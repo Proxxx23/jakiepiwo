@@ -6,6 +6,7 @@ require_once('C:\xampp\htdocs\jakiepiwomamkupic\app\Questions.php');
 
 use Illuminate\Http\Request;
 use App\Styles;
+use App\Traits\Questions as Questions;
 
 class ValidationController extends Controller
 {
@@ -34,9 +35,8 @@ class ValidationController extends Controller
 	*/
     public function validateSimpleAnswer(string $answer) : bool {
 
-    	$simple_answer_in = array('tak', 'nie');
-
-    	if (!in_array($answer, $simple_answer_in)) {
+    	if (!in_array($answer, Questions::$questions[6]['answers']) || 
+    		!in_array($answer, Questions::$questions[8]['answers'])) {
     		return false;
     	} else {
     		return true;
