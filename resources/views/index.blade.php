@@ -67,6 +67,7 @@
     <body>
         <div class="flex-center">
             <div class="content">
+                <!-- Error handling  -->
                 @if ($errors_count > 0)
                 <h3>Błędy formularza</h3>
                     @foreach ($errors AS $error)
