@@ -35,8 +35,7 @@ class ValidationController extends Controller
 	*/
     public function validateSimpleAnswer(string $answer) : bool {
 
-    	if (!in_array($answer, Questions::$questions[6]['answers']) || 
-    		!in_array($answer, Questions::$questions[8]['answers'])) {
+    	if (!in_array($answer, array('tak', 'nie'))) {
     		return false;
     	} else {
     		return true;
@@ -50,10 +49,8 @@ class ValidationController extends Controller
 	*/
     public function validateAnswers(array $answers) : bool {
 
-    	$scale_answers_in = array('pytania skali');
-    	$scale_answers_in_2 = array('pytania skali 2');
-
-    	if (!in_array($answers, $scale_answers_in)) {
+    	if (!in_array($answer, Questions::$questions[6]['answers']) || 
+    		!in_array($answer, Questions::$questions[8]['answers'])) {
     		return false;
     	} else {
     		return true;
