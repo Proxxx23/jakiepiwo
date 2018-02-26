@@ -30,13 +30,15 @@ class StylePickerController extends Controller
     */
 
     // Github: https://gist.github.com/yeco/412610
-    private function array_push_assoc($array, $key, $value) : array {
+    private function array_push_assoc(array $array, $key, $value) : array {
+
  		$array[$key] = $value;
  		return $array;
+
 	}
 
 	// Prints an output with <pre> styling
-	public function printPre($data, $die = false) {
+	public function printPre($data, bool $die = false) {
 
       	$output = var_dump($data);
 

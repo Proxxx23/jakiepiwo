@@ -29,6 +29,8 @@ class PickingAlgorithm extends Controller
 	public $to_exclude[14] = array('TAK' => array(1, 4, 5, 8), 'NIE' => array(2, 3, 6, 7));
 	public $to_exclude[15] = array('TAK' => array(1, 4, 5, 8), 'NIE' => array(2, 3, 6, 7));
 
+	public $excluded_strength = array();
+
 	public $excluded_ids = array();
     
     public function excludeBeerIds(string $answers) : void {
@@ -42,6 +44,8 @@ class PickingAlgorithm extends Controller
     				foreach ($ids_to_exclude AS $id) {
     					if (!in_array($excluded_ids, $id)) {
     						$this->excluded_ids = array_push($this->excluded_ids, $id);
+    					} else {
+    						$this->buildStrenght($id);
     					}
     				}
     			}
@@ -49,8 +53,37 @@ class PickingAlgorithm extends Controller
     	}
     }
 
-    // Losowanie na podstawie wagi odpowiedzi
-    public function extraDraw() : void {
+	/*
+	* Sums pairs beer_id => how many times has it been excluded in excludeBeerIds()
+	*/
+    private function buildStrenght(integer $id) : void {
+
+    	if(!empty($this->excluded_strength[$id])) {
+    		array_push($this->excluded_strength[$id], 1);
+    	} else {
+    		$this->excluded_strenght[$id] = 1;
+    	}
+
+    }
+
+    /*
+    * Picks rarely excluded styles and adds to result if there are fewer than 3 beer results
+    */
+    public function extraDraw(integer $howmanytopick) : array {
+
+    	for($i = 1; $i <= count($this->excluded_strenght); $i++) {
+    		if (!empty($excluded_sum[$i])) {
+    			$excluded_sum[$i] = array_sum($this->excluded_strenght[$i]);
+    		} else {
+    			$excluded_sum[$i] = 0;
+    		}
+    	}
+
+    	sort($excluded_sum);
+    	for ($s = 1; $s <= $howmanytopick; $s++) {
+    		// Posortowane
+    		var_dump($excluded_sum[$s]);
+    	}
 
     }
 
