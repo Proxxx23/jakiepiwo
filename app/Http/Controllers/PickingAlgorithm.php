@@ -61,7 +61,7 @@ class PickingAlgorithm extends Controller
     	if(!empty($this->excluded_strength[$id])) {
     		array_push($this->excluded_strength[$id], 1);
     	} else {
-    		$this->excluded_strenght[$id] = 1;
+    		$this->excluded_strength[$id] = 1;
     	}
 
     }
@@ -71,9 +71,9 @@ class PickingAlgorithm extends Controller
     */
     public function extraDraw(integer $howmanytopick) : array {
 
-    	for($i = 1; $i <= count($this->excluded_strenght); $i++) {
+    	for($i = 1; $i <= count($this->excluded_strength); $i++) {
     		if (!empty($excluded_sum[$i])) {
-    			$excluded_sum[$i] = array_sum($this->excluded_strenght[$i]);
+    			$excluded_sum[$i] = array_sum($this->excluded_strength[$i]);
     		} else {
     			$excluded_sum[$i] = 0;
     		}
