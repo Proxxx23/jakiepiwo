@@ -29,7 +29,9 @@ class StylePickerController extends Controller
     * Custom functions
     */
 
-    // Github: https://gist.github.com/yeco/412610
+    /*
+    * Github: https://gist.github.com/yeco/412610
+    */
     private function array_push_assoc(array $array, $key, $value) : array {
 
  		$array[$key] = $value;
@@ -37,7 +39,9 @@ class StylePickerController extends Controller
 
 	}
 
-	// Prints an output with <pre> styling
+	/*
+	* Prints an output with <pre> styling
+	*/ 
 	public function printPre($data, bool $die = false) {
 
       	$output = var_dump($data);
@@ -92,12 +96,16 @@ class StylePickerController extends Controller
     		mail($_POST['email'], $subject, $this->prepareEmailTemplate(), $headers);
     		return true;
     	} else {
-    		$this->error('Błędny adres e-mail!');
+    		$this->logError('Błędny adres e-mail!');
     		return false;
     	}
 
     }
 
+    /*
+    * Adds email to a Mailchimp list
+    * return $set_newsletter integer
+    */
     private function setNewsletter() : integer {
 
     	$validation = new Validation();
@@ -114,7 +122,7 @@ class StylePickerController extends Controller
 
     }
 
-    private function prepareAnswers() : ?bool {
+    private function prepareAnswers() : bool {
 
     	$answers = array();
     	$validation = new Validation();
@@ -122,24 +130,29 @@ class StylePickerController extends Controller
     	for ($i = 1; $i <= 15; $i++) {
     		
     		if (is_null($_POST['answer-'.$i.''])) { 
-    			$this->error('Pytanie numer ' . $i . ' jest puste. Odpowiedz na wszystkie pytania!', true);
+    			$this->logError('Pytanie numer ' . $i . ' jest puste. Odpowiedz na wszystkie pytania!', true);
     		}
 
     		if (!$validation->validateSimpleAnswer($_POST['answer-'.$i.'']) && $i != 6 && $i != 8) {
-    			$this->error('Problem z walidacją niektórych pól formularza!', true);
+    			$this->logError('Problem z walidacją niektórych pól formularza!', true);
     		}
 
     		$answers = $this->array_push_assoc($answers, 'answer-'.$i, $_POST['answer-'.$i.'']);
     	}
 
 		$this->JSON_answers = json_encode($answers); //JSON $_POST answers
-		return true;
+
+		if ($this->JSON_answers !== '') {
+			return true;
+		} else {
+			return false;
+		}
 
     }
 
     // Wstawia do bazy odpowiedzi użytkownika
     // Rozdzielić na osobną funkcjędo bazy, osobną do wywołania innych rzeczy
-    public function mix() {
+    public function mix() : void {
 
     	$validation = new Validation();
 
@@ -154,40 +167,65 @@ class StylePickerController extends Controller
 
     		if ($insert_answers === true) {
 
+    			// Wykluczamy piwa, których nie powinien kupić a następnie robimy inwersję
+    			$algorithm = new Algorithm();
+				$algorithm->excludeBeerIds($this->JSON_answers);
+
+				// Jeśli stylów jest mniej, niż 3 - dobieramy ile trzeba
+				if (count($algorithm->choosen_ids) < 3) {
+					$howmanytopick = 3 - count($algorithm->choosen_ids);
+					$algorithm->extraDraw($howmanytopick);
+				}
+
+				// Zapisz wybór do bazy
+    			try {
+    				$algorithm->logStyles($name, $email);
+    			} catch (Exception $e) {
+    				// Message
+    			}
+    				
+    			// Wyślij maila na prośbę
     			if ($_POST['sendMeAnEmail']) { 
     				//$this->sendEmail();
     			}
 
+    			// Dodaj do listy newsletterowej
     			if ($_POST['newsletter'] === 1) {
-    				// DOdaj do listy newsletterowej
     				// Mailchimp API
     			}
 
-    			// Wywalamy komuś listę piw
-    			$algorithm = new Algorithm();
-    			$choosen_styles = $algorithm->chooseStyles($this->JSON_answers);
-    			$algorithm->logStyles($name, $email);
+    			// funkcja zwracająca nazwy piw i parametry z bazy do umieszczenia w widoku
 
-    			return view('/result', ['styles' => $choosen_styles]);
+    			return view('/result', ['styles' => $this->getStylesWithInfo($algorithm->choosen_ids)]);
 
     		} else {
-    			$this->error('Nie udało się wykonać insertu na bazie!');
+    			$this->logError('Nie udało się wykonać insertu na bazie!');
     			$this->showErrors();
     		}
     	} else {
     		$this->showErrors();
     	}
-
-
     }
 
     // Pokazuje style z ostatniej wizyty
-    public function showRecentlyPickedStyles() {
+    public function getRecentlyPickedStyles() {
+
+    }
+
+    /*
+    * Selects necessary info about choosen beers from database
+    */
+    public function getStylesWithInfo(array $beer_ids) : array {
+
+    	$beer_ids = explode(',', $beer_ids);
+    	$style_info = DB::select("SELECT * FROM `beer_flavours` WHERE id IN ('".$beer_ids."')");
+
+    	return $style_info;
 
     }
 
     // 5 najczęściej wybieranych stylów
-    public function showMostPickedStyles() {
+    public function getMostPickedStyles() : array {
 
     	// Musi być tabela odkładająca wybrane użytkownikom style (zliczanie - jak logi)
     	$mostly_picked = DB::select('SELECT * FROM styles GROUP BY count(id) AS mostlypicked ORDER BY mostlypicked DESC LIMIT 3;');
@@ -197,7 +235,7 @@ class StylePickerController extends Controller
 
     }
 
-    private function error(string $message, bool $die) : void {
+    private function logError(string $message, bool $die) : void {
 
     	$this->error_msg = array_push($this->error_msg, $message);
     	$this->error_cnt++;
@@ -208,7 +246,7 @@ class StylePickerController extends Controller
 
     }
 
-    public function showErrors() {
+    public function showErrors() : void {
     	if ($this->error_cnt && !empty($this->error_msg)) {
     		return view('index', ['questions' => Questions::$questions, 'accurate_questions' => Questions::$accurate_questions,					'errors' => $this->error_msg, 'errors_count' => $this->error_cnt]);
     	} 

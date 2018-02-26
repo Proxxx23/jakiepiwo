@@ -8,8 +8,6 @@ use Illuminate\Support\Facades\DB;
 class PickingAlgorithm extends Controller
 {
 
-	private $choosen_style = array();
-
 	/*
 	* Array zawiera pary 'odpowiedź' => id_piw z bazy do wykluczenia w przypadku wyboru tej odpowiedzi
 	*/
@@ -32,6 +30,7 @@ class PickingAlgorithm extends Controller
 	public $excluded_strength = array();
 
 	public $excluded_ids = array();
+	public $choosen_ids = array(); //Inverse of $excluded_ids
     
     public function excludeBeerIds(string $answers) : void {
 
@@ -49,6 +48,15 @@ class PickingAlgorithm extends Controller
     					}
     				}
     			}
+    		}
+    	}
+
+    	// Inverse ($i <= beer styles count in DB)
+    	for ($i = 1; $i <= 30; $i++) {
+    		if (!in_array($this->excluded_ids, $i)) {
+    			$this->choosen_ids = array_push($this->choosen_ids, $id);
+    		} else {
+    			continue;
     		}
     	}
     }
@@ -81,13 +89,15 @@ class PickingAlgorithm extends Controller
 
     	sort($excluded_sum);
     	for ($s = 1; $s <= $howmanytopick; $s++) {
-    		// Posortowane
+    		// Posortowane ASC
+    		$this->choosen_ids = array_push($this->choosen_ids, $excluded_sum[$s]);
     		var_dump($excluded_sum[$s]);
+
     	}
 
     }
 
-    public function logStyles($name, $email) {
+    public function logStyles(string $name, string $email) :bool {
 
     	$insert_styles = DB::insert("INSERT INTO `styles_log` (username, e_mail, style_1, style_2, style_3)
     											VALUES
