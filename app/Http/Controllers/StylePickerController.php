@@ -181,7 +181,7 @@ class StylePickerController extends Controller
     			try {
     				$algorithm->logStyles($name, $email);
     			} catch (Exception $e) {
-    				// Message
+    				// Message + mail
     			}
     				
     			// Wyślij maila na prośbę
