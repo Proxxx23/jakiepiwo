@@ -171,12 +171,6 @@ class StylePickerController extends Controller
     			$algorithm = new Algorithm();
 				$algorithm->excludeBeerIds($this->JSON_answers);
 
-				// Jeśli stylów jest mniej, niż 3 - dobieramy ile trzeba
-				if (count($algorithm->choosen_ids) < 3) {
-					$howmanytopick = 3 - count($algorithm->choosen_ids);
-					$algorithm->extraDraw($howmanytopick);
-				}
-
 				// Zapisz wybór do bazy
     			try {
     				$algorithm->logStyles($name, $email);

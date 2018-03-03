@@ -9,93 +9,45 @@ class PickingAlgorithm extends Controller
 {
 
 	/*
-	* Array zawiera pary 'odpowiedź' => id_piw z bazy do wykluczenia w przypadku wyboru tej odpowiedzi
+	* Array zawiera pary 'odpowiedź' => id_piw z bazy do zaliczenia  w przypadku wyboru tej odpowiedzi
 	*/
-	public $to_exclude[1] = array('TAK' => array(1, 4, 5, 8), 'NIE' => array(2, 3, 6, 7));
-	public $to_exclude[2] = array('TAK' => array(1, 4, 5, 8), 'NIE' => array(2, 3, 6, 7));
-	public $to_exclude[3] = array('TAK' => array(1, 4, 5, 8), 'NIE' => array(2, 3, 6, 7));
-	public $to_exclude[4] = array('TAK' => array(1, 4, 5, 8), 'NIE' => array(2, 3, 6, 7));
-	public $to_exclude[5] = array('TAK' => array(1, 4, 5, 8), 'NIE' => array(2, 3, 6, 7));
-	public $to_exclude[6] = array('TAK' => array(1, 4, 5, 8), 'NIE' => array(2, 3, 6, 7));
-	public $to_exclude[7] = array('TAK' => array(1, 4, 5, 8), 'NIE' => array(2, 3, 6, 7));
-	public $to_exclude[8] = array('TAK' => array(1, 4, 5, 8), 'NIE' => array(2, 3, 6, 7));
-	public $to_exclude[9] = array('TAK' => array(1, 4, 5, 8), 'NIE' => array(2, 3, 6, 7));
-	public $to_exclude[10] = array('TAK' => array(1, 4, 5, 8), 'NIE' => array(2, 3, 6, 7));
-	public $to_exclude[11] = array('TAK' => array(1, 4, 5, 8), 'NIE' => array(2, 3, 6, 7));
-	public $to_exclude[12] = array('TAK' => array(1, 4, 5, 8), 'NIE' => array(2, 3, 6, 7));
-	public $to_exclude[13] = array('TAK' => array(1, 4, 5, 8), 'NIE' => array(2, 3, 6, 7));
-	public $to_exclude[14] = array('TAK' => array(1, 4, 5, 8), 'NIE' => array(2, 3, 6, 7));
-	public $to_exclude[15] = array('TAK' => array(1, 4, 5, 8), 'NIE' => array(2, 3, 6, 7));
+	public $to_include[1] = array('TAK' => array(1, 4, 5, 8), 'NIE' => array(2, 3, 6, 7));
+	public $to_include[2] = array('TAK' => array(1, 4, 5, 8), 'NIE' => array(2, 3, 6, 7));
+	public $to_include[3] = array('TAK' => array(1, 4, 5, 8), 'NIE' => array(2, 3, 6, 7));
+	public $to_include[4] = array('TAK' => array(1, 4, 5, 8), 'NIE' => array(2, 3, 6, 7));
+	public $to_include[5] = array('TAK' => array(1, 4, 5, 8), 'NIE' => array(2, 3, 6, 7));
+	public $to_include[6] = array('TAK' => array(1, 4, 5, 8), 'NIE' => array(2, 3, 6, 7));
+	public $to_include[7] = array('TAK' => array(1, 4, 5, 8), 'NIE' => array(2, 3, 6, 7));
+	public $to_include[8] = array('TAK' => array(1, 4, 5, 8), 'NIE' => array(2, 3, 6, 7));
+	public $to_include[9] = array('TAK' => array(1, 4, 5, 8), 'NIE' => array(2, 3, 6, 7));
+	public $to_include[10] = array('TAK' => array(1, 4, 5, 8), 'NIE' => array(2, 3, 6, 7));
+	public $to_include[11] = array('TAK' => array(1, 4, 5, 8), 'NIE' => array(2, 3, 6, 7));
+	public $to_include[12] = array('TAK' => array(1, 4, 5, 8), 'NIE' => array(2, 3, 6, 7));
+	public $to_include[13] = array('TAK' => array(1, 4, 5, 8), 'NIE' => array(2, 3, 6, 7));
+	public $to_include[14] = array('TAK' => array(1, 4, 5, 8), 'NIE' => array(2, 3, 6, 7));
+	public $to_include[15] = array('TAK' => array(1, 4, 5, 8), 'NIE' => array(2, 3, 6, 7));
 
-	public $excluded_strength = array();
-
-	public $excluded_ids = array();
-	public $choosen_ids = array(); //Inverse of $excluded_ids
+	public $included_ids = array();
     
-    public function excludeBeerIds(string $answers) : void {
+    public function includeBeerIds(string $answers) : void {
 
     	$answers_decoded = json_decode($answers);
-    	// Obrabnia JSON-a i kolejno wywala style na podstawie kolejnych odpowiedzi
 
     	foreach ($answers_decoded AS $number => $answer) {
-    		foreach ($to_exclude[$number] AS $yesno => $ids_to_exclude) {
+    		foreach ($to_include[$number] AS $yesno) {
     			if (in_array($answer, $yesno)) {
-    				foreach ($ids_to_exclude AS $id) {
-    					if (!in_array($excluded_ids, $id)) {
-    						$this->excluded_ids = array_push($this->excluded_ids, $id);
+    				foreach ($yesno AS $id) {
+    					if (!in_array($included_ids, $id)) {
+    						$this->included_ids[$id] = 1;
     					} else {
-    						$this->buildStrenght($id);
+    						$this->included_ids[$id]++;
     					}
     				}
     			}
     		}
     	}
-
-    	// Inverse ($i <= beer styles count in DB)
-    	for ($i = 1; $i <= 30; $i++) {
-    		if (!in_array($this->excluded_ids, $i)) {
-    			$this->choosen_ids = array_push($this->choosen_ids, $id);
-    		} else {
-    			continue;
-    		}
-    	}
     }
 
-	/*
-	* Sums pairs beer_id => how many times has it been excluded in excludeBeerIds()
-	*/
-    private function buildStrenght(integer $id) : void {
-
-    	if(!empty($this->excluded_strength[$id])) {
-    		array_push($this->excluded_strength[$id], 1);
-    	} else {
-    		$this->excluded_strength[$id] = 1;
-    	}
-
-    }
-
-    /*
-    * Picks rarely excluded styles and adds to result if there are fewer than 3 beer results
-    */
-    public function extraDraw(integer $howmanytopick) : array {
-
-    	for($i = 1; $i <= count($this->excluded_strength); $i++) {
-    		if (!empty($excluded_sum[$i])) {
-    			$excluded_sum[$i] = array_sum($this->excluded_strength[$i]);
-    		} else {
-    			$excluded_sum[$i] = 0;
-    		}
-    	}
-
-    	sort($excluded_sum);
-    	for ($s = 1; $s <= $howmanytopick; $s++) {
-    		// Posortowane ASC
-    		$this->choosen_ids = array_push($this->choosen_ids, $excluded_sum[$s]);
-    		var_dump($excluded_sum[$s]);
-
-    	}
-
-    }
 
     public function logStyles(string $name, string $email) :bool {
 
