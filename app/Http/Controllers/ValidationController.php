@@ -2,8 +2,6 @@
 declare(strict_types=1);
 namespace App\Http\Controllers;
 
-require_once('C:\xampp\htdocs\jakiepiwomamkupic\app\Questions.php');
-
 use Illuminate\Http\Request;
 use App\Styles;
 use App\Traits\Questions as Questions;

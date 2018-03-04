@@ -31,6 +31,8 @@ class PickingAlgorithm extends Controller
 	public $excluded_ids = array(); // Excluded beer IDs
 	public $style_to_take = array();
 	public $style_to_avoid = array();
+
+	public CONST STYLES_TO_PICK = 3;
     
     /**
     * 
@@ -80,12 +82,12 @@ class PickingAlgorithm extends Controller
     	arsort($this->included_ids);
     	arsort($this->excluded_ids);
 
-    	for ($i = 0; $i < 3; $i++) {
+    	for ($i = 0; $i < self::STYLES_TO_PICK; $i++) {
     		$style_to_take = $this->style_to_take[] = key(array_slice($this->included_ids, $i, 1, true));
     		$buythis[] = DB::select("SELECT * FROM beers WHERE id = :id", ['id' => $style_to_take]);	
     	}
 
-    	for ($i = 0; $i < 3; $i++) {
+    	for ($i = 0; $i < self::STYLES_TO_PICK; $i++) {
     		$style_to_avoid = $this->style_to_avoid[] = key(array_slice($this->excluded_ids, $i, 1, true));
     		$avoidthis[] = DB::select("SELECT * FROM beers WHERE id = :id", ['id' => $style_to_avoid]);	
     	}

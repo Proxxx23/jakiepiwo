@@ -2,9 +2,6 @@
 declare(strict_types=1);
 namespace App\Http\Controllers;
 
-require_once('C:\xampp\htdocs\jakiepiwomamkupic\app\Questions.php');
-require_once('C:\xampp\htdocs\jakiepiwomamkupic\app\http\controllers\ValidationController.php');
-
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -27,9 +24,9 @@ class StylePickerController extends Controller
     public function showQuestions(bool $errors = false) {
 
         if ($errors === true) {
-    		return view('index', ['questions' => Questions::$questions, 'accurate_questions' => Questions::$accurate_questions,					'errors' => $this->error_msg, 'errors_count' => $this->error_cnt]);
+    		return view('index', ['questions' => Questions::$questions, 'accurate_questions' => Questions::$accurate_questions,	'errors' => $this->error_msg, 'errors_count' => $this->error_cnt]);
     	} else {
-    		return view('index', ['questions' => Questions::$questions, 'accurate_questions' => Questions::$accurate_questions,					'errors' => '', 'errors_count' => 0]);
+    		return view('index', ['questions' => Questions::$questions, 'accurate_questions' => Questions::$accurate_questions,	'errors' => '', 'errors_count' => 0]);
     	}
 
     }
@@ -155,8 +152,6 @@ class StylePickerController extends Controller
     			$this->logError('Nie udało się wykonać insertu na bazie!');
     			$this->showQuestions(true);
     		}
-    	} else {
-    		$this->showQuestions(true);
     	}
     }
 
