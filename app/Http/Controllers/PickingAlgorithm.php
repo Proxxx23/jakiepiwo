@@ -11,9 +11,9 @@ class PickingAlgorithm extends Controller
 	/*
 	* Array zawiera pary 'odpowiedź' => id_piw z bazy do zaliczenia  w przypadku wyboru tej odpowiedzi
 	*/
-	public $to_include1 = array('tak' => '1, 4, 5, 8', 'nie' => '2, 3, 6, 7');
-	public $to_include2 = array('tak' => '1, 4, 5, 8', 'nie' => '2, 3, 6, 7');
-	public $to_include3 = array('tak' => '1, 4, 5, 8', 'nie' => '2, 3, 6, 7');
+	public $to_include1 = array('tak' => '46, 47, 48, 49', 'nie' => '50, 51, 52, 53');
+	public $to_include2 = array('tak' => '46, 48, 49, 51', 'nie' => '52, 53, 56, 57');
+	public $to_include3 = array('tak' => '47, 48, 51, 53', 'nie' => '53, 54, 55, 57');
 	// public $to_include[4] = array('TAK' => array(1, 4, 5, 8), 'NIE' => array(2, 3, 6, 7));
 	// public $to_include[5] = array('TAK' => array(1, 4, 5, 8), 'NIE' => array(2, 3, 6, 7));
 	// public $to_include[6] = array('TAK' => array(1, 4, 5, 8), 'NIE' => array(2, 3, 6, 7));
@@ -67,6 +67,7 @@ class PickingAlgorithm extends Controller
 	    				}
 	    	}
     	}
+    	$this->chooseStyles();
     }
 
     public function chooseStyles() {
@@ -75,6 +76,32 @@ class PickingAlgorithm extends Controller
     	
     	arsort($this->included_ids);
     	arsort($this->excluded_ids);
+
+    	for ($i = 0; $i < 3; $i++) {
+    		$style_to_take = key(array_slice($this->included_ids, $i, 1, true));
+    		$buythis[] = DB::select("SELECT * FROM beers WHERE id = :id", ['id' => $style_to_take]);	
+    	}
+
+    	for ($i = 0; $i < 3; $i++) {
+    		$style_to_avoid= key(array_slice($this->excluded_ids, $i, 1, true));
+    		$avoidthis[] = DB::select("SELECT * FROM beers WHERE id = :id", ['id' => $style_to_avoid]);	
+    	}
+
+    	echo "<h3>Te style kupuj</h3>";
+    	for ($i = 0; $i < count($buythis); $i++) {
+	    	foreach ($buythis[$i] as $k => $v) {
+	    		echo $v->name . "<br />";
+	    	}
+	    }
+
+    	echo "<h3>Tych styli unikaj</h3>";
+    	for ($i = 0; $i < count($avoidthis); $i++) {
+	    	foreach ($avoidthis[$i] as $k => $v) {
+	    		echo $v->name . "<br />";
+	    	}
+	    }
+    	die();
+    	
 
     }
 
