@@ -18,6 +18,7 @@ class CreateBeersTable extends Migration
             $table->integer('id_flavour')->references('id')->on('beer_flavours');
             $table->string('name', 100);
             $table->string('name2', 100);
+            $table->string('name_pl', 100);
         });
     }
 

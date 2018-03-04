@@ -1,4 +1,4 @@
 <?php
 
 Route::get('/', 'StylePickerController@showQuestions');
-Route::post('/basic', 'StylePickerController@mix');
+Route::post('/results', 'StylePickerController@mix');

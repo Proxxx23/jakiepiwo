@@ -12,8 +12,9 @@ class ValidationController extends Controller
 {
 
 	/*
-	* Waliduje adres e-mail użytkownika
+	* Validates an e-mail address
 	* @param: $email
+	* @return: bool
 	*/
     public function validateEmail() : bool {
 
@@ -30,8 +31,9 @@ class ValidationController extends Controller
     }
 
 	/*
-	* Waliduje odpowiedzi tak/nie
-	* @param: $answers array
+	* Validates yes/no answers
+	* @param: $answer string
+	* @return: bool
 	*/
     public function validateSimpleAnswer(string $answer) : bool {
 
@@ -44,10 +46,11 @@ class ValidationController extends Controller
     }
 
     /*
-	* Waliduje odpowiedzi skali
-	* @param: $answers array
+	* Validates "scale" answers
+	* @param: $answer string
+	* @return: bool
 	*/
-    public function validateAnswers(array $answers) : bool {
+    public function validateAnswers(string $answer) : bool {
 
     	if (!in_array($answer, Questions::$questions[6]['answers']) || 
     		!in_array($answer, Questions::$questions[8]['answers'])) {
@@ -59,10 +62,11 @@ class ValidationController extends Controller
     }
 
     /*
-	* Waliduje dodatkowe odpowiedzi
-	* @param: $answers array
+	* Validates extra answers
+	* @param: $answer string
+	* @return: bool
 	*/
-    public function validateAdditionalAnswers(array $answers) : bool {
+    public function validateAdditionalAnswers(string $answer) : bool {
 
 
     }

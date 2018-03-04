@@ -151,20 +151,14 @@ class StylePickerController extends Controller
     	if ($this->prepareAnswers() && empty($this->error_msg)) {
     		$insert_answers = DB::insert("INSERT INTO `user_answers` (name, e_mail, newsletter, answers, created_at) 
     										VALUES 
-    									('{$name}', '{$email}', '{$newsletter}', '{$this->JSON_answers}', CURRENT_TIMESTAMP)");
+    										(?, ?, ?, ?, ?)",
+    									[$name, $email, $newsletter, $this->JSON_answers, NOW()]);
 
     		if ($insert_answers === true) {
 
-    			// Wykluczamy piwa, których nie powinien kupić a następnie robimy inwersję
+    			// Algorytm wybiera piwa
     			$algorithm = new Algorithm();
-				$algorithm->includeBeerIds($this->JSON_answers);
-
-				// Zapisz wybór do bazy
-    			try {
-    				$algorithm->logStyles($name, $email);
-    			} catch (Exception $e) {
-    				// Message + mail
-    			}
+				$algorithm->includeBeerIds($this->JSON_answers, $name, $email, $newsletter);
     				
     			// Wyślij maila na prośbę
     			if ($_POST['sendMeAnEmail']) { 
@@ -175,10 +169,6 @@ class StylePickerController extends Controller
     			if ($_POST['newsletter'] === 1) {
     				// Mailchimp API
     			}
-
-    			// funkcja zwracająca nazwy piw i parametry z bazy do umieszczenia w widoku
-
-    			return view('/result', ['styles' => $this->getStylesWithInfo($algorithm->choosen_ids)]);
 
     		} else {
     			$this->logError('Nie udało się wykonać insertu na bazie!');

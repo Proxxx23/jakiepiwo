@@ -17,9 +17,13 @@ class CreateStylesLogsTable extends Migration
             $table->increments('id');
             $table->string('username');
             $table->string('email');
+            $table->tinyInteger('newsletter');
             $table->string('style_1');
             $table->string('style_2');
             $table->string('style_3');
+            $table->string('style_1_avoid');
+            $table->string('style_2_avoid');
+            $table->string('style_3_avoid');
             $table->timestamps();
         });
     }

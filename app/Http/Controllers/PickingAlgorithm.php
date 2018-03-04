@@ -11,9 +11,9 @@ class PickingAlgorithm extends Controller
 	/*
 	* Array zawiera pary 'odpowiedź' => id_piw z bazy do zaliczenia  w przypadku wyboru tej odpowiedzi
 	*/
-	public $to_include1 = array('tak' => '46, 47, 48, 49', 'nie' => '50, 51, 52, 53');
-	public $to_include2 = array('tak' => '46, 48, 49, 51', 'nie' => '52, 53, 56, 57');
-	public $to_include3 = array('tak' => '47, 48, 51, 53', 'nie' => '53, 54, 55, 57');
+	public $to_include1 = array('tak' => '1, 2, 3, 4', 'nie' => '5, 6, 7, 8');
+	public $to_include2 = array('tak' => '2, 4, 6, 8', 'nie' => '1, 3, 5, 7');
+	public $to_include3 = array('tak' => '3, 4, 6, 7', 'nie' => '1, 2, 5, 8');
 	// public $to_include[4] = array('TAK' => array(1, 4, 5, 8), 'NIE' => array(2, 3, 6, 7));
 	// public $to_include[5] = array('TAK' => array(1, 4, 5, 8), 'NIE' => array(2, 3, 6, 7));
 	// public $to_include[6] = array('TAK' => array(1, 4, 5, 8), 'NIE' => array(2, 3, 6, 7));
@@ -29,13 +29,14 @@ class PickingAlgorithm extends Controller
 
 	public $included_ids = array(); // Beer IDs to include
 	public $excluded_ids = array(); // Excluded beer IDs
-	public $choosen_style = array();
+	public $style_to_take = array();
+	public $style_to_avoid = array();
     
     /**
     * 
     *
     */
-    public function includeBeerIds(string $answers) {
+    public function includeBeerIds(string $answers, string $name, string $email, $newsletter) {
 
     	$answers_decoded = json_decode($answers);
 
@@ -67,10 +68,10 @@ class PickingAlgorithm extends Controller
 	    				}
 	    	}
     	}
-    	$this->chooseStyles();
+    	$this->chooseStyles($name, $email, $newsletter);
     }
 
-    public function chooseStyles() {
+    public function chooseStyles(string $name, string $email, $newsletter) {
 
     	// Tu musi być jeszcze wywołanie funkcji, która sprawdzi, czy damy styl nie występuje wiele razy i w included i w excluded (bo to nie miałoby sensu, gdyby stout był jednocześnie wybrany i wykluczony)
     	
@@ -78,46 +79,42 @@ class PickingAlgorithm extends Controller
     	arsort($this->excluded_ids);
 
     	for ($i = 0; $i < 3; $i++) {
-    		$style_to_take = key(array_slice($this->included_ids, $i, 1, true));
+    		$style_to_take = $this->style_to_take[] = key(array_slice($this->included_ids, $i, 1, true));
     		$buythis[] = DB::select("SELECT * FROM beers WHERE id = :id", ['id' => $style_to_take]);	
     	}
 
     	for ($i = 0; $i < 3; $i++) {
-    		$style_to_avoid= key(array_slice($this->excluded_ids, $i, 1, true));
+    		$style_to_avoid = $this->style_to_avoid[] = key(array_slice($this->excluded_ids, $i, 1, true));
     		$avoidthis[] = DB::select("SELECT * FROM beers WHERE id = :id", ['id' => $style_to_avoid]);	
     	}
 
-    	echo "<h3>Te style kupuj</h3>";
-    	for ($i = 0; $i < count($buythis); $i++) {
-	    	foreach ($buythis[$i] as $k => $v) {
-	    		echo $v->name . "<br />";
-	    	}
-	    }
+    	// Zapisz wybór do bazy
+    	try {
+    		$this->logStyles($name, $email, $newsletter);
+    	} catch (Exception $e) {
+    		//mail('kontakt@piwolucja.pl', 'logStyles Exception', $e->getMessage());
+    	}
 
-    	echo "<h3>Tych styli unikaj</h3>";
-    	for ($i = 0; $i < count($avoidthis); $i++) {
-	    	foreach ($avoidthis[$i] as $k => $v) {
-	    		echo $v->name . "<br />";
-	    	}
-	    }
-    	die();
-    	
+    	//return view('/results', ['buythis' => $buythis, 'avoidthis' => $avoidthis]);
+    	return view('/results');
 
     }
 
 
-    public function logStyles(string $name, string $email) : bool {
+    public function logStyles(string $name, string $email, $newsletter) : bool {
 
-    	$this->chooseStyles();
-
-    	$insert_styles = DB::insert('INSERT INTO `styles_logs` (username, email, style_1, style_2, style_3, created_at)
+    	$insert_styles = DB::insert('INSERT INTO `styles_logs` (username, email, newsletter, style_1, style_2, style_3, style_1_avoid, style_2_avoid, style_3_avoid, created_at)
     											VALUES
-    								(?, ?, ?, ?, ?, ?)', 
+    								(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', 
     											[$name, 
     											$email, 
-			    								$this->choosen_style[0], 
-			    								$this->choosen_style[1], 
-			    								$this->choosen_style[2],
+    											$newsletter,
+			    								$this->style_to_take[0], 
+			    								$this->style_to_take[1], 
+			    								$this->style_to_take[2],
+			    								$this->style_to_avoid[0],
+			    								$this->style_to_avoid[1],
+			    								$this->style_to_avoid[2],
 			    								NOW()]
 			    								);
 
