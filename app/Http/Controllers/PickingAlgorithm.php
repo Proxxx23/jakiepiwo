@@ -95,8 +95,7 @@ class PickingAlgorithm extends Controller
     		//mail('kontakt@piwolucja.pl', 'logStyles Exception', $e->getMessage());
     	}
 
-    	//return view('/results', ['buythis' => $buythis, 'avoidthis' => $avoidthis]);
-    	return view('/results');
+    	return view('/results', ['buythis' => $buythis, 'avoidthis' => $avoidthis]);
 
     }
 

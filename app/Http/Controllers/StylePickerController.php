@@ -156,10 +156,6 @@ class StylePickerController extends Controller
 
     		if ($insert_answers === true) {
 
-    			// Algorytm wybiera piwa
-    			$algorithm = new Algorithm();
-				$algorithm->includeBeerIds($this->JSON_answers, $name, $email, $newsletter);
-    				
     			// Wyślij maila na prośbę
     			if ($_POST['sendMeAnEmail']) { 
     				//$this->sendEmail();
@@ -169,6 +165,10 @@ class StylePickerController extends Controller
     			if ($_POST['newsletter'] === 1) {
     				// Mailchimp API
     			}
+
+    			// Algorytm wybiera piwa
+    			$algorithm = new Algorithm();
+				$algorithm->includeBeerIds($this->JSON_answers, $name, $email, $newsletter);
 
     		} else {
     			$this->logError('Nie udało się wykonać insertu na bazie!');
