@@ -10,4 +10,25 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+
+    /*
+	* Prints an output with <pre> styling
+	*/ 
+	public function printPre($data, bool $die = false, bool $backtrace = false) {
+
+      	$output = var_dump($data);
+
+      	echo "<pre>";
+      	print_r($output);
+      	echo "</pre>";
+
+   		if ($die === true) {
+   			die();
+   		}
+
+   		if ($backtrace === true) {
+   			echo "<br /><br /><h3>Backtrace</h3>";
+   			var_dump(debug_backtrace());
+   		}
+	}
 }

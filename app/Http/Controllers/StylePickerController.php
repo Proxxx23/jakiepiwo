@@ -1,5 +1,5 @@
 <?php
-
+declare(strict_types=1);
 namespace App\Http\Controllers;
 
 require_once('C:\xampp\htdocs\jakiepiwomamkupic\app\Questions.php');
@@ -39,29 +39,17 @@ class StylePickerController extends Controller
 
 	}
 
-	/*
-	* Prints an output with <pre> styling
-	*/ 
-	public function printPre($data, bool $die = false) {
-
-      	$output = var_dump($data);
-
-      	echo "<pre>";
-      	print_r($output);
-      	echo "</pre>";
-
-   		if ($die) {
-   			die();
-   		}
-	}
-
     /*
     * Show all the questions
     * return: view
     */
-    public function showQuestions() {
+    public function showQuestions(bool $errors = false) {
 
-        return view('index', ['questions' => Questions::$questions, 'accurate_questions' => Questions::$accurate_questions]);
+        if ($errors === true) {
+    		return view('index', ['questions' => Questions::$questions, 'accurate_questions' => Questions::$accurate_questions,					'errors' => $this->error_msg, 'errors_count' => $this->error_cnt]);
+    	} else {
+    		return view('index', ['questions' => Questions::$questions, 'accurate_questions' => Questions::$accurate_questions,					'errors' => '', 'errors_count' => 0]);
+    	}
 
     }
 
@@ -127,7 +115,7 @@ class StylePickerController extends Controller
     	$answers = array();
     	$validation = new Validation();
 
-    	for ($i = 1; $i <= 15; $i++) {
+    	for ($i = 1; $i <= 3; $i++) {
     		
     		if (is_null($_POST['answer-'.$i.''])) { 
     			$this->logError('Pytanie numer ' . $i . ' jest puste. Odpowiedz na wszystkie pytania!', true);
@@ -137,7 +125,7 @@ class StylePickerController extends Controller
     			$this->logError('Problem z walidacją niektórych pól formularza!', true);
     		}
 
-    		$answers = $this->array_push_assoc($answers, 'answer-'.$i, $_POST['answer-'.$i.'']);
+    		$answers = $this->array_push_assoc($answers, $i, $_POST['answer-'.$i.'']);
     	}
 
 		$this->JSON_answers = json_encode($answers); //JSON $_POST answers
@@ -152,12 +140,12 @@ class StylePickerController extends Controller
 
     // Wstawia do bazy odpowiedzi użytkownika
     // Rozdzielić na osobną funkcjędo bazy, osobną do wywołania innych rzeczy
-    public function mix() : void {
+    public function mix() {
 
     	$validation = new Validation();
 
     	$name = $_POST['username'] ?? 'Gość';
-    	$email = $validation->validateEmail($_POST['email']) ?? '';
+    	($validation->validateEmail($_POST['email'])) ? $email = $_POST['email'] : $email = '';
     	($_POST['newsletter'] === 'Tak') ? $newsletter = 1 : $newsletter = 0;
 
     	if ($this->prepareAnswers() && empty($this->error_msg)) {
@@ -169,7 +157,7 @@ class StylePickerController extends Controller
 
     			// Wykluczamy piwa, których nie powinien kupić a następnie robimy inwersję
     			$algorithm = new Algorithm();
-				$algorithm->excludeBeerIds($this->JSON_answers);
+				$algorithm->includeBeerIds($this->JSON_answers);
 
 				// Zapisz wybór do bazy
     			try {
@@ -194,10 +182,10 @@ class StylePickerController extends Controller
 
     		} else {
     			$this->logError('Nie udało się wykonać insertu na bazie!');
-    			$this->showErrors();
+    			$this->showQuestions(true);
     		}
     	} else {
-    		$this->showErrors();
+    		$this->showQuestions(true);
     	}
     }
 
@@ -229,21 +217,16 @@ class StylePickerController extends Controller
 
     }
 
-    private function logError(string $message, bool $die) : void {
+    private function logError(string $message, bool $die) {
 
     	$this->error_msg = array_push($this->error_msg, $message);
     	$this->error_cnt++;
+    	$this->showQuestions(true);
 
     	if ($die) {
     		die($message);
     	}
 
-    }
-
-    public function showErrors() : void {
-    	if ($this->error_cnt && !empty($this->error_msg)) {
-    		return view('index', ['questions' => Questions::$questions, 'accurate_questions' => Questions::$accurate_questions,					'errors' => $this->error_msg, 'errors_count' => $this->error_cnt]);
-    	} 
     }
 
 
