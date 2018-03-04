@@ -79,7 +79,7 @@
                         @endforeach
                     @endfor
 
-                    <h1>Tych styli powinieneś raczej unikać</h1>
+                    <h1>Tych stylów powinieneś raczej unikać</h1>
 
                     @for ($i = 0; $i < count($avoidthis); $i++)
                         @foreach ($avoidthis[$i] as $k => $v)
@@ -89,7 +89,11 @@
                         @endforeach
                     @endfor
 
-                   
+                    <legend>Czy chcesz to na maila?</legend>
+                    <form action="StylePickerController@sendEmail">
+                        <input type="email" name="email">&nbsp;
+                        <input type="submit" name="mailMe" value="Wyślij">
+                    </form>
                 </div>
             </div>
         </div>

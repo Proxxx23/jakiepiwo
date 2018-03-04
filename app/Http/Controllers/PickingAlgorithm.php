@@ -15,18 +15,20 @@ class PickingAlgorithm extends Controller
 	protected $to_include1 = array('tak' => '1, 2, 3, 4', 'nie' => '5, 6, 7, 8');
 	protected $to_include2 = array('tak' => '2, 4, 6, 8', 'nie' => '1, 3, 5, 7');
 	protected $to_include3 = array('tak' => '3, 4, 6, 7', 'nie' => '1, 2, 5, 8');
-	// protected $to_include4 = array('TAK' => array(1, 4, 5, 8), 'NIE' => array(2, 3, 6, 7));
-	// protected $to_include5 = array('TAK' => array(1, 4, 5, 8), 'NIE' => array(2, 3, 6, 7));
-	// protected $to_include6 = array('TAK' => array(1, 4, 5, 8), 'NIE' => array(2, 3, 6, 7));
-	// protected $to_include7 = array('TAK' => array(1, 4, 5, 8), 'NIE' => array(2, 3, 6, 7));
-	// protected $to_include8 = array('TAK' => array(1, 4, 5, 8), 'NIE' => array(2, 3, 6, 7));
-	// protected $to_include9 = array('TAK' => array(1, 4, 5, 8), 'NIE' => array(2, 3, 6, 7));
-	// protected $to_include10 = array('TAK' => array(1, 4, 5, 8), 'NIE' => array(2, 3, 6, 7));
-	// protected $to_include11 = array('TAK' => array(1, 4, 5, 8), 'NIE' => array(2, 3, 6, 7));
-	// protected $to_include12 = array('TAK' => array(1, 4, 5, 8), 'NIE' => array(2, 3, 6, 7));
-	// protected $to_include13 = array('TAK' => array(1, 4, 5, 8), 'NIE' => array(2, 3, 6, 7));
-	// protected $to_include14 = array('TAK' => array(1, 4, 5, 8), 'NIE' => array(2, 3, 6, 7));
-	// protected $to_include15 = array('TAK' => array(1, 4, 5, 8), 'NIE' => array(2, 3, 6, 7));
+	protected $to_include4 = array('tak' => '3, 4, 6, 7', 'nie' => '1, 2, 5, 8');
+	
+	// Pytania skali
+	protected $to_include5 = array('tak' => '3, 4, 6, 7', 'nie' => '1, 2, 5, 8');
+	protected $to_include7 = array('tak' => '3, 4, 6, 7', 'nie' => '1, 2, 5, 8');
+
+	protected $to_include6 = array('tak' => '3, 4, 6, 7', 'nie' => '1, 2, 5, 8');
+	protected $to_include8 = array('tak' => '3, 4, 6, 7', 'nie' => '1, 2, 5, 8');
+	protected $to_include9 = array('tak' => '3, 4, 6, 7', 'nie' => '1, 2, 5, 8');
+	protected $to_include10 = array('tak' => '3, 4, 6, 7', 'nie' => '1, 2, 5, 8');
+	protected $to_include11 = array('tak' => '3, 4, 6, 7', 'nie' => '1, 2, 5, 8');
+	protected $to_include12 = array('tak' => '3, 4, 6, 7', 'nie' => '1, 2, 5, 8');
+	protected $to_include13 = array('tak' => '3, 4, 6, 7', 'nie' => '1, 2, 5, 8');
+	protected $to_include14 = array('tak' => '3, 4, 6, 7', 'nie' => '1, 2, 5, 8');
 
 	// Extra questions
 	protected $extra_to_include1 = array();
@@ -56,6 +58,11 @@ class PickingAlgorithm extends Controller
 
 	    			if ($answer != $yesno) { 
 	    				continue; 
+	    			}
+
+	    			// Pytania skali
+	    			if ($answer != 'tak' && $answer != 'nie') {
+	    				
 	    			}
 
 	    				if ($answer == 'tak') {

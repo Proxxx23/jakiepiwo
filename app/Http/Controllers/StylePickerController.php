@@ -88,7 +88,7 @@ class StylePickerController extends Controller
 
     }
 
-    public function prepareAnswers() : bool {
+    public function prepareAnswers() {
 
     	$answers = array();
     	$validation = new Validation();
@@ -96,7 +96,8 @@ class StylePickerController extends Controller
     	for ($i = 1; $i <= 3; $i++) {
     		
     		if (is_null($_POST['answer-'.$i.''])) { 
-    			$this->logError('Pytanie numer ' . $i . ' jest puste. Odpowiedz na wszystkie pytania!', true);
+    			$this->logError('Pytanie numer ' . $i . ' jest puste. Odpowiedz na wszystkie pytania!');
+    			return $this->showQuestions(true);
     		}
 
     		if (!$validation->validateSimpleAnswer($_POST['answer-'.$i.'']) && $i != 6 && $i != 8) {
@@ -150,7 +151,7 @@ class StylePickerController extends Controller
 
     		} else {
     			$this->logError('Nie udało się wykonać insertu na bazie!');
-    			$this->showQuestions(true);
+    			return $this->showQuestions(true);
     		}
     	}
     }
@@ -187,7 +188,7 @@ class StylePickerController extends Controller
 
     }
 
-    public function logError(string $message, bool $die) {
+    public function logError(string $message, bool $die = false) {
 
     	$this->error_msg = array_push($this->error_msg, $message);
     	$this->error_cnt++;
