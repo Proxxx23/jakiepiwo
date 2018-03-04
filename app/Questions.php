@@ -22,9 +22,9 @@ trait Questions {
 
 		// Pytania techniczne
 		4 => array("question" => "Chcesz czegoś lekkiego do ugaszenia pragnienia, czy złożonego i degustacyjnego?", "type" => 0, "answers" => array('NO')),
-		5 => array("question" => "Jak mocne ma być?", "type" => 1, "answers" => array('wodniste', 'leciutkie', 'przeciętne', 'mocniejsze', 'tęgie', 'krew czorta')),
+		5 => array("question" => "Jak mocne ma być?", "type" => 1, "answers" => array('leciutkie', 'przeciętne', 'mocne', 'krew czorta')),
 		6 => array("question" => "Wolisz jasne czy ciemne?", "type" => 0, "answers" => array('NO')),
-		7 => array("question" => "Jak wysoką goryczkę tolerujesz?", "type" => 1, "answers" => array('ledwie wyczuwalną', 'delikatną', 'wyczuwalną', 'zdecydowanie wyczuwalną', 'mocną', 'jestem hopheadem')),
+		7 => array("question" => "Jak wysoką goryczkę tolerujesz?", "type" => 1, "answers" => array('ledwie wyczuwalną', 'lekką', 'zdecydowanie wyczuwalną', 'mocną', 'jestem hopheadem')),
 		8 => array("question" => "Raczej słodkie?", "type" => 0, "answers" => array('NO')),
 
 		// Pytania smakowe - podaj w skali

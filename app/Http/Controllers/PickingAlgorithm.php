@@ -14,21 +14,21 @@ class PickingAlgorithm extends Controller
 	*/
 	protected $to_include1 = array('tak' => '1, 2, 3, 4', 'nie' => '5, 6, 7, 8');
 	protected $to_include2 = array('tak' => '2, 4, 6, 8', 'nie' => '1, 3, 5, 7');
-	protected $to_include3 = array('tak' => '3, 4, 6, 7', 'nie' => '1, 2, 5, 8');
-	protected $to_include4 = array('tak' => '3, 4, 6, 7', 'nie' => '1, 2, 5, 8');
+	protected $to_include3 = array('tak' => '1, 2, 3, 4', 'nie' => '1, 2, 3, 4');
+	protected $to_include4 = array('tak' => '1, 2, 3, 4', 'nie' => '1, 2, 3, 4');
 	
 	// Pytania skali
-	protected $to_include5 = array('tak' => '3, 4, 6, 7', 'nie' => '1, 2, 5, 8');
-	protected $to_include7 = array('tak' => '3, 4, 6, 7', 'nie' => '1, 2, 5, 8');
+	protected $to_include5 = array('leciutkie' => '1, 2, 3, 4', 'przeiętne' => '', 'mocne' => '', 'krew czorta' => '');
+	protected $to_include7 = array('ledwie wyczuwalną' => '1, 2, 3, 4', 'lekką' => '1, 2, 3, 4', 'zdecydowanie wyczuwalną' => '', 'mocną' => '', 'jestem hopheadem' => '');
 
-	protected $to_include6 = array('tak' => '3, 4, 6, 7', 'nie' => '1, 2, 5, 8');
-	protected $to_include8 = array('tak' => '3, 4, 6, 7', 'nie' => '1, 2, 5, 8');
-	protected $to_include9 = array('tak' => '3, 4, 6, 7', 'nie' => '1, 2, 5, 8');
-	protected $to_include10 = array('tak' => '3, 4, 6, 7', 'nie' => '1, 2, 5, 8');
-	protected $to_include11 = array('tak' => '3, 4, 6, 7', 'nie' => '1, 2, 5, 8');
-	protected $to_include12 = array('tak' => '3, 4, 6, 7', 'nie' => '1, 2, 5, 8');
-	protected $to_include13 = array('tak' => '3, 4, 6, 7', 'nie' => '1, 2, 5, 8');
-	protected $to_include14 = array('tak' => '3, 4, 6, 7', 'nie' => '1, 2, 5, 8');
+	protected $to_include6 = array('tak' => '1, 2, 3, 4', 'nie' => '1, 2, 3, 4');
+	protected $to_include8 = array('tak' => '1, 2, 3, 4', 'nie' => '1, 2, 3, 4');
+	protected $to_include9 = array('tak' => '1, 2, 3, 4', 'nie' => '1, 2, 3, 4');
+	protected $to_include10 = array('tak' => '1, 2, 3, 4', 'nie' => '1, 2, 3, 4');
+	protected $to_include11 = array('tak' => '1, 2, 3, 4', 'nie' => '1, 2, 3, 4');
+	protected $to_include12 = array('tak' => '1, 2, 3, 4', 'nie' => '1, 2, 3, 4');
+	protected $to_include13 = array('tak' => '1, 2, 3, 4', 'nie' => '1, 2, 3, 4');
+	protected $to_include14 = array('tak' => '1, 2, 3, 4', 'nie' => '1, 2, 3, 4');
 
 	// Extra questions
 	protected $extra_to_include1 = array();
@@ -43,6 +43,23 @@ class PickingAlgorithm extends Controller
 	private $style_to_avoid = array();
 
 	private CONST STYLES_TO_PICK = 3; // Eventually change to user's decision
+
+    /**
+    * Randomizes ids in $to_include vars
+    */
+	private function randomizer() {
+
+		for ($i = 0 ; $i < 4; $i++) {
+			if ($i != 3) {
+				$this->r .= $r .= mt_rand(1, 20) . ', ';
+			} else {
+				$this->r .= $r .= mt_rand(1, 20);
+			}
+		}
+
+		return $r;
+
+	}
     
     /**
     * TODO: Change name of the method
@@ -54,18 +71,26 @@ class PickingAlgorithm extends Controller
     	foreach ($answers_decoded AS $number => $answer) {
 	    	foreach ($this->{'to_include'.$number} AS $yesno => $ids) {
 
+	    		// Switch to randomize ID-s
+	    		//$ids = $this->randomizer();
+
 	    		$ids_exploded = explode(', ', $ids);
 
+	    		if ($answer == 'tak' || $answer == 'nie') {
 	    			if ($answer != $yesno) { 
 	    				continue; 
 	    			}
-
-	    			// Pytania skali
+	    		} 
+	    			// Pytania skali - dopracować
 	    			if ($answer != 'tak' && $answer != 'nie') {
-	    				
-	    			}
-
-	    				if ($answer == 'tak') {
+	    				foreach ($ids_exploded AS $value) {
+	    						if (!empty($this->included_ids[$value])) {
+									$this->included_ids[$value]++;
+								} else {
+									$this->included_ids[$value] = 1;
+								}	
+	    					}
+	    			} elseif ($answer == 'tak') {
 	    					foreach ($ids_exploded AS $value) {
 	    						if (!empty($this->included_ids[$value])) {
 									$this->included_ids[$value]++;
@@ -73,7 +98,7 @@ class PickingAlgorithm extends Controller
 									$this->included_ids[$value] = 1;
 								}	
 	    					}
-	    				} else {
+	    			} elseif ($answer == 'nie') {
 	    					foreach ($ids_exploded AS $value) {
 								if (!empty($this->excluded_ids[$value])) {
 									$this->excluded_ids[$value]++;
@@ -81,7 +106,7 @@ class PickingAlgorithm extends Controller
 									$this->excluded_ids[$value] = 1;
 								}	
 	    					}
-	    				}
+	    			}
 	    	}
     	}
 
