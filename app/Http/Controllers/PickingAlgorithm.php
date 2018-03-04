@@ -9,30 +9,37 @@ class PickingAlgorithm extends Controller
 {
 
 	/*
-	* Array zawiera pary 'odpowiedź' => id_piw z bazy do zaliczenia  w przypadku wyboru tej odpowiedzi
+	* Array zawiera pary 'odpowiedź' => id_piw z bazy do zaliczenia w przypadku wyboru tej odpowiedzi
 	*/
-	public $to_include1 = array('tak' => '1, 2, 3, 4', 'nie' => '5, 6, 7, 8');
-	public $to_include2 = array('tak' => '2, 4, 6, 8', 'nie' => '1, 3, 5, 7');
-	public $to_include3 = array('tak' => '3, 4, 6, 7', 'nie' => '1, 2, 5, 8');
-	// public $to_include[4] = array('TAK' => array(1, 4, 5, 8), 'NIE' => array(2, 3, 6, 7));
-	// public $to_include[5] = array('TAK' => array(1, 4, 5, 8), 'NIE' => array(2, 3, 6, 7));
-	// public $to_include[6] = array('TAK' => array(1, 4, 5, 8), 'NIE' => array(2, 3, 6, 7));
-	// public $to_include[7] = array('TAK' => array(1, 4, 5, 8), 'NIE' => array(2, 3, 6, 7));
-	// public $to_include[8] = array('TAK' => array(1, 4, 5, 8), 'NIE' => array(2, 3, 6, 7));
-	// public $to_include[9] = array('TAK' => array(1, 4, 5, 8), 'NIE' => array(2, 3, 6, 7));
-	// public $to_include[10] = array('TAK' => array(1, 4, 5, 8), 'NIE' => array(2, 3, 6, 7));
-	// public $to_include[11] = array('TAK' => array(1, 4, 5, 8), 'NIE' => array(2, 3, 6, 7));
-	// public $to_include[12] = array('TAK' => array(1, 4, 5, 8), 'NIE' => array(2, 3, 6, 7));
-	// public $to_include[13] = array('TAK' => array(1, 4, 5, 8), 'NIE' => array(2, 3, 6, 7));
-	// public $to_include[14] = array('TAK' => array(1, 4, 5, 8), 'NIE' => array(2, 3, 6, 7));
-	// public $to_include[15] = array('TAK' => array(1, 4, 5, 8), 'NIE' => array(2, 3, 6, 7));
+	protected $to_include1 = array('tak' => '1, 2, 3, 4', 'nie' => '5, 6, 7, 8');
+	protected $to_include2 = array('tak' => '2, 4, 6, 8', 'nie' => '1, 3, 5, 7');
+	protected $to_include3 = array('tak' => '3, 4, 6, 7', 'nie' => '1, 2, 5, 8');
+	// public $to_include4 = array('TAK' => array(1, 4, 5, 8), 'NIE' => array(2, 3, 6, 7));
+	// public $to_include5 = array('TAK' => array(1, 4, 5, 8), 'NIE' => array(2, 3, 6, 7));
+	// public $to_include6 = array('TAK' => array(1, 4, 5, 8), 'NIE' => array(2, 3, 6, 7));
+	// public $to_include7 = array('TAK' => array(1, 4, 5, 8), 'NIE' => array(2, 3, 6, 7));
+	// public $to_include8 = array('TAK' => array(1, 4, 5, 8), 'NIE' => array(2, 3, 6, 7));
+	// public $to_include9 = array('TAK' => array(1, 4, 5, 8), 'NIE' => array(2, 3, 6, 7));
+	// public $to_include10 = array('TAK' => array(1, 4, 5, 8), 'NIE' => array(2, 3, 6, 7));
+	// public $to_include11 = array('TAK' => array(1, 4, 5, 8), 'NIE' => array(2, 3, 6, 7));
+	// public $to_include12 = array('TAK' => array(1, 4, 5, 8), 'NIE' => array(2, 3, 6, 7));
+	// public $to_include13 = array('TAK' => array(1, 4, 5, 8), 'NIE' => array(2, 3, 6, 7));
+	// public $to_include14 = array('TAK' => array(1, 4, 5, 8), 'NIE' => array(2, 3, 6, 7));
+	// public $to_include15 = array('TAK' => array(1, 4, 5, 8), 'NIE' => array(2, 3, 6, 7));
 
-	public $included_ids = array(); // Beer IDs to include
-	public $excluded_ids = array(); // Excluded beer IDs
-	public $style_to_take = array();
-	public $style_to_avoid = array();
+	// Extra questions
+	protected $extra_to_include1 = array();
+	protected $extra_to_include2 = array();
+	protected $extra_to_include3 = array();
+	protected $extra_to_include4 = array();
+	protected $extra_to_include5 = array();
 
-	public CONST STYLES_TO_PICK = 3; // Eventually change to user's decision
+	private $included_ids = array(); // Beer IDs to include
+	private $excluded_ids = array(); // Excluded beer IDs
+	private $style_to_take = array();
+	private $style_to_avoid = array();
+
+	private CONST STYLES_TO_PICK = 3; // Eventually change to user's decision
     
     /**
     * 
