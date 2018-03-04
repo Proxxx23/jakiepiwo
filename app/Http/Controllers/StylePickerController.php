@@ -124,7 +124,7 @@ class StylePickerController extends Controller
 
     	$name = $_POST['username'] ?? 'Gość';
     	($validation->validateEmail($_POST['email'])) ? $email = $_POST['email'] : $email = '';
-    	($_POST['newsletter'] === 'Tak') ? $newsletter = 1 : $newsletter = 0;
+    	($_POST['newsletter']) ? $newsletter = 1 : $newsletter = 0;
 
     	if ($this->prepareAnswers() && empty($this->error_msg)) {
     		$insert_answers = DB::insert("INSERT INTO `user_answers` (name, e_mail, newsletter, answers, created_at) 

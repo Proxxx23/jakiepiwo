@@ -32,7 +32,7 @@ class PickingAlgorithm extends Controller
 	public $style_to_take = array();
 	public $style_to_avoid = array();
 
-	public CONST STYLES_TO_PICK = 3;
+	public CONST STYLES_TO_PICK = 3; // Eventually change to user's decision
     
     /**
     * 
@@ -71,13 +71,15 @@ class PickingAlgorithm extends Controller
 	    	}
     	}
 
+    	// TODO: Check if there are at least 3 styles
+    	// If no - make extra Draw
     	$this->chooseStyles($name, $email, $newsletter);
 
     }
 
     public function chooseStyles(string $name, string $email, $newsletter) {
 
-    	// Tu musi być jeszcze wywołanie funkcji, która sprawdzi, czy damy styl nie występuje wiele razy i w included i w excluded (bo to nie miałoby sensu, gdyby stout był jednocześnie wybrany i wykluczony)
+    	// Tu musi być jeszcze wywołanie funkcji, która sprawdzi, czy dany styl nie występuje wiele razy i w included i w excluded (bo to nie miałoby sensu, gdyby stout był jednocześnie wybrany i wykluczony)
     	
     	arsort($this->included_ids);
     	arsort($this->excluded_ids);
@@ -99,7 +101,7 @@ class PickingAlgorithm extends Controller
     		//mail('kontakt@piwolucja.pl', 'logStyles Exception', $e->getMessage());
     	}
 
-    	return view('results', ['buythis' => $buythis, 'avoidthis' => $avoidthis]);
+    	return view('results', ['buythis' => $buythis, 'avoidthis' => $avoidthis, 'username' => $name]);
 
     }
 
