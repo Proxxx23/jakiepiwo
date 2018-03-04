@@ -88,7 +88,7 @@ class StylePickerController extends Controller
 
     }
 
-    private function prepareAnswers() : bool {
+    public function prepareAnswers() : bool {
 
     	$answers = array();
     	$validation = new Validation();
@@ -146,7 +146,7 @@ class StylePickerController extends Controller
 
     			// Algorytm wybiera piwa
     			$algorithm = new Algorithm();
-				$algorithm->includeBeerIds($this->JSON_answers, $name, $email, $newsletter);
+				return $algorithm->includeBeerIds($this->JSON_answers, $name, $email, $newsletter);
 
     		} else {
     			$this->logError('Nie udało się wykonać insertu na bazie!');
@@ -159,7 +159,7 @@ class StylePickerController extends Controller
     public function getRecentlyPickedStyles() {
 
     	if ($_SERVER['REMOTE_ADDR']) {
-    		$q = DB::select("SELECT * FROM beers_logs WHERE ip_address = '".$_SERVER['REMOTE_ADDR']."' ORDER BY created_at DESC LIMIT 1;")
+    		$q = DB::select("SELECT * FROM beers_logs WHERE ip_address = '".$_SERVER['REMOTE_ADDR']."' ORDER BY created_at DESC LIMIT 1;");
     	}
 
     }
@@ -187,7 +187,7 @@ class StylePickerController extends Controller
 
     }
 
-    private function logError(string $message, bool $die) {
+    public function logError(string $message, bool $die) {
 
     	$this->error_msg = array_push($this->error_msg, $message);
     	$this->error_cnt++;

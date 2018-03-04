@@ -14,7 +14,7 @@ class Controller extends BaseController
   /*
 	* Prints an output with <pre> styling
 	*/ 
-	protected function printPre($data, bool $die = false, bool $backtrace = false) {
+	public function printPre($data, bool $die = false, bool $backtrace = false) {
 
       	$output = var_dump($data);
 
@@ -35,7 +35,7 @@ class Controller extends BaseController
     /*
     * Github: https://gist.github.com/yeco/412610
     */
-    protected function array_push_assoc(array $array, $key, $value) : array {
+    public function array_push_assoc(array $array, $key, $value) : array {
 
         $array[$key] = $value;
         return $array;

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\View;
 
 class PickingAlgorithm extends Controller
 {
@@ -79,7 +80,7 @@ class PickingAlgorithm extends Controller
 
     	// TODO: Check if there are at least 3 styles
     	// If no - make extra Draw
-    	$this->chooseStyles($name, $email, $newsletter);
+    	return $this->chooseStyles($name, $email, $newsletter);
 
     }
 
