@@ -20,25 +20,6 @@ class StylePickerController extends Controller
 	public $error_msg = array();
 	public $JSON_answers = '';
 
-    public function __construct() {
-
-
-    }
-
-    /*
-    * Custom functions
-    */
-
-    /*
-    * Github: https://gist.github.com/yeco/412610
-    */
-    private function array_push_assoc(array $array, $key, $value) : array {
-
- 		$array[$key] = $value;
- 		return $array;
-
-	}
-
     /*
     * Show all the questions
     * return: view
@@ -78,7 +59,7 @@ class StylePickerController extends Controller
     	$headers = 'From: jakiepiwomamwybrac@piwolucja.pl' . "\r\n" .
     	'Reply-To: jakiepiwomamwybrac@piwolucja.pl' . "\r\n";
 
-    	$subject = $_POST['username'] . ' oto 3 najlepsze style dla Ciebie';
+    	$subject = $_POST['username'] . ', oto 3 najlepsze style dla Ciebie!';
 
     	if ($validation->validateEmail()) {
     		mail($_POST['email'], $subject, $this->prepareEmailTemplate(), $headers);
@@ -158,11 +139,11 @@ class StylePickerController extends Controller
 
     			// Wyślij maila na prośbę
     			if ($_POST['sendMeAnEmail']) { 
-    				//$this->sendEmail();
+    				$this->sendEmail();
     			}
 
     			// Dodaj do listy newsletterowej
-    			if ($_POST['newsletter'] === 1) {
+    			if ($_POST['newsletter']) {
     				// Mailchimp API
     			}
 

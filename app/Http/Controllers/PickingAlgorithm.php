@@ -68,7 +68,9 @@ class PickingAlgorithm extends Controller
 	    				}
 	    	}
     	}
+
     	$this->chooseStyles($name, $email, $newsletter);
+
     }
 
     public function chooseStyles(string $name, string $email, $newsletter) {
@@ -95,7 +97,7 @@ class PickingAlgorithm extends Controller
     		//mail('kontakt@piwolucja.pl', 'logStyles Exception', $e->getMessage());
     	}
 
-    	return view('/results', ['buythis' => $buythis, 'avoidthis' => $avoidthis]);
+    	return view('results', ['buythis' => $buythis, 'avoidthis' => $avoidthis]);
 
     }
 
