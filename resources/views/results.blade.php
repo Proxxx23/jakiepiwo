@@ -69,12 +69,12 @@
             <div class="content">
 
                 <div>
-                    <h1>Hej, {$username}! Oto style dla Ciebie!</h1>
+                    <h1>Hej, {{$username}}! Oto style dla Ciebie!</h1>
 
                     @for ($i = 0; $i < count($buythis); $i++)
                         @foreach ($buythis[$i] as $k => $v)
 
-                            <p>{$v->name} / {$v->name2} / {$v->name_pl}</p></br>
+                            <p>{{$v->name}} / {{$v->name2}} / {{$v->name_pl}}</p></br>
 
                         @endforeach
                     @endfor
@@ -84,7 +84,7 @@
                     @for ($i = 0; $i < count($avoidthis); $i++)
                         @foreach ($avoidthis[$i] as $k => $v)
 
-                            <p>{$v->name} / {$v->name2} / {$v->name_pl}</p></br>
+                            <p>{{$v->name}} / {{$v->name2}} / {{$v->name_pl}}</p></br>
 
                         @endforeach
                     @endfor
