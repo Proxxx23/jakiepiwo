@@ -24,6 +24,7 @@ class CreateStylesLogsTable extends Migration
             $table->string('style_1_avoid');
             $table->string('style_2_avoid');
             $table->string('style_3_avoid');
+            $table->string('ip_address');
             $table->timestamps();
         });
     }

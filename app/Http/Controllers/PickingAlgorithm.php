@@ -14,18 +14,18 @@ class PickingAlgorithm extends Controller
 	protected $to_include1 = array('tak' => '1, 2, 3, 4', 'nie' => '5, 6, 7, 8');
 	protected $to_include2 = array('tak' => '2, 4, 6, 8', 'nie' => '1, 3, 5, 7');
 	protected $to_include3 = array('tak' => '3, 4, 6, 7', 'nie' => '1, 2, 5, 8');
-	// public $to_include4 = array('TAK' => array(1, 4, 5, 8), 'NIE' => array(2, 3, 6, 7));
-	// public $to_include5 = array('TAK' => array(1, 4, 5, 8), 'NIE' => array(2, 3, 6, 7));
-	// public $to_include6 = array('TAK' => array(1, 4, 5, 8), 'NIE' => array(2, 3, 6, 7));
-	// public $to_include7 = array('TAK' => array(1, 4, 5, 8), 'NIE' => array(2, 3, 6, 7));
-	// public $to_include8 = array('TAK' => array(1, 4, 5, 8), 'NIE' => array(2, 3, 6, 7));
-	// public $to_include9 = array('TAK' => array(1, 4, 5, 8), 'NIE' => array(2, 3, 6, 7));
-	// public $to_include10 = array('TAK' => array(1, 4, 5, 8), 'NIE' => array(2, 3, 6, 7));
-	// public $to_include11 = array('TAK' => array(1, 4, 5, 8), 'NIE' => array(2, 3, 6, 7));
-	// public $to_include12 = array('TAK' => array(1, 4, 5, 8), 'NIE' => array(2, 3, 6, 7));
-	// public $to_include13 = array('TAK' => array(1, 4, 5, 8), 'NIE' => array(2, 3, 6, 7));
-	// public $to_include14 = array('TAK' => array(1, 4, 5, 8), 'NIE' => array(2, 3, 6, 7));
-	// public $to_include15 = array('TAK' => array(1, 4, 5, 8), 'NIE' => array(2, 3, 6, 7));
+	// protected $to_include4 = array('TAK' => array(1, 4, 5, 8), 'NIE' => array(2, 3, 6, 7));
+	// protected $to_include5 = array('TAK' => array(1, 4, 5, 8), 'NIE' => array(2, 3, 6, 7));
+	// protected $to_include6 = array('TAK' => array(1, 4, 5, 8), 'NIE' => array(2, 3, 6, 7));
+	// protected $to_include7 = array('TAK' => array(1, 4, 5, 8), 'NIE' => array(2, 3, 6, 7));
+	// protected $to_include8 = array('TAK' => array(1, 4, 5, 8), 'NIE' => array(2, 3, 6, 7));
+	// protected $to_include9 = array('TAK' => array(1, 4, 5, 8), 'NIE' => array(2, 3, 6, 7));
+	// protected $to_include10 = array('TAK' => array(1, 4, 5, 8), 'NIE' => array(2, 3, 6, 7));
+	// protected $to_include11 = array('TAK' => array(1, 4, 5, 8), 'NIE' => array(2, 3, 6, 7));
+	// protected $to_include12 = array('TAK' => array(1, 4, 5, 8), 'NIE' => array(2, 3, 6, 7));
+	// protected $to_include13 = array('TAK' => array(1, 4, 5, 8), 'NIE' => array(2, 3, 6, 7));
+	// protected $to_include14 = array('TAK' => array(1, 4, 5, 8), 'NIE' => array(2, 3, 6, 7));
+	// protected $to_include15 = array('TAK' => array(1, 4, 5, 8), 'NIE' => array(2, 3, 6, 7));
 
 	// Extra questions
 	protected $extra_to_include1 = array();
@@ -42,8 +42,7 @@ class PickingAlgorithm extends Controller
 	private CONST STYLES_TO_PICK = 3; // Eventually change to user's decision
     
     /**
-    * 
-    *
+    * TODO: Change name of the method
     */
     public function includeBeerIds(string $answers, string $name, string $email, $newsletter) {
 
@@ -115,9 +114,9 @@ class PickingAlgorithm extends Controller
 
     public function logStyles(string $name, string $email, $newsletter) : bool {
 
-    	$insert_styles = DB::insert('INSERT INTO `styles_logs` (username, email, newsletter, style_1, style_2, style_3, style_1_avoid, style_2_avoid, style_3_avoid, created_at)
+    	$insert_styles = DB::insert('INSERT INTO `styles_logs` (username, email, newsletter, style_1, style_2, style_3, style_1_avoid, style_2_avoid, style_3_avoid, ip_address, created_at)
     											VALUES
-    								(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', 
+    								(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', 
     											[$name, 
     											$email, 
     											$newsletter,
@@ -127,6 +126,7 @@ class PickingAlgorithm extends Controller
 			    								$this->style_to_avoid[0],
 			    								$this->style_to_avoid[1],
 			    								$this->style_to_avoid[2],
+			    								$_SERVER['REMOTE_ADDR'],
 			    								NOW()]
 			    								);
 

@@ -158,12 +158,16 @@ class StylePickerController extends Controller
     // Pokazuje style z ostatniej wizyty
     public function getRecentlyPickedStyles() {
 
+    	if ($_SERVER['REMOTE_ADDR']) {
+    		$q = DB::select("SELECT * FROM beers_logs WHERE ip_address = '".$_SERVER['REMOTE_ADDR']."' ORDER BY created_at DESC LIMIT 1;")
+    	}
+
     }
 
     /*
     * Selects necessary info about choosen beers from database
     */
-    public function getStylesWithInfo(array $beer_ids) : array {
+    public function getDetailedInfoAboutStyle(integer $beer_ids) : object {
 
     	$beer_ids = explode(',', $beer_ids);
     	$style_info = DB::select("SELECT * FROM `beer_flavours` WHERE id IN ('".$beer_ids."')");
@@ -175,7 +179,7 @@ class StylePickerController extends Controller
     // 5 najczęściej wybieranych stylów
     public function getMostPickedStyles() : array {
 
-    	// Musi być tabela odkładająca wybrane użytkownikom style (zliczanie - jak logi)
+    	// TODO: Z logów!
     	$mostly_picked = DB::select('SELECT * FROM styles GROUP BY count(id) AS mostlypicked ORDER BY mostlypicked DESC LIMIT 3;');
 
     	return $mostly_picked;
