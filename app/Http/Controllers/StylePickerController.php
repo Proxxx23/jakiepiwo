@@ -88,7 +88,7 @@ class StylePickerController extends Controller
 
     }
 
-    public function prepareAnswers() {
+    public function prepareAnswers() : bool {
 
     	$answers = array();
     	$validation = new Validation();
@@ -99,15 +99,14 @@ class StylePickerController extends Controller
     			$this->logError('Pytanie numer ' . $i . ' jest puste. Odpowiedz na wszystkie pytania!');
     		}
 
+    	if (isset($_POST['answer-'.$i.''])) {
     		if (!$validation->validateSimpleAnswer($_POST['answer-'.$i.'']) && $i != 5 && $i != 7) {
     			$this->logError('Problem z walidacją niektórych pól formularza!', true);
     		}
-
-    		$answers = $this->array_push_assoc($answers, $i, $_POST['answer-'.$i.'']);
     	}
 
-    	if ($this->error_cnt > 0) {
-    		$this->showQuestions(true);
+    		$this->array_push_assoc($answers, $i, $_POST['answer-'.$i.'']);
+
     	}
 
 		$this->JSON_answers = json_encode($answers); //JSON $_POST answers
@@ -115,8 +114,11 @@ class StylePickerController extends Controller
 		if ($this->JSON_answers !== '') {
 			return true;
 		} else {
+			$this->logError('Brak odpowiedzi na pytania!');
 			return false;
 		}
+
+		return true;
 
     }
 
@@ -130,7 +132,12 @@ class StylePickerController extends Controller
     	($validation->validateEmail($_POST['email'])) ? $email = $_POST['email'] : $email = '';
     	($_POST['newsletter']) ? $newsletter = 1 : $newsletter = 0;
 
-    	if ($this->prepareAnswers() && empty($this->error_msg)) {
+    	if (!$this->prepareAnswers()) {
+    		var_dump($this->error_msg);
+    		die();
+    	}
+
+    	if (empty($this->error_msg)) {
     		$insert_answers = DB::insert("INSERT INTO `user_answers` (name, e_mail, newsletter, answers, created_at) 
     										VALUES 
     										(?, ?, ?, ?, ?)",
@@ -153,9 +160,11 @@ class StylePickerController extends Controller
 				return $algorithm->includeBeerIds($this->JSON_answers, $name, $email, $newsletter);
 
     		} else {
-    			$this->logError('Nie udało się wykonać insertu na bazie!');
+    			$this->logError('Błąd połączenia z bazą danych!');
     			return $this->showQuestions(true);
     		}
+    	} else {
+    		return $this->showQuestions(true);
     	}
     }
 
@@ -188,18 +197,28 @@ class StylePickerController extends Controller
 
     	return $mostly_picked;
 
+    }
+
+    public function logErrorToDB(string $message) : void {
+
+    	try {
+    		DB::insert("INSERT INTO error_logs (error, created_at) VALUES (:error, :created_at)",
+    					['error' => $message, 'created_at' => NOW()]);
+    	} catch (Exception $e) {
+    		die($e->getMessage());
+    	}
 
     }
 
     public function logError(string $message, bool $die = false) {
 
-    	$this->error_msg = array_push($this->error_msg, $message);
-    	$this->error_cnt++;
-    	$this->showQuestions(true);
-
     	if ($die) {
     		die($message);
     	}
+
+    	$this->logErrorToDB($message);
+    	array_push($this->error_msg, $message);
+    	$this->error_cnt++;
 
     }
 
