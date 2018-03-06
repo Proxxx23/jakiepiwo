@@ -70,7 +70,7 @@
             }
 
             .changelog h3 {
-                font-size: 18px;
+                font-size: 14px;
                 color: lime;
             }
 
@@ -82,15 +82,15 @@
             .todo {
                 position: absolute;
                 right: 25px;
-                top: 100px;
+                top: 180px;
             }
 
             .todo h3 {
-                font-size: 18px;
+                font-size: 14px;
                 color: lime;
             }
 
-            .changelog ul li {
+            .todo ul li {
                 font-size: 14px;
                 color: black;
             }
@@ -103,14 +103,28 @@
             <div class="changelog">
                 <h3>Changelog v. 0.1nightly</h3>
                 <ul>
-                    <li>Zmiany</li>
+                    <li>Pełny algorytm z budowaniem "siły"</li>
+                    <li>Logowanie błędów formularza do bazy</li>
+                    <li>Obsługa błędów</li>
+                    <li>Wstępna wersja bazująca na 10 stylach</li>
+                    <li>Walidacja formularza</li>
+                    <li>Zapis odpowiedzi do bazy</li>
                 </ul>
             </div>
 
             <div class="todo">
                 <h3>Pracuję nad</h3>
                 <ul>
-                    <li>Praca</li>
+                    <li>Wykluczanie znanych użytkownikowi stylów</li>
+                    <li>Niektóre pytania jako skala/suwak</li>
+                    <li>Słone/kwaśne/Islay jako propozycja obok stylów</li>
+                    <li>Barrel aged jako osobna część</li>
+                    <li>Mail na życzenie</li>
+                    <li>Wyświetlanie stylów z ostatniej wizyty</li>
+                    <li>Najczęściej polecane style</li>
+                    <li>Pula 10 polecanych piw na każdy styl</li>
+                    <li>Logowanie błędów w jednym insercie DB</li>
+                    <li>SKalowanie pytań (ważne > mniej ważne)</li>
                 </ul>
             </div>
             <div class="content">

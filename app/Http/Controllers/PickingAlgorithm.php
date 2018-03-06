@@ -13,43 +13,40 @@ class PickingAlgorithm extends Controller
 	* Array zawiera pary 'odpowiedź' => id_piw z bazy do zaliczenia w przypadku wyboru tej odpowiedzi
 	*/
 	// Czy smakują Ci lekkie piwa koncernowe dostępne w sklepach?
-	protected $to_include1 = array('tak' => '1, 2, 3, 4', 
-		'nie' => '5, 6, 7, 8');
+	protected $to_include1 = array('tak' => '9, 10, 11, 12, 13', 
+		'nie' => '5, 6, 7, 8'); // Nie można uzupełniać jako odwrotność tak, ale trzeba z tym uważać (czasem może być ani nie, ani tak)
 	// Czy chcesz poznać nowe smaki?
-	protected $to_include2 = array('tak' => '2, 4, 6, 8', 'nie' => '1, 3, 5, 7');
-	// Czy piłeś już nietypowe piwa?
+	protected $to_include2 = array('tak' => '1, 2, 3, 4, 5, 6, 7, 8, 9, 15, 16, 19, 20', 'nie' => '1, 3, 5, 7');
+	// Czy piłeś już nietypowe piwa? (słabe pytanie)
 	protected $to_include3 = array('tak' => '1, 2, 3, 4', 'nie' => '1, 2, 3, 4');
 
 	// TODO: Wykluczamy to, co już znasz?
 
 	// Chcesz czegoś lekkiego do ugaszenia pragnienia, czy złożonego i degustacyjnego?
-	protected $to_include4 = array('tak' => '1, 2, 3, 4', 'nie' => '1, 2, 3, 4');
+	protected $to_include4 = array('coś lekkiego' => '1, 2, 3, 4', 'coś pośrodku' => '1, 2, 3, 4', 'coś złożonego' => '');
 	
 	// Pytania skali
-
-	// Jak mocne ma być?
-	protected $to_include5 = array('leciutkie' => '1, 2, 3, 4', 'przeiętne' => '', 'mocne' => '', 'krew czorta' => '');
 	// Jak wysoką goryczkę tolerujesz?
-	protected $to_include7 = array('ledwie wyczuwalną' => '1, 2, 3, 4', 'lekką' => '1, 2, 3, 4', 'zdecydowanie wyczuwalną' => '', 'mocną' => '', 'jestem hopheadem' => '');
+	protected $to_include5 = array('ledwie wyczuwalną' => '9, 14, 15, 16, 17, 18, 19, 20', 'lekką' => '11, 12', 'zdecydowanie wyczuwalną' => '10, 13', 'mocną' => '1, 2, 3, 4, 5, 6, 7, 8', 'jestem hopheadem' => '1, 3, 7');
 
-	// Wolisz jasne czy ciemne?
-	protected $to_include6 = array('tak' => '1, 2, 3, 4', 'nie' => '1, 2, 3, 4');
+	// Wolisz jasne czy ciemne? (zmienić na jasne/ciemne)
+	protected $to_include6 = array('tak' => '1, 2, 5, 6, 7, 8, 9, 10, 11, 13, 14, 15, 16, 17, 20', 'nie' => '3, 4, 12, 18, 19');
 
-	// Raczej słodkie?
-	protected $to_include8 = array('tak' => '1, 2, 3, 4', 'nie' => '1, 2, 3, 4');
+	// Raczej słodkie? (zmienić: słodkie/wytrawne)
+	protected $to_include7 = array('tak' => '1, 2, 3, 4', 'nie' => '1, 2, 3, 4');
 	// TODO: Jako skala/suwak
 	// Klimaty czekoladowe?
-	protected $to_include9 = array('tak' => '1, 2, 3, 4', 'nie' => '1, 2, 3, 4');
+	protected $to_include8 = array('tak' => '1, 2, 3, 4', 'nie' => '1, 2, 3, 4');
 	// Lubisz torfową whisky (Islay)?
-	protected $to_include10 = array('tak' => '1, 2, 3, 4', 'nie' => '1, 2, 3, 4');
+	protected $to_include9 = array('tak' => '1, 2, 3, 4', 'nie' => '1, 2, 3, 4');
 	// Odpowiada Ci palony smak?
-	protected $to_include11 = array('tak' => '1, 2, 3, 4', 'nie' => '1, 2, 3, 4');
+	protected $to_include10 = array('tak' => '1, 2, 3, 4', 'nie' => '1, 2, 3, 4');
 	// Bardziej owocowo?
-	protected $to_include12 = array('tak' => '1, 2, 3, 4', 'nie' => '1, 2, 3, 4');
+	protected $to_include11 = array('tak' => '1, 2, 3, 4', 'nie' => '1, 2, 3, 4');
 	// Co powiesz na piwo kwaśne?
-	protected $to_include13 = array('tak' => '1, 2, 3, 4', 'nie' => '1, 2, 3, 4');
+	protected $to_include12 = array('tak' => '1, 2, 3, 4', 'nie' => '1, 2, 3, 4');
 	// Co powiesz na piwo słonawe?
-	protected $to_include14 = array('tak' => '1, 2, 3, 4', 'nie' => '1, 2, 3, 4');
+	protected $to_include13 = array('tak' => '1, 2, 3, 4', 'nie' => '1, 2, 3, 4');
 
 	// Extra questions
 	protected $extra_to_include1 = array();
@@ -97,13 +94,14 @@ class PickingAlgorithm extends Controller
 
 	    		$ids_exploded = explode(', ', $ids);
 
-	    		if ($answer == 'tak' || $answer == 'nie') {
+	    		// Tak/nie i tym podobne
+	    		if (count($this->{'to_include'.$number}) == 2) {
 	    			if ($answer != $yesno) { 
 	    				continue; 
 	    			}
 	    		} 
 	    			// Pytania skali - dopracować
-	    			if ($answer != 'tak' && $answer != 'nie') {
+	    			if (count($this->{'to_include'.$number}) > 2) {
 	    				// Osobne wykluczenie na zakresy IBU/alkoholu, brane pod uwagę na samym końcu
 	    				foreach ($ids_exploded AS $value) {
 	    						if (!empty($this->included_ids[$value])) {

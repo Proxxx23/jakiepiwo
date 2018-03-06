@@ -93,14 +93,14 @@ class StylePickerController extends Controller
     	$answers = array();
     	$validation = new Validation();
 
-    	for ($i = 1; $i <= 14; $i++) {
+    	for ($i = 1; $i <= 13; $i++) {
     		
     		if (is_null($_POST['answer-'.$i.''])) { 
     			$this->logError('Pytanie numer ' . $i . ' jest puste. Odpowiedz na wszystkie pytania!');
     		}
 
     	if (isset($_POST['answer-'.$i.''])) {
-    		if (!$validation->validateSimpleAnswer($_POST['answer-'.$i.'']) && $i != 5 && $i != 7) {
+    		if (!$validation->validateSimpleAnswer($_POST['answer-'.$i.'']) && $i != 4 && $i != 5 &&) {
     			$this->logError('Problem z walidacją niektórych pól formularza!', true);
     		}
     	}
