@@ -83,6 +83,7 @@ class PickingAlgorithm extends Controller
 	    		} 
 	    			// Pytania skali - dopracować
 	    			if ($answer != 'tak' && $answer != 'nie') {
+	    				// Osobne wykluczenie na zakresy IBU/alkoholu, brane pod uwagę na samym końcu
 	    				foreach ($ids_exploded AS $value) {
 	    						if (!empty($this->included_ids[$value])) {
 									$this->included_ids[$value]++;

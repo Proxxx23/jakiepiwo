@@ -97,7 +97,6 @@ class StylePickerController extends Controller
     		
     		if (is_null($_POST['answer-'.$i.''])) { 
     			$this->logError('Pytanie numer ' . $i . ' jest puste. Odpowiedz na wszystkie pytania!');
-    			return $this->showQuestions(true);
     		}
 
     		if (!$validation->validateSimpleAnswer($_POST['answer-'.$i.'']) && $i != 5 && $i != 7) {
@@ -105,6 +104,10 @@ class StylePickerController extends Controller
     		}
 
     		$answers = $this->array_push_assoc($answers, $i, $_POST['answer-'.$i.'']);
+    	}
+
+    	if ($this->error_cnt > 0) {
+    		$this->showQuestions(true);
     	}
 
 		$this->JSON_answers = json_encode($answers); //JSON $_POST answers
