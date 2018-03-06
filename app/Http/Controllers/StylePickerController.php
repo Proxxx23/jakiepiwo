@@ -100,12 +100,12 @@ class StylePickerController extends Controller
     		}
 
     	if (isset($_POST['answer-'.$i.''])) {
-    		if (!$validation->validateSimpleAnswer($_POST['answer-'.$i.'']) && $i != 4 && $i != 5 &&) {
+    		if (!$validation->validateSimpleAnswer($_POST['answer-'.$i.'']) && $i != 4 && $i != 6) {
     			$this->logError('Problem z walidacją niektórych pól formularza!', true);
     		}
     	}
 
-    		$this->array_push_assoc($answers, $i, $_POST['answer-'.$i.'']);
+    		$answers = $this->array_push_assoc($answers, $i, $_POST['answer-'.$i.'']);
 
     	}
 

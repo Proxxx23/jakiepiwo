@@ -94,6 +94,8 @@ class PickingAlgorithm extends Controller
 
 	    		$ids_exploded = explode(', ', $ids);
 
+
+
 	    		// Tak/nie i tym podobne
 	    		if (count($this->{'to_include'.$number}) == 2) {
 	    			if ($answer != $yesno) { 
