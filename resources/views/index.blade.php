@@ -62,10 +62,57 @@
             .m-b-md {
                 margin-bottom: 30px;
             }
+
+            .changelog {
+                position: absolute;
+                right: 25px;
+                top: 18px;
+            }
+
+            .changelog h3 {
+                font-size: 18px;
+                color: lime;
+            }
+
+            .changelog ul li {
+                font-size: 14px;
+                color: black;
+            }
+
+            .todo {
+                position: absolute;
+                right: 25px;
+                top: 100px;
+            }
+
+            .todo h3 {
+                font-size: 18px;
+                color: lime;
+            }
+
+            .changelog ul li {
+                font-size: 14px;
+                color: black;
+            }
+
+            }
         </style>
     </head>
     <body>
         <div class="flex-center">
+            <div class="changelog">
+                <h3>Changelog v. 0.1nightly</h3>
+                <ul>
+                    <li>Zmiany</li>
+                </ul>
+            </div>
+
+            <div class="todo">
+                <h3>Pracuję nad</h3>
+                <ul>
+                    <li>Praca</li>
+                </ul>
+            </div>
             <div class="content">
                 <!-- Error handling  -->
                 

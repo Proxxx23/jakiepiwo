@@ -132,10 +132,7 @@ class StylePickerController extends Controller
     	($validation->validateEmail($_POST['email'])) ? $email = $_POST['email'] : $email = '';
     	($_POST['newsletter']) ? $newsletter = 1 : $newsletter = 0;
 
-    	if (!$this->prepareAnswers()) {
-    		var_dump($this->error_msg);
-    		die();
-    	}
+    	$this->prepareAnswers();
 
     	if (empty($this->error_msg)) {
     		$insert_answers = DB::insert("INSERT INTO `user_answers` (name, e_mail, newsletter, answers, created_at) 
@@ -160,7 +157,7 @@ class StylePickerController extends Controller
 				return $algorithm->includeBeerIds($this->JSON_answers, $name, $email, $newsletter);
 
     		} else {
-    			$this->logError('Błąd połączenia z bazą danych!');
+    			$this->logError('Błąd połączenia z bazą danych!', true);
     			return $this->showQuestions(true);
     		}
     	} else {
@@ -199,6 +196,10 @@ class StylePickerController extends Controller
 
     }
 
+	/**
+    * Zapisuje błędy do bazy
+    */
+    //TODO: Przebudować na zrzucanie wszystkich błędów w jednym insercie
     public function logErrorToDB(string $message) : void {
 
     	try {
@@ -210,7 +211,10 @@ class StylePickerController extends Controller
 
     }
 
-    public function logError(string $message, bool $die = false) {
+    /**
+    * Loguje wszelkie błędy
+    */
+    public function logError(string $message, bool $die = false) : void {
 
     	if ($die) {
     		die($message);

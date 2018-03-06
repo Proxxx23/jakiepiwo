@@ -12,22 +12,43 @@ class PickingAlgorithm extends Controller
 	/*
 	* Array zawiera pary 'odpowiedź' => id_piw z bazy do zaliczenia w przypadku wyboru tej odpowiedzi
 	*/
-	protected $to_include1 = array('tak' => '1, 2, 3, 4', 'nie' => '5, 6, 7, 8');
+	// Czy smakują Ci lekkie piwa koncernowe dostępne w sklepach?
+	protected $to_include1 = array('tak' => '1, 2, 3, 4', 
+		'nie' => '5, 6, 7, 8');
+	// Czy chcesz poznać nowe smaki?
 	protected $to_include2 = array('tak' => '2, 4, 6, 8', 'nie' => '1, 3, 5, 7');
+	// Czy piłeś już nietypowe piwa?
 	protected $to_include3 = array('tak' => '1, 2, 3, 4', 'nie' => '1, 2, 3, 4');
+
+	// TODO: Wykluczamy to, co już znasz?
+
+	// Chcesz czegoś lekkiego do ugaszenia pragnienia, czy złożonego i degustacyjnego?
 	protected $to_include4 = array('tak' => '1, 2, 3, 4', 'nie' => '1, 2, 3, 4');
 	
 	// Pytania skali
+
+	// Jak mocne ma być?
 	protected $to_include5 = array('leciutkie' => '1, 2, 3, 4', 'przeiętne' => '', 'mocne' => '', 'krew czorta' => '');
+	// Jak wysoką goryczkę tolerujesz?
 	protected $to_include7 = array('ledwie wyczuwalną' => '1, 2, 3, 4', 'lekką' => '1, 2, 3, 4', 'zdecydowanie wyczuwalną' => '', 'mocną' => '', 'jestem hopheadem' => '');
 
+	// Wolisz jasne czy ciemne?
 	protected $to_include6 = array('tak' => '1, 2, 3, 4', 'nie' => '1, 2, 3, 4');
+
+	// Raczej słodkie?
 	protected $to_include8 = array('tak' => '1, 2, 3, 4', 'nie' => '1, 2, 3, 4');
+	// TODO: Jako skala/suwak
+	// Klimaty czekoladowe?
 	protected $to_include9 = array('tak' => '1, 2, 3, 4', 'nie' => '1, 2, 3, 4');
+	// Lubisz torfową whisky (Islay)?
 	protected $to_include10 = array('tak' => '1, 2, 3, 4', 'nie' => '1, 2, 3, 4');
+	// Odpowiada Ci palony smak?
 	protected $to_include11 = array('tak' => '1, 2, 3, 4', 'nie' => '1, 2, 3, 4');
+	// Bardziej owocowo?
 	protected $to_include12 = array('tak' => '1, 2, 3, 4', 'nie' => '1, 2, 3, 4');
+	// Co powiesz na piwo kwaśne?
 	protected $to_include13 = array('tak' => '1, 2, 3, 4', 'nie' => '1, 2, 3, 4');
+	// Co powiesz na piwo słonawe?
 	protected $to_include14 = array('tak' => '1, 2, 3, 4', 'nie' => '1, 2, 3, 4');
 
 	// Extra questions
