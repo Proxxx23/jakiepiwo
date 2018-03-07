@@ -79,7 +79,7 @@ class PickingAlgorithm extends Controller
 
 	}
 
-	private function synergy(int $n, int $multiplier = 2, bool $positive = true) {
+	private function synergy(int $n, int $multiplier, bool $positive = true) {
 
 		if ($positive) {
 			$this->included_ids[$n] *= $multiplier;
