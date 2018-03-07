@@ -132,6 +132,8 @@ class PickingAlgorithm extends Controller
     	}
 
     	// Synergie - wstępnie działa
+    	// Na pewno kwasy / smoked / grodziskie / ciężkie RIS-y
+    	// Ma podbijać sumę ID-ków w stosie (wpływ na wszystkie ID przypisane do danej odpowiedzi na tak/nie)
     	 $answer_value = get_object_vars($answers_decoded);
     	 if ($answer_value[1] == 'tak' && $answer_value[2] == 'tak') {
     	 	$this->synergy(1, 100, true);
