@@ -109,6 +109,7 @@
                     <li>Wstępna wersja bazująca na 10 stylach</li>
                     <li>Walidacja formularza</li>
                     <li>Zapis odpowiedzi do bazy</li>
+                    <li>Mechanizm synergi</li>
                 </ul>
             </div>
 
@@ -117,14 +118,16 @@
                 <ul>
                     <li>Wykluczanie znanych użytkownikowi stylów</li>
                     <li>Niektóre pytania jako skala/suwak</li>
+                    <li>Dolosowanie (kolejne 3 ze stosu)</li>
                     <li>Słone/kwaśne/Islay jako propozycja obok stylów</li>
                     <li>Barrel aged jako osobna część</li>
+                    <li>Integracja z MailChimp API</li>
                     <li>Mail na życzenie</li>
                     <li>Wyświetlanie stylów z ostatniej wizyty</li>
                     <li>Najczęściej polecane style</li>
                     <li>Pula 10 polecanych piw na każdy styl</li>
                     <li>Logowanie błędów w jednym insercie DB</li>
-                    <li>SKalowanie pytań (ważne > mniej ważne)</li>
+                    <li>Skalowanie pytań (ważne > mniej ważne)</li>
                 </ul>
             </div>
             <div class="content">
@@ -151,7 +154,7 @@
                     
                         @if ($field['type'] === 1)  
                          @foreach ($field['answers'] AS $ans)
-                           {{$ans}}<input type="radio" name="answer-{{ $index }}" value={{$ans}}>&nbsp;
+                           {{$ans}}<input type="radio" name="answer-{{ $index }}" value="{{$ans}}">&nbsp;
                          @endforeach
                          
                         @else

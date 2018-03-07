@@ -20,15 +20,15 @@ trait Questions {
 		// 4 => array("question" => "Wykluczamy to, co już znasz?", "type" => 0, "answers" => array('NO')),
 		// AIPA / Porter / Imperial Stout / Piwa kwaśne etc.
 
-		// Pytania techniczne
-		4 => array("question" => "Chcesz czegoś lekkiego do ugaszenia pragnienia, czy złożonego i degustacyjnego?", "type" => 0, "answers" => array('coś lekkiego', 'coś pośrodku', 'coś złożonego')),
-		5 => array("question" => "Wolisz jasne czy ciemne?", "type" => 0, "answers" => array('NO')),
-		6 => array("question" => "Jak wysoką goryczkę tolerujesz?", "type" => 1, "answers" => array('ledwie wyczuwalną', 'lekką', 'zdecydowanie wyczuwalną', 'mocną', 'jestem hopheadem')),
-		7 => array("question" => "Raczej słodkie?", "type" => 0, "answers" => array('NO')),
+		//Inne niż tak/nie
+		4 => array("question" => "Chcesz czegoś lekkiego do ugaszenia pragnienia, czy złożonego i degustacyjnego?", "type" => 1, "answers" => array('coś lekkiego', 'coś pośrodku', 'coś złożonego')),
+		5 => array("question" => "Jak wysoką goryczkę tolerujesz?", "type" => 1, "answers" => array('ledwie wyczuwalną', 'lekką', 'zdecydowanie wyczuwalną', 'mocną', 'jestem hopheadem')),
+		6 => array("question" => "Wolisz jasne czy ciemne?", "type" => 1, "answers" => array('jasne', 'bez znaczenia', 'ciemne')),
+		7 => array("question" => "Raczej słodkie?", "type" => 1, "answers" => array('słodsze', 'bez znaczenia', 'wytrawniejsze')),
 
 		// Pytania smakowe - podaj w skali
 		8 => array("question" => "Klimaty czekoladowe?", "type" => 0, "answers" => array('NO')),
-		9 => array("question" => "Lubisz torfową whisky (Islay)?", "type" => 0, "answers" => array('NO')),
+		9 => array("question" => "Gęsta konsystencja?", "type" => 0, "answers" => array('NO')),
 		10 => array("question" => "Odpowiada Ci palony smak?", "type" => 0, "answers" => array('NO')), // Coś innego
 		11 => array("question" => "Bardziej owocowo?", "type" => 0, "answers" => array('NO')),
 		12 => array("question" => "Co powiesz na piwo kwaśne?", "type" => 0, "answers" => array('NO')),

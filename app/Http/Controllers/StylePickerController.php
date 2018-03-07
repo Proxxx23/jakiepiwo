@@ -99,11 +99,11 @@ class StylePickerController extends Controller
     			$this->logError('Pytanie numer ' . $i . ' jest puste. Odpowiedz na wszystkie pytania!');
     		}
 
-    	if (isset($_POST['answer-'.$i.''])) {
-    		if (!$validation->validateSimpleAnswer($_POST['answer-'.$i.'']) && $i != 4 && $i != 6) {
-    			$this->logError('Problem z walidacją niektórych pól formularza!', true);
+    		if (isset($_POST['answer-'.$i.''])) {
+    			if (!$validation->validateSimpleAnswer($_POST['answer-'.$i.'']) && (Questions::$questions[$i]['type'] != 1)) {
+    				$this->logError('Problem z walidacją niektórych pól formularza!', true);
+    			}
     		}
-    	}
 
     		$answers = $this->array_push_assoc($answers, $i, $_POST['answer-'.$i.'']);
 

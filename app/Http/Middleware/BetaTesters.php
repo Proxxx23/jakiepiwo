@@ -14,7 +14,7 @@ class BetaTesters
      * @return mixed
      */
 
-    private const BETA_IP = array(''); // adresy IP betatesterów
+    private const BETA_IP = array('217.173.4.20', '87.207.174.210', '89.65.74.223', '31.178.112.4', '37.47.184.249', '62.61.61.40', '94.42.123.186', '89.71.154.241', '87.207.217.42', '89.67.40.6', '31.0.35.136', '79.191.70.105'); // adresy IP betatesterów
 
     private $DEV = false;
 
@@ -30,7 +30,6 @@ class BetaTesters
         if (!$this->DEV) {
             die('Brak uprawnień!');
         }
-        
 
         return $next($request);
     }
