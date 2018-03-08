@@ -14,7 +14,7 @@ trait Questions {
 		// Pytania wstępne
 		1 => array("question" => "Czy smakują Ci lekkie piwa koncernowe dostępne w sklepach?", "type" => 0, "answers" => array('NO')),
 		2 => array("question" => "Czy chcesz poznać nowe smaki?", "type" => 0, "answers" => array('NO')),
-		3 => array("question" => "Czy piłeś już nietypowe piwa?", "type" => 0, "answers" => array('NO')),
+		3 => array("question" => "Czy wolałbyś poznać wyłącznie style, które potrafią zszokować?", "type" => 0, "answers" => array('NO')),
 
 		// TODO: Obsługa
 		// 4 => array("question" => "Wykluczamy to, co już znasz?", "type" => 0, "answers" => array('NO')),

@@ -13,40 +13,57 @@ class PickingAlgorithm extends Controller
 	* Array zawiera pary 'odpowiedź' => id_piw z bazy do zaliczenia w przypadku wyboru tej odpowiedzi
 	*/
 	// Czy smakują Ci lekkie piwa koncernowe dostępne w sklepach?
-	protected $to_include1 = array('tak' => '9, 10, 11, 12, 13', 
-		'nie' => '5, 6, 7, 8'); // Nie można uzupełniać jako odwrotność tak, ale trzeba z tym uważać (czasem może być ani nie, ani tak)
+	protected $to_include1 = array('tak' => '9, 10, 11, 12, 13, 14, 25, 26, 27', 
+									'nie' => '5, 6, 7, 8, 22, 23, 24, 28, 29, 30, 31, 32, 33, 34, 35, 36,37,38,39,40'); // Nie można uzupełniać jako odwrotność tak, ale trzeba z tym uważać (czasem może być ani nie, ani tak)
 	// Czy chcesz poznać nowe smaki?
-	protected $to_include2 = array('tak' => '1, 2, 3, 4, 5, 6, 7, 8, 9, 15, 16, 19, 20', 'nie' => '1, 3, 5, 7');
-	// Czy piłeś już nietypowe piwa? (słabe pytanie)
-	protected $to_include3 = array('tak' => '1, 2, 3, 4', 'nie' => '1, 2, 3, 4');
+	protected $to_include2 = array('tak' => '1, 2, 3, 4, 5, 6, 7, 8, 9, 15, 16, 19, 20, 22,23,24,28,29,30,31,32,33,34,35,36,37,38,39,40', 
+									'nie' => '1, 3, 5, 7, 21, 25,26,27');
+	// Czy wolałbyś poznać wyłącznie style, które potrafią zszokować?
+	protected $to_include3 = array('tak' => '1,2,3,4,5,6,7,8,15,16,23,24,36,37,40', 'nie' => '9,10,11,12,13,14,17,18,19,20,21,22,25,26,27,28,29,30,31,32,33,34,35,38,39');
 
 	// TODO: Wykluczamy to, co już znasz?
 
-	// Chcesz czegoś lekkiego do ugaszenia pragnienia, czy złożonego i degustacyjnego?
-	protected $to_include4 = array('coś lekkiego' => '1, 2, 3, 4', 'coś pośrodku' => '1, 2, 3, 4', 'coś złożonego' => '');
+	// Chcesz czegoś lekkiego do ugaszenia pragnienia, czy złożonego i degustacyjnego? - TODO na zakresach z beer_flavours lub API PolskiKraft
+	protected $to_include4 = array('coś lekkiego' => '9,10,11,12,13,17,18,21,25,26,31,32,33,40', 
+									'coś pośrodku' => '14,15,16,19,20,25,27,28,29,30,34,35,38', 
+									'coś złożonego' => '1,2,3,4,5,6,7,8,22,23,24,36,37,39');
 	
 	// Jak wysoką goryczkę tolerujesz?
-	protected $to_include5 = array('ledwie wyczuwalną' => '9, 14, 15, 16, 17, 18, 19, 20', 'lekką' => '11, 12', 'zdecydowanie wyczuwalną' => '10, 13', 'mocną' => '1, 2, 3, 4, 5, 6, 7, 8', 'jestem hopheadem' => '1, 3, 7');
+	protected $to_include5 = array('ledwie wyczuwalną' => '9, 14, 15, 16, 17, 18, 19, 20, 25, 40', 
+									'lekką' => '11, 12, 21, 22, 23, 26, 31,34', 
+									'zdecydowanie wyczuwalną' => '10, 13, 21, 24, 27, 28,29,30,32,33,35,38,39', 
+									'mocną' => '1, 2, 3, 4, 5, 6, 7, 8,36,37', 
+									'jestem hopheadem' => '1, 3, 7');
 
 	// Wolisz jasne czy ciemne? (zmienić na jasne/ciemne)
-	protected $to_include6 = array('jasne' => '1, 2, 5, 6, 7, 8, 9, 10, 11, 13, 14, 15, 16, 17, 20', 'bez znaczenia' => '', 'ciemne' => '3, 4, 12, 18, 19');
+	protected $to_include6 = array('jasne' => '1, 2, 5, 6, 7, 8, 9, 10, 11, 13, 14, 15, 16, 17, 20,22,23,25,26,27,28,31,32,38,39,40', 
+									'bez znaczenia' => '', 
+									'ciemne' => '3, 4, 12, 18, 19,21,24,29,30,33,34,35,36,37');
 
 	// Raczej słodkie? (zmienić: słodkie/wytrawne)
 	// TODO: Więcej opcji (słodkie/bez znaczenia/wytrawne)
-	protected $to_include7 = array('słodsze' => '1, 2, 3, 4', ' bez znaczenia' => '', 'wytrawniejsze' => '1, 2, 3, 4');
+	protected $to_include7 = array('słodsze' => '1, 2,5,6,7,8,14,15,16,18,19,20,21', 
+									'bez znaczenia' => '', 
+									'wytrawniejsze' => '3,4,5,9,10,11,12,13,17,21');
 	// TODO: Jako skala/suwak
 	// Klimaty czekoladowe?
-	protected $to_include8 = array('tak' => '3, 4, 12, 18', 'nie' => '1, 2, 5, 6, 7, 8, 9, 19, 11, 13, 14, 15, 16, 17, 18, 19, 20');
+	protected $to_include8 = array('tak' => '3, 4, 12, 18,21,24,29,30,33,34,35,36,37', 
+									'nie' => '1, 2, 5, 6, 7, 8, 9, 19, 11, 13, 14, 15, 16, 17, 18, 19, 20,22,23,25,26,27,28,31,32,38,39,40');
 	// Mocno gazowane?
-	protected $to_include9 = array('tak' => '5, 7, 8, 19, 20', 'nie' => '1, 2, 3, 4, 6, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18');
+	protected $to_include9 = array('tak' => '5, 7, 8, 19, 20,21,25,40', 
+									'nie' => '1, 2, 3, 4, 6, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 22,23,24,26,27,28,29,30,31,32,33,34,35,36,37,38,39');
 	// Odpowiada Ci palony smak?
-	protected $to_include10 = array('tak' => '3, 12', 'nie' => '1, 2, 4, 5, 6, 7, 8, 9, 10, 11, 13, 14, 15, 16, 17, 18, 19, 20');
+	protected $to_include10 = array('tak' => '3, 12,21,24,29,33,35,36,37', 
+									'nie' => '1, 2, 4, 5, 6, 7, 8, 9, 10, 11, 13, 14, 15, 16, 17, 18, 19, 20,21,22,23,25,26,27,28,30,31,32,34,38,32,40');
 	// Bardziej owocowo?
-	protected $to_include11 = array('tak' => '1, 2, 5, 6, 7, 8', 'nie' => '3, 4, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20');
+	protected $to_include11 = array('tak' => '1, 2, 5, 6, 7, 8,25,40', 
+									'nie' => '3, 4, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,21,22,23,24,26,27,28,29,30,31,32,33,34,35,36,37,38,39');
 	// Co powiesz na piwo kwaśne?
-	protected $to_include12 = array('tak' => '100', 'nie' => '1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 10');
+	protected $to_include12 = array('tak' => '40', 
+									'nie' => '1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40');
 	// Co powiesz na piwo słonawe?
-	protected $to_include13 = array('tak' => '100', 'nie' => '1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 10');
+	protected $to_include13 = array('tak' => '100', 
+									'nie' => '1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,21,22,23,24,25,26,27,28,29,30');
 
 	// Extra questions (dym z ogniska/wędzonka) / Islay whisky
 	protected $extra_to_include1 = array();
@@ -79,14 +96,20 @@ class PickingAlgorithm extends Controller
 
 	}
 
-	private function synergy(int $n, int $multiplier, bool $positive = true) {
+	private function positiveSynergy(array $ids_to_multiply, int $multiplier) {
 
-		if ($positive) {
-			$this->included_ids[$n] *= $multiplier;
-		} else {
-			$this->excluded_ids[$n] *= $multiplier;
+		foreach ($ids_to_multiply AS $id) {
+			$this->included_ids[$id] *= $multiplier;
 		}
+		
+	}
 
+	private function negativeSynergy(array $ids_to_divide, int $divider) {
+
+		foreach ($ids_to_divide AS $id) {
+			$this->excluded_ids[$id] = floor($this->excluded_ids[$id] / $divider);
+		}
+		
 	}
 
     
@@ -96,6 +119,8 @@ class PickingAlgorithm extends Controller
     public function includeBeerIds(string $answers, string $name, string $email, int $newsletter) {
 
     	$answers_decoded = json_decode($answers);
+    	echo "Odpowiedzi zdekodowane z JSON-a: <br />";
+    	var_dump($answers_decoded);
 
     	foreach ($answers_decoded AS $number => $answer) {
 	    	foreach ($this->{'to_include'.$number} AS $yesno => $ids) {
@@ -104,6 +129,9 @@ class PickingAlgorithm extends Controller
 	    		//$ids = $this->randomizer();
 
 	    		$ids_exploded = explode(', ', $ids);
+	    		echo "Exploded_IDS: ";
+	    		var_dump($ids_exploded);
+	    		die();
 
 	    			// Buduj siłę negatywną
 	    			if ($answer != $yesno) { 
@@ -135,9 +163,23 @@ class PickingAlgorithm extends Controller
     	// Na pewno kwasy / smoked / grodziskie / ciężkie RIS-y
     	// Ma podbijać sumę ID-ków w stosie (wpływ na wszystkie ID przypisane do danej odpowiedzi na tak/nie)
     	 $answer_value = get_object_vars($answers_decoded);
-    	 if ($answer_value[1] == 'tak' && $answer_value[2] == 'tak') {
-    	 	$this->synergy(1, 100, true);
-    	 	$this->synergy(2, 100, true);
+    	 // Lekkie + owocowe + Kwaśne
+    	 if ($answer_value[4] == 'coś lekkiego' && $answer_value[11] == 'tak' && $answer_value[12] == 'tak') {
+    	 	$this->positiveSynergy(array(40), 3);
+    	 }
+    	 // nowe smaki LUB szokujące + złożone + jasne
+    	 if (($answer_value[2] == 'tak' || $answer_value[3] == 'tak') && $answer_value[4] == 'coś złożonego' && $answer_value[4] == 'jasne') {
+    	 	$this->positiveSynergy(array(7, 15, 16, 23, 39), 3);
+    	 }
+
+    	 // nowe smaki LUB szokujące + złożone + ciemne (beczki!)
+    	 if (($answer_value[2] == 'tak' || $answer_value[3] == 'tak') && $answer_value[4] == 'coś złożonego' && $answer_value[4] == 'ciemne') {
+    	 	$this->positiveSynergy(array(36, 37), 3);
+    	 }
+
+    	 // złożone + ciemne + nieowocowe
+    	 if ($answer_value[4] == 'coś złożonego' && $answer_value[6] == 'ciemne' && $answer_value[11] == 'nie') {
+    	 	$this->positiveSynergy(array(3, 24, 35, 36, 37), 3);
     	 }
 
     	// TODO: Check if there are at least 3 styles
@@ -152,6 +194,11 @@ class PickingAlgorithm extends Controller
     	
     	arsort($this->included_ids);
     	arsort($this->excluded_ids);
+
+    	echo "Tablica ze stylami do wybrania i punktami: <br />";
+    	var_dump($this->included_ids);
+    	echo "<br />Tablica ze stylami do odrzucenia i punktami: <br />";
+    	var_dump($this->excluded_ids);
 
     	// if (1==1) {
     	// 	$this->printPre($this->included_ids);
