@@ -119,8 +119,6 @@ class PickingAlgorithm extends Controller
     public function includeBeerIds(string $answers, string $name, string $email, int $newsletter) {
 
     	$answers_decoded = json_decode($answers);
-    	echo "Odpowiedzi zdekodowane z JSON-a: <br />";
-    	var_dump($answers_decoded);
 
     	foreach ($answers_decoded AS $number => $answer) {
 	    	foreach ($this->{'to_include'.$number} AS $yesno => $ids) {
@@ -128,10 +126,7 @@ class PickingAlgorithm extends Controller
 	    		// Switch to randomize ID-s
 	    		//$ids = $this->randomizer();
 
-	    		$ids_exploded = explode(', ', $ids);
-	    		echo "Exploded_IDS: ";
-	    		var_dump($ids_exploded);
-	    		die();
+	    		$ids_exploded = explode(',', trim($ids));
 
 	    			// Buduj siłę negatywną
 	    			if ($answer != $yesno) { 
