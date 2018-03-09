@@ -10,60 +10,59 @@ class PickingAlgorithm extends Controller
 {
 
 	/*
-	* Array zawiera pary 'odpowiedź' => id_piw z bazy do zaliczenia w przypadku wyboru tej odpowiedzi
+	* Array zawiera pary 'odpowiedź' => id_piw z bazy do zaliczenia w przypadku wyboru tej odpowiedzi + ew. dodatkowa siła
 	*/
 	// Czy smakują Ci lekkie piwa koncernowe dostępne w sklepach?
-	protected $to_include1 = array('tak' => '9:2.1, 10, 11, 12, 13, 14, 25, 26, 27', 
-									'nie' => '5, 6, 7, 8, 22, 23, 24, 28, 29, 30, 31, 32, 33, 34, 35, 36,37,38,39,40'); // Nie można uzupełniać jako odwrotność tak, ale trzeba z tym uważać (czasem może być ani nie, ani tak)
+	protected $to_include1 = array('tak' => '9, 10, 11, 12, 13, 14, 25, 26, 27, 41,45,52', 
+									'nie' => '5, 6, 7, 8, 22, 23, 24, 28, 29, 30, 31, 32, 33, 34, 35, 36,37,38,39,40,42,43,44,46,47,48,49,50,51,53,54,55,56,57,58,59,60'); // Nie można uzupełniać jako odwrotność tak, ale trzeba z tym uważać (czasem może być ani nie, ani tak)
 	// Czy chcesz poznać nowe smaki?
-	protected $to_include2 = array('tak' => '1, 2, 3, 4, 5, 6, 7, 8, 9, 15, 16, 19, 20, 22,23,24,28,29,30,31,32,33,34,35,36,37,38,39,40', 
-									'nie' => '1, 3, 5, 7, 21, 25,26,27');
+	protected $to_include2 = array('tak' => '1, 2, 3, 4, 5, 6, 7, 8, 9, 15, 16, 19, 20, 22,23,24,28,29,30,31,32,33,34,35,36,37,38,39,40,42,43,44,45,47,49,50,51,52,53,54,55,56,57,58,59,60', 
+									'nie' => '1, 3, 5, 7, 21, 25,26,27,41,46,48');
 	// Czy wolałbyś poznać wyłącznie style, które potrafią zszokować?
-	protected $to_include3 = array('tak' => '1,2,3,4,5,6,7,8,15,16,23,24,36,37,40', 'nie' => '9,10,11,12,13,14,17,18,19,20,21,22,25,26,27,28,29,30,31,32,33,34,35,38,39');
+	protected $to_include3 = array('tak' => '1,2,3,4,5,6,7,8,15,16,23,24,36,37,40,42,43,44,50,51,54,55,56,57,58,59,60', 'nie' => '');
 
 	// TODO: Wykluczamy to, co już znasz?
 
 	// Chcesz czegoś lekkiego do ugaszenia pragnienia, czy złożonego i degustacyjnego? - TODO na zakresach z beer_flavours lub API PolskiKraft
-	protected $to_include4 = array('coś lekkiego' => '9,10,11,12,13,17,18,21,25,26,31,32,33,40', 
-									'coś pośrodku' => '14,15,16,19,20,25,27,28,29,30,34,35,38', 
-									'coś złożonego' => '1,2,3,4,5,6,7,8,22,23,24,36,37,39');
+	protected $to_include4 = array('coś lekkiego' => '9,10,11,12,13,17,18,21,25,26,31,32,33,40,41,45,47,51,52', 
+									'coś pośrodku' => '14,15,16,19,20,25,27,28,29,30,34,35,38,42,43,44,45,46,47,48,49,53,54,55,56,57,58,59,60', 
+									'coś złożonego' => '1,2,3,4,5,6,7,8,22,23,24,36,37,39,42,43,44,50,60:0.5');
 	
-	// Jak wysoką goryczkę tolerujesz?
-	protected $to_include5 = array('ledwie wyczuwalną' => '9, 14, 15, 16, 17, 18, 19, 20, 25, 40', 
-									'lekką' => '11, 12, 21, 22, 23, 26, 31,34', 
-									'zdecydowanie wyczuwalną' => '10, 13, 21, 24, 27, 28,29,30,32,33,35,38,39', 
-									'mocną' => '1, 2, 3, 4, 5, 6, 7, 8,36,37', 
-									'jestem hopheadem' => '1, 3, 7');
+	// Jak wysoką goryczkę preferujesz?
+	protected $to_include5 = array('ledwie wyczuwalną' => '9, 14, 15, 16, 17, 18, 19, 20, 25, 40,41,44,50,51,53,54,56', 
+									'lekką' => '11, 12, 21, 22, 23, 26, 31,34,42,43,45,46,47,48,49,50,52,55,57,59', 
+									'zdecydowanie wyczuwalną' => '10, 13, 21, 24, 27, 28,29,30,32,33,35,38,39,55,57,58,59,60', 
+									'mocną' => '1, 2, 3, 4, 5, 6, 7, 8,36,37,58,59', 
+									'jestem hopheadem' => '1:1.5, 3:1.5, 7:2');
 
-	// Wolisz jasne czy ciemne? (zmienić na jasne/ciemne)
-	protected $to_include6 = array('jasne' => '1, 2, 5, 6, 7, 8, 9, 10, 11, 13, 14, 15, 16, 17, 20,22,23,25,26,27,28,31,32,38,39,40', 
+	// Wolisz piwa jasne czy ciemne? (zmienić na jasne/ciemne)
+	protected $to_include6 = array('jasne' => '1, 2, 5, 6, 7, 8, 9, 10, 11, 13, 14, 15, 16, 17, 20,22,23,25,26,27,28,31,32,38,39,40,41,42,43,44,45,46,47,49,50,51,52,53,54,55,56,57,60', 
 									'bez znaczenia' => '', 
-									'ciemne' => '3, 4, 12, 18, 19,21,24,29,30,33,34,35,36,37');
+									'ciemne' => '3, 4, 12, 18, 19,21,24,29,30,33,34,35,36,37,43:0.5,48,58,59');
 
-	// Raczej słodkie? (zmienić: słodkie/wytrawne)
-	// TODO: Więcej opcji (słodkie/bez znaczenia/wytrawne)
-	protected $to_include7 = array('słodsze' => '1, 2,5,6,7,8,14,15,16,18,19,20,21', 
+	// Wolisz piwa słodsze czy wytrawniejsze?
+	protected $to_include7 = array('słodsze' => '1, 2,5,6,7,8,14,15,16,18,19,20,21,46,49,50,53,54,60', 
 									'bez znaczenia' => '', 
-									'wytrawniejsze' => '3,4,5,9,10,11,12,13,17,21');
+									'wytrawniejsze' => '3,4,5,9,10,11,12,13,17,21,41,45,47,48,52,55,57,58,59');
 	// TODO: Jako skala/suwak
-	// Klimaty czekoladowe?
-	protected $to_include8 = array('tak' => '3, 4, 12, 18,21,24,29,30,33,34,35,36,37', 
-									'nie' => '1, 2, 5, 6, 7, 8, 9, 19, 11, 13, 14, 15, 16, 17, 18, 19, 20,22,23,25,26,27,28,31,32,38,39,40');
-	// Mocno gazowane?
-	protected $to_include9 = array('tak' => '5, 7, 8, 19, 20,21,25,40', 
-									'nie' => '1, 2, 3, 4, 6, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 22,23,24,26,27,28,29,30,31,32,33,34,35,36,37,38,39');
-	// Odpowiada Ci palony smak?
-	protected $to_include10 = array('tak' => '3, 12,21,24,29,33,35,36,37', 
-									'nie' => '1, 2, 4, 5, 6, 7, 8, 9, 10, 11, 13, 14, 15, 16, 17, 18, 19, 20,21,22,23,25,26,27,28,30,31,32,34,38,32,40');
-	// Bardziej owocowo?
-	protected $to_include11 = array('tak' => '1, 2, 5, 6, 7, 8,25,40', 
+	// Czy odpowiadałby Ci smak czekoladowy w piwie?
+	protected $to_include8 = array('tak' => '3, 4, 12, 18,21,24,29,30,33,34,35,36,37,48,58:1.25,59:1.25', 
+									'nie' => '1, 2, 5, 6, 7, 8, 9, 19, 11, 13, 14, 15, 16, 17, 18, 19, 20,22,23,25,26,27,28,31,32,38,39,40,41,42,43,44,45,46,47,49,50,51,52,53,54,55,56,57,60');
+	// Czy wolisz piwa mocno nagazowane?
+	protected $to_include9 = array('tak' => '5, 7, 8, 19, 20,21,25,40,44,45,47,49,51,52,56:0.5', 
+									'nie' => '1, 2, 3, 4, 6, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 22,23,24,26,27,28,29,30,31,32,33,34,35,36,37,38,39,46,53,54');
+	// Czy odpowiadałby Ci smak palony w piwie?
+	protected $to_include10 = array('tak' => '3, 12,21,24,29,33,35,36,37,58:1.25,59:1.25', 
+									'nie' => '1, 2, 4, 5, 6, 7, 8, 9, 10, 11, 13, 14, 15, 16, 17, 18, 19, 20,21,22,23,25,26,27,28,30,31,32,34,38,32,40,41,42,43,44,45,46,47,48:0.5,49,50,51,52,53,54,55,56,57,60');
+	// Czy chciałbyś piwo w klimatach owocowych (bez soku)?
+	protected $to_include11 = array('tak' => '1:2, 2:2, 5:2, 6:2, 7:2, 8:2,25,40,42,43,44,45:0.5,47:0.5,51,56,60:2', 
 									'nie' => '3, 4, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,21,22,23,24,26,27,28,29,30,31,32,33,34,35,36,37,38,39');
 	// Co powiesz na piwo kwaśne?
-	protected $to_include12 = array('tak' => '40', 
-									'nie' => '1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40');
+	protected $to_include12 = array('tak' => '40:2,42:3,43:3,44:3,51:2,56:2', 
+									'nie' => '1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,45,46,47,48,49,50,52,53,54,55:0.5,57,58,59,60');
 	// Co powiesz na piwo słonawe?
-	protected $to_include13 = array('tak' => '100', 
-									'nie' => '1:1.25, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,21,22,23,24,25,26,27,28,29,30');
+	protected $to_include13 = array('tak' => '51:3, 55:0.5', 
+									'nie' => '1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,54,55,56,57,58,59,60');
 
 	// Extra questions (dym z ogniska/wędzonka) / Islay whisky
 	protected $extra_to_include1 = array();

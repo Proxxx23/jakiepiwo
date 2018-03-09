@@ -22,9 +22,9 @@ trait Questions {
 
 		//Inne niż tak/nie
 		4 => array("question" => "Chcesz czegoś lekkiego do ugaszenia pragnienia, czy złożonego i degustacyjnego?", "type" => 1, "answers" => array('coś lekkiego', 'coś pośrodku', 'coś złożonego')),
-		5 => array("question" => "Jak wysoką goryczkę tolerujesz?", "type" => 1, "answers" => array('ledwie wyczuwalną', 'lekką', 'zdecydowanie wyczuwalną', 'mocną', 'jestem hopheadem')),
-		6 => array("question" => "Wolisz jasne czy ciemne?", "type" => 1, "answers" => array('jasne', 'bez znaczenia', 'ciemne')),
-		7 => array("question" => "Raczej słodkie?", "type" => 1, "answers" => array('słodsze', 'bez znaczenia', 'wytrawniejsze')),
+		5 => array("question" => "Jak wysoką goryczkę preferujesz?", "type" => 1, "answers" => array('ledwie wyczuwalną', 'lekką', 'zdecydowanie wyczuwalną', 'mocną', 'jestem hopheadem')),
+		6 => array("question" => "Wolisz piwa jasne czy ciemne?", "type" => 1, "answers" => array('jasne', 'bez znaczenia', 'ciemne')),
+		7 => array("question" => "Wolisz piwa słodsze czy wytrawniejsze?", "type" => 1, "answers" => array('słodsze', 'bez znaczenia', 'wytrawniejsze')),
 
 		// Pytania smakowe - podaj w skali
 		8 => array("question" => "Klimaty czekoladowe?", "type" => 0, "answers" => array('NO')),
