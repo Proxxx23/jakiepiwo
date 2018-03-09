@@ -19,7 +19,7 @@ class PickingAlgorithm extends Controller
 	protected $to_include2 = array('tak' => '1, 2, 3, 4, 5, 6, 7, 8, 9, 15, 16, 19, 20, 22,23,24,28,29,30,31,32,33,34,35,36,37,38,39,40,42,43,44,45,47,49,50,51,52,53,54,55,56,57,58,59,60', 
 									'nie' => '1, 3, 5, 7, 21, 25,26,27,41,46,48');
 	// Czy wolałbyś poznać wyłącznie style, które potrafią zszokować?
-	protected $to_include3 = array('tak' => '1,2,3,4,5,6,7,8,15,16,23,24,36,37,40,42,43,44,50,51,54,55,56,57,58,59,60', 'nie' => '');
+	protected $to_include3 = array('tak' => '1:1.5,2:2.5,3:2.5,4:2.5,5:2.5,6:2.5,7:2.5,8:2.5,15:2.5,16:2.5,23:2.5,24:2.5,36:2.5,37:2.5,40:2.5,42:2.5,43:2.5,44:2.5,50:2.5,51:2.5,54:2.5,55:2.5,56:2.5,57:2.5,58:2.5,59:2.5,60:2.5', 'nie' => '');
 
 	// TODO: Wykluczamy to, co już znasz?
 
@@ -198,10 +198,10 @@ class PickingAlgorithm extends Controller
     	arsort($this->included_ids);
     	arsort($this->excluded_ids);
 
-    	// echo "Tablica ze stylami do wybrania i punktami: <br />";
-    	// var_dump($this->included_ids);
-    	// echo "<br />Tablica ze stylami do odrzucenia i punktami: <br />";
-    	// var_dump($this->excluded_ids);
+    	echo "Tablica ze stylami do wybrania i punktami: <br />";
+    	var_dump($this->included_ids);
+    	echo "<br />Tablica ze stylami do odrzucenia i punktami: <br />";
+    	var_dump($this->excluded_ids);
 
 
     	for ($i = 0; $i < self::STYLES_TO_PICK; $i++) {
