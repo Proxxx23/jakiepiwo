@@ -9,6 +9,7 @@ use App\Http\Controllers\ValidationController as Validation;
 use App\Http\Controllers\PickingAlgorithm as Algorithm;
 use App\Traits\Questions as Questions;
 use App\Styles;
+use \DrewM\MailChimp\MailChimp;
 
 class StylePickerController extends Controller
 {
@@ -68,21 +69,35 @@ class StylePickerController extends Controller
 
     }
 
+    /**
+    * GitHub: https://github.com/drewm/mailchimp-api
+    */
+    private function addEmailToNewsletterList($email) {
+
+    	$MailChimp = new MailChimp('d42a6395b596459d1e2c358525a019b7-us3');
+    	$list_id = 'e51bd39480';
+
+		$result = $MailChimp->post("lists/$list_id/members", [
+			'email_address' => $email,
+			'status'        => 'subscribed',
+		]);
+
+    }
+
     /*
     * Adds email to a Mailchimp list
     * return $set_newsletter integer
     */
-    private function setNewsletter() : integer {
+    private function setNewsletter(?string $email) : int {
 
     	$validation = new Validation();
 
-    	if ($validation->validateEmail()) {
+    	if ($validation->validateEmail($email)) {
+    		$this->addEmailToNewsletterList($email);
     		$set_newsletter = 1;
     	} else {
     		$set_newsletter = 0;
     	}
-
-    	// Intagracja z MailChimpem - wywołanie w mix()
 
     	return $set_newsletter;
 
@@ -143,13 +158,17 @@ class StylePickerController extends Controller
     		if ($insert_answers === true) {
 
     			// Wyślij maila na prośbę
-    			if ($_POST['sendMeAnEmail']) { 
-    				$this->sendEmail();
+    			if ($email != '') { 
+    				$this->sendEmail($email);
     			}
 
     			// Dodaj do listy newsletterowej
-    			if ($_POST['newsletter']) {
-    				// Mailchimp API
+    			if ($newsletter === 1) {
+    				if ($email != '') {
+    					$this->setNewsletter($email);
+    				} else {
+    					$this->logError('Jeżeli chcesz dopisać się do newslettera, musisz podać adres e-mail.');
+    				}
     			}
 
     			// Algorytm wybiera piwa

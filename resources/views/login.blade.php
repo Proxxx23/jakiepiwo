@@ -100,7 +100,7 @@
     </head>
     <body>
         <div class="flex-center">
-            <!-- <div class="changelog">
+            <div class="changelog">
                 <h3>Changelog v. 0.1nightly</h3>
                 <ul>
                     <li>Pełny algorytm z budowaniem "siły"</li>
@@ -121,6 +121,7 @@
                     <li>Dolosowanie (kolejne 3 ze stosu)</li>
                     <li>Słone/kwaśne/Islay jako propozycja obok stylów</li>
                     <li>Barrel aged jako osobna część</li>
+                    <li>Integracja z MailChimp API</li>
                     <li>Mail na życzenie</li>
                     <li>Wyświetlanie stylów z ostatniej wizyty</li>
                     <li>Najczęściej polecane style</li>
@@ -128,7 +129,7 @@
                     <li>Logowanie błędów w jednym insercie DB</li>
                     <li>Skalowanie pytań (ważne > mniej ważne)</li>
                 </ul>
-            </div> -->
+            </div>
             <div class="content">
                 <!-- Error handling  -->
                 
@@ -165,7 +166,7 @@
                     @endforeach
 
                     <br /><input type="submit" name="send" value="Wyslij">
-                    <br />Wyślij mi maila<input type="checkbox" name="sendMeAnEmail" disabled="disabled">
+                    <br />Wyślij mi maila<input type="checkbox" name="sendMeAnEmail">
 
                     <h1>Mam do Ciebie dokładniejsze pytania</h1>
                         @foreach ($accurate_questions AS $index => $field)

@@ -38,7 +38,7 @@ trait Questions {
 
 	);
 
-	// Dodatkowe pytania dokładne
+	// Dodatkowe pytania dokładne do przeniesienia wyżej
 	public static $accurate_questions = array(
 
 		0 => array("question" => "Dokładne pytanie", "type" => 0),

@@ -13,7 +13,7 @@ class PickingAlgorithm extends Controller
 	* Array zawiera pary 'odpowiedź' => id_piw z bazy do zaliczenia w przypadku wyboru tej odpowiedzi
 	*/
 	// Czy smakują Ci lekkie piwa koncernowe dostępne w sklepach?
-	protected $to_include1 = array('tak' => '9, 10, 11, 12, 13, 14, 25, 26, 27', 
+	protected $to_include1 = array('tak' => '9:2.1, 10, 11, 12, 13, 14, 25, 26, 27', 
 									'nie' => '5, 6, 7, 8, 22, 23, 24, 28, 29, 30, 31, 32, 33, 34, 35, 36,37,38,39,40'); // Nie można uzupełniać jako odwrotność tak, ale trzeba z tym uważać (czasem może być ani nie, ani tak)
 	// Czy chcesz poznać nowe smaki?
 	protected $to_include2 = array('tak' => '1, 2, 3, 4, 5, 6, 7, 8, 9, 15, 16, 19, 20, 22,23,24,28,29,30,31,32,33,34,35,36,37,38,39,40', 
@@ -63,7 +63,7 @@ class PickingAlgorithm extends Controller
 									'nie' => '1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40');
 	// Co powiesz na piwo słonawe?
 	protected $to_include13 = array('tak' => '100', 
-									'nie' => '1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,21,22,23,24,25,26,27,28,29,30');
+									'nie' => '1:1.25, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,21,22,23,24,25,26,27,28,29,30');
 
 	// Extra questions (dym z ogniska/wędzonka) / Islay whisky
 	protected $extra_to_include1 = array();
@@ -112,9 +112,30 @@ class PickingAlgorithm extends Controller
 		
 	}
 
+	/*
+	* Buduje siłę dla konkretnych ID stylu
+	* Jeśli id ma postać 5:2.5 to zwiększy (przy trafieniu w to ID) punktację tego stylu o 2.5 a nie o 1
+	* Domyślnie większa punktację stylu o 1
+	*/
+	private function strengthBuilder(string $ids) : ?array {
+
+		$ids_exploded = explode(',', trim($ids));
+		foreach ($ids_exploded AS $v) {
+	    	if (stristr($v, ':') || stristr($v, ' :')) {
+	    		$tmp = explode(':', $v);
+	    		$strength[$tmp[0]] = (float)$tmp[1];
+	    	} else {
+	    		$strength[$v] = 1;
+	    	}
+	    }
+
+	    return $strength;
+
+	}
+
     
     /**
-    * TODO: Change name of the method
+    * Tutaj dzieje się magia
     */
     public function includeBeerIds(string $answers, string $name, string $email, int $newsletter) {
 
@@ -123,34 +144,22 @@ class PickingAlgorithm extends Controller
     	foreach ($answers_decoded AS $number => $answer) {
 	    	foreach ($this->{'to_include'.$number} AS $yesno => $ids) {
 
-	    		// Switch to randomize ID-s
-	    		//$ids = $this->randomizer();
+	    		//$ids = $this->randomizer(); Switch to randomize ID-s
 
-	    		$ids_exploded = explode(',', trim($ids));
+	    		$ids_to_calc = $this->strengthBuilder($ids);
+	    		
+	    		if ($answer == $yesno) {
+		    		foreach ($ids_to_calc AS $style_id => $strength) {
+		    			$this->included_ids[$style_id] += $strength;
+		    		}
+	    		}
 
-	    			// Buduj siłę negatywną
-	    			if ($answer != $yesno) { 
-	    				foreach ($ids_exploded AS $value) {
-							if (!empty($this->excluded_ids[$value])) {
-								$this->excluded_ids[$value]++;
-							} else {
-								$this->excluded_ids[$value] = 1;
-							}
-	    				}
-	    			} 
+	    		if ($answer != $yesno) { 
+		    		foreach ($ids_to_calc AS $style_id => $strength) {
+		    			$this->excluded_ids[$style_id] += $strength;
+		    		}
+	    		} 
 
-	    			// Buduj siłę pozytywną
-	    			if ($answer == $yesno) {
-	    				foreach ($ids_exploded AS $value) {
-	    					if (!empty($this->included_ids[$value])) {
-								$this->included_ids[$value]++;
-							} else {
-								$this->included_ids[$value] = 1;
-							}
-
-							// Positive synergy	
-	    				}
-	    			} 
 	    	}
     	}
 
@@ -190,25 +199,20 @@ class PickingAlgorithm extends Controller
     	arsort($this->included_ids);
     	arsort($this->excluded_ids);
 
-    	echo "Tablica ze stylami do wybrania i punktami: <br />";
-    	var_dump($this->included_ids);
-    	echo "<br />Tablica ze stylami do odrzucenia i punktami: <br />";
-    	var_dump($this->excluded_ids);
+    	// echo "Tablica ze stylami do wybrania i punktami: <br />";
+    	// var_dump($this->included_ids);
+    	// echo "<br />Tablica ze stylami do odrzucenia i punktami: <br />";
+    	// var_dump($this->excluded_ids);
 
-    	// if (1==1) {
-    	// 	$this->printPre($this->included_ids);
-    	// 	$this->printPre($this->excluded_ids, true);
-    	// }
 
-    	// TODO: Pojedyncze selecty!
     	for ($i = 0; $i < self::STYLES_TO_PICK; $i++) {
     		$style_to_take = $this->style_to_take[] = key(array_slice($this->included_ids, $i, 1, true));
-    		$buythis[] = DB::select("SELECT * FROM beers WHERE id = :id", ['id' => $style_to_take]);	
-    	}
+    		$buythis[] = DB::select("SELECT * FROM beers WHERE id = $style_to_take");
+    	}   	
 
     	for ($i = 0; $i < self::STYLES_TO_PICK; $i++) {
     		$style_to_avoid = $this->style_to_avoid[] = key(array_slice($this->excluded_ids, $i, 1, true));
-    		$avoidthis[] = DB::select("SELECT * FROM beers WHERE id = :id", ['id' => $style_to_avoid]);	
+    		$avoidthis[] = DB::select("SELECT * FROM beers WHERE id = $style_to_avoid");	
     	}
 
     	// Zapisz wybór do bazy
@@ -218,7 +222,7 @@ class PickingAlgorithm extends Controller
     		//mail('kontakt@piwolucja.pl', 'logStyles Exception', $e->getMessage());
     	}
 
-    	return view('results', ['buythis' => $buythis, 'avoidthis' => $avoidthis, 'username' => $name]);
+    	return view('results', ['buythis' => (array)$buythis, 'avoidthis' => (array)$avoidthis, 'username' => $name]);
 
     }
 
