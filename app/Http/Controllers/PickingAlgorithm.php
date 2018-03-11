@@ -95,23 +95,9 @@ class PickingAlgorithm extends Controller
 
 	private CONST STYLES_TO_PICK = 3; // Eventually change to user's decision
 
-    /**
-    * Randomizes ids in $to_include vars
-    */
-	private function randomizer() : int {
-
-		for ($i = 0 ; $i < 4; $i++) {
-			if ($i != 3) {
-				$this->r .= $r .= mt_rand(1, 20) . ', ';
-			} else {
-				$this->r .= $r .= mt_rand(1, 20);
-			}
-		}
-
-		return $r;
-
-	}
-
+	/**
+	* Builds positive synergy if user ticks 2-4 particular answers
+	*/
 	private function positiveSynergy(array $ids_to_multiply, int $multiplier) {
 
 		foreach ($ids_to_multiply AS $id) {
@@ -120,6 +106,9 @@ class PickingAlgorithm extends Controller
 		
 	}
 
+	/**
+	* Builds negative synergy if user ticks 2-4 particular answers
+	*/
 	private function negativeSynergy(array $ids_to_divide, int $divider) {
 
 		foreach ($ids_to_divide AS $id) {
@@ -165,8 +154,6 @@ class PickingAlgorithm extends Controller
 	    		}
 
 	    		($_POST['answer-14'] == 'tak') ? $this->BA = true : $this->BA = false;
-
-	    		//$ids = $this->randomizer(); Switch to randomize ID-s
 
 	    		$ids_to_calc = $this->strengthBuilder($ids);
 	    		
