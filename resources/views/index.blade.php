@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="{{ app()->getLocale() }}">
     <head>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -104,6 +105,12 @@
                 color: black;
             }
 
+            ​#question* {
+                display:none;
+                border:1px solid #F00;
+                width:150px;
+            }​
+
             }
         </style>
     </head>
@@ -120,6 +127,7 @@
                     <li>Zapis odpowiedzi do bazy</li>
                     <li>Mechanizm synergi</li>
                     <li>Skalowanie pytań (ważne > mniej ważne)</li>
+                    <li>Barrel aged jako osobna część</li>
                 </ul>
             </div>
 
@@ -130,11 +138,11 @@
                     <li>Niektóre pytania jako skala/suwak</li>
                     <li>Dolosowanie (kolejne 3 ze stosu)</li>
                     <li>Słone/kwaśne/Islay jako propozycja obok stylów</li>
-                    <li>Barrel aged jako osobna część</li>
                     <li>Mail na życzenie</li>
                     <li>Wyświetlanie stylów z ostatniej wizyty</li>
                     <li>Najczęściej polecane style</li>
                     <li>Pula 10 polecanych piw na każdy styl</li>
+                    <li>Tooltipy do pytań</li>
                     <li>Logowanie błędów w jednym insercie DB</li>
                 </ul>
             </div> -->
@@ -153,9 +161,12 @@
                     <form method="POST" action=" {{ action('StylePickerController@mix') }} ">
                     {{ csrf_field() }}
                    
-                <h5>Odpowiedz na wszystkie poniższe pytania, aby dowiedzieć się, jakie 3 style piwne powinny Ci najbardziej zasmakować. </h5>
+                <h3>Odpowiedz na wszystkie poniższe pytania, aby dowiedzieć się, jakie 3 style piwne powinny Ci najbardziej zasmakować. </h3>
 
                     @foreach ($questions as $index => $field)
+                    @if ($index == 14)
+                        <h3>Odpowiedz na opcjonalne pytania, aby otrzymać dokładniejsze propozycje. Uwaga! Zawęży to w znaczący sposób wyniki!</h3>
+                    @endif
                     <h3>{{$index}}. {{$field['question']}}</h3>
                     
                         @if ($field['type'] === 1)  
@@ -170,16 +181,11 @@
                         @endif
 
                     @endforeach
-
-                    <h5>Odpowiedz na opcjonalne pytania, aby otrzymać dokładniejsze wyniki</h5>
-                        @foreach ($accurate_questions AS $index => $field)
-                            <h3>{{ $field['question'] }} {{ $index+1 }}</h3>
-                        @endforeach
                     <div class="bottom-input">
                         <div class="bottom-container">
                             Imię <input type="text" name="username"> <em>(opcjonalne)</em> <br />
                             Adres e-mail <input type="email" name="email"> <em>(opcjonalne)</em><br />
-                            <input type="checkbox" name="sendMeAnEmail" value="Tak" disabled="disabled">Chcę otrzymać maila ze stylami i piwami wybranymi dla mnie. <br />
+                            <input type="checkbox" name="sendMeAnEmail" value="Tak" disabled="disabled">Chcę otrzymać maila ze stylami i piwami wybranymi dla mnie. <em>(nieaktywne)</em><br />
                             <input type="checkbox" name="newsletter" value="Tak">Chcę otrzymywać <a href="http://piwolucja.pl/newsletter/" target="_blank">piwny newsletter</a>. <br /><br />
                             <input type="submit" name="send" value="Wyślij">
                         </div>

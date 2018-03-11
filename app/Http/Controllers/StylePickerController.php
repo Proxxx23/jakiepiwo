@@ -26,6 +26,8 @@ class StylePickerController extends Controller
     */
     public function showQuestions(bool $errors = false) {
 
+    	//die('Wprowadzam zmiany w pytaniach i algorytmie. Beta będzie włączona ponownie około 20:30');
+
         if ($errors === true) {
     		return view('index', ['questions' => Questions::$questions, 'accurate_questions' => Questions::$accurate_questions,	'mostly_picked' => $this->getMostPickedStyles(), 'errors' => $this->error_msg, 'errors_count' => $this->error_cnt]);
     	} else {
@@ -112,8 +114,11 @@ class StylePickerController extends Controller
 
     	for ($i = 1; $i <= count(Questions::$questions); $i++) {
     		
-    		if (is_null($_POST['answer-'.$i.''])) { 
-    			$this->logError('Pytanie numer ' . $i . ' jest puste. Odpowiedz na wszystkie pytania!');
+    		// Opcjonalne nie są sprawdzane w ten sposób
+    		if ($i <= 13) {
+	    		if (is_null($_POST['answer-'.$i.''])) { 
+	    			$this->logError('Pytanie numer ' . $i . ' jest puste. Odpowiedz na wszystkie pytania!');
+	    		}
     		}
 
     		if (isset($_POST['answer-'.$i.''])) {
@@ -211,7 +216,7 @@ class StylePickerController extends Controller
     /**
     * Takes 3 mostly picked styles
     */
-    public function getMostPickedStyles() : array {
+    public function getMostPickedStyles() : ?array {
 
 		$mostly_picked = DB::select('SELECT COUNT(`s`.`style_take`) AS `wybrano_razy`, `b`.`name`, `b`.`name2`, `b`.`name_pl` FROM `styles_logs` s INNER JOIN `beers` b ON `b`.`id` = `s`.`style_take` GROUP BY `s`.`style_take` ORDER BY `wybrano_razy` DESC LIMIT 3');
 

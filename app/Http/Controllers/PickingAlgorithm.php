@@ -63,16 +63,28 @@ class PickingAlgorithm extends Controller
 	// Co powiesz na piwo słonawe?
 	protected $to_include13 = array('tak' => '51:3, 55:0.5', 
 									'nie' => '1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,54,55,56,57,58,59,60');
+
+	// Additional questions
 	// BA
 	protected $to_include14 = array('tak' => 'tak', 
 									'nie' => 'nie');
 
-	// Extra questions (dym z ogniska/wędzonka) / Islay whisky
-	protected $extra_to_include1 = array();
-	protected $extra_to_include2 = array();
-	protected $extra_to_include3 = array();
-	protected $extra_to_include4 = array();
-	protected $extra_to_include5 = array();
+	// Piwa o jakiej konsystencji preferujesz?
+	protected $to_include15 = array('wodniste' => '33:2, 40:2, 44:2, 51:2, 52:2', 
+									'średnie' => '1:2, 2:2, 3:2, 4:2, 5:2, 6:2, 9:2, 10:2, 11:2, 12:2, 13:2, 14:2, 15:2, 16:2, 17:2, 18:2, 19:2, 21:2, 22:2, 24:2, 26:2, 27:2, 28:2, 29:2, 30:2, 31:2, 32:2, 34:2, 35:2, 38:2, 41:2, 42:2, 43:2, 45:2, 46:2, 47:2, 48:2, 49:2, 55:2, 56:2, 57:2, 58:2, 59:2, 60:2',
+									'gęste' => '7:2, 20:2, 23:2, 25:2, 36:2, 37:2, 39:2, 50:2, 53:2, 54:2');
+
+	// Jak mocne alkoholowo piwa preferujesz?
+	protected $to_include16 = array('lekkie' => '9:2, 10:2, 11:2, 12:2, 13:2, 33:2, 41:2, 44:2, 51:2, 52:2', 
+									'średnie' => '1:2, 2:2, 3:2, 4:2, 5:2, 6:2, 7:2, 14:2, 15:2, 16:2, 17:2, 18:2, 19:2, 21:2, 25:2, 27:2, 28:2, 29:2, 30:2, 31:2, 32:2, 34:2, 38:2, 42:2, 43:2, 45:2, 46:2, 47:2, 48:2, 53:2, 55:2, 56:2, 57:2, 59:2, 60:2',
+									'mocne' => '7:2, 8:2, 20:2, 22:2, 23:2, 24:2, 36:2, 37:2, 39:2, 49:2, 50:2, 53:2, 54:2, 58:2');
+
+	// Czy odpowiadałby Ci smak wędzony/dymny w piwie?
+	// TODO coś jak z BA
+	protected $to_include17 = array('tak' => '15:2, 16:2, 58:2, 59:2', 
+									'nie' => '');
+
+	// STYLE: Lite (A)PA, (A)PA + warianty, Smoked (imperial porter, imperial stout)
 
 	private $included_ids = array(); // Beer IDs to include
 	private $excluded_ids = array(); // Excluded beer IDs
