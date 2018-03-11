@@ -81,7 +81,7 @@ class PickingAlgorithm extends Controller
 
 	// Czy odpowiadałby Ci smak wędzony/dymny w piwie?
 	// TODO coś jak z BA
-	protected $to_include17 = array('tak' => '15:2, 16:2, 58:2, 59:2, 62:2, 62:3', 
+	protected $to_include17 = array('tak' => '15:2, 16:2, 58:2, 59:2, 62:2, 62:2', 
 									'nie' => '');
 
 	private $included_ids = array(); // Beer IDs to include

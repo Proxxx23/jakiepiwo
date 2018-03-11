@@ -183,7 +183,7 @@
                     @endforeach
                     <div class="bottom-input">
                         <div class="bottom-container">
-                            Imię <input type="text" name="username"> <em>(opcjonalne)</em> <br />
+                            Imię <input type="text" name="username" maxlength="25"> <em>(opcjonalne)</em> <br />
                             Adres e-mail <input type="email" name="email"> <em>(opcjonalne)</em><br />
                             <input type="checkbox" name="sendMeAnEmail" value="Tak" disabled="disabled">Chcę otrzymać maila ze stylami i piwami wybranymi dla mnie. <em>(nieaktywne)</em><br />
                             <input type="checkbox" name="newsletter" value="Tak">Chcę otrzymywać <a href="http://piwolucja.pl/newsletter/" target="_blank">piwny newsletter</a>. <br /><br />
