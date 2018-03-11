@@ -10,6 +10,7 @@ use App\Http\Controllers\PickingAlgorithm as Algorithm;
 use App\Traits\Questions as Questions;
 use App\Styles;
 use \DrewM\MailChimp\MailChimp;
+use Mail;
 
 class StylePickerController extends Controller
 {
@@ -17,6 +18,7 @@ class StylePickerController extends Controller
     public $error_cnt = 0;
 	public $error_msg = array();
 	public $JSON_answers = '';
+	public $mostly_picked = array();
 
     /*
     * Show all the questions
@@ -25,9 +27,9 @@ class StylePickerController extends Controller
     public function showQuestions(bool $errors = false) {
 
         if ($errors === true) {
-    		return view('index', ['questions' => Questions::$questions, 'accurate_questions' => Questions::$accurate_questions,	'errors' => $this->error_msg, 'errors_count' => $this->error_cnt]);
+    		return view('index', ['questions' => Questions::$questions, 'accurate_questions' => Questions::$accurate_questions,	'mostly_picked' => $this->getMostPickedStyles(), 'errors' => $this->error_msg, 'errors_count' => $this->error_cnt]);
     	} else {
-    		return view('index', ['questions' => Questions::$questions, 'accurate_questions' => Questions::$accurate_questions,	'errors' => '', 'errors_count' => 0]);
+    		return view('index', ['questions' => Questions::$questions, 'accurate_questions' => Questions::$accurate_questions,	'mostly_picked' => $this->getMostPickedStyles(), 'errors' => '', 'errors_count' => 0]);
     	}
 
     }
@@ -108,7 +110,7 @@ class StylePickerController extends Controller
     	$answers = array();
     	$validation = new Validation();
 
-    	for ($i = 1; $i <= 13; $i++) {
+    	for ($i = 1; $i <= count(Questions::$questions); $i++) {
     		
     		if (is_null($_POST['answer-'.$i.''])) { 
     			$this->logError('Pytanie numer ' . $i . ' jest puste. Odpowiedz na wszystkie pytania!');
@@ -195,6 +197,7 @@ class StylePickerController extends Controller
 
     /*
     * Selects necessary info about choosen beers from database
+    * TODO: Polski Kraft API
     */
     public function getDetailedInfoAboutStyle(integer $beer_ids) : object {
 
@@ -205,11 +208,12 @@ class StylePickerController extends Controller
 
     }
 
-    // 5 najczęściej wybieranych stylów
+    /**
+    * Takes 3 mostly picked styles
+    */
     public function getMostPickedStyles() : array {
 
-    	// TODO: Z logów!
-    	$mostly_picked = DB::select('SELECT * FROM styles GROUP BY count(id) AS mostlypicked ORDER BY mostlypicked DESC LIMIT 3;');
+		$mostly_picked = DB::select('SELECT COUNT(`s`.`style_take`) AS `wybrano_razy`, `b`.`name`, `b`.`name2`, `b`.`name_pl` FROM `styles_logs` s INNER JOIN `beers` b ON `b`.`id` = `s`.`style_take` GROUP BY `s`.`style_take` ORDER BY `wybrano_razy` DESC LIMIT 3');
 
     	return $mostly_picked;
 

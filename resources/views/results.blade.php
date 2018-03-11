@@ -5,17 +5,18 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>Result</title>
+        <title>Style piwne dla Ciebie - deGUSTATOR v.0.1 nightly</title>
 
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Mina" rel="stylesheet">
 
         <!-- Styles -->
         <style>
             html, body {
                 background-color: #fff;
                 color: #636b6f;
-                font-family: 'Raleway', sans-serif;
+                font-family: 'Mina', sans-serif;
                 font-weight: 100;
                 height: 100vh;
                 margin: 0;
@@ -69,7 +70,7 @@
             <div class="content">
 
                 <div>
-                    <h1>Hej, {{$username}}! Oto style dla Ciebie!</h1>
+                    <h1>@if ($username != '')Hej, {{$username}}!@endif Piwa w tych stylach powinny Ci zasmakować</h1>
 
                     @for ($i = 0; $i < count($buythis); $i++)
                         @foreach ($buythis[$i] as $k => $v)
@@ -81,7 +82,12 @@
                         @endforeach
                     @endfor
 
-                    <h1>Tych stylów powinieneś raczej unikać</h1>
+                    <!-- TODO: tylko pod piwa rzeczywiście starzone w BA -->
+                    @if ($barrel_aged === true)
+                        <p>Ponieważ lubisz alkohole szlachetne, powinny zainteresować Cię piwa leżakowane w beczkach po trunkach takich jak whisky czy bourbon. Szukaj w sklepie piw z dopiskiem "barrel-aged" lub "BA" na etykiecie.</p>
+                    @endif
+
+                    <h1>Piw w tych stylach powinieneś raczej unikać</h1>
 
                     @for ($i = 0; $i < count($avoidthis); $i++)
                         @foreach ($avoidthis[$i] as $k => $v)
@@ -98,6 +104,7 @@
                         <input type="email" name="email" disabled="disabled">&nbsp;
                         <input type="submit" name="mailMe" disabled="disabled" value="Wyślij">
                     </form>
+                    Odbierz za darmo piwnego e-booka <a href="http://piwolucja.pl/newsletter/" target="_blank">"15 pytań o piwo wraz z konkretnymi odpowiedziami"</a>
                 </div>
             </div>
         </div>

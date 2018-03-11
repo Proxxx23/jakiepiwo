@@ -15,9 +15,9 @@ class CreateUserAnswersTable extends Migration
     {
         Schema::create('user_answers', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('id_user');
-            $table->string('name', 100);
-            $table->string('e_mail', 100);
+            $table->integer('id_user')->nullable();
+            $table->string('name', 100)->nullable();
+            $table->string('e_mail', 100)->nullable();
             $table->tinyInteger('newsletter');
             $table->text('answers');
             $table->timestamps();

@@ -1,6 +1,5 @@
 {
     "host": "s2.zenbox.pl",
-    "port": "22",
     "username": "pijpiwo",
     "password": "krzysiujezupe123",
     "rootDirectory": "/domains/degustator.piwolucja.pl/"

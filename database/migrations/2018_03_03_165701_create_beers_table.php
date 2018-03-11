@@ -15,10 +15,10 @@ class CreateBeersTable extends Migration
     {
         Schema::create('beers', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('id_flavour')->references('id')->on('beer_flavours');
+            $table->integer('id_flavour')->references('id')->on('beer_flavours')->nullable();
             $table->string('name', 100);
-            $table->string('name2', 100);
-            $table->string('name_pl', 100);
+            $table->string('name2', 100)->nullable();
+            $table->string('name_pl', 100)->nullable();
         });
     }
 
