@@ -29,9 +29,9 @@ class StylePickerController extends Controller
     	//die('Wprowadzam zmiany w pytaniach i algorytmie. Beta będzie włączona ponownie około 20:30');
 
         if ($errors === true) {
-    		return view('index', ['questions' => Questions::$questions, 'accurate_questions' => Questions::$accurate_questions,	'mostly_picked' => $this->getMostPickedStyles(), 'errors' => $this->error_msg, 'errors_count' => $this->error_cnt]);
+    		return view('index', ['questions' => Questions::$questions, 'accurate_questions' => Questions::$accurate_questions,	'mostly_picked' => $this->getMostPickedStyles(), 'lastvisit_name' => $this->getUsername(), 'errors' => $this->error_msg, 'errors_count' => $this->error_cnt]);
     	} else {
-    		return view('index', ['questions' => Questions::$questions, 'accurate_questions' => Questions::$accurate_questions,	'mostly_picked' => $this->getMostPickedStyles(), 'errors' => '', 'errors_count' => 0]);
+    		return view('index', ['questions' => Questions::$questions, 'accurate_questions' => Questions::$accurate_questions,	'mostly_picked' => $this->getMostPickedStyles(), 'lastvisit_name' => $this->getUsername(), 'errors' => '', 'errors_count' => 0]);
     	}
 
     }
@@ -221,6 +221,22 @@ class StylePickerController extends Controller
 		$mostly_picked = DB::select('SELECT COUNT(`s`.`style_take`) AS `wybrano_razy`, `b`.`name`, `b`.`name2`, `b`.`name_pl` FROM `styles_logs` s INNER JOIN `beers` b ON `b`.`id` = `s`.`style_take` GROUP BY `s`.`style_take` ORDER BY `wybrano_razy` DESC LIMIT 3');
 
     	return $mostly_picked;
+
+    }
+
+    /**
+    * Gets name of an user using IP address
+    */
+    public function getUsername() : ?string {
+
+    	$last_visit = DB::select('SELECT username FROM styles_logs WHERE ip_address = "'.$_SERVER['REMOTE_ADDR'].'" ORDER BY created_at DESC LIMIT 1');
+
+    	if ($last_visit) {
+			$v = get_object_vars($last_visit[0]);
+			return $v['username'];
+		} else {
+			return false;
+		}
 
     }
 

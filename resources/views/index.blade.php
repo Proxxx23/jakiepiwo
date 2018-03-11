@@ -161,7 +161,7 @@
                     <form method="POST" action=" {{ action('StylePickerController@mix') }} ">
                     {{ csrf_field() }}
                    
-                <h3>Odpowiedz na wszystkie poniższe pytania, aby dowiedzieć się, jakie 3 style piwne powinny Ci najbardziej zasmakować. </h3>
+                <h3>@if ($lastvisit_name) Czołem, {{$lastvisit_name}}!@endif Odpowiedz na wszystkie poniższe pytania, aby dowiedzieć się, jakie 3 style piwne powinny Ci najbardziej zasmakować. </h3>
 
                     @foreach ($questions as $index => $field)
                     @if ($index == 14)
