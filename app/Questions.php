@@ -5,8 +5,8 @@ namespace App\Traits;
 trait Questions {
  
 	/*@type
-	* 0 - pytanie "tak/może/nie"
-	* 1 - pytanie w skali
+	* 0 - pytanie "tak/nie"
+	* 1 - pytanie <> tak/nie
 	*/
 	
 	public static $questions = array(
@@ -40,17 +40,6 @@ trait Questions {
 		16 => array("question" => "Jak mocne (zawartość alkoholu) piwa preferujesz?", "type" => 1, "answers" => array('lekkie', 'średnie', 'mocne')),
 		17 => array("question" => "Czy odpowiadałby Ci smak wędzony/dymny w piwie?", "type" => 0, "answers" => array('NO')), 
 
-
-	);
-
-	// Dodatkowe pytania dokładne do przeniesienia wyżej
-	public static $accurate_questions = array(
-
-		0 => array("question" => "Dodatkowe pytanie nr", "type" => 0),
-		1 => array("question" => "Dodatkowe pytanie nr", "type" => 0),
-		2 => array("question" => "Dodatkowe pytanie nr", "type" => 0),
-		3 => array("question" => "Dodatkowe pytanie nr", "type" => 0),
-		4 => array("question" => "Dodatkowe pytanie nr", "type" => 0)
 
 	);
 

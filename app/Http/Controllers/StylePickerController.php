@@ -29,9 +29,9 @@ class StylePickerController extends Controller
     	//die('Wprowadzam zmiany w pytaniach i algorytmie. Beta będzie włączona ponownie około 20:30');
 
         if ($errors === true) {
-    		return view('index', ['questions' => Questions::$questions, 'accurate_questions' => Questions::$accurate_questions,	'mostly_picked' => $this->getMostPickedStyles(), 'lastvisit_name' => $this->getUsername(), 'errors' => $this->error_msg, 'errors_count' => $this->error_cnt]);
+    		return view('index', ['questions' => Questions::$questions,	'mostly_picked' => $this->getMostPickedStyles(), 'lastvisit_name' => $this->getUsername(), 'errors' => $this->error_msg, 'errors_count' => $this->error_cnt]);
     	} else {
-    		return view('index', ['questions' => Questions::$questions, 'accurate_questions' => Questions::$accurate_questions,	'mostly_picked' => $this->getMostPickedStyles(), 'lastvisit_name' => $this->getUsername(), 'errors' => '', 'errors_count' => 0]);
+    		return view('index', ['questions' => Questions::$questions,	'mostly_picked' => $this->getMostPickedStyles(), 'lastvisit_name' => $this->getUsername(), 'errors' => '', 'errors_count' => 0]);
     	}
 
     }

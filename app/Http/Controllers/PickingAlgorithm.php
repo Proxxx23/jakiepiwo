@@ -179,6 +179,7 @@ class PickingAlgorithm extends Controller
 	    			$this->excluder($to_excl);
 	    		}
 
+	    		// Nie idź dalej przy BA
 	    		if (in_array($ids, array('tak', 'nie'))) {
 	    			continue;
 	    		}
@@ -200,11 +201,11 @@ class PickingAlgorithm extends Controller
 	    	}
     	}
 
-    	// Synergie - wstępnie działa
-    	// Na pewno kwasy / smoked / grodziskie / ciężkie RIS-y
+    	// Na pewno kwasy / smoked / grodziskie / ciężkie RIS-y / AIPA
     	// Ma podbijać sumę ID-ków w stosie (wpływ na wszystkie ID przypisane do danej odpowiedzi na tak/nie)
     	// TODO: Refactor na tablice
     	 $answer_value = get_object_vars($answers_decoded);
+
     	 // Lekkie + owocowe + Kwaśne
     	 if ($answer_value[4] == 'coś lekkiego' && $answer_value[11] == 'tak' && $answer_value[12] == 'tak') {
     	 	$this->positiveSynergy(array(40, 56), 2);
@@ -266,7 +267,7 @@ class PickingAlgorithm extends Controller
     		//mail('kontakt@piwolucja.pl', 'logStyles Exception', $e->getMessage());
     	}
 
-    	// TODO: Usuwa BA jeśli nie trafiono w 3 polecanych na piwa, które leżakuje się na ogół w beczkach - przemyśleć!
+    	// TODO: Usuwa BA jeśli nie trafiono w 3 polecanych na piwa, które leżakuje się na ogół w beczkach - przemyśleć, czy warto!
     	// foreach ($this->style_to_take AS $ids) {
     	// 	if (!in_array($ids, array(7, ))) {
     	// 		$this->BA = false;
@@ -277,15 +278,12 @@ class PickingAlgorithm extends Controller
 
     }
 
-    // TODO: Try/catch or error logging
-    public function logStyles(string $name, string $email, int $newsletter) : void {
+    private function logStyles(string $name, string $email, int $newsletter) : void {
 
     	for ($i = 0; $i < 3; $i++) {
-
     		DB::insert('INSERT INTO `styles_logs` (username, email, newsletter, style_take, style_avoid, ip_address, created_at)
     					VALUES
     					(?, ?, ?, ?, ?, ?, ?)', [$name, $email, $newsletter, $this->style_to_take[$i], $this->style_to_avoid[$i], $_SERVER['REMOTE_ADDR'], NOW()]);
-
     	}
 
     }
