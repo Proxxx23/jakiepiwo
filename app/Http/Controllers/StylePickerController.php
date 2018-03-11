@@ -235,7 +235,7 @@ class StylePickerController extends Controller
 			$v = get_object_vars($last_visit[0]);
 			return $v['username'];
 		} else {
-			return false;
+			return null;
 		}
 
     }
