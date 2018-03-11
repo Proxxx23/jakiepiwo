@@ -240,6 +240,23 @@ class StylePickerController extends Controller
 
     }
 
+    /**
+    * Gets 3 styles from last user's visit
+    * TODO
+    */
+    public function getUserLastVisitStyles() {
+
+    	$last_visit_styles = DB::select('SELECT s.style_take, b.name FROM styles_logs s INNER JOIN beers b ON s.style_take = b.id WHERE s.ip_address = "'.$_SERVER['REMOTE_ADDR'].'" ORDER BY created_at DESC LIMIT 3');
+
+    	// if (!empty($last_visit_styles)) {
+    	// 	for ($i = 0; $i <= count($last_visit_styles); $i++) {
+    	// 		$last_styles[] = get_object_vars($last_visit_styles[$i]);
+    	// 	}
+    	// 	var_dump($last_styles);
+    	// }
+
+    }
+
 	/**
     * Zapisuje błędy do bazy
     */

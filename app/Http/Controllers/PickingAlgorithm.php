@@ -84,7 +84,7 @@ class PickingAlgorithm extends Controller
 	protected $to_include17 = array('tak' => '15:2, 16:2, 58:2, 59:2', 
 									'nie' => '');
 
-	// TODO: STYLE: Lite (A)PA, (A)PA + warianty, Smoked (imperial porter, imperial stout)
+	// TODO: STYLE: Lite (A)PA, (A)PA + warianty, Smoked (imperial porter, imperial stout), Brown ALe
 
 	private $included_ids = array(); // Beer IDs to include
 	private $excluded_ids = array(); // Excluded beer IDs
@@ -203,6 +203,7 @@ class PickingAlgorithm extends Controller
     	// Synergie - wstępnie działa
     	// Na pewno kwasy / smoked / grodziskie / ciężkie RIS-y
     	// Ma podbijać sumę ID-ków w stosie (wpływ na wszystkie ID przypisane do danej odpowiedzi na tak/nie)
+    	// TODO: Refactor na tablice
     	 $answer_value = get_object_vars($answers_decoded);
     	 // Lekkie + owocowe + Kwaśne
     	 if ($answer_value[4] == 'coś lekkiego' && $answer_value[11] == 'tak' && $answer_value[12] == 'tak') {
@@ -221,6 +222,12 @@ class PickingAlgorithm extends Controller
     	 // złożone + ciemne + nieowocowe
     	 if ($answer_value[4] == 'coś złożonego' && $answer_value[6] == 'ciemne' && $answer_value[11] == 'nie') {
     	 	$this->positiveSynergy(array(3, 24, 35, 36, 37), 2);
+    	 }
+
+    	 //Lekkie + ciemne + słodkie + goryczka (ledwie || lekka || wyczuwalna)
+    	 if ($answer_value[4] == 'coś lekkiego' && $answer_value[6] == 'ciemne' && $answer_value[7] == 'słodsze' && !in_array($answer_value[5], array('mocną', 'jestem hopheadem'))) {
+    	 	$this->positiveSynergy(array(12, 29, 30, 34), 2);
+    	 	$this->negativeSynergy(array(36, 37), 3);
     	 }
 
     	// TODO: Jeśli style zapunktowały tak samo, to który ma brać?
