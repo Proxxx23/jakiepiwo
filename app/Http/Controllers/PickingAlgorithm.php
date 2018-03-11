@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\View;
 class PickingAlgorithm extends Controller
 {
 
-	/*
+	/**
 	* Array zawiera pary 'odpowiedź' => id_piw z bazy do zaliczenia w przypadku wyboru tej odpowiedzi + ew. dodatkowa siła
 	*/
 	// Czy smakują Ci lekkie piwa koncernowe dostępne w sklepach?
@@ -44,7 +44,7 @@ class PickingAlgorithm extends Controller
 	protected $to_include7 = array('słodsze' => '1, 2,5,6,7:1.5,8,14:1.5,15:1.5,16:1.5,18:1.5,19,20:1.5,22:2,23:2,25,31:1.5,34:2,36,38,39:1.5,46,49:1.5,50,53,54:2,60:2', 
 									'bez znaczenia' => '', 
 									'wytrawniejsze' => '3:1.5,4,5,9,10:1.5,11,12,13:1.5,17,18,21,28,29,33:2,35:2,36,37,40,41,45,47,48,52:1.5,55,57,58,59');
-	// TODO: Jako skala/suwak
+
 	// Czy odpowiadałby Ci smak czekoladowy w piwie?
 	protected $to_include8 = array('tak' => '3:1.25, 4, 12:1.5, 18,21:1.25,24:2,29,30,33:1.5,34:1.75,35:1.5,36:2,37:2,48,58:1.25,59:1.5', 
 									'nie' => '1, 2, 5, 6, 7, 8, 9, 19, 11, 13, 14, 15, 16, 17, 18, 19, 20,22,23,25,26,27,28,31,32,38,39,40,41,42,43,44,45,46,47,49,50,51,52,53,54,55,56,57,60');
@@ -84,16 +84,16 @@ class PickingAlgorithm extends Controller
 	protected $to_include17 = array('tak' => '15:2, 16:2, 58:2, 59:2', 
 									'nie' => '');
 
-	// STYLE: Lite (A)PA, (A)PA + warianty, Smoked (imperial porter, imperial stout)
+	// TODO: STYLE: Lite (A)PA, (A)PA + warianty, Smoked (imperial porter, imperial stout)
 
 	private $included_ids = array(); // Beer IDs to include
 	private $excluded_ids = array(); // Excluded beer IDs
-	private $style_to_take = array();
-	private $style_to_avoid = array();
+	private $style_to_take = array(); // Styles user should buy
+	private $style_to_avoid = array(); // Styles user should avoid
 
 	public $BA = false; // BA beers
 
-	private CONST STYLES_TO_PICK = 3; // Eventually change to user's decision
+	private CONST STYLES_TO_PICK = 3;
 
 	/**
 	* Builds positive synergy if user ticks 2-4 particular answers
@@ -149,11 +149,17 @@ class PickingAlgorithm extends Controller
     	foreach ($answers_decoded AS $number => $answer) {
 	    	foreach ($this->{'to_include'.$number} AS $yesno => $ids) {
 
-	    		if (in_array($ids, array('tak', 'nie'))) {
+	    		if ($_POST['answer-14'] == 'tak') {
+	    			$this->BA = true;
+	    			continue;
+	    		} else {
+	    			$this->BA = false;
 	    			continue;
 	    		}
 
-	    		($_POST['answer-14'] == 'tak') ? $this->BA = true : $this->BA = false;
+	    		if (in_array($ids, array('tak', 'nie'))) {
+	    			continue;
+	    		}
 
 	    		$ids_to_calc = $this->strengthBuilder($ids);
 	    		
