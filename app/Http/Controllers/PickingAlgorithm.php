@@ -138,9 +138,19 @@ class PickingAlgorithm extends Controller
 
 	}
 
+	/**
+	* Excludes sour/salty/smoked beers if user says NO
+	* TODO: Funkcja, która działa z każdym pytaniem
+	*/
+	private function excluder(array $ids_to_exclude) {
+		foreach ($ids_to_exclude AS $id) {
+			$this->included_ids[$id] = 0;
+		}
+	}
+
     
     /**
-    * Tutaj dzieje się magia
+    * Heart of an algorithm
     */
     public function includeBeerIds(string $answers, string $name, string $email, int $newsletter) {
 
@@ -153,6 +163,20 @@ class PickingAlgorithm extends Controller
 	    			$this->BA = true;
 	    		} else {
 	    			$this->BA = false;
+	    		}
+
+	    		//TODO: Refactor
+	    		if ($_POST['answer-12'] == 'nie ma mowy') {
+	    			$to_excl = array(40, 42, 43, 44, 51, 56);
+	    			$this->excluder($to_excl);
+	    		}
+				if ($_POST['answer-13'] == 'nie ma mowy') {
+	    			$to_excl = array(51, 55);
+	    			$this->excluder($to_excl);
+	    		}
+	    		if ($_POST['answer-17'] == 'nie') {
+	    			$to_excl = array(15, 16, 58, 59);
+	    			$this->excluder($to_excl);
 	    		}
 
 	    		if (in_array($ids, array('tak', 'nie'))) {
@@ -211,11 +235,11 @@ class PickingAlgorithm extends Controller
     	arsort($this->included_ids);
     	arsort($this->excluded_ids);
 
-    	echo "Tablica ze stylami do wybrania i punktami: <br />";
-    	var_dump($this->included_ids);
-    	echo "<br />Tablica ze stylami do odrzucenia i punktami: <br />";
-    	var_dump($this->excluded_ids);
-    	die();
+    	// echo "Tablica ze stylami do wybrania i punktami: <br />";
+    	// var_dump($this->included_ids);
+    	// echo "<br />Tablica ze stylami do odrzucenia i punktami: <br />";
+    	// var_dump($this->excluded_ids);
+    	// die();
 
 
     	for ($i = 0; $i < self::STYLES_TO_PICK; $i++) {
