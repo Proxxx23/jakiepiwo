@@ -151,10 +151,8 @@ class PickingAlgorithm extends Controller
 
 	    		if ($_POST['answer-14'] == 'tak') {
 	    			$this->BA = true;
-	    			continue;
 	    		} else {
 	    			$this->BA = false;
-	    			continue;
 	    		}
 
 	    		if (in_array($ids, array('tak', 'nie'))) {
@@ -184,40 +182,40 @@ class PickingAlgorithm extends Controller
     	 $answer_value = get_object_vars($answers_decoded);
     	 // Lekkie + owocowe + Kwaśne
     	 if ($answer_value[4] == 'coś lekkiego' && $answer_value[11] == 'tak' && $answer_value[12] == 'tak') {
-    	 	$this->positiveSynergy(array(40), 3);
+    	 	$this->positiveSynergy(array(40, 56), 2);
     	 }
     	 // nowe smaki LUB szokujące + złożone + jasne
     	 if (($answer_value[2] == 'tak' || $answer_value[3] == 'tak') && $answer_value[4] == 'coś złożonego' && $answer_value[4] == 'jasne') {
-    	 	$this->positiveSynergy(array(7, 15, 16, 23, 39), 3);
+    	 	$this->positiveSynergy(array(7, 15, 16, 23, 39), 2);
     	 }
 
     	 // nowe smaki LUB szokujące + złożone + ciemne (beczki!)
     	 if (($answer_value[2] == 'tak' || $answer_value[3] == 'tak') && $answer_value[4] == 'coś złożonego' && $answer_value[4] == 'ciemne') {
-    	 	$this->positiveSynergy(array(36, 37), 3);
+    	 	$this->positiveSynergy(array(36, 37), 2);
     	 }
 
     	 // złożone + ciemne + nieowocowe
     	 if ($answer_value[4] == 'coś złożonego' && $answer_value[6] == 'ciemne' && $answer_value[11] == 'nie') {
-    	 	$this->positiveSynergy(array(3, 24, 35, 36, 37), 3);
+    	 	$this->positiveSynergy(array(3, 24, 35, 36, 37), 2);
     	 }
 
-    	// TODO: Check if there are at least 3 styles
-    	// If no - make extra Draw
+    	// TODO: Jeśli style zapunktowały tak samo, to który ma brać?
     	return $this->chooseStyles($name, $email, $newsletter);
 
     }
 
     public function chooseStyles(string $name, string $email, int $newsletter) {
 
-    	// Tu musi być jeszcze wywołanie funkcji, która sprawdzi, czy dany styl nie występuje wiele razy i w included i w excluded (bo to nie miałoby sensu, gdyby stout był jednocześnie wybrany i wykluczony)
+    	// TODO: Tu musi być jeszcze wywołanie funkcji, która sprawdzi, czy dany styl nie występuje wiele razy i w included i w excluded (bo to nie miałoby sensu, gdyby stout był jednocześnie wybrany i wykluczony)
     	
     	arsort($this->included_ids);
     	arsort($this->excluded_ids);
 
-    	// echo "Tablica ze stylami do wybrania i punktami: <br />";
-    	// var_dump($this->included_ids);
-    	// echo "<br />Tablica ze stylami do odrzucenia i punktami: <br />";
-    	// var_dump($this->excluded_ids);
+    	echo "Tablica ze stylami do wybrania i punktami: <br />";
+    	var_dump($this->included_ids);
+    	echo "<br />Tablica ze stylami do odrzucenia i punktami: <br />";
+    	var_dump($this->excluded_ids);
+    	die();
 
 
     	for ($i = 0; $i < self::STYLES_TO_PICK; $i++) {
@@ -237,10 +235,9 @@ class PickingAlgorithm extends Controller
     		//mail('kontakt@piwolucja.pl', 'logStyles Exception', $e->getMessage());
     	}
 
-    	// Ustawić BA na false, jeśli wyjdą w stylach do wzięcia piwa, których nie leżakuje się w beczkach!
-    	// Osobna funkcja
+    	// TODO: Usuwa BA jeśli nie trafiono w 3 polecanych na piwa, które leżakuje się na ogół w beczkach - przemyśleć!
     	// foreach ($this->style_to_take AS $ids) {
-    	// 	if (in_array($ids, array())) {
+    	// 	if (!in_array($ids, array(7, ))) {
     	// 		$this->BA = false;
     	// 	}
     	// }
