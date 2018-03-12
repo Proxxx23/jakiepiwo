@@ -105,9 +105,11 @@
                     <li>Poprawki algorytmu dla piw lekkich ciemnych</li>
                     <li>Witanie się z użytkownikiem, jeśli już odwiedzał narzędzie</li>
                     <li>Obsługa tooltipów via Bootstrap</li>
+                    <li>Wstępny mechanizm prewencyjny dla występowania piwa jako polecane i odradzane jednocześnie</li>
                 </ul>
                 <h5>Bugfixes</h5>
                 <ul>
+                    <li>Poprawka zliczania punktów</li>
                     <li>W przypadku odrzucenia piw wędzonych, pojawiał się wędzony ris i imperialny porter bałtycki</li>
                     <li>Pusty e-mail nie wysyła się już przy zaznaczeniu newslettera</li>
                     <li>Kliknięcie w treść odpowiedzi zaznacza odpowiedź</li>
@@ -125,7 +127,6 @@
                     <li>Czy danych piw możesz napić się w okolicy? (OnTap API)</li>
                     <li>Wyświetlanie stylów z ostatniej wizyty</li>
                     <li>Najczęściej polecane użytkowniom style</li>
-                    <li>Mechanizm, który zapobiegnie pokazywaniu tego samego stylu w polecanych i odradzanych (co i tak nie będzie mieć raczej miejsca)</li>
                     <li>Pokazywanie użytkownikowi - na życzenie - ile punktów dostały dane style</li>
                     <li>Wyróżnianie piwa, które w znaczący sposób odbiegło punktami reszcie stawki</li>
                     <li>Możliwość wykluczania przez użytkownika całych stylów, które już zna (na początek IPA)</li>
