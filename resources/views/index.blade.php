@@ -117,6 +117,7 @@
                 border:1px solid #F00;
                 width:150px;
             }​
+
         </style>
     </head>
     <body>
@@ -144,7 +145,7 @@
                     @endif
                     <h3>{{$index}}. {{$field['question']}} 
                         @if ($field['tooltip'] != '')
-                            <a class="tltp" style="cursor: help !important;" data-toggle="tooltip" data-placement="right" title="{{$field['tooltip']}}">[i]</a>
+                            <img src="images/info-icon-16-16.png" class="tltp" style="cursor: help !important;" data-toggle="tooltip" data-placement="right" title="{{$field['tooltip']}}"></img>
                         @endif</h3>
                     
                         @if ($field['type'] === 1)  
