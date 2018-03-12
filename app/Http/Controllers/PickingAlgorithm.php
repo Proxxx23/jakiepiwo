@@ -154,11 +154,15 @@ class PickingAlgorithm extends Controller
 		$included = array_slice($this->included_ids, 0, 3, true);
 		$excluded = array_slice($this->excluded_ids, 0, 3, true);
 
-		$search = array_search($included, $excluded);
+		foreach ($included AS $id => $points) {
+			if (array_key_exists($id, $excluded)) {
+				$to_unset = $id;
+			}
+		}
 
-		if ($search !== false) {
-			unset($this->excluded_ids[$search]);
-			// TODO: unset included too?
+
+		if (is_numeric($to_unset)) {
+			unset($this->included_ids[$to_unset]);
 			return true;
 		} else {
 			return false;
