@@ -12,7 +12,7 @@ trait Questions {
 	public static $questions = array(
 
 		// Pytania wstępne
-		1 => array("question" => "Czy smakują Ci piwa koncernowe dostępne w sklepach?", "type" => 0, "answers" => array('NO')),
+		1 => array("question" => "Czy smakują Ci piwa koncernowe dostępne w sklepach?", "type" => 0, "answers" => array('NO'), "tooltip" => "Chodzi o jasne piwa koncernowe, takie jak Lech, Kasztelan, Tyskie czy Specjal."),
 		2 => array("question" => "Czy chcesz poznać nowe piwne smaki?", "type" => 0, "answers" => array('NO')),
 		3 => array("question" => "Czy wolałbyś poznać wyłącznie style piwne, które potrafią zszokować?", "type" => 0, "answers" => array('NO')),
 
@@ -29,15 +29,15 @@ trait Questions {
 		// Pytania smakowe - podaj w skali
 		8 => array("question" => "Czy odpowiadałby Ci smak czekoladowy w piwie?", "type" => 0, "answers" => array('NO')),
 		9 => array("question" => "Czy wolisz piwa mocno nagazowane?", "type" => 0, "answers" => array('NO')),
-		10 => array("question" => "Czy odpowiadałby Ci smak palony w piwie?", "type" => 0, "answers" => array('NO')), // Coś innego
-		11 => array("question" => "Czy chciałbyś piwo w klimatach owocowych (bez soku)?", "type" => 0, "answers" => array('NO')),
-		12 => array("question" => "Co powiesz na piwo kwaśne?", "type" => 1, "answers" => array('chętnie', 'nie ma mowy')),
+		10 => array("question" => "Czy odpowiadałby Ci smak palony w piwie?", "type" => 0, "answers" => array('NO')), // TODO: Zamienić z 9 miejscami
+		11 => array("question" => "Czy chciałbyś piwo w klimatach owocowych?", "type" => 0, "answers" => array('NO'), "tooltip" => "Chodzi o piwa bez dodatku soku, w których nuty owocowe otrzymano dzięki użyciu odpowiednich odmian chmielu lub dzięki pracy drożdży."),
+		12 => array("question" => "Co powiesz na piwo kwaśne?", "type" => 1, "answers" => array('chętnie', 'nie ma mowy'), "tooltip" => "Kwaśne nie oznacza, że piwo jest zepsute czy stare."),
 		13 => array("question" => "Co powiesz na piwo słonawe?", "type" => 1, "answers" => array('chętnie', 'nie ma mowy')),
 
 		// Dodatkowe 4 pytania
 		14 => array("question" => "Czy lubisz bourbon, whisky lub inne alkohole szlachetne?", "type" => 0, "answers" => array('NO')),
 		15 => array("question" => "Piwa o jakiej konsystencji preferujesz?", "type" => 1, "answers" => array('wodniste', 'średnie', 'gęste')),
-		16 => array("question" => "Jak mocne (zawartość alkoholu) piwa preferujesz?", "type" => 1, "answers" => array('lekkie', 'średnie', 'mocne')),
+		16 => array("question" => "Jak mocne pod względem zawartości alkoholu piwa preferujesz?", "type" => 1, "answers" => array('lekkie', 'średnie', 'mocne')),
 		17 => array("question" => "Czy odpowiadałby Ci smak wędzony/dymny w piwie?", "type" => 0, "answers" => array('NO')), 
 
 

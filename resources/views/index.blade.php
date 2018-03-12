@@ -11,10 +11,12 @@
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
         <link href="https://fonts.googleapis.com/css?family=Mina" rel="stylesheet">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
         <script>
             $(document).ready(function(){
-                $('[data-toggle="dymek"]').tooltip()
+                $('[data-toggle="tooltip"]').tooltip()
             });
         </script>
         <!-- Styles -->
@@ -115,8 +117,6 @@
                 border:1px solid #F00;
                 width:150px;
             }​
-
-            }
         </style>
     </head>
     <body>
@@ -142,19 +142,22 @@
                     @if ($index == 14)
                         <h3>Odpowiedz na opcjonalne pytania, aby otrzymać dokładniejsze propozycje. Uwaga! Zawęży to w znaczący sposób wyniki!</h3>
                     @endif
-                    <h3>{{$index}}. {{$field['question']}} <a data-toggle="dymek" data-placement="right" title="Tytuł">[i]</a></h3>
+                    <h3>{{$index}}. {{$field['question']}} 
+                        @if ($field['tooltip'] != '')
+                            <a class="tltp" style="cursor: help !important;" data-toggle="tooltip" data-placement="right" title="{{$field['tooltip']}}">[i]</a>
+                        @endif</h3>
                     
                         @if ($field['type'] === 1)  
                          @foreach ($field['answers'] AS $ans)
-                         <label>
-                           {{$ans}}<input type="radio" name="answer-{{ $index }}" value="{{$ans}}">&nbsp;
-                        </label>
+                            <label>
+                                {{$ans}}<input type="radio" name="answer-{{ $index }}" value="{{$ans}}">&nbsp;
+                            </label>
                          @endforeach
                          
                         @else
 
-                        <label>TAK<input type="radio" name="answer-{{ $index }}" value="tak">&nbsp;</label>
-                        <label>NIE<input type="radio" name="answer-{{ $index }}" value="nie">&nbsp;</label>
+                            <label>TAK<input type="radio" name="answer-{{ $index }}" value="tak">&nbsp;</label>
+                            <label>NIE<input type="radio" name="answer-{{ $index }}" value="nie">&nbsp;</label>
                         @endif
 
                     @endforeach
