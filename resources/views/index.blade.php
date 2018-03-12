@@ -11,7 +11,12 @@
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
         <link href="https://fonts.googleapis.com/css?family=Mina" rel="stylesheet">
-
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+        <script>
+            $(document).ready(function(){
+                $('[data-toggle="dymek"]').tooltip()
+            });
+        </script>
         <!-- Styles -->
         <style>
             html, body {
@@ -116,38 +121,8 @@
     </head>
     <body>
         <div class="flex-center">
-            <!-- <div class="changelog">
-                <h3>Changelog v. 0.1nightly</h3>
-                <ul>
-                    <li>Pełny algorytm z budowaniem "siły"</li>
-                    <li>Logowanie błędów formularza do bazy</li>
-                    <li>Obsługa błędów</li>
-                    <li>Wstępna wersja bazująca na 10 stylach</li>
-                    <li>Walidacja formularza</li>
-                    <li>Zapis odpowiedzi do bazy</li>
-                    <li>Mechanizm synergi</li>
-                    <li>Skalowanie pytań (ważne > mniej ważne)</li>
-                    <li>Barrel aged jako osobna część</li>
-                </ul>
-            </div>
-
-            <div class="todo">
-                <h3>Pracuję nad</h3> 
-                <ul>
-                    <li>Wykluczanie znanych użytkownikowi stylów</li>
-                    <li>Niektóre pytania jako skala/suwak</li>
-                    <li>Dolosowanie (kolejne 3 ze stosu)</li>
-                    <li>Słone/kwaśne/Islay jako propozycja obok stylów</li>
-                    <li>Mail na życzenie</li>
-                    <li>Wyświetlanie stylów z ostatniej wizyty</li>
-                    <li>Najczęściej polecane style</li>
-                    <li>Pula 10 polecanych piw na każdy styl</li>
-                    <li>Tooltipy do pytań</li>
-                    <li>Logowanie błędów w jednym insercie DB</li>
-                </ul>
-            </div> -->
             <div class="content">
-                <h1>deGUSTATOR v0.1 nightly</h1>
+                <h1>deGUSTATOR v0.1 nightly <a href="/changelog" target="_blank">(changelog)</a></h1>
                 <!-- Error handling  -->
                 
                 @if ($errors_count > 0)
@@ -167,17 +142,19 @@
                     @if ($index == 14)
                         <h3>Odpowiedz na opcjonalne pytania, aby otrzymać dokładniejsze propozycje. Uwaga! Zawęży to w znaczący sposób wyniki!</h3>
                     @endif
-                    <h3>{{$index}}. {{$field['question']}}</h3>
+                    <h3>{{$index}}. {{$field['question']}} <a data-toggle="dymek" data-placement="right" title="Tytuł">[i]</a></h3>
                     
                         @if ($field['type'] === 1)  
                          @foreach ($field['answers'] AS $ans)
+                         <label>
                            {{$ans}}<input type="radio" name="answer-{{ $index }}" value="{{$ans}}">&nbsp;
+                        </label>
                          @endforeach
                          
                         @else
 
-                        TAK<input type="radio" name="answer-{{ $index }}" value="tak">&nbsp;
-                        NIE<input type="radio" name="answer-{{ $index }}" value="nie">&nbsp;
+                        <label>TAK<input type="radio" name="answer-{{ $index }}" value="tak">&nbsp;</label>
+                        <label>NIE<input type="radio" name="answer-{{ $index }}" value="nie">&nbsp;</label>
                         @endif
 
                     @endforeach

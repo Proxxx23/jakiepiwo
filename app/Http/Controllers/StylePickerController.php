@@ -76,7 +76,7 @@ class StylePickerController extends Controller
     /**
     * GitHub: https://github.com/drewm/mailchimp-api
     */
-    private function addEmailToNewsletterList($email) {
+    private function addEmailToNewsletterList($email) : void {
 
     	$MailChimp = new MailChimp('d42a6395b596459d1e2c358525a019b7-us3');
     	$list_id = 'e51bd39480';
@@ -165,7 +165,7 @@ class StylePickerController extends Controller
     		if ($insert_answers === true) {
 
     			// Wyślij maila na prośbę
-    			if ($email != '') { 
+    			if ($email != '' && isset($_POST['sendMeAnEmail'])) { 
     				$this->sendEmail($email);
     			}
 

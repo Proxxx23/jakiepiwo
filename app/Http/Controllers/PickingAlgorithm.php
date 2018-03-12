@@ -14,10 +14,10 @@ class PickingAlgorithm extends Controller
 	*/
 	// Czy smakują Ci lekkie piwa koncernowe dostępne w sklepach?
 	protected $to_include1 = array('tak' => '9:2, 10:2, 11:2, 12, 13:2, 14, 25, 26, 27, 41,45,52', 
-									'nie' => '5, 6, 7, 8, 22, 23, 24, 28, 29, 30, 31, 32, 33, 34, 35, 36,37,38,39,40,42,43,44,46,47,48,49,50,51,53,54,55,56,57,58,59,60, 61, 62, 63, 64');
+									'nie' => '5, 6, 7, 8, 22, 23, 24, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 42, 43, 44, 46, 47, 48, 49, 50, 51, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64');
 	// Czy chcesz poznać nowe smaki?
-	protected $to_include2 = array('tak' => '1, 2, 3, 4, 5, 6, 7, 8, 15, 16, 19, 20, 22,23,24,28,29,30,31,32,33,34,35,36,37,38,39,40,42,43,44,45,47,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64', 
-									'nie' => '9:2, 10:2, 11:2, 12:1.5, 13:2, 14, 21, 25,26,27:0.5,41:2,46,48:0:5');
+	protected $to_include2 = array('tak' => '1, 2, 3, 4, 5, 6, 7, 8, 15, 16, 19, 20, 22, 23, 24, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 42, 43, 44, 45, 47, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64', 
+									'nie' => '9:2, 10:2, 11:2, 12:1.5, 13:2, 14, 21, 25, 26, 27:0.5, 41:2, 46, 48:0:5');
 	// Czy wolałbyś poznać wyłącznie style, które potrafią zszokować?
 	protected $to_include3 = array('tak' => '1:1.5,2:2.5,3:2.5,4:2.5,5:2.5,6:2.5,7:2.5,8:2.5,15:2.5,16:2.5,23:2.5,24:2.5,36:2.5,37:2.5,40:2.5,42:2.5,43:2.5,44:2.5,50:2.5,51:2.5,54:2.5,55:2.5,56:2.5,57:2.5,58:2.5,59:2.5,60:1.5, 61:1.5, 62:2.5, 63:2.5', 'nie' => '');
 
@@ -96,7 +96,7 @@ class PickingAlgorithm extends Controller
 	/**
 	* Builds positive synergy if user ticks 2-4 particular answers
 	*/
-	private function positiveSynergy(array $ids_to_multiply, int $multiplier) {
+	private function positiveSynergy(array $ids_to_multiply, $multiplier) : void {
 
 		foreach ($ids_to_multiply AS $id) {
 			$this->included_ids[$id] *= $multiplier;
@@ -107,7 +107,7 @@ class PickingAlgorithm extends Controller
 	/**
 	* Builds negative synergy if user ticks 2-4 particular answers
 	*/
-	private function negativeSynergy(array $ids_to_divide, int $divider) {
+	private function negativeSynergy(array $ids_to_divide, $divider) : void {
 
 		foreach ($ids_to_divide AS $id) {
 			$this->excluded_ids[$id] = floor($this->excluded_ids[$id] / $divider);
@@ -140,7 +140,7 @@ class PickingAlgorithm extends Controller
 	* Excludes sour/salty/smoked beers if user says NO
 	* TODO: Funkcja, która działa z każdym pytaniem
 	*/
-	private function excluder(array $ids_to_exclude) {
+	private function excluder(array $ids_to_exclude) : void {
 		foreach ($ids_to_exclude AS $id) {
 			$this->included_ids[$id] = 0;
 		}
@@ -173,7 +173,7 @@ class PickingAlgorithm extends Controller
 	    			$this->excluder($to_excl);
 	    		}
 	    		if ($_POST['answer-17'] == 'nie') {
-	    			$to_excl = array(15, 16, 58, 59);
+	    			$to_excl = array(15, 16, 58, 59, 62, 63);
 	    			$this->excluder($to_excl);
 	    		}
 
@@ -223,11 +223,47 @@ class PickingAlgorithm extends Controller
     	 	$this->positiveSynergy(array(3, 24, 35, 36, 37), 2);
     	 }
 
-    	 //Lekkie + ciemne + słodkie + goryczka (ledwie || lekka || wyczuwalna)
+    	 // Lekkie + ciemne + słodkie + goryczka (ledwie || lekka || wyczuwalna)
     	 if ($answer_value[4] == 'coś lekkiego' && $answer_value[6] == 'ciemne' && $answer_value[7] == 'słodsze' && !in_array($answer_value[5], array('mocną', 'jestem hopheadem'))) {
     	 	$this->positiveSynergy(array(12, 29, 30, 34, 64), 2);
     	 	$this->negativeSynergy(array(36, 37), 3);
     	 }
+
+    	 // jasne + nieczekoladowe + niepalone
+    	 if ($answer_value[6] == 'jasne' && $answer_value[8] == 'nie' && $answer_value[10] == 'nie') {
+    	 	$this->negativeSynergy(array(12, 21, 24, 29, 33, 34, 35, 36, 37, 58, 59, 62, 63), 2);
+    	 }
+
+    	 // czekoladowe + niepalone
+    	 if ($answer_value[8] == 'tak' && $answer_value[10] == 'nie') {
+    	 	$this->positiveSynergy(array(12, 34), 1.5);
+    	 }
+
+    	 // ciemne + czekoladowe + niepalone
+    	 if ($answer_value[8] == 'tak' && $answer_value[10] == 'nie') {
+    	 	$this->positiveSynergy(array(12, 34), 2);
+    	 }
+
+    	 // goryczka ledwo || lekka + jasne + mocno gazowane
+    	 if (($answer_value[5] == 'ledwie wyczuwalną' || $answer_value[5] == 'lekką') && $answer_value[6] == 'jasne' && $answer_value[9] == 'tak') {
+    	 	$this->positiveSynergy(array(20, 25, 40, 44, 45, 47, 51, 52), 2);
+    	 }
+
+    	 // jasne + lekkie + wędzone = grodziskie
+    	 if ($answer_value[4] == 'coś lekkiego' && $answer_value[6] == 'jasne' && $answer_value[17] == 'tak') {
+    	 	$this->positiveSynergy(array(52), 2.5);
+    	 }
+
+    	 // jasne + lekkie + wodniste + wędzone = grodziskie
+    	 if ($answer_value[4] == 'coś lekkiego' && $answer_value[6] == 'jasne' && $answer_value[15] == 'wodniste' && $answer_value[17] == 'tak') {
+    	 	$this->positiveSynergy(array(52), 3);
+    	 	// $this->negativeSynergy <- RIS-y i gęste lochy TODO
+    	 }
+
+    	 // dla dużej goryczki + jasne
+    	 // dla bardzo dużej goryczki + jasne
+    	 // dla dużej goryczki + ciemne
+    	 // słodsze lżejsze
 
     	// TODO: Jeśli style zapunktowały tak samo, to który ma brać?
     	return $this->chooseStyles($name, $email, $newsletter);
@@ -241,13 +277,16 @@ class PickingAlgorithm extends Controller
     	arsort($this->included_ids);
     	arsort($this->excluded_ids);
 
+    	//TODO: Nie może pokazywać podobnych stylów (max 2 podobne) 
+    	//TODO: Jeśli np. 5 stylów ma tyle samo punktów, to wylosować te, które się pokaże, a które nie
+
     	// echo "Tablica ze stylami do wybrania i punktami: <br />";
     	// var_dump($this->included_ids);
     	// echo "<br />Tablica ze stylami do odrzucenia i punktami: <br />";
     	// var_dump($this->excluded_ids);
     	// die();
 
-
+    	//TODO Przekazywać punkty do widoku i jeśli jakiś styl się bardzo wyróżnia, to oznaczać
     	for ($i = 0; $i < self::STYLES_TO_PICK; $i++) {
     		$style_to_take = $this->style_to_take[] = key(array_slice($this->included_ids, $i, 1, true));
     		$buythis[] = DB::select("SELECT * FROM beers WHERE id = $style_to_take");
