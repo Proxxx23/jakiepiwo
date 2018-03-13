@@ -108,6 +108,7 @@
                     <li>Wstępny mechanizm prewencyjny dla występowania piwa jako polecane i odradzane jednocześnie</li>
                     <li>Jeśli stylowi z 4 lub 5 pozycji brakowało niewiele do "podium", jeden lub obydwa zostaną pokazane na 4 i 5 pozycji (na szaro, mniejszym fontem)</li> 
                     <li>Wyróżnianie piwa, które w znaczący sposób odbiegło punktami reszcie stawki (pozytywnie i negatywnie)</li>
+                    <li>Pierwsze przymiarki do Bootstrap forms</li>
                 </ul>
                 <h5>Bugfixes</h5>
                 <ul>
@@ -119,9 +120,9 @@
 
                 <h5>Planowane usprawnienia (według priotytetu)</h5> 
                 <ul>
-                    <li>Możliwość wykluczania przez użytkownika całych stylów, które już zna (na początek IPA)</li>
-                    <li>Dalsze synergie pozytywne i negatywne</li>
                     <li>ID w odpowiedziach inkrementowane, nieunikalne</li>
+                    <li>Możliwość wykluczania przez użytkownika całych stylów, które już zna (na początek IPA)</li>
+                    <li>Uzupełnienie synergii pozytywnych i negatywnych</li>
                     <li>Adnotacja o BA tylko dla piw, które faktycznie leżakuje się w beczkach</li>
                     <li>Mail powitalny z MailChimp + e-book (final welcome e-mail)</li>
                     <li>Pokazywanie tylko jednej nazwy stylu + dymek z nazwą alternatywną i PL</li>
@@ -131,6 +132,7 @@
                     <li>Czy danych piw możesz napić się w okolicy? (OnTap API)</li>
                     <li>Wyświetlanie stylów z ostatniej wizyty (???)</li>
                     <li>Najczęściej polecane użytkowniom style</li>
+                    <li>Facebook Tags, SEO oraz Twitter Cards</li>
                 </ul>
             </div>
     </body>

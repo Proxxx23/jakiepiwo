@@ -151,24 +151,28 @@
                     
                         @if ($field['type'] === 1)  
                          @foreach ($field['answers'] AS $ans)
-                            <label>
-                                {{$ans}}<input type="radio" name="answer-{{ $index }}" value="{{$ans}}">&nbsp;
+                            <label class="radio-inline">
+                                <input type="radio" name="answer-{{ $index }}" value="{{$ans}}">{{$ans}}
                             </label>
                          @endforeach
                          
                         @else
-                            <label>TAK<input type="radio" name="answer-{{ $index }}" value="tak">&nbsp;</label>
-                            <label>NIE<input type="radio" name="answer-{{ $index }}" value="nie">&nbsp;</label>
+                            <label class="radio-inline"><input type="radio" name="answer-{{ $index }}" value="tak">tak</label>
+                            <label class="radio-inline"><input type="radio" name="answer-{{ $index }}" value="nie">nie</label>
                         @endif
 
                     @endforeach
                     <div class="bottom-input">
                         <div class="bottom-container">
-                            Imię <input type="text" name="username" maxlength="25"> <em>(opcjonalne)</em> <br />
-                            Adres e-mail <input type="email" name="email"> <em>(opcjonalne)</em><br />
-                            <input type="checkbox" name="sendMeAnEmail" value="Tak" disabled="disabled">Chcę otrzymać maila ze stylami i piwami wybranymi dla mnie. <em>(nieaktywne)</em><br />
-                            <input type="checkbox" name="newsletter" value="Tak">Chcę otrzymywać <a href="http://piwolucja.pl/newsletter/" target="_blank">piwny newsletter</a>. <br /><br />
-                            <input type="submit" name="send" value="Wyślij">
+                            <label><input type="text" class="form-control" placeholder="Imię" name="username" maxlength="25"><em>(opcjonalne)</em></label><br />
+                            <label><input type="email" class="form-control" placeholder="Adres e-mail" name="email"><em>(opcjonalne)</em></label>
+                            <div class="checkbox">
+                                <label><input type="checkbox" name="sendMeAnEmail" value="Tak" disabled="disabled">Chcę otrzymać dodatkowego maila ze stylami i piwami wybranymi dla mnie <em>(nieaktywne)</em></label>
+                            </div>
+                            <div class="checkbox">
+                                <label><input type="checkbox" name="newsletter" value="Tak">Chcę otrzymywać <a href="http://piwolucja.pl/newsletter/" target="_blank">piwny newsletter</a></label>
+                            </div>
+                            <input type="submit" class="btn btn-primary" name="send" value="Wyślij">
                         </div>
                     </div>
                     </form>

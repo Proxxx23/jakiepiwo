@@ -123,6 +123,7 @@ class PickingAlgorithm extends Controller
 
 	/**
 	* Positive and negative synergies executer
+	* There are all the synergies
 	*/
 	private function synergyExecuter($answer_value) : void {
 
@@ -193,7 +194,7 @@ class PickingAlgorithm extends Controller
     	 }
 
     	 // niska goryczka + gęste + owoce
-    	 if (($answer_value[5] == 'ledwie wyczuwalną' || $answer_value[7] == 'lekką') && $answer_value[7] != 'wytrawniejsze' && $answer_value[11] == 'tak') {
+    	 if (($answer_value[5] == 'ledwie wyczuwalną' || $answer_value[5] == 'lekką') && $answer_value[7] != 'wytrawniejsze' && $answer_value[11] == 'tak') {
     	 	$this->positiveSynergy(array(20, 25, 45, 53), 2);
     	 	// negative
     	 }
