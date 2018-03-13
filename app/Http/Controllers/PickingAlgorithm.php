@@ -87,11 +87,14 @@ class PickingAlgorithm extends Controller
 	private $included_ids = array(); // Beer IDs to include
 	private $excluded_ids = array(); // Excluded beer IDs
 	private $style_to_take = array(); // Styles user should buy
+	private $additional_styles_to_take = array(); 
+	private $additional_styles_to_avoid = array();
 	private $style_to_avoid = array(); // Styles user should avoid
 
 	public $BA = false; // BA beers
 
-	private CONST STYLES_TO_PICK = 3;
+	private $cnt_styles_to_pick = 3;
+	private $cnt_styles_to_avoid = 3;
 
 	/**
 	* Builds positive synergy if user ticks 2-4 particular answers
@@ -151,15 +154,16 @@ class PickingAlgorithm extends Controller
 	*/
 	private function checkDoubles() : bool {
 
-		$included = array_slice($this->included_ids, 0, 3, true);
-		$excluded = array_slice($this->excluded_ids, 0, 3, true);
+		(!$this->show_optional) ? $n = 3 : $n = 5;
+
+		$included = array_slice($this->included_ids, 0, $n, true);
+		$excluded = array_slice($this->excluded_ids, 0, $n, true);
 
 		foreach ($included AS $id => $points) {
 			if (array_key_exists($id, $excluded)) {
 				$to_unset = $id;
 			}
 		}
-
 
 		if (is_numeric($to_unset)) {
 			unset($this->included_ids[$to_unset]);
@@ -170,6 +174,32 @@ class PickingAlgorithm extends Controller
 
 	}
 
+	/**
+	* If there's an 4th and 5rd style with a little "margin" to 3rd style
+	* Takes 4th or 5th style as an extra styles to take or avoid
+	* TODO: Do jednej zmiennej pakować i w widoku 4-5 styl pokazywać inaczej
+	*/
+	private function optionalStyles() : void {
+
+		$third_style_take = key(array_slice($this->included_ids, 0, 3, true));
+		$third_style_avoid = key(array_slice($this->excluded_ids, 0, 3, true));
+
+		for ($i = 3; $i <= 4; $i++) {
+
+			$to_take_chunk = array_slice($this->included_ids, $i, 1, true);
+			$to_avoid_chunk = array_slice($this->excluded_ids, $i, 1, true);
+			
+			if (($third_style_take / 100 * 90) < $to_take_chunk) {
+				$this->cnt_styles_to_pick++;
+			}
+
+			if (($third_style_avoid / 100 * 90) < $to_avoid_chunk) {
+				$this->cnt_styles_to_avoid++;
+			}
+
+		}
+
+	}
     
     /**
     * Heart of an algorithm
@@ -299,23 +329,25 @@ class PickingAlgorithm extends Controller
     	arsort($this->included_ids);
     	arsort($this->excluded_ids);
     	$this->checkDoubles();
+    	$this->optionalStyles();
 
     	//TODO: Nie może pokazywać podobnych stylów (max 2 podobne) 
     	//TODO: Jeśli np. 5 stylów ma tyle samo punktów, to wylosować te, które się pokaże, a które nie
 
-    	// echo "Tablica ze stylami do wybrania i punktami: <br />";
-    	// var_dump($this->included_ids);
-    	// echo "<br />Tablica ze stylami do odrzucenia i punktami: <br />";
-    	// var_dump($this->excluded_ids);
-    	// die();
+    	if ($_SERVER['REMOTE_ADDR'] == '89.64.48.198') {
+	    	echo "Tablica ze stylami do wybrania i punktami: <br />";
+	    	$this->printPre($this->included_ids);
+	    	echo "<br />Tablica ze stylami do odrzucenia i punktami: <br />";
+	    	$this->printPre($this->excluded_ids);
+    	}
 
     	//TODO Przekazywać punkty do widoku i jeśli jakiś styl się bardzo wyróżnia, to oznaczać
-    	for ($i = 0; $i < self::STYLES_TO_PICK; $i++) {
+    	for ($i = 0; $i < $this->cnt_styles_to_pick; $i++) {
     		$style_to_take = $this->style_to_take[] = key(array_slice($this->included_ids, $i, 1, true));
     		$buythis[] = DB::select("SELECT * FROM beers WHERE id = $style_to_take");
     	}   	
 
-    	for ($i = 0; $i < self::STYLES_TO_PICK; $i++) {
+    	for ($i = 0; $i < $this->cnt_styles_to_avoid; $i++) {
     		$style_to_avoid = $this->style_to_avoid[] = key(array_slice($this->excluded_ids, $i, 1, true));
     		$avoidthis[] = DB::select("SELECT * FROM beers WHERE id = $style_to_avoid");	
     	}

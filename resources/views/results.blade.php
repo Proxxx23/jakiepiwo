@@ -66,6 +66,11 @@
             .m-b-md {
                 margin-bottom: 30px;
             }
+
+            #optional_take, #optional_avoid {
+                font-size: 12px;
+                color: grey;
+            }
         </style>
     </head>
     <body>
@@ -78,9 +83,15 @@
                     @for ($i = 0; $i < count($buythis); $i++)
                         @foreach ($buythis[$i] as $k => $v)
 
-                            <p>{{$v->name}} 
+                            @if ($i < 3)
+                            <p id="take">{{$v->name}} 
                                 @if ($v->name2 != '') / {{$v->name2}} @endif 
                                 @if ($v->name_pl != '') / {{$v->name_pl}} @endif</p></br>
+                            @else
+                            <p id="optional_take">{{$v->name}} 
+                                @if ($v->name2 != '') / {{$v->name2}} @endif 
+                                @if ($v->name_pl != '') / {{$v->name_pl}} @endif</p></br>
+                            @endif
 
                         @endforeach
                     @endfor
@@ -95,9 +106,15 @@
                     @for ($i = 0; $i < count($avoidthis); $i++)
                         @foreach ($avoidthis[$i] as $k => $v)
 
-                            <p>{{$v->name}} 
+                            @if ($i < 3)
+                            <p id="avoid">{{$v->name}} 
                                 @if ($v->name2 != '') / {{$v->name2}} @endif 
                                 @if ($v->name_pl != '') / {{$v->name_pl}} @endif</p></br>
+                            @else
+                            <p id="optional_avoid">{{$v->name}} 
+                                @if ($v->name2 != '') / {{$v->name2}} @endif 
+                                @if ($v->name_pl != '') / {{$v->name_pl}} @endif</p></br>
+                            @endif
 
                         @endforeach
                     @endfor
