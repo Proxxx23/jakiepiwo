@@ -137,12 +137,13 @@
                     <form method="POST" action=" {{ action('StylePickerController@mix') }} ">
                     {{ csrf_field() }}
                    
-                <h3>@if ($lastvisit_name) Czołem, {{$lastvisit_name}}!@endif Odpowiedz na wszystkie poniższe pytania, aby dowiedzieć się, jakie 3 style piwne powinny Ci najbardziej zasmakować. </h3>
+                <h3>@if ($lastvisit_name) Czołem, {{$lastvisit_name}}!@endif 
+                Odpowiedz na wszystkie poniższe pytania, aby dowiedzieć się, jakie 3 style piwne powinny Ci najbardziej zasmakować. </h3>
 
                     @foreach ($questions as $index => $field)
-                    @if ($index == 14)
-                        <h3>Odpowiedz na opcjonalne pytania, aby otrzymać dokładniejsze propozycje. Uwaga! Zawęży to w znaczący sposób wyniki!</h3>
-                    @endif
+                        @if ($index == 14)
+                            <h3>Odpowiedz na opcjonalne pytania, aby otrzymać dokładniejsze propozycje. Uwaga! Zawęży to w znaczący sposób wyniki!</h3>
+                        @endif
                     <h3>{{$index}}. {{$field['question']}} 
                         @if ($field['tooltip'] != '')
                             <img src="images/info-icon-16-16.png" class="tltp" style="cursor: help !important;" data-toggle="tooltip" data-placement="right" title="{{$field['tooltip']}}"></img>
@@ -156,7 +157,6 @@
                          @endforeach
                          
                         @else
-
                             <label>TAK<input type="radio" name="answer-{{ $index }}" value="tak">&nbsp;</label>
                             <label>NIE<input type="radio" name="answer-{{ $index }}" value="nie">&nbsp;</label>
                         @endif

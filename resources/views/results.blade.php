@@ -71,6 +71,23 @@
                 font-size: 12px;
                 color: grey;
             }
+
+            #take, #avoid {
+                font-size: 18px;
+            }
+
+            #must_take {
+                font-size: 18px !important;
+                font-weight: bold !important;
+                color: #8FBC8F;
+            }
+
+            #must_avoid {
+                font-size: 18px !important;
+                color: #aa3311;
+                font-weight: bold !important;
+            }
+
         </style>
     </head>
     <body>
@@ -84,7 +101,7 @@
                         @foreach ($buythis[$i] as $k => $v)
 
                             @if ($i < 3)
-                            <p id="take">{{$v->name}} 
+                            <p @if ($must_take && $i == 0) id="must_take" @else id="take" @endif>{{$v->name}} 
                                 @if ($v->name2 != '') / {{$v->name2}} @endif 
                                 @if ($v->name_pl != '') / {{$v->name_pl}} @endif</p></br>
                             @else
@@ -107,7 +124,7 @@
                         @foreach ($avoidthis[$i] as $k => $v)
 
                             @if ($i < 3)
-                            <p id="avoid">{{$v->name}} 
+                            <p @if ($must_avoid && $i == 0) id="must_avoid" @else id="avoid" @endif>{{$v->name}} 
                                 @if ($v->name2 != '') / {{$v->name2}} @endif 
                                 @if ($v->name_pl != '') / {{$v->name_pl}} @endif</p></br>
                             @else

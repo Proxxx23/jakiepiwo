@@ -90,7 +90,7 @@
         </style>
     </head>
     <body><div class="changelog">
-                <h3>Changelog v. 0.1 nightly (12.03.2018 r.)</h3>
+                <h3>Changelog v. 0.1 nightly (13.03.2018 r.)</h3>
                 <h5>Najnowsze zmiany i funkcje (najnowsze na dole)</h5>
                 <ul>
                     <li>Pełny algorytm z budowaniem "siły pozytywnej" i "siły negatywnej"</li>
@@ -106,6 +106,8 @@
                     <li>Witanie się z użytkownikiem, jeśli już odwiedzał narzędzie</li>
                     <li>Obsługa tooltipów via Bootstrap</li>
                     <li>Wstępny mechanizm prewencyjny dla występowania piwa jako polecane i odradzane jednocześnie</li>
+                    <li>Jeśli stylowi z 4 lub 5 pozycji brakowało niewiele do "podium", jeden lub obydwa zostaną pokazane na 4 i 5 pozycji (na szaro, mniejszym fontem)</li> 
+                    <li>Wyróżnianie piwa, które w znaczący sposób odbiegło punktami reszcie stawki (pozytywnie i negatywnie)</li>
                 </ul>
                 <h5>Bugfixes</h5>
                 <ul>
@@ -117,8 +119,6 @@
 
                 <h5>Planowane usprawnienia</h5> 
                 <ul>
-                    <li>W przypadku 3 podobnych stylów do polecenia, algorytm wybierze tylko 1-2 z nich i dorzuci 1 styl z 4 pozycji (w trakcie prac...)</li>
-                    <li>W przypadku kilku zbliżonych stylów w tej samej punktacji końcowej, algorytm wylosuje 3 z nich (w trakcie prac...)</li>
                     <li>Adnotacja o BA tylko dla piw, które faktycznie leżakuje się w beczkach (w trakcie prac...)</li>
                     <li>Mail powitalny z MailChimp + e-book</li>
                     <li>Zapisywanie pól formularza w razie błędów</li>
@@ -127,8 +127,6 @@
                     <li>Czy danych piw możesz napić się w okolicy? (OnTap API)</li>
                     <li>Wyświetlanie stylów z ostatniej wizyty</li>
                     <li>Najczęściej polecane użytkowniom style</li>
-                    <li>Pokazywanie użytkownikowi - na życzenie - ile punktów dostały dane style</li>
-                    <li>Wyróżnianie piwa, które w znaczący sposób odbiegło punktami reszcie stawki</li>
                     <li>Możliwość wykluczania przez użytkownika całych stylów, które już zna (na początek IPA)</li>
                 </ul>
             </div>
