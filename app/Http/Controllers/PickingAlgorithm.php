@@ -327,7 +327,7 @@ class PickingAlgorithm extends Controller
 	    			$this->excluder($to_excl);
 	    		}
 				if ($_POST['answer-13'] == 'nie ma mowy') {
-	    			$to_excl = array(51, 55);
+	    			$to_excl = array(51);
 	    			$this->excluder($to_excl);
 	    		}
 	    		if ($_POST['answer-17'] == 'nie') {
