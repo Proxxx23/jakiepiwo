@@ -27,6 +27,12 @@ class StylePickerController extends Controller
     public function showQuestions(bool $errors = false) {
 
     	//die('Wprowadzam zmiany w pytaniach i algorytmie. Beta będzie włączona ponownie około 20:30');
+    	// if ($_SERVER['REMOTE_ADDR'] == '89.64.48.198') {
+    	// 	$API = file_get_contents('https://www.polskikraft.pl/openapi/style/list');
+    	// 	$API_example = file_get_contents('https://www.polskikraft.pl/openapi/style/80/examples');
+    	// 	$json_API = json_decode($API);
+    	// 	var_dump($json_API);
+    	// }
 
         if ($errors === true) {
     		return view('index', ['questions' => Questions::$questions,	'mostly_picked' => $this->getMostPickedStyles(), 'lastvisit_name' => $this->getUsername(), 'errors' => $this->error_msg, 'errors_count' => $this->error_cnt]);

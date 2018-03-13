@@ -5,7 +5,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>deGustator v.0.1 nightly - changelog</title>
+        <title>The Gustator v.0.1 nightly - changelog</title>
 
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
@@ -121,14 +121,16 @@
 
                 <h5>Planowane usprawnienia (według priotytetu)</h5> 
                 <ul>
+                    <li>PolskiKraft API - Słowniki + wpięcie (kontroler)</li>
                     <li>Możliwość wykluczania przez użytkownika całych stylów, które już zna (na początek IPA)</li>
+                    <li>Pole (0/1) "mail" w bazie logów</li>
                     <li>Uzupełnienie synergii pozytywnych i negatywnych</li>
                     <li>Adnotacja o BA tylko dla piw, które faktycznie leżakuje się w beczkach</li>
                     <li>Mail powitalny z MailChimp + e-book (final welcome e-mail)</li>
                     <li>Pokazywanie tylko jednej nazwy stylu + dymek z nazwą alternatywną i PL</li>
                     <li>Zapisywanie pól formularza w razie błędów</li>
                     <li>Mail z wynikiem na życzenie</li>
-                    <li>Polecane, najlepiej oceniane piwa w danych stylach (PolskiKraft API)</li>
+                    <li>Przełącznik w mocy piw</li>
                     <li>Czy danych piw możesz napić się w okolicy? (OnTap API)</li>
                     <li>Wyświetlanie stylów z ostatniej wizyty (???)</li>
                     <li>Najczęściej polecane użytkowniom style</li>

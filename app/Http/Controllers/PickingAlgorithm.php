@@ -289,17 +289,17 @@ class PickingAlgorithm extends Controller
 	*/
 	private function mustTakeMustAvoid() : void {
 
-		$first_style_take = key(array_slice($this->included_ids, 0, 1, true));
-		$first_style_avoid = key(array_slice($this->excluded_ids, 0, 1, true));
+		$first_style_take = array_values(array_slice($this->included_ids, 0, 1, true));
+		$first_style_avoid = array_values(array_slice($this->excluded_ids, 0, 1, true));
 
-		$second_style_take = key(array_slice($this->included_ids, 1, 1, true));
-		$second_style_avoid = key(array_slice($this->excluded_ids, 1, 1, true));
+		$second_style_take = array_values(array_slice($this->included_ids, 1, 1, true));
+		$second_style_avoid = array_values(array_slice($this->excluded_ids, 1, 1, true));
 
-		if ($second_style_take * 1.5 <= $first_style_take) {
+		if ($second_style_take[0] * 1.5 <= $first_style_take[0]) {
 			$this->must_take = true;
 		}
 
-		if ($second_style_avoid * 1.5 <= $first_style_avoid) {
+		if ($second_style_avoid[0] * 1.5 <= $first_style_avoid[0]) {
 			$this->must_avoid = true;
 		}
 
@@ -376,12 +376,12 @@ class PickingAlgorithm extends Controller
     	$this->optionalStyles();
     	$this->mustTakeMustAvoid();
 
-    	// if ($_SERVER['REMOTE_ADDR'] == '89.64.48.198') {
-	    // 	echo "Tablica ze stylami do wybrania i punktami: <br />";
-	    // 	$this->printPre($this->included_ids);
-	    // 	echo "<br />Tablica ze stylami do odrzucenia i punktami: <br />";
-	    // 	$this->printPre($this->excluded_ids);
-    	// }
+    	if ($_SERVER['REMOTE_ADDR'] == '89.64.48.198') {
+	    	echo "Tablica ze stylami do wybrania i punktami: <br />";
+	    	$this->printPre($this->included_ids);
+	    	echo "<br />Tablica ze stylami do odrzucenia i punktami: <br />";
+	    	$this->printPre($this->excluded_ids);
+    	}
 
     	for ($i = 0; $i < $this->cnt_styles_to_pick; $i++) {
     		$style_to_take = $this->style_to_take[] = key(array_slice($this->included_ids, $i, 1, true));

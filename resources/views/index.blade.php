@@ -6,7 +6,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>deGUSTATOR v0.1 nightly</title>
+        <title>The Gustator v0.1 nightly</title>
 
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
@@ -123,7 +123,7 @@
     <body>
         <div class="flex-center">
             <div class="content">
-                <h1>deGUSTATOR v0.1 nightly <a href="/changelog" target="_blank">(changelog)</a></h1>
+                <h1>The Gustator v0.1 nightly <a href="/changelog" target="_blank">(changelog)</a></h1>
                 <!-- Error handling  -->
                 
                 @if ($errors_count > 0)

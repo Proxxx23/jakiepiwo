@@ -19,6 +19,7 @@ class CreateStylesLogsTable extends Migration
             $table->string('username');
             $table->string('email');
             $table->tinyInteger('newsletter');
+            $table->tinyInteger('mail');
             $table->integer('style_take');
             $table->integer('style_avoid');
             $table->string('ip_address');
