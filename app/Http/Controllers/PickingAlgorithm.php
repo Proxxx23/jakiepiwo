@@ -192,11 +192,11 @@ class PickingAlgorithm extends Controller
 			$to_take_chunk = array_slice($this->included_ids, $i, 1, true);
 			$to_avoid_chunk = array_slice($this->excluded_ids, $i, 1, true);
 			
-			if (($third_style_take / 100 * 90) < $to_take_chunk) {
+			if (($third_style_take / 100 * 90) <= $to_take_chunk) {
 				$this->cnt_styles_to_pick++;
 			}
 
-			if (($third_style_avoid / 100 * 90) < $to_avoid_chunk) {
+			if (($third_style_avoid / 100 * 90) <= $to_avoid_chunk) {
 				$this->cnt_styles_to_avoid++;
 			}
 		}
@@ -215,11 +215,11 @@ class PickingAlgorithm extends Controller
 		$second_style_take = key(array_slice($this->included_ids, 1, 1, true));
 		$second_style_avoid = key(array_slice($this->excluded_ids, 1, 1, true));
 
-		if ($second_style_take * 1.1 < $first_style_take) {
+		if ($second_style_take * 1.5 <= $first_style_take) {
 			$this->must_take = true;
 		}
 
-		if ($second_style_avoid * 1.1 < $first_style_avoid) {
+		if ($second_style_avoid * 1.5 <= $first_style_avoid) {
 			$this->must_avoid = true;
 		}
 

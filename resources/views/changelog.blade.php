@@ -120,7 +120,8 @@
                 <h5>Planowane usprawnienia</h5> 
                 <ul>
                     <li>Adnotacja o BA tylko dla piw, które faktycznie leżakuje się w beczkach (w trakcie prac...)</li>
-                    <li>Mail powitalny z MailChimp + e-book</li>
+                    <li>Mail powitalny z MailChimp + e-book (final welcome e-mail)</li>
+                    <li>Pokazywanie tylko jednej nazwy stylu + dymek z nazwą alternatywną i PL</li>
                     <li>Zapisywanie pól formularza w razie błędów</li>
                     <li>Mail z wynikiem na życzenie</li>
                     <li>Polecane, najlepiej oceniane piwa w danych stylach po połączeniu z PolskiKraft API</li>
