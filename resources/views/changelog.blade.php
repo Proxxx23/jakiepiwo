@@ -117,18 +117,20 @@
                     <li>Kliknięcie w treść odpowiedzi zaznacza odpowiedź</li>
                 </ul>
 
-                <h5>Planowane usprawnienia</h5> 
+                <h5>Planowane usprawnienia (według priotytetu)</h5> 
                 <ul>
-                    <li>Adnotacja o BA tylko dla piw, które faktycznie leżakuje się w beczkach (w trakcie prac...)</li>
+                    <li>Możliwość wykluczania przez użytkownika całych stylów, które już zna (na początek IPA)</li>
+                    <li>Dalsze synergie pozytywne i negatywne</li>
+                    <li>ID w odpowiedziach inkrementowane, nieunikalne</li>
+                    <li>Adnotacja o BA tylko dla piw, które faktycznie leżakuje się w beczkach</li>
                     <li>Mail powitalny z MailChimp + e-book (final welcome e-mail)</li>
                     <li>Pokazywanie tylko jednej nazwy stylu + dymek z nazwą alternatywną i PL</li>
                     <li>Zapisywanie pól formularza w razie błędów</li>
                     <li>Mail z wynikiem na życzenie</li>
-                    <li>Polecane, najlepiej oceniane piwa w danych stylach po połączeniu z PolskiKraft API</li>
+                    <li>Polecane, najlepiej oceniane piwa w danych stylach (PolskiKraft API)</li>
                     <li>Czy danych piw możesz napić się w okolicy? (OnTap API)</li>
-                    <li>Wyświetlanie stylów z ostatniej wizyty</li>
+                    <li>Wyświetlanie stylów z ostatniej wizyty (???)</li>
                     <li>Najczęściej polecane użytkowniom style</li>
-                    <li>Możliwość wykluczania przez użytkownika całych stylów, które już zna (na początek IPA)</li>
                 </ul>
             </div>
     </body>

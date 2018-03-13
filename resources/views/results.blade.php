@@ -136,7 +136,7 @@
                         @endforeach
                     @endfor
 
-                    <legend>Czy chcesz to na maila?</legend>
+                    <legend>Czy chcesz to na maila? (nieaktywne)</legend>
                     <form action="StylePickerController@sendEmail">
                         <input type="email" name="email" disabled="disabled">&nbsp;
                         <input type="submit" name="mailMe" disabled="disabled" value="Wyślij">

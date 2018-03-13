@@ -121,6 +121,85 @@ class PickingAlgorithm extends Controller
 		
 	}
 
+	/**
+	* Positive and negative synergies executer
+	*/
+	private function synergyExecuter($answer_value) : void {
+
+		// Lekkie + owocowe + Kwaśne
+    	 if ($answer_value[4] == 'coś lekkiego' && $answer_value[11] == 'tak' && $answer_value[12] == 'chętnie') {
+    	 	$this->positiveSynergy(array(40, 56), 2);
+    	 }
+    	 // nowe smaki LUB szokujące + złożone + jasne
+    	 if (($answer_value[2] == 'tak' || $answer_value[3] == 'tak') && $answer_value[4] == 'coś złożonego' && $answer_value[4] == 'jasne') {
+    	 	$this->positiveSynergy(array(7, 15, 16, 23, 39, 42, 50, 60), 2);
+    	 }
+
+    	 // nowe smaki LUB szokujące + złożone + ciemne (beczki!)
+    	 if (($answer_value[2] == 'tak' || $answer_value[3] == 'tak') && $answer_value[4] == 'coś złożonego' && $answer_value[4] == 'ciemne') {
+    	 	$this->positiveSynergy(array(36, 37, 58, 59, 62, 63), 2);
+    	 }
+
+    	 // złożone + ciemne + nieowocowe
+    	 if ($answer_value[4] == 'coś złożonego' && $answer_value[6] == 'ciemne' && $answer_value[11] == 'nie') {
+    	 	$this->positiveSynergy(array(3, 24, 35, 36, 37, 48, 58, 59, 62, 63), 1.5);
+    	 }
+
+    	 // Lekkie + ciemne + słodkie + goryczka (ledwie || lekka || wyczuwalna)
+    	 if ($answer_value[4] == 'coś lekkiego' && $answer_value[6] == 'ciemne' && $answer_value[7] == 'słodsze' && !in_array($answer_value[5], array('mocną', 'jestem hopheadem'))) {
+    	 	$this->positiveSynergy(array(12, 29, 30, 34, 64), 2);
+    	 	$this->negativeSynergy(array(36, 37), 3);
+    	 }
+
+    	 // jasne + nieczekoladowe + niepalone
+    	 if ($answer_value[6] == 'jasne' && $answer_value[8] == 'nie' && $answer_value[10] == 'nie') {
+    	 	$this->negativeSynergy(array(12, 21, 24, 29, 33, 34, 35, 36, 37, 58, 59, 62, 63), 2);
+    	 }
+
+    	 // czekoladowe + niepalone
+    	 if ($answer_value[8] == 'tak' && $answer_value[10] == 'nie') {
+    	 	$this->positiveSynergy(array(12, 34), 1.5);
+    	 }
+
+    	 // ciemne + czekoladowe + niepalone
+    	 if ($answer_value[8] == 'tak' && $answer_value[10] == 'nie') {
+    	 	$this->positiveSynergy(array(12, 34), 2);
+    	 }
+
+    	 // goryczka ledwo || lekka + jasne + mocno gazowane
+    	 if (($answer_value[5] == 'ledwie wyczuwalną' || $answer_value[5] == 'lekką') && $answer_value[6] == 'jasne' && $answer_value[9] == 'tak') {
+    	 	$this->positiveSynergy(array(20, 25, 40, 44, 45, 47, 51, 52), 2);
+    	 }
+
+    	 // jasne + lekkie + wędzone = grodziskie
+    	 if ($answer_value[4] == 'coś lekkiego' && $answer_value[6] == 'jasne' && $answer_value[17] == 'tak') {
+    	 	$this->positiveSynergy(array(52), 2.5);
+    	 }
+
+    	 // jasne + lekkie + wodniste + wędzone = grodziskie
+    	 if ($answer_value[4] == 'coś lekkiego' && $answer_value[6] == 'jasne' && $answer_value[15] == 'wodniste' && $answer_value[17] == 'tak') {
+    	 	$this->positiveSynergy(array(52), 3);
+    	 	// $this->negativeSynergy <- RIS-y i gęste lochy TODO
+    	 }
+
+    	 // duża/hophead goryczka + jasne
+    	 if (($answer_value[5] == 'mocną' || $answer_value[5] == 'jestem hopheadem') && $answer_value[6] == 'jasne') {
+    	 	$this->positiveSynergy(array(1, 2, 5, 6, 7, 8, 28, 61), 1.5);
+    	 }
+
+		 // duża/hophead goryczka + ciemne (Black/Brown IPA + Porter)
+    	 if (($answer_value[5] == 'mocną' || $answer_value[5] == 'jestem hopheadem') && $answer_value[6] == 'ciemne') {
+    	 	$this->positiveSynergy(array(3, 4, 29), 1.5);
+    	 }
+
+    	 // niska goryczka + gęste + owoce
+    	 if (($answer_value[5] == 'ledwie wyczuwalną' || $answer_value[7] == 'lekką') && $answer_value[7] != 'wytrawniejsze' && $answer_value[11] == 'tak') {
+    	 	$this->positiveSynergy(array(20, 25, 45, 53), 2);
+    	 	// negative
+    	 }
+
+	}
+
 	/*
 	* Buduje siłę dla konkretnych ID stylu
 	* Jeśli id ma postać 5:2.5 to zwiększy (przy trafieniu w to ID) punktację tego stylu o 2.5 a nie o 1
@@ -204,7 +283,7 @@ class PickingAlgorithm extends Controller
 	}
 
 	/**
-	* If 1st styles to take and avoid has more than 150% points of 2nd styles
+	* If 1st styles to take and avoid has more than/equal 150% points of 2nd styles
 	* Emphasize them!
 	*/
 	private function mustTakeMustAvoid() : void {
@@ -281,67 +360,7 @@ class PickingAlgorithm extends Controller
     	// Ma podbijać sumę ID-ków w stosie (wpływ na wszystkie ID przypisane do danej odpowiedzi na tak/nie)
     	// TODO: Refactor na tablice
     	 $answer_value = get_object_vars($answers_decoded);
-
-    	 // Lekkie + owocowe + Kwaśne
-    	 if ($answer_value[4] == 'coś lekkiego' && $answer_value[11] == 'tak' && $answer_value[12] == 'tak') {
-    	 	$this->positiveSynergy(array(40, 56), 2);
-    	 }
-    	 // nowe smaki LUB szokujące + złożone + jasne
-    	 if (($answer_value[2] == 'tak' || $answer_value[3] == 'tak') && $answer_value[4] == 'coś złożonego' && $answer_value[4] == 'jasne') {
-    	 	$this->positiveSynergy(array(7, 15, 16, 23, 39), 2);
-    	 }
-
-    	 // nowe smaki LUB szokujące + złożone + ciemne (beczki!)
-    	 if (($answer_value[2] == 'tak' || $answer_value[3] == 'tak') && $answer_value[4] == 'coś złożonego' && $answer_value[4] == 'ciemne') {
-    	 	$this->positiveSynergy(array(36, 37), 2);
-    	 }
-
-    	 // złożone + ciemne + nieowocowe
-    	 if ($answer_value[4] == 'coś złożonego' && $answer_value[6] == 'ciemne' && $answer_value[11] == 'nie') {
-    	 	$this->positiveSynergy(array(3, 24, 35, 36, 37), 2);
-    	 }
-
-    	 // Lekkie + ciemne + słodkie + goryczka (ledwie || lekka || wyczuwalna)
-    	 if ($answer_value[4] == 'coś lekkiego' && $answer_value[6] == 'ciemne' && $answer_value[7] == 'słodsze' && !in_array($answer_value[5], array('mocną', 'jestem hopheadem'))) {
-    	 	$this->positiveSynergy(array(12, 29, 30, 34, 64), 2);
-    	 	$this->negativeSynergy(array(36, 37), 3);
-    	 }
-
-    	 // jasne + nieczekoladowe + niepalone
-    	 if ($answer_value[6] == 'jasne' && $answer_value[8] == 'nie' && $answer_value[10] == 'nie') {
-    	 	$this->negativeSynergy(array(12, 21, 24, 29, 33, 34, 35, 36, 37, 58, 59, 62, 63), 2);
-    	 }
-
-    	 // czekoladowe + niepalone
-    	 if ($answer_value[8] == 'tak' && $answer_value[10] == 'nie') {
-    	 	$this->positiveSynergy(array(12, 34), 1.5);
-    	 }
-
-    	 // ciemne + czekoladowe + niepalone
-    	 if ($answer_value[8] == 'tak' && $answer_value[10] == 'nie') {
-    	 	$this->positiveSynergy(array(12, 34), 2);
-    	 }
-
-    	 // goryczka ledwo || lekka + jasne + mocno gazowane
-    	 if (($answer_value[5] == 'ledwie wyczuwalną' || $answer_value[5] == 'lekką') && $answer_value[6] == 'jasne' && $answer_value[9] == 'tak') {
-    	 	$this->positiveSynergy(array(20, 25, 40, 44, 45, 47, 51, 52), 2);
-    	 }
-
-    	 // jasne + lekkie + wędzone = grodziskie
-    	 if ($answer_value[4] == 'coś lekkiego' && $answer_value[6] == 'jasne' && $answer_value[17] == 'tak') {
-    	 	$this->positiveSynergy(array(52), 2.5);
-    	 }
-
-    	 // jasne + lekkie + wodniste + wędzone = grodziskie
-    	 if ($answer_value[4] == 'coś lekkiego' && $answer_value[6] == 'jasne' && $answer_value[15] == 'wodniste' && $answer_value[17] == 'tak') {
-    	 	$this->positiveSynergy(array(52), 3);
-    	 	// $this->negativeSynergy <- RIS-y i gęste lochy TODO
-    	 }
-
-    	 // dla dużej goryczki + jasne
-    	 // dla bardzo dużej goryczki + jasne
-    	 // dla dużej goryczki + ciemne
-    	 // słodsze lżejsze
+    	 $this->synergyExecuter($answer_value);
 
     	// TODO: Jeśli style zapunktowały tak samo, to który ma brać?
     	return $this->chooseStyles($name, $email, $newsletter);
