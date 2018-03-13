@@ -204,7 +204,7 @@ class PickingAlgorithm extends Controller
 	/*
 	* Buduje siłę dla konkretnych ID stylu
 	* Jeśli id ma postać 5:2.5 to zwiększy (przy trafieniu w to ID) punktację tego stylu o 2.5 a nie o 1
-	* Domyślnie większa punktację stylu o 1
+	* Domyślnie zwiększa punktację stylu o 1
 	*/
 	private function strengthBuilder(string $ids) : ?array {
 
@@ -413,10 +413,13 @@ class PickingAlgorithm extends Controller
 
     private function logStyles(string $name, string $email, int $newsletter) : void {
 
+    	$lastID = DB::select('SELECT MAX(id_answer) AS lastid FROM `styles_logs` LIMIT 1');
+    	$nextID = (int)$lastID[0]->lastid + 1;
+
     	for ($i = 0; $i < 3; $i++) {
-    		DB::insert('INSERT INTO `styles_logs` (username, email, newsletter, style_take, style_avoid, ip_address, created_at)
+    		DB::insert('INSERT INTO `styles_logs` (id_answer, username, email, newsletter, style_take, style_avoid, ip_address, created_at)
     					VALUES
-    					(?, ?, ?, ?, ?, ?, ?)', [$name, $email, $newsletter, $this->style_to_take[$i], $this->style_to_avoid[$i], $_SERVER['REMOTE_ADDR'], NOW()]);
+    					(?, ?, ?, ?, ?, ?, ?, ?)', [(int)$nextID, $name, $email, $newsletter, $this->style_to_take[$i], $this->style_to_avoid[$i], $_SERVER['REMOTE_ADDR'], NOW()]);
     	}
 
     }

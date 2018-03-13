@@ -15,6 +15,7 @@ class CreateStylesLogsTable extends Migration
     {
         Schema::create('styles_logs', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('id_answer');
             $table->string('username');
             $table->string('email');
             $table->tinyInteger('newsletter');
