@@ -121,20 +121,21 @@
 
                 <h5>Planowane usprawnienia (według priotytetu)</h5> 
                 <ul>
-                    <li>PolskiKraft API - Słowniki + wpięcie (kontroler)</li>
-                    <li>Możliwość wykluczania przez użytkownika całych stylów, które już zna (na początek IPA)</li>
-                    <li>Pole (0/1) "mail" w bazie logów</li>
-                    <li>Uzupełnienie synergii pozytywnych i negatywnych</li>
-                    <li>Adnotacja o BA tylko dla piw, które faktycznie leżakuje się w beczkach</li>
-                    <li>Mail powitalny z MailChimp + e-book (final welcome e-mail)</li>
-                    <li>Pokazywanie tylko jednej nazwy stylu + dymek z nazwą alternatywną i PL</li>
-                    <li>Zapisywanie pól formularza w razie błędów</li>
-                    <li>Mail z wynikiem na życzenie</li>
-                    <li>Przełącznik w mocy piw</li>
-                    <li>Czy danych piw możesz napić się w okolicy? (OnTap API)</li>
-                    <li>Wyświetlanie stylów z ostatniej wizyty (???)</li>
-                    <li>Najczęściej polecane użytkowniom style</li>
-                    <li>Facebook Tags, SEO oraz Twitter Cards</li>
+                    <li>BUGFIX: Style szokujące - siła negatywna w przypadku odpowiedzi "nie"</li>
+                    <li>FEATURE: PolskiKraft API - Słowniki + wpięcie (kontroler)</li>
+                    <li>FEATURE: Możliwość wykluczania przez użytkownika całych stylów, które już zna (na początek IPA)</li>
+                    <li>FEATURE: Pole (0/1) "mail" w bazie logów</li>
+                    <li>FEATURE: Uzupełnienie synergii pozytywnych i negatywnych</li>
+                    <li>BUGFIX: Adnotacja o BA tylko dla piw, które faktycznie leżakuje się w beczkach</li>
+                    <li>FEATURE: Mail powitalny z MailChimp + e-book (final welcome e-mail)</li>
+                    <li>FEATURE: Pokazywanie tylko jednej nazwy stylu + dymek z nazwą alternatywną i PL</li>
+                    <li>FEATURE: Zapisywanie pól formularza w razie błędów</li>
+                    <li>FEATURE: Mail z wynikiem na życzenie</li>
+                    <li>FEATURE: Przełącznik w mocy piw</li>
+                    <li>FEATURE: Czy danych piw możesz napić się w okolicy? (OnTap API)</li>
+                    <li>FEATURE: Wyświetlanie stylów z ostatniej wizyty (???)</li>
+                    <li>FEATURE: Najczęściej polecane użytkowniom style</li>
+                    <li>FEATURE: Facebook Tags, SEO oraz Twitter Cards</li>
                 </ul>
             </div>
     </body>

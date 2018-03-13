@@ -206,7 +206,7 @@ class PickingAlgorithm extends Controller
 	* Jeśli id ma postać 5:2.5 to zwiększy (przy trafieniu w to ID) punktację tego stylu o 2.5 a nie o 1
 	* Domyślnie zwiększa punktację stylu o 1
 	*/
-	private function strengthBuilder(string $ids) : ?array {
+	private function strengthBuilder(string $ids, bool $shocking = false) : ?array {
 
 		$ids_exploded = explode(',', trim($ids));
 		foreach ($ids_exploded AS $v) {
@@ -237,10 +237,8 @@ class PickingAlgorithm extends Controller
 	*/
 	private function checkDoubles() : bool {
 
-		(!$this->show_optional) ? $n = 3 : $n = 5;
-
-		$included = array_slice($this->included_ids, 0, $n, true);
-		$excluded = array_slice($this->excluded_ids, 0, $n, true);
+		$included = array_slice($this->included_ids, 0, $this->cnt_styles_to_pick, true);
+		$excluded = array_slice($this->excluded_ids, 0, $this->cnt_styles_to_avoid, true);
 
 		foreach ($included AS $id => $points) {
 			if (array_key_exists($id, $excluded)) {
@@ -340,7 +338,12 @@ class PickingAlgorithm extends Controller
 	    			continue;
 	    		}
 
-	    		$ids_to_calc = $this->strengthBuilder($ids);
+	    		//if ($_POST['answer-3'] == 'nie') {
+	    		// TODO!
+	    			//$ids_to_calc = $this->strengthBuilder($ids, true);
+	    		//} else {
+	    			$ids_to_calc = $this->strengthBuilder($ids);
+	    		//}
 	    		
 	    		if ($answer == $yesno) {
 		    		foreach ($ids_to_calc AS $style_id => $strength) {
@@ -372,8 +375,8 @@ class PickingAlgorithm extends Controller
     		
     	arsort($this->included_ids);
     	arsort($this->excluded_ids);
-    	$this->checkDoubles();
     	$this->optionalStyles();
+    	$this->checkDoubles();
     	$this->mustTakeMustAvoid();
 
     	if ($_SERVER['REMOTE_ADDR'] == '89.64.48.198') {
