@@ -100,12 +100,15 @@
                 </ul>
                 <h5>Bugfixes</h5>
                 <ul>
-                    <li>Poprawki algorytmu dla witbiera i gose</li>
+                    <li>Poprawki algorytmu dla witbiera</li>
+                    <li>Poprawki algorytmu dla RIS-ów</li>
+                    <li>Wzmocnienie znaczenia pytania o piwa ciemne/jasne</li>
                 </ul>
 
                 <h5>Planowane usprawnienia (według priotytetu)</h5> 
                 <ul>
                     <li>FIX: Ograniczenie listy stylów do tych, które występują często w piwach z Polski (usunięcie m.in. english porteru)</li>
+                    <li>BIGFIX: Poprawki jasne/ciemne</li>
                     <li>BUGFIX: Odpowiedź "bez znaczenie" nie buduje siły negatywnej z niezanzczoncyh odpowiedzi</li>
                     <li>FEATURE: Pytanie o paloność zostanie zastąpione pytaniem o przyprawowość</li>
                     <li>BUGFIX: Zaznaczenie piw kwaśnych powoduje, że nie mogą się one pojawić w wykluczonych</li>
