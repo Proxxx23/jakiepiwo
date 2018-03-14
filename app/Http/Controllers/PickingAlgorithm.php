@@ -29,7 +29,7 @@ class PickingAlgorithm extends Controller
 									'coś złożonego' => '1,2,3,4,5,6,7,8,22,23,24,36,37,39,42,43,44,50,62,63');
 	
 	// Jak wysoką goryczkę preferujesz?
-	protected $to_include5 = array('ledwie wyczuwalną' => '9,14,15,16,17,18,19,20,25,40,41,44,50,51,53,54,56', 
+	protected $to_include5 = array('ledwie wyczuwalną' => '9,14,15,16,17,18,19,20,25,40,41,44,45,50,51,53,54,56', 
 									'lekką' => '11,12,21,22,23,26,31,34,42,43,45,46,47,48,49,50,52,55,57,59,60', 
 									'zdecydowanie wyczuwalną' => '1,2,3,4,5,6,7,8,10,13,21,24,27,28,29,30,32,33,35,38,39,55,57,58,59,60,61,62,63,64', 
 									'mocną' => '1:1.5,2:1.5,3:1.5,4:1.5,5:1.5,6:1.5,7:1.5,8:1.5,35,36,37,58,59,62,63', 
@@ -75,8 +75,8 @@ class PickingAlgorithm extends Controller
 									'gęste' => '7:2,20:2,23:2,25:2,36:2,37:2,39:2,50:2,53:2,54:2,58:2,62:2,63:2');
 
 	// Jak mocne alkoholowo piwa preferujesz?
-	protected $to_include16 = array('lekkie' => '9:2,10:2,11:2,12:2,13:2,33:2,41:2,44:2,51:2,52:2,64:2', 
-									'średnie' => '1:2,2:2,3:2,4:2,5:2,6:2,7:2,14:2,15:2,16:2,17:2,18:2,19:2,21:2,25:2,27:2,28:2,29:2,30:2,31:2,32:2,34:2,38:2,42:2,43:2,45:2,46:2,47:2,48:2,53:2,55:2,56:2,57:2,59:2,60:2,61:2',
+	protected $to_include16 = array('lekkie' => '9:2,10:2,11:2,12:2,13:2,33:2,41:2,44:2,51:2,52:2,64:2,45:2', 
+									'średnie' => '1:2,2:2,3:2,4:2,5:2,6:2,7:2,14:2,15:2,16:2,17:2,18:2,19:2,21:2,25:2,27:2,28:2,29:2,30:2,31:2,32:2,34:2,38:2,42:2,43:2,46:2,47:2,48:2,53:2,55:2,56:2,57:2,59:2,60:2,61:2',
 									'mocne' => '7:2,8:2,20:2,22:2,23:2,24:2,36:2,37:2,39:2,49:2,50:2,53:2,54:2,58:2,62:2,63:2');
 
 	// Czy odpowiadałby Ci smak wędzony/dymny w piwie?
@@ -193,8 +193,8 @@ class PickingAlgorithm extends Controller
     	 	$this->positiveSynergy(array(3, 4, 29), 1.5);
     	 }
 
-    	 // niska goryczka + gęste + owoce
-    	 if (($answer_value[5] == 'ledwie wyczuwalną' || $answer_value[5] == 'lekką') && $answer_value[7] != 'wytrawniejsze' && $answer_value[11] == 'tak') {
+    	 // niska goryczka + jasne + owoce + średnie/gęste
+    	 if (($answer_value[5] == 'ledwie wyczuwalną' || $answer_value[5] == 'lekką') && $answer_value[6] != 'ciemne' && $answer_value[11] == 'tak' && $answer_value[15] != 'wodniste') {
     	 	$this->positiveSynergy(array(20, 25, 45, 53), 2);
     	 	// negative
     	 }
@@ -223,10 +223,10 @@ class PickingAlgorithm extends Controller
 	}
 
 	/**
-	* Excludes sour/salty/smoked beers if user says NO
+	* Excludes sour/salty/smoked beers from recommended styles if user says NO
 	* TODO: Funkcja, która działa z każdym pytaniem
 	*/
-	private function excluder(array $ids_to_exclude) : void {
+	private function excludeFromRecommended(array $ids_to_exclude) : void {
 		foreach ($ids_to_exclude AS $id) {
 			$this->included_ids[$id] = 0;
 		}
@@ -260,7 +260,6 @@ class PickingAlgorithm extends Controller
 	* Takes 4th or 5th style as an extra styles to take or avoid
 	* TODO: Do jednej zmiennej pakować i w widoku 4-5 styl pokazywać inaczej
 	*/
-	// TODO poprawka!
 	private function optionalStyles() : void {
 
 		$third_style_take = array_values(array_slice($this->included_ids, 0, 3, true));
@@ -323,15 +322,15 @@ class PickingAlgorithm extends Controller
 	    		//TODO: Refactor
 	    		if ($_POST['answer-12'] == 'nie ma mowy') {
 	    			$to_excl = array(40, 42, 43, 44, 51, 56);
-	    			$this->excluder($to_excl);
+	    			$this->excludeFromRecommended($to_excl);
 	    		}
 				if ($_POST['answer-13'] == 'nie ma mowy') {
 	    			$to_excl = array(51);
-	    			$this->excluder($to_excl);
+	    			$this->excludeFromRecommended($to_excl);
 	    		}
 	    		if ($_POST['answer-17'] == 'nie') {
 	    			$to_excl = array(15, 16, 57, 58, 59, 62, 63);
-	    			$this->excluder($to_excl);
+	    			$this->excludeFromRecommended($to_excl);
 	    		}
 
 	    		// Nie idź dalej przy BA
