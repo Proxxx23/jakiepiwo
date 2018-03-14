@@ -95,7 +95,7 @@
                 <ul>
                     <li>Jeśli stylowi z 4 lub 5 pozycji brakowało niewiele do "podium", jeden lub obydwa zostaną pokazane na 4 i 5 pozycji (na szaro, mniejszym fontem)</li> 
                     <li>Wyróżnianie piwa, które w znaczący sposób odbiegło punktami reszcie stawki (pozytywnie i negatywnie)</li>
-                    <li>Pierwsze przymiarki do Bootstrap forms</li>
+                    <li>Pierwsze przymiarki do Bootstrap Forms</li>
                     <li>Zapis odpowiedzi użytkownika do bazy na jednym ID</li>
                 </ul>
                 <h5>Bugfixes</h5>
@@ -112,6 +112,11 @@
                     <li>FEATURE: Inny układ pytań o smaki</li>
                     <li>FIX: Zbyt rzadko pokazujące się style z Belgii</li>
                     <li>BUGFIX: Style szokujące - siła negatywna w przypadku odpowiedzi "nie"</li>
+                    <li>BIGFIX: Problemy z odpowiedziami dot. goryczki</li>
+                    <Li>FEATURE: Usunięcie pytania o słone piwa - gose w ramach innych odpowiedzi</li>
+                    <li>FEATURE: Walidacja formularza w JS</li>
+                    <li>FEATURE: Zmiana paloności na przyprawy lub usunięcie pytania</li>
+                    <li>BUGIFX: Próba zmiany algorytmu na pokazywanie stylów belgijskich</li>
                     <li>FEATURE: PolskiKraft API - Słowniki + wpięcie (kontroler)</li>
                     <li>FEATURE: Możliwość wykluczania przez użytkownika całych stylów, które już zna (na początek IPA)</li>
                     <li>FEATURE: Pole (0/1) "mail" w bazie logów</li>
