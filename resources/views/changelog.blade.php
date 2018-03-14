@@ -122,6 +122,10 @@
                 <h5>Planowane usprawnienia (według priotytetu)</h5> 
                 <ul>
                     <li>BUGFIX: Style szokujące - siła negatywna w przypadku odpowiedzi "nie"</li>
+                    <li>BIGFIX: Problemy z odpowiedziami dot. goryczki</li>
+                    <LI>FEATURE: Usunięcie pytania o słone piwa - gose w ramach innych odpowiedzi</li>
+                    <li>FEATURE: Zmiana paloności na przyprawy lub usunięcie pytania</li>
+                    <li>BUGIFX: Próba zmiany algorytmu na pokazywanie stylów belgijskich</li>
                     <li>FEATURE: PolskiKraft API - Słowniki + wpięcie (kontroler)</li>
                     <li>FEATURE: Możliwość wykluczania przez użytkownika całych stylów, które już zna (na początek IPA)</li>
                     <li>FEATURE: Pole (0/1) "mail" w bazie logów</li>
