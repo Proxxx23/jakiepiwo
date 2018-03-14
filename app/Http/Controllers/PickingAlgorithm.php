@@ -81,7 +81,7 @@ class PickingAlgorithm extends Controller
 
 	// Czy odpowiadałby Ci smak wędzony/dymny w piwie?
 	// TODO coś jak z BA
-	protected $to_include17 = array('tak' => '15:2,16:2,58:2,59:2,62:2,62:2', 
+	protected $to_include17 = array('tak' => '15:2,16:2,52:2,58:2,59:2,62:2,62:2', 
 									'nie' => '');
 
 	private $included_ids = array(); // Beer IDs to include
@@ -260,21 +260,22 @@ class PickingAlgorithm extends Controller
 	* Takes 4th or 5th style as an extra styles to take or avoid
 	* TODO: Do jednej zmiennej pakować i w widoku 4-5 styl pokazywać inaczej
 	*/
+	// TODO poprawka!
 	private function optionalStyles() : void {
 
-		$third_style_take = key(array_slice($this->included_ids, 0, 3, true));
-		$third_style_avoid = key(array_slice($this->excluded_ids, 0, 3, true));
+		$third_style_take = array_values(array_slice($this->included_ids, 0, 3, true));
+		$third_style_avoid = array_values(array_slice($this->excluded_ids, 0, 3, true));
 
 		for ($i = 3; $i <= 4; $i++) {
 
-			$to_take_chunk = array_slice($this->included_ids, $i, 1, true);
-			$to_avoid_chunk = array_slice($this->excluded_ids, $i, 1, true);
+			$to_take_chunk = array_values(array_slice($this->included_ids, 0, $i, true));
+			$to_avoid_chunk = array_values(array_slice($this->excluded_ids, 0, $i, true));
 			
-			if (($third_style_take / 100 * 90) <= $to_take_chunk) {
+			if ($to_take_chunk[0] >= ($third_style_take[0] / 100 * 90)) {
 				$this->cnt_styles_to_pick++;
 			}
 
-			if (($third_style_avoid / 100 * 90) <= $to_avoid_chunk) {
+			if ($to_avoid_chunk[0] >= ($third_style_avoid[0] / 100 * 90)) {
 				$this->cnt_styles_to_avoid++;
 			}
 		}
@@ -379,7 +380,7 @@ class PickingAlgorithm extends Controller
     	$this->checkDoubles();
     	$this->mustTakeMustAvoid();
 
-    	if ($_SERVER['REMOTE_ADDR'] == '89.64.48.198') {
+    	if ($_SERVER['REMOTE_ADDR'] == '89.64.48.81') {
 	    	echo "Tablica ze stylami do wybrania i punktami: <br />";
 	    	$this->printPre($this->included_ids);
 	    	echo "<br />Tablica ze stylami do odrzucenia i punktami: <br />";
