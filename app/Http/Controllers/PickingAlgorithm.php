@@ -32,13 +32,13 @@ class PickingAlgorithm extends Controller
 	protected $to_include5 = array('ledwie wyczuwalną' => '9,14,15,16,17,18,19,20,25,40,41,44,45,50,51,53,54,56', 
 									'lekką' => '11,12,21,22,23,26,31,34,42,43,45,46,47,48,49,50,52,55,57,59,60', 
 									'zdecydowanie wyczuwalną' => '1,2,3,4,5,6,7,8,10,13,21,24,27,28,29,30,32,33,35,38,39,55,57,58,59,60,61,62,63,64', 
-									'mocną' => '1:1.5,2:1.5,3:1.5,4:1.5,5:1.5,6:1.5,7:1.5,8:1.5,35,36,37,58,59,62,63', 
-									'jestem hopheadem' => '1:1.5,3:1.5,5:1.5,7:2,8');
+									'mocną' => '1,2,3,4,5,6,7,8,35,36,37,58,59,62,63', 
+									'jestem hopheadem' => '1,3,5,7,8');
 
 	// Wolisz piwa jasne czy ciemne?
-	protected $to_include6 = array('jasne' => '1:2,2:2,5:2,6:2,7:2,8:2,9:2,10:2,11:2,13:2,14:2,15:2,16:2,17:2,20:2,22:2,23:2,25:2,26:2,27:2,28:2,31:2,32:2,38:2,39:2,40:2,41:2,42:2,43:2,44:2,45:2,46:2,47:2,49:2,50:2,51:2,52:2,53:2,54:2,55:2,56:2,57:2,60:2,61:2', 
+	protected $to_include6 = array('jasne' => '1:2.5,2:2.5,5:2.5,6:2.5,7:2.5,8:2.5,9:2.5,10:2.5,11:2.5,13:2.5,14:2.5,15:2.5,16:2.5,17:2.5,20:2.5,22:2.5,23:2.5,25:2.5,26:2.5,27:2.5,28:2.5,31:2.5,32:2.5,38:2.5,39:2.5,40:2.5,41:2.5,42:2.5,43:2.5,44:2.5,45:2.5,46:2.5,47:2.5,49:2.5,50:2.5,51:2.5,52:2.5,53:2.5,54:2.5,55:2.5,56:2.5,57:2.5,60:2.5,61:2.5', 
 									'bez znaczenia' => '', 
-									'ciemne' => '3:2,4:2,12:2,18:2,19:2,21:2,24:2,29:2,30:2,33:2,34:2,35:2,36:2,37:2,43,48:2,58:2,59:2,62:2,63:2,64:2');
+									'ciemne' => '3:2.5,4:2.5,12:2.5,18:2.5,19:2.5,21:2.5,24:2.5,29:2.5,30:2.5,33:2.5,34:2.5,35:2.5,36:2.5,37:2.5,43,48:2.5,58:2.5,59:2.5,62:2.5,63:2.5,64:2.5');
 
 	// Wolisz piwa słodsze czy wytrawniejsze?
 	protected $to_include7 = array('słodsze' => '1,2,5,6,7:1.5,8,14:1.5,15:1.5,16:1.5,18:1.5,19,20:1.5,22:2,23:2,25,31:1.5,34:2,36,38,39:1.5,46,49:1.5,50,53,54:2,60:1.5,62,63', 
@@ -46,43 +46,35 @@ class PickingAlgorithm extends Controller
 									'wytrawniejsze' => '3:1.5,4,5,9,10:1.5,11,12,13:1.5,17,18,21,28,29,33:2,35:2,36,37,40,41,45,47,48,52:1.5,55,57,58,59,61,62,63,64');
 
 	// Czy odpowiadałby Ci smak czekoladowy w piwie?
-	protected $to_include8 = array('tak' => '3:1.25,4,12:1.5,18,21:1.25,24:2,29,30,33:1.5,34:1.75,35:1.5,36:2,37:2,48,58:1.25,59:1.5,62:2,63:2', 
+	protected $to_include8 = array('tak' => '3:1.5,4,12:1.5,18,21:1.5,24:2,29,30,33:1.5,34:2,35:2,36:2,37:2,48,58:2,59:1.5,62:2,63:2', 
 									'nie' => '1,2,5,6,7,8,9,10,11,13,14,15,16,17,18,19,20,22,23,25,26,27,28,31,32,38,39,40,41,42,43,44,45,46,47,49,50,51,52,53,54,55,56,57,60,61,64');
 	// Czy wolisz piwa mocno nagazowane?
 	protected $to_include9 = array('tak' => '5,7,8,19,20,21,25,40,44,45,47,49,51,52,56:0.5', 
 									'nie' => '1,2,3,4,6,9,10,11,12,13,14,15,16,17,18,22,23,24,26,27,28,29,30,31,32,33,34,35,36,37,38,39,46,53,54');
-	// Czy odpowiadałby Ci smak palony w piwie?
-	protected $to_include10 = array('tak' => '3:2,12,21:1.25,24:1.75,29:1.5,33:1.5,35:1.25,36:1.5,37:2,58:1.25,59:1.25,62:1.5,63:1.5,64', 
-									'nie' => '1,2,4,5,6,7,8,9,10,11,13,14,15,16,17,18,19,20,21,22,23,25,26,27,28,30,31,32,34,38,32,40,41,42,43,44,45,46,47,48:0.5,49,50,51,52,53,54,55,56,57,60,61');
+	// Czy odpowiadałoby Ci piwo nieco przyprawowe
+	protected $to_include10 = array('tak' => '20,25,45:1.5,46,47:1.5,48,49:2,50:2,53:1.5', 
+									'nie' => '');
 	// Czy chciałbyś piwo w klimatach owocowych (bez soku)?
 	protected $to_include11 = array('tak' => '1:2,2:1.5,5:1.5,6:1.5,7:2,8:2,25,40:1.5,42:1.5,43,44,45,47:0.5,49:1.5,50,51:1.25,55,56:1.5,60:2,61:2', 
 									'nie' => '3,4,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,26,27,28,29,30,31,32,33,34,35,36,37,38,39,41,46,47,48,52,53,54,57,58,59,62,63,64');
 	// Co powiesz na piwo kwaśne?
 	protected $to_include12 = array('tak' => '40:2,42:3,43:3,44:3,51:2,56:2', 
 									'nie' => '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,45,46,47,48,49,50,52,53,54,55:0.5,57,58,59,60,61,62,63,64');
-	// Co powiesz na piwo słonawe?
-	protected $to_include13 = array('tak' => '51:3,55:0.5', 
-									'nie' => '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,54,55,56,57,58,59,60,61,62,63,64');
+	// Czy odpowiadałby Ci smak wędzony/dymny w piwie?
+	// TODO coś jak z BA
+	protected $to_include13 = array('tak' => '15:1.5,16:1.5,52:1.5,58:1.5,59:1.5,62:1.5,63:1.5', 
+									'nie' => '');
 
 	// Additional questions
 	// BA
 	protected $to_include14 = array('tak' => 'tak', 
 									'nie' => 'nie');
 
-	// Piwa o jakiej konsystencji preferujesz?
-	protected $to_include15 = array('wodniste' => '33:2,40:2,44:2,51:2,52:2', 
-									'średnie' => '1:2,2:2,3:2,4:2,5:2,6:2,9:2,10:2,11:2,12:2,13:2,14:2,15:2,16:2,17:2,18:2,19:2,21:2,22:2,24:2,26:2,27:2,28:2,29:2,30:2,31:2,32:2,34:2,35:2,38:2,41:2,42:2,43:2,45:2,46:2,47:2,48:2,49:2,55:2,56:2,57:2,59:2,60:2,61:2,64:2',
-									'gęste' => '7:2,20:2,23:2,25:2,36:3,37:2,39:2,50:2,53:2,54:2,58:2,62:2,63:2');
+	// Jak mocne i gęste piwa preferujesz?
+	protected $to_include15 = array('wodniste i lekkie' => '9:4,10:4,11:4,12:4,13:4,33:4,41:4,44:4,51:4,52:4,64:4,45:4', 
+									'średnie' => '1:4,2:4,3:4,4:4,5:4,6:4,7:4,14:4,15:4,16:4,17:4,18:4,19:4,21:4,25:4,27:4,28:4,29:4,30:4,31:4,32:4,34:4,38:4,42:4,43:4,46:4,47:4,48:4,53:4,55:4,56:4,57:4,59:4,60:4,61:4',
+									'mocne i gęste' => '7:4,8:4,20:4,22:4,23:4,24:4,36:4,37:4,39:4,49:4,50:4,53:4,54:4,58:4,62:4,63:4');
 
-	// Jak mocne alkoholowo piwa preferujesz?
-	protected $to_include16 = array('lekkie' => '9:2,10:2,11:2,12:2,13:2,33:2,41:2,44:2,51:2,52:2,64:2,45:2', 
-									'średnie' => '1:2,2:2,3:2,4:2,5:2,6:2,7:2,14:2,15:2,16:2,17:2,18:2,19:2,21:2,25:2,27:2,28:2,29:2,30:2,31:2,32:2,34:2,38:2,42:2,43:2,46:2,47:2,48:2,53:2,55:2,56:2,57:2,59:2,60:2,61:2',
-									'mocne' => '7:2,8:2,20:2,22:2,23:2,24:2,36:3,37:3,39:2,49:2,50:2,53:2,54:2,58:3,62:3,63:3');
-
-	// Czy odpowiadałby Ci smak wędzony/dymny w piwie?
-	// TODO coś jak z BA
-	protected $to_include17 = array('tak' => '15:2,16:2,52:2,58:2,59:2,62:2,62:2', 
-									'nie' => '');
 
 	private $included_ids = array(); // Beer IDs to include
 	private $excluded_ids = array(); // Excluded beer IDs
@@ -249,20 +241,20 @@ class PickingAlgorithm extends Controller
 	}
 
 	/**
-	* There must be a margin between included and excluded beer
-	* TODO: Dopracować
+	* There must at least 125% margin between included and excluded beer
+	* included > excluded
 	*/
 	private function checkMargin() : void {
 
 		foreach ($this->included_ids AS $id => $points) {
 			if (array_key_exists($id, $this->excluded_ids)) {
-				if ($this->excluded_ids[$id] <= $points / 100 * 80) {
-					echo $id . " " . $this->excluded_ids[$id] . '<=' . ($points / 100 * 80) . "<br /";
+				$excluded_points = $this->excluded_ids[$id];
+				$included_points = $points;
+				if ($included_points > $excluded_points && $included_points <= $excluded_points * 1.25) {
 					unset($this->excluded_ids[$id]);
-				}
+				} 
 			}
 		}
-
 	}
 
 	/**
@@ -292,7 +284,7 @@ class PickingAlgorithm extends Controller
 	}
 
 	/**
-	* If 1st styles to take and avoid has more than/equal 150% points of 2nd styles
+	* If 1st styles to take and avoid has more than/equal 150% points of 2nd or 3rd styles
 	* Emphasize them!
 	*/
 	private function mustTakeMustAvoid() : void {
@@ -303,11 +295,14 @@ class PickingAlgorithm extends Controller
 		$second_style_take = array_values(array_slice($this->included_ids, 1, 1, true));
 		$second_style_avoid = array_values(array_slice($this->excluded_ids, 1, 1, true));
 
-		if ($second_style_take[0] * 1.5 <= $first_style_take[0]) {
+		$third_style_take = array_values(array_slice($this->included_ids, 2, 1, true));
+		$third_style_avoid = array_values(array_slice($this->excluded_ids, 2, 1, true));
+
+		if ($second_style_take[0] * 1.25 <= $first_style_take[0] || $third_style_take[0] * 1.25 <= $first_style_take[0]) {
 			$this->must_take = true;
 		}
 
-		if ($second_style_avoid[0] * 1.5 <= $first_style_avoid[0]) {
+		if ($second_style_avoid[0] * 1.25 <= $first_style_avoid[0] || $third_style_avoid[0] * 1.25 <= $first_style_avoid[0]) {
 			$this->must_avoid = true;
 		}
 
@@ -348,48 +343,43 @@ class PickingAlgorithm extends Controller
 	    			continue;
 	    		}
 
-	    		//if ($_POST['answer-3'] == 'nie') {
-	    		// TODO!
-	    			//$ids_to_calc = $this->strengthBuilder($ids, true);
-	    		//} else {
-	    			$ids_to_calc = $this->strengthBuilder($ids);
-	    		//}
-	    		
-	    		if ($answer == $yesno) {
+	    		$ids_to_calc = $this->strengthBuilder($ids);
+	    		if ($answer == $yesno && $answer != 'bez znaczenia') {
 		    		foreach ($ids_to_calc AS $style_id => $strength) {
-		    			$this->included_ids[$style_id] += $strength;
+		    			if (is_numeric($style_id)) {
+		    				$this->included_ids[$style_id] += $strength;
+		    			}
 		    		}
 	    		}
 
-	    		if ($answer != $yesno) { 
+	    		if ($answer != $yesno && !in_array($number, array(3,5,8)) && $answer != 'bez znaczenia') { 
 		    		foreach ($ids_to_calc AS $style_id => $strength) {
-		    			$this->excluded_ids[$style_id] += $strength;
+		    			if (is_numeric($style_id)) {
+		    				$this->excluded_ids[$style_id] += $strength;
+		    			}
 		    		}
 	    		} 
 
 	    	}
     	}
 
-    	// Na pewno kwasy / smoked / grodziskie / ciężkie RIS-y / AIPA
-    	// Ma podbijać sumę ID-ków w stosie (wpływ na wszystkie ID przypisane do danej odpowiedzi na tak/nie)
-    	// TODO: Refactor na tablice
-    	 $answer_value = get_object_vars($answers_decoded);
-    	 $this->synergyExecuter($answer_value);
+    	$answer_value = get_object_vars($answers_decoded);
+    	$this->synergyExecuter($answer_value);
 
-    	// TODO: Jeśli style zapunktowały tak samo, to który ma brać?
     	return $this->chooseStyles($name, $email, $newsletter);
 
     }
 
     public function chooseStyles(string $name, string $email, int $newsletter) {
     		
-    	arsort($this->included_ids);
+   		arsort($this->included_ids);
     	arsort($this->excluded_ids);
     	$this->optionalStyles();
     	$this->checkDoubles();
+		$this->checkMargin();
+		$this->mustTakeMustAvoid();
 
-    	if ($_SERVER['REMOTE_ADDR'] == '89.64.48.81') {
-    		//$this->checkMargin();
+    	if ($_SERVER['REMOTE_ADDR'] == '89.64.49.222') {
     		echo "<br /><br /><br />";
 	    	echo "Tablica ze stylami do wybrania i punktami: <br />";
 	    	$this->printPre($this->included_ids);
@@ -397,7 +387,7 @@ class PickingAlgorithm extends Controller
 	    	$this->printPre($this->excluded_ids);
     	}
 
-    	$this->mustTakeMustAvoid();
+    	
 
     	for ($i = 0; $i < $this->cnt_styles_to_pick; $i++) {
     		$style_to_take = $this->style_to_take[] = key(array_slice($this->included_ids, $i, 1, true));

@@ -6,7 +6,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>The Gustator v0.2 nightly</title>
+        <title>The Gustator v0.3 nightly</title>
 
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
@@ -123,7 +123,7 @@
     <body>
         <div class="flex-center">
             <div class="content">
-                <h1>The Gustator v0.2 nightly <a href="/changelog" target="_blank">(changelog)</a></h1>
+                <h1>The Gustator v0.3 nightly <a href="/changelog" target="_blank">(changelog)</a></h1>
                 <!-- Error handling  -->
                 
                 @if ($errors_count > 0)
@@ -141,9 +141,6 @@
                 Odpowiedz na wszystkie poniższe pytania, aby dowiedzieć się, jakie 3 style piwne powinny Ci najbardziej zasmakować. </h3>
 
                     @foreach ($questions as $index => $field)
-                        @if ($index == 14)
-                            <h3>Odpowiedz na opcjonalne pytania, aby otrzymać dokładniejsze propozycje. Uwaga! Zawęży to w znaczący sposób wyniki!</h3>
-                        @endif
                     <h3>{{$index}}. {{$field['question']}} 
                         @if ($field['tooltip'] != '')
                             <img src="images/info-icon-16-16.png" class="tltp" style="cursor: help !important;" data-toggle="tooltip" data-placement="right" title="{{$field['tooltip']}}"></img>
@@ -152,13 +149,13 @@
                         @if ($field['type'] === 1)  
                          @foreach ($field['answers'] AS $ans)
                             <label class="radio-inline">
-                                <input type="radio" name="answer-{{ $index }}" value="{{$ans}}">{{$ans}}
+                                <input type="radio" name="answer-{{ $index }}" value="{{$ans}}" @if ($index < 14) required @endif>{{$ans}}
                             </label>
                          @endforeach
                          
                         @else
-                            <label class="radio-inline"><input type="radio" name="answer-{{ $index }}" value="tak">tak</label>
-                            <label class="radio-inline"><input type="radio" name="answer-{{ $index }}" value="nie">nie</label>
+                            <label class="radio-inline"><input type="radio" name="answer-{{ $index }}" value="tak" @if ($index < 14) required @endif>tak</label>
+                            <label class="radio-inline"><input type="radio" name="answer-{{ $index }}" value="nie" @if ($index < 14) required @endif>nie</label>
                         @endif
 
                     @endforeach

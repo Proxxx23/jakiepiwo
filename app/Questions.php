@@ -21,26 +21,21 @@ trait Questions {
 		// AIPA / Porter / Imperial Stout / Piwa kwaśne etc.
 
 		//Inne niż tak/nie
-		4 => array("question" => "Wolisz lekkie piwo do ugaszenia pragnienia, czy piwo bardziej złożone i degustacyjne?", "type" => 1, "answers" => array('coś lekkiego', 'coś pośrodku', 'coś złożonego')),
+		4 => array("question" => "Wolisz lekkie piwo do ugaszenia pragnienia, czy piwo bardziej złożone i degustacyjne?", "type" => 1, "answers" => array('coś lekkiego', 'coś pośrodku', 'coś złożonego'), "tooltip" => "Piwa lekkie oferują mniejszą głębię, zaś piwa złożone to większe nagromadzenie różnych aromatów i smaków."),
 		5 => array("question" => "Jak wysoką goryczkę preferujesz?", "type" => 1, "answers" => array('ledwie wyczuwalną', 'lekką', 'zdecydowanie wyczuwalną', 'mocną', 'jestem hopheadem')),
 		6 => array("question" => "Smakują Ci bardziej piwa jasne, czy piwa ciemne?", "type" => 1, "answers" => array('jasne', 'bez znaczenia', 'ciemne')),
 		7 => array("question" => "Smakują Ci bardziej piwa słodsze, czy piwa wytrawniejsze?", "type" => 1, "answers" => array('słodsze', 'bez znaczenia', 'wytrawniejsze')),
 
 		// Pytania smakowe - podaj w skali
 		8 => array("question" => "Czy odpowiadałby Ci smak czekoladowy w piwie?", "type" => 0, "answers" => array('NO')),
-		9 => array("question" => "Czy wolisz piwa mocno nagazowane?", "type" => 0, "answers" => array('NO')),
-		10 => array("question" => "Czy odpowiadałby Ci smak palony w piwie?", "type" => 0, "answers" => array('NO')), // TODO: Zamienić z 9 miejscami
+		9 => array("question" => "Czy wolisz piwa mocno gazowane?", "type" => 0, "answers" => array('NO')),
+		10 => array("question" => "Czy odpowiadałoby Ci piwo nieco przyprawowe?", "type" => 0, "answers" => array('NO'), "tooltip" => "W niektórych piwach da się wyczuć na przykład goździki czy nuty pieprzne."), // TODO: Zamienić z 9 miejscami
 		11 => array("question" => "Czy chciałbyś piwo w klimatach owocowych?", "type" => 0, "answers" => array('NO'), "tooltip" => "Chodzi o piwa bez dodatku soku, w których nuty owocowe otrzymano dzięki użyciu odpowiednich odmian chmielu lub dzięki pracy drożdży."),
 		12 => array("question" => "Co powiesz na piwo kwaśne?", "type" => 1, "answers" => array('chętnie', 'nie ma mowy'), "tooltip" => "Kwaśne nie oznacza, że piwo jest zepsute czy stare."),
-		13 => array("question" => "Co powiesz na piwo słonawe?", "type" => 1, "answers" => array('chętnie', 'nie ma mowy')),
+		13 => array("question" => "Czy odpowiadałby Ci smak wędzony/dymny w piwie?", "type" => 0, "answers" => array('NO')),
 
-		// Dodatkowe 4 pytania
 		14 => array("question" => "Czy lubisz bourbon, whisky lub inne alkohole szlachetne?", "type" => 0, "answers" => array('NO')),
-		15 => array("question" => "Piwa o jakiej konsystencji preferujesz?", "type" => 1, "answers" => array('wodniste', 'średnie', 'gęste')),
-		16 => array("question" => "Jak mocne pod względem zawartości alkoholu piwa preferujesz?", "type" => 1, "answers" => array('lekkie', 'średnie', 'mocne')),
-		17 => array("question" => "Czy odpowiadałby Ci smak wędzony/dymny w piwie?", "type" => 0, "answers" => array('NO')), 
-
-
+		15 => array("question" => "Jak mocne i gęste piwa preferujesz?", "type" => 1, "answers" => array('wodniste i lekkie', 'średnie', 'mocne i gęste')),
 	);
 
 }

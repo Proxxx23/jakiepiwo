@@ -89,7 +89,7 @@ class StylePickerController extends Controller
 
 		$result = $MailChimp->post("lists/$list_id/members", [
 			'email_address' => $email,
-			'status'        => 'subscribed',
+			'status'        => 'pending',
 		]);
 
     }

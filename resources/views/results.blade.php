@@ -5,7 +5,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>Style piwne dla Ciebie - The Gustator v.0.2 nightly</title>
+        <title>Style piwne dla Ciebie - The Gustator v0.3 nightly</title>
 
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
@@ -118,7 +118,7 @@
                         <p>Ponieważ lubisz alkohole szlachetne, powinny zainteresować Cię piwa leżakowane w beczkach po trunkach takich jak whisky czy bourbon. Szukaj w sklepie piw z dopiskiem "barrel-aged" lub "BA" na etykiecie.</p>
                     @endif
 
-                    <h1>Piw w tych stylach powinieneś raczej unikać</h1>
+                    <h1>Piwa w tych stylach raczej nie przypadną Ci do gustu</h1>
 
                     @for ($i = 0; $i < count($avoidthis); $i++)
                         @foreach ($avoidthis[$i] as $k => $v)
