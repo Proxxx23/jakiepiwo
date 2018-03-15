@@ -148,9 +148,9 @@ class PickingAlgorithm extends Controller
     	 	$this->negativeSynergy(array(36, 37), 3);
     	 }
 
-    	 // jasne + nieczekoladowe + niepalone
-    	 if ($answer_value[6] == 'jasne' && $answer_value[8] == 'nie' && $answer_value[10] == 'nie') {
-    	 	echo "Synergia jasne + nieczekoladowe + niepalone <br />";
+    	 // jasne + nieczekoladowe
+    	 if ($answer_value[6] == 'jasne' && $answer_value[8] == 'nie') {
+    	 	echo "Synergia jasne + nieczekoladowe <br />";
     	 	$this->negativeSynergy(array(12, 21, 24, 29, 33, 34, 35, 36, 37, 58, 59, 62, 63), 2);
     	 }
 
@@ -211,8 +211,7 @@ class PickingAlgorithm extends Controller
 	}
 
 	/**
-	* Excludes sour/salty/smoked beers from recommended styles if user says NO
-	* TODO: Funkcja, która działa z każdym pytaniem
+	* Excludes sour/smoked beers from recommended styles if user says NO
 	*/
 	private function excludeFromRecommended(array $ids_to_exclude) : void {
 		foreach ($ids_to_exclude AS $id) {

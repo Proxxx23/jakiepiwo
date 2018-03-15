@@ -18,7 +18,6 @@ class StylePickerController extends Controller
     public $error_cnt = 0;
 	public $error_msg = array();
 	public $JSON_answers = '';
-	public $mostly_picked = array();
 
     /*
     * Show all the questions
@@ -35,9 +34,9 @@ class StylePickerController extends Controller
     	// }
 
         if ($errors === true) {
-    		return view('index', ['questions' => Questions::$questions,	'mostly_picked' => $this->getMostPickedStyles(), 'lastvisit_name' => $this->getUsername(), 'errors' => $this->error_msg, 'errors_count' => $this->error_cnt]);
+    		return view('index', ['questions' => Questions::$questions, 'lastvisit_name' => $this->getUsername(), 'errors' => $this->error_msg, 'errors_count' => $this->error_cnt]);
     	} else {
-    		return view('index', ['questions' => Questions::$questions,	'mostly_picked' => $this->getMostPickedStyles(), 'lastvisit_name' => $this->getUsername(), 'errors' => '', 'errors_count' => 0]);
+    		return view('index', ['questions' => Questions::$questions, 'lastvisit_name' => $this->getUsername(), 'errors' => '', 'errors_count' => 0]);
     	}
 
     }
@@ -197,45 +196,13 @@ class StylePickerController extends Controller
     	}
     }
 
-    // Pokazuje style z ostatniej wizyty
-    public function getRecentlyPickedStyles() {
-
-    	if ($_SERVER['REMOTE_ADDR']) {
-    		$q = DB::select("SELECT * FROM beers_logs WHERE ip_address = '".$_SERVER['REMOTE_ADDR']."' ORDER BY created_at DESC LIMIT 1;");
-    	}
-
-    }
-
-    /*
-    * Selects necessary info about choosen beers from database
-    * TODO: Polski Kraft API
-    */
-    public function getDetailedInfoAboutStyle(integer $beer_ids) : object {
-
-    	$beer_ids = explode(',', $beer_ids);
-    	$style_info = DB::select("SELECT * FROM `beer_flavours` WHERE id IN ('".$beer_ids."')");
-
-    	return $style_info;
-
-    }
-
-    /**
-    * Takes 3 mostly picked styles
-    */
-    public function getMostPickedStyles() : ?array {
-
-		$mostly_picked = DB::select('SELECT COUNT(`s`.`style_take`) AS `wybrano_razy`, `b`.`name`, `b`.`name2`, `b`.`name_pl` FROM `styles_logs` s INNER JOIN `beers` b ON `b`.`id` = `s`.`style_take` GROUP BY `s`.`style_take` ORDER BY `wybrano_razy` DESC LIMIT 3');
-
-    	return $mostly_picked;
-
-    }
 
     /**
     * Gets name of an user using IP address
     */
     public function getUsername() : ?string {
 
-    	$last_visit = DB::select('SELECT username, LENGTH(username) AS last FROM styles_logs WHERE ip_address = "'.$_SERVER['REMOTE_ADDR'].'" ORDER BY last DESC LIMIT 1');
+    	$last_visit = DB::select('SELECT username FROM styles_logs WHERE ip_address = "'.$_SERVER['REMOTE_ADDR'].'" ORDER BY created_at DESC LIMIT 1');
 
     	if ($last_visit) {
 			$v = get_object_vars($last_visit[0]);
@@ -243,23 +210,6 @@ class StylePickerController extends Controller
 		} else {
 			return null;
 		}
-
-    }
-
-    /**
-    * Gets 3 styles from last user's visit
-    * TODO
-    */
-    public function getUserLastVisitStyles() {
-
-    	$last_visit_styles = DB::select('SELECT s.style_take, b.name FROM styles_logs s INNER JOIN beers b ON s.style_take = b.id WHERE s.ip_address = "'.$_SERVER['REMOTE_ADDR'].'" ORDER BY created_at DESC LIMIT 3');
-
-    	// if (!empty($last_visit_styles)) {
-    	// 	for ($i = 0; $i <= count($last_visit_styles); $i++) {
-    	// 		$last_styles[] = get_object_vars($last_visit_styles[$i]);
-    	// 	}
-    	// 	var_dump($last_styles);
-    	// }
 
     }
 
