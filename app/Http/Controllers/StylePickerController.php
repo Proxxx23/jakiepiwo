@@ -235,7 +235,7 @@ class StylePickerController extends Controller
     */
     public function getUsername() : ?string {
 
-    	$last_visit = DB::select('SELECT username FROM styles_logs WHERE ip_address = "'.$_SERVER['REMOTE_ADDR'].'" ORDER BY created_at DESC LIMIT 1');
+    	$last_visit = DB::select('SELECT username, LENGTH(username) AS last FROM styles_logs WHERE ip_address = "'.$_SERVER['REMOTE_ADDR'].'" ORDER BY last DESC LIMIT 1');
 
     	if ($last_visit) {
 			$v = get_object_vars($last_visit[0]);

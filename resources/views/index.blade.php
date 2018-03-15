@@ -137,8 +137,8 @@
                     <form method="POST" action=" {{ action('StylePickerController@mix') }} ">
                     {{ csrf_field() }}
                    
-                <h3>@if ($lastvisit_name) Czołem, {{$lastvisit_name}}!@endif 
-                Odpowiedz na wszystkie poniższe pytania, aby dowiedzieć się, jakie 3 style piwne powinny Ci najbardziej zasmakować. </h3>
+                @if ($lastvisit_name)<h3> Czołem, {{$lastvisit_name}}! Miło, że znów tu zaglądasz!</h3>@endif 
+                <p>The Gustator to narzędzie, które na podstawie Twoich preferencji smakowych postara się określić jakie piwa powinny Ci zasmakować. Odpowiedz na wszystkie poniższe pytania, aby już nigdy nie mieć problemu z wyborem piwa w sklepie</p>
 
                     @foreach ($questions as $index => $field)
                     <h3>{{$index}}. {{$field['question']}} 
@@ -149,13 +149,13 @@
                         @if ($field['type'] === 1)  
                          @foreach ($field['answers'] AS $ans)
                             <label class="radio-inline">
-                                <input type="radio" name="answer-{{ $index }}" value="{{$ans}}" @if ($index < 14) required @endif>{{$ans}}
+                                <input type="radio" name="answer-{{ $index }}" value="{{$ans}}" autocomplete="off" required>{{$ans}}
                             </label>
                          @endforeach
                          
                         @else
-                            <label class="radio-inline"><input type="radio" name="answer-{{ $index }}" value="tak" @if ($index < 14) required @endif>tak</label>
-                            <label class="radio-inline"><input type="radio" name="answer-{{ $index }}" value="nie" @if ($index < 14) required @endif>nie</label>
+                            <label class="radio-inline"><input type="radio" name="answer-{{ $index }}" value="tak" autocomplete="off" required>tak</label>
+                            <label class="radio-inline"><input type="radio" name="answer-{{ $index }}" value="nie" autocomplete="off" required>nie</label>
                         @endif
 
                     @endforeach
@@ -169,7 +169,7 @@
                             <div class="checkbox">
                                 <label><input type="checkbox" name="newsletter" value="Tak">Chcę otrzymywać <a href="http://piwolucja.pl/newsletter/" target="_blank">piwny newsletter</a></label>
                             </div>
-                            <input type="submit" class="btn btn-primary" name="send" value="Wyślij">
+                            <input type="submit" class="btn btn-primary btn-lg btn-block" name="send" value="Wyślij">
                         </div>
                     </div>
                     </form>

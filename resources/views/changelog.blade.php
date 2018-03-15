@@ -96,6 +96,7 @@
                     <li>Walidacja formularza po stronie HTML-a</li>
                     <li>Między stylem proponowanym a odradzanym musi być 125% marginesu w punktacji. W innym wypadku styl odradzany nie zostanie odradzony</li>
                     <li>Osoba dopisująca się do newslettera otrzymuje mail potwierdzający oraz e-booka</li>
+                    <li>Usunięto 6 stylów piwnych</li>
                 </ul>
                 <h5>Bugfixes</h5>
                 <ul>
@@ -112,23 +113,25 @@
                     <li>Style palone zawierają się w pytaniu o czekoladowość (jeśli są też palone)</li>
                     <li>Style belgisjkie pokazują się teraz częściej</li>
                     <li>Kalibracja kolorków (bardzo polecany/odradzany styl)</li>
+                    <li>Grodziskie jest już poprawnie wykluczane, jeśli nie chcemy piwa wędzonego</li>
                 </ul>
 
                 <h5>Planowane usprawnienia (według priotytetu)</h5> 
                 <ul>
                     <li>FEATURE: Jeśli style z pierwszych pozycji mają nieznaczne różnice punktowe, pokazuj je losowo</li>
                     <li>FEATURE: Zmiana układu pytań (od ogółu do szczegółu)</li>
-                    <li>FEATURE: Ograniczenie listy stylów do tych, które występują często w piwach z Polski (usunięcie m.in. english porteru)</li>   
                     <li>FEATURE: Inny układ pytań o smaki</li>
-                    <li>FEATURE: PolskiKraft API - Słowniki + wpięcie (kontroler)</li>
-                    <li>FEATURE: Możliwość wykluczania przez użytkownika całych stylów, które już zna (na początek IPA)</li>
-                    <li>FEATURE: Pole (0/1) "mail" w bazie logów</li>
+                    <li>FEATURE: Bootstrap Theme + Form</li>
+                    <li>FEATURE: Inny układ wyników</li>
                     <li>FEATURE: Uzupełnienie synergii pozytywnych i negatywnych</li>
-                    <li>BUGFIX: Adnotacja o BA tylko dla piw, które faktycznie leżakuje się w beczkach</li>
+                    <li>FEATURE: Nowy styl - Lite APA (lub oznaczenie przy APA)</li>   
+                    <li>FEATURE: PolskiKraft API - Słowniki + wpięcie (kontroler)</li>
+                    <li>??? FEATURE: Możliwość wykluczania przez użytkownika całych stylów, które już zna (na początek IPA)</li>
+                    <li>??? FEATURE: Przełącznik w mocy piw</li>
+                    <li>FEATURE: Pole (0/1) "mail" w bazie logów</li>
                     <li>FEATURE: Pokazywanie tylko jednej nazwy stylu + dymek z nazwą alternatywną i PL</li>
                     <li>FEATURE: Zapisywanie pól formularza w razie błędów</li>
                     <li>FEATURE: Mail z wynikiem na życzenie</li>
-                    <li>FEATURE: Przełącznik w mocy piw</li>
                     <li>FEATURE: Czy danych piw możesz napić się w okolicy? (OnTap API)</li>
                     <li>FEATURE: Najczęściej polecane użytkowniom style</li>
                     <li>FEATURE: Facebook Tags, SEO oraz Twitter Cards</li>
