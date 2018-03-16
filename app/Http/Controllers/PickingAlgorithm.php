@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\View;
+use App\Http\Controllers\PolskiKraft\PolskiKraftAPI AS PKAPI;
 
 class PickingAlgorithm extends Controller
 {
@@ -397,15 +398,14 @@ class PickingAlgorithm extends Controller
     		$avoidthis[] = DB::select("SELECT * FROM beers WHERE id = $style_to_avoid");	
     	}
 
-    	// Zapisz wybór do bazy
-    	// TODO Log
+    	//TODO
     	try {
     		$this->logStyles($name, $email, $newsletter);
     	} catch (Exception $e) {
     		//mail('kontakt@piwolucja.pl', 'logStyles Exception', $e->getMessage());
     	}
 
-    	return view('results', ['buythis' => $buythis, 'avoidthis' => $avoidthis, 'must_take' => $this->must_take, 'must_avoid' => $this->must_avoid, 'username' => $name, 'barrel_aged' => $this->BA]);
+    	return view('results', ['buythis' => $buythis, 'avoidthis' => $avoidthis, 'must_take' => $this->must_take, 'must_avoid' => $this->must_avoid, 'username' => $name, 'barrel_aged' => $this->BA);
 
     }
 

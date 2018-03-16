@@ -28,6 +28,7 @@ class StylePickerController extends Controller
     	if ($_SERVER['REMOTE_ADDR'] != '89.64.49.8') {
     		die('Trwają prace. Serwis niedostępny do godziny 21:00.');
     	}
+
     	// if ($_SERVER['REMOTE_ADDR'] == '89.64.48.198') {
     	// 	$API = file_get_contents('https://www.polskikraft.pl/openapi/style/list');
     	// 	$API_example = file_get_contents('https://www.polskikraft.pl/openapi/style/80/examples');
