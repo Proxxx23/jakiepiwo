@@ -405,6 +405,8 @@ class PickingAlgorithm extends Controller
     		//mail('kontakt@piwolucja.pl', 'logStyles Exception', $e->getMessage());
     	}
 
+    	// $to_take_info = PKAPI::getBeersInfo($this->style_to_take);
+
     	return view('results', ['buythis' => $buythis, 'avoidthis' => $avoidthis, 'must_take' => $this->must_take, 'must_avoid' => $this->must_avoid, 'username' => $name, 'barrel_aged' => $this->BA);
 
     }

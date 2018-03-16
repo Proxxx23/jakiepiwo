@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\ValidationController as Validation;
 use App\Http\Controllers\PickingAlgorithm as Algorithm;
 use App\Traits\Questions as Questions;
+use App\Http\Controllers\PolskiKraft\PolskiKraftAPI AS PKAPI;
 use App\Styles;
 use \DrewM\MailChimp\MailChimp;
 use Mail;

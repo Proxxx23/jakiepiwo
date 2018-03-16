@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers\PolskiKraft;
 
 use Illuminate\Http\Request;
+use App\Http\Controllers\PolskiKraft\Dictionaries as Dictionaries;
 
 class PolskiKraftAPI
 {
@@ -19,12 +20,20 @@ class PolskiKraftAPI
 
     }
 
-    // Slownik
-    //
+    public static function getBeersInfo(array $beer_ids) : ?array {
 
-    public static function getBeerInfo($beer_id = 0) : ?array {
+        $ids_to_show = array();
 
-        $request = json_decode(file_get_contents("https://www.polskikraft.pl/openapi/style/{$beer_id}/examples"));
+        foreach ($beer_ids AS $id) {
+            if (array_key_exists($id, Dictionaries::$ID)) {
+                $ids_to_show[] = Dictionaries::$ID[$id];
+            }
+        }
+
+        for ($i = 0; $i < count($ids_to_show); $i++) {
+            $content = 'https://www.polskikraft.pl/openapi/style/'.$ids_to_show[$i].'/examples';
+            $request[$i] = json_decode(file_get_contents($content));
+        }
 
         if (!empty($request)) {
             return $request;
