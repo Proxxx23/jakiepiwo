@@ -96,7 +96,11 @@
                     <li>Walidacja formularza po stronie HTML-a</li>
                     <li>Między stylem proponowanym a odradzanym musi być 125% marginesu w punktacji. W innym wypadku styl odradzany nie zostanie odradzony</li>
                     <li>Osoba dopisująca się do newslettera otrzymuje mail potwierdzający oraz e-booka</li>
-                    <li>Usunięto 6 stylów piwnych</li>
+                    <li>Usunięto 8 stylów piwnych</li>
+                    <li>Bitter / ESB jako jeden styl</li>
+                    <li>Nowe style: Blonde, Belgian Strong Ale, American Wheat, Oatmeal Stout, Pale Ale, Milkshake IPA, Coffee Stout, Rye Porter, Bock</li>
+                    <li>Synergie dla nowych stylów</li>
+                    <li>Nowy układ pytań</li>
                 </ul>
                 <h5>Bugfixes</h5>
                 <ul>
@@ -111,7 +115,7 @@
                     <li>Połączenie pytania o gęstość i moc w jedno (zwiększenie znaczenia)</li>
                     <li>Usunięcie pytania o piwo słone</li>
                     <li>Style palone zawierają się w pytaniu o czekoladowość (jeśli są też palone)</li>
-                    <li>Style belgisjkie pokazują się teraz częściej</li>
+                    <li>Style belgijskie pokazują się teraz częściej</li>
                     <li>Kalibracja kolorków (bardzo polecany/odradzany styl)</li>
                     <li>Grodziskie jest już poprawnie wykluczane, jeśli nie chcemy piwa wędzonego</li>
                 </ul>
@@ -119,12 +123,10 @@
                 <h5>Planowane usprawnienia (według priotytetu)</h5> 
                 <ul>
                     <li>FEATURE: Jeśli style z pierwszych pozycji mają nieznaczne różnice punktowe, pokazuj je losowo</li>
-                    <li>FEATURE: Zmiana układu pytań (od ogółu do szczegółu)</li>
                     <li>FEATURE: Inny układ pytań o smaki</li>
                     <li>FEATURE: Bootstrap Theme + Form</li>
                     <li>FEATURE: Inny układ wyników</li>
-                    <li>FEATURE: Uzupełnienie synergii pozytywnych i negatywnych</li>
-                    <li>FEATURE: Nowy styl - Lite APA (lub oznaczenie przy APA)</li>   
+                    <li>FEATURE: Uzupełnienie synergii negatywnych</li> 
                     <li>FEATURE: PolskiKraft API - Słowniki + wpięcie (kontroler)</li>
                     <li>??? FEATURE: Możliwość wykluczania przez użytkownika całych stylów, które już zna (na początek IPA)</li>
                     <li>??? FEATURE: Przełącznik w mocy piw</li>

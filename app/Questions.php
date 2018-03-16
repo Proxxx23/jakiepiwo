@@ -21,15 +21,14 @@ trait Questions {
 		6 => array("question" => "Smakują Ci bardziej piwa jasne, czy piwa ciemne?", "type" => 1, "answers" => array('jasne', 'bez znaczenia', 'ciemne')),
 		7 => array("question" => "Smakują Ci bardziej piwa słodsze, czy piwa wytrawniejsze?", "type" => 1, "answers" => array('słodsze', 'bez znaczenia', 'wytrawniejsze')),
 
-		8 => array("question" => "Czy odpowiadałby Ci smak czekoladowy w piwie?", "type" => 0, "answers" => array('NO')),
-		9 => array("question" => "Czy wolisz piwa mocno gazowane?", "type" => 0, "answers" => array('NO')),
-		10 => array("question" => "Czy odpowiadałoby Ci piwo nieco przyprawowe?", "type" => 0, "answers" => array('NO'), "tooltip" => "W niektórych piwach da się wyczuć na przykład goździki czy nuty pieprzne."), // TODO: Zamienić z 9 miejscami
-		11 => array("question" => "Czy chciałbyś piwo w klimatach owocowych?", "type" => 0, "answers" => array('NO'), "tooltip" => "Chodzi o piwa bez dodatku soku, w których nuty owocowe otrzymano dzięki użyciu odpowiednich odmian chmielu lub dzięki pracy drożdży."),
-		12 => array("question" => "Co powiesz na piwo kwaśne?", "type" => 1, "answers" => array('chętnie', 'nie ma mowy'), "tooltip" => "Kwaśne nie oznacza, że piwo jest zepsute czy stare."),
-		13 => array("question" => "Czy odpowiadałby Ci smak wędzony/dymny w piwie?", "type" => 0, "answers" => array('NO')),
-
-		14 => array("question" => "Czy lubisz bourbon, whisky lub inne alkohole szlachetne?", "type" => 0, "answers" => array('NO')),
-		15 => array("question" => "Jak mocne i gęste piwa preferujesz?", "type" => 1, "answers" => array('wodniste i lekkie', 'średnie', 'mocne i gęste')),
+		8 => array("question" => "Jak mocne i gęste piwa preferujesz?", "type" => 1, "answers" => array('wodniste i lekkie', 'średnie', 'mocne i gęste')),
+		9 => array("question" => "Czy odpowiadałby Ci smak czekoladowy w piwie?", "type" => 0, "answers" => array('NO')),
+		10 => array("question" => "Czy odpowiadałby Ci smak kawowy w piwie?", "type" => 0, "answers" => array('NO')),
+		11 => array("question" => "Czy odpowiadałoby Ci piwo nieco przyprawowe?", "type" => 0, "answers" => array('NO'), "tooltip" => "W niektórych piwach da się wyczuć na przykład goździki czy nuty pieprzne."),
+		12 => array("question" => "Czy chciałbyś piwo w klimatach owocowych?", "type" => 0, "answers" => array('NO'), "tooltip" => "Chodzi o piwa bez dodatku soku, w których nuty owocowe otrzymano dzięki użyciu odpowiednich odmian chmielu lub dzięki pracy drożdży."),
+		13 => array("question" => "Co powiesz na piwo kwaśne?", "type" => 1, "answers" => array('chętnie', 'nie ma mowy'), "tooltip" => "Kwaśne nie oznacza, że piwo jest zepsute czy stare."),
+		14 => array("question" => "Czy odpowiadałby Ci smak wędzony/dymny w piwie?", "type" => 0, "answers" => array('NO')),
+		15 => array("question" => "Czy lubisz bourbon, whisky lub inne alkohole szlachetne?", "type" => 0, "answers" => array('NO')),
 
 		// TODO Nowy układ
 		// 1, 2, 3, 4, 5, 6, 7, 9, 15 - 11, 8, 10, 13, 12, 14

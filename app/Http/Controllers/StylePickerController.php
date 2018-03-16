@@ -25,7 +25,9 @@ class StylePickerController extends Controller
     */
     public function showQuestions(bool $errors = false) {
 
-    	//die('Wprowadzam zmiany w pytaniach i algorytmie. Beta będzie włączona ponownie około 20:30');
+    	if ($_SERVER['REMOTE_ADDR'] != '89.64.49.8') {
+    		die('Trwają prace. Serwis niedostępny do godziny 21:00.');
+    	}
     	// if ($_SERVER['REMOTE_ADDR'] == '89.64.48.198') {
     	// 	$API = file_get_contents('https://www.polskikraft.pl/openapi/style/list');
     	// 	$API_example = file_get_contents('https://www.polskikraft.pl/openapi/style/80/examples');
@@ -202,7 +204,7 @@ class StylePickerController extends Controller
     */
     public function getUsername() : ?string {
 
-    	$last_visit = DB::select('SELECT username FROM styles_logs WHERE ip_address = "'.$_SERVER['REMOTE_ADDR'].'" ORDER BY created_at DESC LIMIT 1');
+    	$last_visit = DB::select('SELECT `username` FROM `styles_logs` WHERE `ip_address` = "'.$_SERVER['REMOTE_ADDR'].'" AND `username` <> "" ORDER BY `created_at` DESC LIMIT 1');
 
     	if ($last_visit) {
 			$v = get_object_vars($last_visit[0]);
