@@ -3,11 +3,6 @@ declare(strict_types=1);
 namespace App\Traits;
 
 trait Questions {
- 
-	/*@type
-	* 0 - pytanie "tak/nie"
-	* 1 - pytanie <> tak/nie
-	*/
 	
 	public static $questions = array(
 
@@ -24,14 +19,11 @@ trait Questions {
 		8 => array("question" => "Jak mocne i gęste piwa preferujesz?", "type" => 1, "answers" => array('wodniste i lekkie', 'średnie', 'mocne i gęste')),
 		9 => array("question" => "Czy odpowiadałby Ci smak czekoladowy w piwie?", "type" => 0, "answers" => array('NO')),
 		10 => array("question" => "Czy odpowiadałby Ci smak kawowy w piwie?", "type" => 0, "answers" => array('NO')),
-		11 => array("question" => "Czy odpowiadałoby Ci piwo nieco przyprawowe?", "type" => 0, "answers" => array('NO'), "tooltip" => "W niektórych piwach da się wyczuć na przykład goździki czy nuty pieprzne."),
+		11 => array("question" => "Czy odpowiadałoby Ci piwo nieco przyprawowe?", "type" => 0, "answers" => array('NO'), "tooltip" => "W niektórych piwach da się wyczuć na przykład goździki czy nuty pieprzowe."),
 		12 => array("question" => "Czy chciałbyś piwo w klimatach owocowych?", "type" => 0, "answers" => array('NO'), "tooltip" => "Chodzi o piwa bez dodatku soku, w których nuty owocowe otrzymano dzięki użyciu odpowiednich odmian chmielu lub dzięki pracy drożdży."),
 		13 => array("question" => "Co powiesz na piwo kwaśne?", "type" => 1, "answers" => array('chętnie', 'nie ma mowy'), "tooltip" => "Kwaśne nie oznacza, że piwo jest zepsute czy stare."),
 		14 => array("question" => "Czy odpowiadałby Ci smak wędzony/dymny w piwie?", "type" => 0, "answers" => array('NO')),
 		15 => array("question" => "Czy lubisz bourbon, whisky lub inne alkohole szlachetne?", "type" => 0, "answers" => array('NO')),
-
-		// TODO Nowy układ
-		// 1, 2, 3, 4, 5, 6, 7, 9, 15 - 11, 8, 10, 13, 12, 14
 	);
 
 }

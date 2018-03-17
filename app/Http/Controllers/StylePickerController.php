@@ -26,8 +26,8 @@ class StylePickerController extends Controller
     */
     public function showQuestions(bool $errors = false) {
 
-    	if ($_SERVER['REMOTE_ADDR'] != '89.64.49.8') {
-    		die('Trwają prace. Serwis niedostępny do godziny 21:00.');
+    	if ($_SERVER['REMOTE_ADDR'] != '89.64.48.129') {
+    		die('Wprowadzam zmiany. Widzimy się o 14:00');
     	}
 
     	// if ($_SERVER['REMOTE_ADDR'] == '89.64.48.198') {
@@ -123,18 +123,9 @@ class StylePickerController extends Controller
 
     	for ($i = 1; $i <= count(Questions::$questions); $i++) {
     		
-    		// Opcjonalne nie są sprawdzane w ten sposób
-    		if ($i <= 13) {
-	    		if (is_null($_POST['answer-'.$i.''])) { 
-	    			$this->logError('Pytanie numer ' . $i . ' jest puste. Odpowiedz na wszystkie pytania!');
-	    		}
-    		}
-
-    		if (isset($_POST['answer-'.$i.''])) {
-    			if (!$validation->validateSimpleAnswer($_POST['answer-'.$i.'']) && (Questions::$questions[$i]['type'] != 1)) {
-    				$this->logError('Problem z walidacją niektórych pól formularza!', true);
-    			}
-    		}
+	    	if (is_null($_POST['answer-'.$i.''])) { 
+	    		$this->logError('Pytanie numer ' . $i . ' jest puste. Odpowiedz na wszystkie pytania!');
+	    	}
 
     		$answers = $this->array_push_assoc($answers, $i, $_POST['answer-'.$i.'']);
 

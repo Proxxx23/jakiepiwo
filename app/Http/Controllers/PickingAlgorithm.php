@@ -72,7 +72,7 @@ class PickingAlgorithm extends Controller
 									'nie' => 'nie');
 
 
-
+	public $answers_decoded = array();
 
 	private $included_ids = array(); // Beer IDs to include
 	private $excluded_ids = array(); // Excluded beer IDs
@@ -88,6 +88,8 @@ class PickingAlgorithm extends Controller
 
 	private $cnt_styles_to_pick = 3;
 	private $cnt_styles_to_avoid = 3;
+
+	// private $toshuffle = 0;
 
 	/**
 	* Builds positive synergy if user ticks 2-4 particular answers
@@ -194,7 +196,14 @@ class PickingAlgorithm extends Controller
 		 // duża/hophead goryczka + ciemne
     	 if (($answer_value[5] == 'mocną' || $answer_value[5] == 'jestem hopheadem') && $answer_value[6] == 'ciemne') {
     	 	echo "Synergia duża/hophead goryczka + ciemne <br />";
-    	 	$this->positiveSynergy(array(3, 36, 37, 58, 62, 63, 75), 1.5);
+    	 	$this->positiveSynergy(array(3, 36, 37, 58, 62, 63, 75), 1.75);
+    	 }
+
+    	 // goryczka ledwo || lekka
+    	 if ($answer_value[5] == 'ledwie wyczuwalną' || $answer_value[5] == 'lekką') {
+    	 	echo "Synergia negatywna na lekkie goryczki <br />";
+    	 	$this->negativeSynergy(array(1, 2, 3, 5, 7, 8, 28, 61), 2);
+    	 	$this->negativeSynergy(array(6, 60, 65, 69, 71, 72), 1.5);
     	 }
 
 	}
@@ -312,13 +321,36 @@ class PickingAlgorithm extends Controller
 		}
 
 	}
+
+
+	/**
+	* If first styles has less than 95% margin - shuffle this part of an array
+	*/
+	/* private function shuffleAnswers() : void {
+
+		$first_style_index = key(array_slice($this->included_ids, 0, 1, true));
+		$first_style_pts = array_values(array_slice($this->included_ids, 0, 1, true));
+
+		for ($i = 1; $i <= count($this->included_ids); $i++) {
+
+			$nth_style_index = key(array_slice($this->included_ids, $i, 1, true));
+			$nth_style_pts = array_values(array_slice($this->included_ids, $i, 1, true));
+
+			if ($nth_style_pts[0] >= $first_style_pts[0] * 0.80) {
+				//echo $nth_style_pts[0] . ' >= ' . $first_style_pts[0] * 0.80;
+				$this->toshuffle++;
+			}
+
+		}
+
+	} */
     
     /**
     * Heart of an algorithm
     */
     public function includeBeerIds(string $answers, string $name, string $email, int $newsletter) {
 
-    	$answers_decoded = json_decode($answers);
+    	$answers_decoded = $this->answers_decoded = json_decode($answers);
 
     	foreach ($answers_decoded AS $number => $answer) {
 	    	foreach ($this->{'to_include'.$number} AS $yesno => $ids) {
@@ -380,12 +412,12 @@ class PickingAlgorithm extends Controller
 		$this->checkMargin();
 		$this->mustTakeMustAvoid();
 
-    	if ($_SERVER['REMOTE_ADDR'] == '89.64.49.8') {
-    		echo "<br /><br /><br />";
-	    	echo "Tablica ze stylami do wybrania i punktami: <br />";
-	    	$this->printPre($this->included_ids);
-	    	echo "<br />Tablica ze stylami do odrzucenia i punktami: <br />";
-	    	$this->printPre($this->excluded_ids);
+    	if ($_SERVER['REMOTE_ADDR'] == '89.64.48.129') {
+    		// echo "<br /><br /><br />";
+	    	// echo "Tablica ze stylami do wybrania i punktami: <br />";
+	    	// $this->printPre($this->included_ids);
+	    	// echo "<br />Tablica ze stylami do odrzucenia i punktami: <br />";
+	    	// $this->printPre($this->excluded_ids);
     	}
 
     	for ($i = 0; $i < $this->cnt_styles_to_pick; $i++) {
@@ -405,9 +437,15 @@ class PickingAlgorithm extends Controller
     		//mail('kontakt@piwolucja.pl', 'logStyles Exception', $e->getMessage());
     	}
 
-    	// $to_take_info = PKAPI::getBeersInfo($this->style_to_take);
+    	foreach ($this->style_to_take AS $index => $id) {
+    		if (PKAPI::getBeerInfo($id) != null) {
+    			$PK_style_take[] = PKAPI::getBeerInfo($id);
+    		} else {
+    			$PK_style_take[] = '';
+    		}
+    	}
 
-    	return view('results', ['buythis' => $buythis, 'avoidthis' => $avoidthis, 'must_take' => $this->must_take, 'must_avoid' => $this->must_avoid, 'username' => $name, 'barrel_aged' => $this->BA);
+    	return view('results', ['buythis' => $buythis, 'avoidthis' => $avoidthis, 'must_take' => $this->must_take, 'must_avoid' => $this->must_avoid, 'PK_style_take' => $PK_style_take, 'username' => $name, 'barrel_aged' => $this->BA, 'answers' => $this->answers_decoded]);
 
     }
 

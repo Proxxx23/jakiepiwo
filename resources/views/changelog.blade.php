@@ -5,7 +5,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>The Gustator v0.3 nightly - changelog</title>
+        <title>The Gustator v0.4 nightly - changelog</title>
 
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
@@ -90,52 +90,40 @@
         </style>
     </head>
     <body><div class="changelog">
-                <h3>Changelog v0.3 nightly (15.03.2018 r.)</h3>
+                <h3>Changelog v0.4 nightly (17.03.2018 r.)</h3>
                 <h5>Najnowsze zmiany i funkcje</h5>
                 <ul>
-                    <li>Walidacja formularza po stronie HTML-a</li>
-                    <li>Między stylem proponowanym a odradzanym musi być 125% marginesu w punktacji. W innym wypadku styl odradzany nie zostanie odradzony</li>
-                    <li>Osoba dopisująca się do newslettera otrzymuje mail potwierdzający oraz e-booka</li>
                     <li>Usunięto 8 stylów piwnych</li>
                     <li>Bitter / ESB jako jeden styl</li>
                     <li>Nowe style: Blonde, Belgian Strong Ale, American Wheat, Oatmeal Stout, Pale Ale, Milkshake IPA, Coffee Stout, Rye Porter, Bock</li>
                     <li>Synergie dla nowych stylów</li>
                     <li>Nowy układ pytań</li>
+                    <li>PolskiKraft API - Słowniki + gotowy kontroler</li>
+                    <li>Propozycje najlepiej ocenianych piw w danym stylu z PolskiKraft.pl wraz z miniaturkami w tooltipie</li>
+                    <li>Debug odpowiedzi z formularza w wynikach (v 0.5)</li>
+                    <li>Uzupełnienie negatywnych synergii (v 0.5)</li>
+                    <li>Piwa polecane wyświetlają się losowo z puli (v 0.5)</li>
                 </ul>
                 <h5>Bugfixes</h5>
                 <ul>
-                    <li>Wzmocnienie znaczenia pytania o piwa ciemne/jasne</li>
-                    <li>Poprawki dla pytania o kolor piwa (większy nacisk)</li>
-                    <li>Style szokujące - siła negatywna w przypadku odpowiedzi "nie" nie będzie budowana</li>
-                    <li>Poprawka budowania siły (pusta tablica tworzona w przypadku odpowiedzi "bez znaczenia")</li>
-                    <li>Poprawka wpływu pytania o goryczkę (wyrównanie punktacji)</li>
-                    <li>W niektórych pytaniach, w przypadku wybrania odpowiedzi "tak", algorytm nie buduje siły negatywnej dla piw przypisanych do niezaznaczonej odpowiedzi</li>
-                    <li>Odpowiedź "bez znaczenia" nie buduje siły negatywnej z niezaznaczonych odpowiedzi</li>
-                    <li>Pytanie o paloność zostało zastąpione pytaniem o przyprawowość</li>
-                    <li>Połączenie pytania o gęstość i moc w jedno (zwiększenie znaczenia)</li>
-                    <li>Usunięcie pytania o piwo słone</li>
-                    <li>Style palone zawierają się w pytaniu o czekoladowość (jeśli są też palone)</li>
-                    <li>Style belgijskie pokazują się teraz częściej</li>
-                    <li>Kalibracja kolorków (bardzo polecany/odradzany styl)</li>
-                    <li>Grodziskie jest już poprawnie wykluczane, jeśli nie chcemy piwa wędzonego</li>
+                    <li>Brak</li>
                 </ul>
 
                 <h5>Planowane usprawnienia (według priotytetu)</h5> 
                 <ul>
-                    <li>FEATURE: Jeśli style z pierwszych pozycji mają nieznaczne różnice punktowe, pokazuj je losowo</li>
+                    <li>FEATURE: Złączenie ciemnych imperiali w jedno (v0.5 nightly)</li>
+                    <li>FEATURE: Inna koncepcja pytania o goryczkę (goryczka DO lub skala suwakowa) (v0.6 nightly)</li>
+                    <li>FEATURE: Zapisywanie pól formularza w razie błędów (v0.6 nightly)</li>
+                    <li>FEATURE: Bootstrap Theme + Form (v0.1 beta)</li>
+                    <li>FEATURE: Inny układ wyników (v0.1 beta)</li>
+                    <li>FEATURE: Najczęściej polecane użytkowniom style (v0.2 beta)</li>
+                    <li>FEATURE: Mail z wynikiem na życzenie (v0.2 beta)</li>
+                    <li>FEATURE: Pole (0/1) "mail" w bazie logów (v0.2 beta)</li>
+                    <li>FEATURE: Dalsze prace z PK API</li>
+                    <li>FEATURE: Ratebeer API dla stylów, których nie ma w PK</li>
                     <li>FEATURE: Inny układ pytań o smaki</li>
-                    <li>FEATURE: Bootstrap Theme + Form</li>
-                    <li>FEATURE: Inny układ wyników</li>
-                    <li>FEATURE: Uzupełnienie synergii negatywnych</li> 
-                    <li>FEATURE: PolskiKraft API - Słowniki + wpięcie (kontroler)</li>
-                    <li>??? FEATURE: Możliwość wykluczania przez użytkownika całych stylów, które już zna (na początek IPA)</li>
-                    <li>??? FEATURE: Przełącznik w mocy piw</li>
-                    <li>FEATURE: Pole (0/1) "mail" w bazie logów</li>
                     <li>FEATURE: Pokazywanie tylko jednej nazwy stylu + dymek z nazwą alternatywną i PL</li>
-                    <li>FEATURE: Zapisywanie pól formularza w razie błędów</li>
-                    <li>FEATURE: Mail z wynikiem na życzenie</li>
                     <li>FEATURE: Czy danych piw możesz napić się w okolicy? (OnTap API)</li>
-                    <li>FEATURE: Najczęściej polecane użytkowniom style</li>
                     <li>FEATURE: Facebook Tags, SEO oraz Twitter Cards</li>
                 </ul>
             </div>

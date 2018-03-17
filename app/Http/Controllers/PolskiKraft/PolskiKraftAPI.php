@@ -20,20 +20,23 @@ class PolskiKraftAPI
 
     }
 
-    public static function getBeersInfo(array $beer_ids) : ?array {
+    public static function getBeerInfo(int $beer_id) {
 
         $ids_to_show = array();
 
-        foreach ($beer_ids AS $id) {
-            if (array_key_exists($id, Dictionaries::$ID)) {
-                $ids_to_show[] = Dictionaries::$ID[$id];
-            }
+        if (array_key_exists($beer_id, Dictionaries::$ID)) {
+            $beer_id = Dictionaries::$ID[$beer_id];
+        } else {
+            return null;
         }
 
-        for ($i = 0; $i < count($ids_to_show); $i++) {
-            $content = 'https://www.polskikraft.pl/openapi/style/'.$ids_to_show[$i].'/examples';
-            $request[$i] = json_decode(file_get_contents($content));
-        }
+        $content = 'https://www.polskikraft.pl/openapi/style/'.$beer_id.'/examples';
+        $request = json_decode(file_get_contents($content));
+
+        $del1 = mt_rand(0, 4);
+        unset($request[$del1]);
+        $del2 = mt_rand(0, 3);
+        unset($request[$del2]);
 
         if (!empty($request)) {
             return $request;
