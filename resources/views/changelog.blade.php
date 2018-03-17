@@ -111,6 +111,7 @@
 
                 <h5>Planowane usprawnienia (według priotytetu)</h5> 
                 <ul>
+                    <li>BUGFIX: Czasami pokazują się mniej niż 3 piwa polecane</li>
                     <li>FEATURE: Złączenie ciemnych imperiali w jedno (v0.5 nightly)</li>
                     <li>FEATURE: Inna koncepcja pytania o goryczkę (goryczka DO lub skala suwakowa) (v0.6 nightly)</li>
                     <li>FEATURE: Zapisywanie pól formularza w razie błędów (v0.6 nightly)</li>

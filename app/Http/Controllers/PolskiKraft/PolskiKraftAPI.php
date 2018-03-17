@@ -37,7 +37,7 @@ class PolskiKraftAPI
         unset($request[$del1]);
         $del2 = mt_rand(0, 3);
         unset($request[$del2]);
-
+        
         if (!empty($request)) {
             return $request;
         } else {

@@ -26,9 +26,9 @@ class StylePickerController extends Controller
     */
     public function showQuestions(bool $errors = false) {
 
-    	if ($_SERVER['REMOTE_ADDR'] != '89.64.48.129') {
-    		die('Wprowadzam zmiany. Widzimy się o 14:00');
-    	}
+    	// if ($_SERVER['REMOTE_ADDR'] != '89.64.48.129') {
+    	// 	die('Wprowadzam zmiany. Widzimy się o 14:00');
+    	// }
 
     	// if ($_SERVER['REMOTE_ADDR'] == '89.64.48.198') {
     	// 	$API = file_get_contents('https://www.polskikraft.pl/openapi/style/list');
