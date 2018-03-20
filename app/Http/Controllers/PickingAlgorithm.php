@@ -442,16 +442,17 @@ class PickingAlgorithm extends Controller
     	$this->checkDoubles();
 		$this->checkMargin();
 		$this->mustTakeMustAvoid();
+		$this->checkShuffleStyles();
 
-    	if ($_SERVER['REMOTE_ADDR'] == '89.64.48.176') {
-			$this->checkShuffleStyles();
-    		$this->removePoints();
+		if ($_SERVER['REMOTE_ADDR'] == '89.64.48.176') {
     		echo "<br /><br /><br />";
 	    	echo "Tablica ze stylami do wybrania i punktami: <br />";
 	    	$this->printPre($this->included_ids);
 	    	echo "<br />Tablica ze stylami do odrzucenia i punktami: <br />";
 	    	$this->printPre($this->excluded_ids);
     	}
+
+    	$this->removePoints();
 
     	for ($i = 0; $i < $this->cnt_styles_to_pick; $i++) {
     		$style_to_take = $this->style_to_take[] = $this->included_ids[$i];

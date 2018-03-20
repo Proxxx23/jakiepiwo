@@ -109,18 +109,16 @@
                     <li>FEATURE: Ile razy The Gustator pomógł odwiedzającym? (v 0.1 beta)</li>
                     <li>FEATURE: Bootstrap Theme + Form (v0.1 beta)</li>
                     <li>FEATURE: Inny układ wyników (v0.1 beta)</li>
-                    <li>FEATURE: Próba wyświetlania stylów losowo, jeśli mają bardzo zbliżoną punktację (v 0.2 beta)</li>
-                    <li>FEATURE: Najczęściej polecane użytkowniom style (v0.2 beta)</li>
-                    <li>FEATURE: Mail z wynikiem na życzenie (v0.2 beta)</li>
-                    <li>FEATURE: Pole (0/1) "mail" w bazie logów (v0.2 beta)</li>
+                    <li>FEATURE: Facebook Tags, SEO oraz Twitter Cards (v0.1 beta)</li>
+                    <li>FEATURE: Rotacyjne artykuły o piwie pod wynikami (v0.1 beta)</li>
+                    <li>FEATURE: Mail z wynikiem na życzenie (v0.1 beta)</li>
+                    <li>FEATURE: Pole (0/1) "mail" w bazie logów (v0.1 beta)</li>
                     <li>FEATURE: Dalsze prace z PK API</li>
                     <li>FEATURE: Ratebeer API dla stylów, których nie ma w PK</li>
                     <li>FEATURE: Inny układ pytań o smaki</li>
                     <li>FEATURE: Pokazywanie tylko jednej nazwy stylu + dymek z nazwą alternatywną i PL</li>
                     <li>FEATURE: Czy danych piw możesz napić się w okolicy? (OnTap API)</li>
-                    <li>FEATURE: Facebook Tags, SEO oraz Twitter Cards</li>
                     <li>FEATURE: Krótkie opisy stylów</li>
-                    <li>FEATURE: Rotacyjne artykuły o piwie pod wynikami</li>
                 </ul>
             </div>
     </body>
