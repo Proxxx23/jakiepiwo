@@ -22,7 +22,7 @@ class PickingAlgorithm extends Controller
 	// Czy wolałbyś poznać wyłącznie style, które potrafią zszokować?
 	protected $to_include3 = array('tak' => '1:1.5,2:2.5,3:2.5,5:2.5,6:2.5,7:2.5,8:2.5,15:2.5,16:2.5,23:2.5,24:2.5,36:2.5,37:2.5,40:2.5,42:2.5,44:2.5,50:2.5,51:2.5,55:2.5,56:2.5,57:2.5,58:2.5,59:2.5,60:1.5,61:1.5,62:2.5,63:2.5,73:2.5,74:2.5,75:2.5', 'nie' => '');
 
-	// Chcesz czegoś lekkiego do ugaszenia pragnienia, czy złożonego i degustacyjnego? - TODO na zakresach z beer_flavours lub API PolskiKraft
+	// Chcesz czegoś lekkiego do ugaszenia pragnienia, czy złożonego i degustacyjnego?
 	protected $to_include4 = array('coś lekkiego' => '9,10,11,12,13,21,25,32,33,40,45,47,51,52', 
 									'coś pośrodku' => '14,15,16,19,20,25,27,28,30,34,35,38,42,44,45,47,48,49,53,55,56,57,58,59,60,61,64', 
 									'coś złożonego' => '1,2,3,5,6,7,8,22,23,24,36,37,39,42,44,50,62,63');
@@ -85,6 +85,7 @@ class PickingAlgorithm extends Controller
 	private $must_avoid = false; // TODO: Obsługa wszystkich 3 stylów
 
 	public $BA = false; // BA beers
+	private $shuffled = false;
 
 	private $cnt_styles_to_pick = 3;
 	private $cnt_styles_to_avoid = 3;
@@ -324,26 +325,56 @@ class PickingAlgorithm extends Controller
 
 
 	/**
-	* If first styles has less than 95% margin - shuffle this part of an array
+	* Remove points assigned to beer ids
 	*/
-	/* private function shuffleAnswers() : void {
+	private function removePoints() {
+
+		$this->included_ids = ($this->shuffled === false) ? array_keys($this->included_ids) : array_values($this->included_ids);
+		$this->excluded_ids = array_keys($this->excluded_ids);
+
+	}
+
+
+	/*
+	* Shuffle n-elements of an included_ids array
+	*/
+	private function shuffleStyles($toshuffle) {
+
+		$this->included_ids = array_keys(array_slice($this->included_ids, 0, $toshuffle, true));
+		shuffle($this->included_ids);
+
+	}
+
+
+	/**
+	* Checks how many styles should be shuffled.
+	* Margin between first and n-th style should be less than 90% of points).
+	*/
+	 private function checkShuffleStyles() : void {
 
 		$first_style_index = key(array_slice($this->included_ids, 0, 1, true));
 		$first_style_pts = array_values(array_slice($this->included_ids, 0, 1, true));
+
+		$toshuffle = 0;
 
 		for ($i = 1; $i <= count($this->included_ids); $i++) {
 
 			$nth_style_index = key(array_slice($this->included_ids, $i, 1, true));
 			$nth_style_pts = array_values(array_slice($this->included_ids, $i, 1, true));
 
-			if ($nth_style_pts[0] >= $first_style_pts[0] * 0.80) {
+			if ($nth_style_pts[0] >= $first_style_pts[0] * 0.90) {
 				//echo $nth_style_pts[0] . ' >= ' . $first_style_pts[0] * 0.80;
-				$this->toshuffle++;
+				$toshuffle++;
 			}
 
 		}
 
-	} */
+		if ($toshuffle > 4) {
+			$this->shuffleStyles($toshuffle);
+			$this->shuffled = true;
+		}
+
+	} 
     
     /**
     * Heart of an algorithm
@@ -412,21 +443,24 @@ class PickingAlgorithm extends Controller
 		$this->checkMargin();
 		$this->mustTakeMustAvoid();
 
-    	if ($_SERVER['REMOTE_ADDR'] == '89.64.48.129') {
-    		// echo "<br /><br /><br />";
-	    	// echo "Tablica ze stylami do wybrania i punktami: <br />";
-	    	// $this->printPre($this->included_ids);
-	    	// echo "<br />Tablica ze stylami do odrzucenia i punktami: <br />";
-	    	// $this->printPre($this->excluded_ids);
+    	if ($_SERVER['REMOTE_ADDR'] == '89.64.48.176') {
+			$this->checkShuffleStyles();
+    		$this->removePoints();
+    		echo "<br /><br /><br />";
+	    	echo "Tablica ze stylami do wybrania i punktami: <br />";
+	    	$this->printPre($this->included_ids);
+	    	echo "<br />Tablica ze stylami do odrzucenia i punktami: <br />";
+	    	$this->printPre($this->excluded_ids);
     	}
 
     	for ($i = 0; $i < $this->cnt_styles_to_pick; $i++) {
-    		$style_to_take = $this->style_to_take[] = key(array_slice($this->included_ids, $i, 1, true));
+    		$style_to_take = $this->style_to_take[] = $this->included_ids[$i];
     		$buythis[] = DB::select("SELECT * FROM beers WHERE id = $style_to_take");
     	}   	
 
+
     	for ($i = 0; $i < $this->cnt_styles_to_avoid; $i++) {
-    		$style_to_avoid = $this->style_to_avoid[] = key(array_slice($this->excluded_ids, $i, 1, true));
+    		$style_to_avoid = $this->style_to_avoid[] = $this->excluded_ids[$i];
     		$avoidthis[] = DB::select("SELECT * FROM beers WHERE id = $style_to_avoid");	
     	}
 

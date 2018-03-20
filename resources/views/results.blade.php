@@ -6,7 +6,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>Style piwne dla Ciebie - The Gustator v0.4 nightly</title>
+        <title>Style piwne dla Ciebie - The Gustator v0.6 nightly</title>
 
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
@@ -121,10 +121,12 @@
                                 @if ($v->name_pl != '') / {{$v->name_pl}} @endif</p>
 
                                 <p>
-                                    @for ($u = 0; $u < 3; $u++)
-                                        @if ($PK_style_take[$i][$u] != '')
-                                        @if ($u == 0)<h5>Polecane piwa w tym stylu</h5>@endif
-                                            <a href="{{$PK_style_take[$i][$u]->web_url}}" target="_blank" title="Zobacz {{$PK_style_take[$i][$u]->title}} na PolskiKraft.pl">{{$PK_style_take[$i][$u]->title}}</a> z {{$PK_style_take[$i][$u]->subtitle}} <img src="images/info-icon-16-16.png" class="tltp" style="cursor: help !important;" data-html="true" data-toggle="tooltip" data-placement="right" title="<img src='{{$PK_style_take[$i][$u]->photo_thumbnail_url}}'' />"> <br />
+                                    @for ($u = 0; $u < 5; $u++)
+                                        @if ($PK_style_take[$i] != '')
+                                            @if ($u == 0)<h5>Polecane piwa w tym stylu</h5>@endif
+                                                @if ($PK_style_take[$i][$u] != '')
+                                                    <a href="{{$PK_style_take[$i][$u]->web_url}}" target="_blank" title="Zobacz {{$PK_style_take[$i][$u]->title}} na PolskiKraft.pl">{{$PK_style_take[$i][$u]->title}}</a> z {{$PK_style_take[$i][$u]->subtitle}} <img src="images/info-icon-16-16.png" class="tltp" style="cursor: help !important;" data-html="true" data-toggle="tooltip" data-placement="right" title="<img src='{{$PK_style_take[$i][$u]->photo_thumbnail_url}}'' />"> <br />
+                                                @endif
                                         @endif
                                     @endfor
                                 </p>

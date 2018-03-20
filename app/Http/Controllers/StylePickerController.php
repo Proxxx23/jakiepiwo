@@ -26,15 +26,8 @@ class StylePickerController extends Controller
     */
     public function showQuestions(bool $errors = false) {
 
-    	// if ($_SERVER['REMOTE_ADDR'] != '89.64.48.129') {
-    	// 	die('Wprowadzam zmiany. Widzimy się o 14:00');
-    	// }
-
-    	// if ($_SERVER['REMOTE_ADDR'] == '89.64.48.198') {
-    	// 	$API = file_get_contents('https://www.polskikraft.pl/openapi/style/list');
-    	// 	$API_example = file_get_contents('https://www.polskikraft.pl/openapi/style/80/examples');
-    	// 	$json_API = json_decode($API);
-    	// 	var_dump($json_API);
+    	// if ($_SERVER['REMOTE_ADDR'] != '89.64.48.176') {
+    	// 	die('Prace serwisowe nad v 0.6 nightly. Serwis wróci do działania o 20:00.');
     	// }
 
         if ($errors === true) {

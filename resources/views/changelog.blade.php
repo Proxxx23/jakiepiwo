@@ -5,7 +5,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>The Gustator v0.4 nightly - changelog</title>
+        <title>The Gustator v0.6 nightly - changelog</title>
 
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
@@ -90,33 +90,26 @@
         </style>
     </head>
     <body><div class="changelog">
-                <h3>Changelog v0.4 nightly (17.03.2018 r.)</h3>
+                <h3>Changelog v0.6 nightly (20.03.2018 r.)</h3>
                 <h5>Najnowsze zmiany i funkcje</h5>
                 <ul>
-                    <li>Usunięto 8 stylów piwnych</li>
-                    <li>Bitter / ESB jako jeden styl</li>
-                    <li>Nowe style: Blonde, Belgian Strong Ale, American Wheat, Oatmeal Stout, Pale Ale, Milkshake IPA, Coffee Stout, Rye Porter, Bock</li>
-                    <li>Synergie dla nowych stylów</li>
-                    <li>Nowy układ pytań</li>
-                    <li>PolskiKraft API - Słowniki + gotowy kontroler</li>
-                    <li>Propozycje najlepiej ocenianych piw w danym stylu z PolskiKraft.pl wraz z miniaturkami w tooltipie</li>
                     <li>Debug odpowiedzi z formularza w wynikach (v 0.5)</li>
                     <li>Uzupełnienie negatywnych synergii (v 0.5)</li>
                     <li>Piwa polecane wyświetlają się losowo z puli (v 0.5)</li>
+                    <li>Jeżeli między polecanymi stylami jest marginalna różnica punktowa, będą wyświetlane losowo dla większej różnorodności przedstawianych stylów (v 0.6)</li>
                 </ul>
                 <h5>Bugfixes</h5>
                 <ul>
-                    <li>Brak</li>
+                    <li>Czasami pokazywały się mniej niż 3 piwa polecane (v 0.5)</li>
                 </ul>
 
                 <h5>Planowane usprawnienia (według priotytetu)</h5> 
                 <ul>
-                    <li>BUGFIX: Czasami pokazują się mniej niż 3 piwa polecane</li>
-                    <li>FEATURE: Złączenie ciemnych imperiali w jedno (v0.5 nightly)</li>
-                    <li>FEATURE: Inna koncepcja pytania o goryczkę (goryczka DO lub skala suwakowa) (v0.6 nightly)</li>
-                    <li>FEATURE: Zapisywanie pól formularza w razie błędów (v0.6 nightly)</li>
+                    <li>FEATURE: Zapisywanie pól formularza w razie błędów i walidacja jQuery (v 0.1 beta)</li>
+                    <li>FEATURE: Ile razy The Gustator pomógł odwiedzającym? (v 0.1 beta)</li>
                     <li>FEATURE: Bootstrap Theme + Form (v0.1 beta)</li>
                     <li>FEATURE: Inny układ wyników (v0.1 beta)</li>
+                    <li>FEATURE: Próba wyświetlania stylów losowo, jeśli mają bardzo zbliżoną punktację (v 0.2 beta)</li>
                     <li>FEATURE: Najczęściej polecane użytkowniom style (v0.2 beta)</li>
                     <li>FEATURE: Mail z wynikiem na życzenie (v0.2 beta)</li>
                     <li>FEATURE: Pole (0/1) "mail" w bazie logów (v0.2 beta)</li>
@@ -126,6 +119,8 @@
                     <li>FEATURE: Pokazywanie tylko jednej nazwy stylu + dymek z nazwą alternatywną i PL</li>
                     <li>FEATURE: Czy danych piw możesz napić się w okolicy? (OnTap API)</li>
                     <li>FEATURE: Facebook Tags, SEO oraz Twitter Cards</li>
+                    <li>FEATURE: Krótkie opisy stylów</li>
+                    <li>FEATURE: Rotacyjne artykuły o piwie pod wynikami</li>
                 </ul>
             </div>
     </body>

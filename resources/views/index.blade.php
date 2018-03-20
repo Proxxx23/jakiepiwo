@@ -6,7 +6,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>The Gustator v0.4 nightly</title>
+        <title>The Gustator v0.6 nightly</title>
 
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
@@ -123,7 +123,7 @@
     <body>
         <div class="flex-center">
             <div class="content">
-                <h1>The Gustator v0.4 nightly <a href="/changelog" target="_blank">(changelog)</a></h1>
+                <h1>The Gustator v0.6 nightly <a href="/changelog" target="_blank">(changelog)</a></h1>
                 <!-- Error handling  -->
                 
                 @if ($errors_count > 0)
@@ -138,7 +138,7 @@
                     {{ csrf_field() }}
                    
                 @if ($lastvisit_name)<h3> Czołem, {{$lastvisit_name}}! Miło, że znów tu zaglądasz!</h3>@endif 
-                <p>The Gustator to narzędzie, które na podstawie Twoich preferencji smakowych postara się określić jakie piwa powinny Ci zasmakować. Odpowiedz na wszystkie poniższe pytania, aby już nigdy nie mieć problemu z wyborem piwa w sklepie</p>
+                <p>The Gustator to wirtualny kolega, który podstawie Twoich preferencji poleci piwa dopasowane do Ciebie. Odpowiedz na wszystkie poniższe pytania, aby już nigdy nie mieć problemu z wyborem piwa w sklepie.</p>
 
                     @foreach ($questions as $index => $field)
                     <h3>{{$index}}. {{$field['question']}} 
@@ -147,11 +147,11 @@
                         @endif</h3>
                     
                         @if ($field['type'] === 1)  
-                         @foreach ($field['answers'] AS $ans)
-                            <label class="radio-inline">
-                                <input type="radio" name="answer-{{ $index }}" value="{{$ans}}" autocomplete="off" required>{{$ans}}
-                            </label>
-                         @endforeach
+                            @foreach ($field['answers'] AS $answer)
+                                <label class="radio-inline">
+                                    <input type="radio" name="answer-{{ $index }}" value="{{$answer}}" autocomplete="off" required>{{$answer}}
+                                </label>
+                            @endforeach
                          
                         @else
                             <label class="radio-inline"><input type="radio" name="answer-{{ $index }}" value="tak" autocomplete="off" required>tak</label>
@@ -167,10 +167,10 @@
                                 <label><input type="checkbox" name="sendMeAnEmail" value="Tak" disabled="disabled">Chcę otrzymać dodatkowego maila ze stylami i piwami wybranymi dla mnie <em>(nieaktywne)</em></label>
                             </div>
                             <div class="checkbox">
-                                <label><input type="checkbox" name="newsletter" value="Tak">Chcę otrzymywać <a href="http://piwolucja.pl/newsletter/" target="_blank">piwny newsletter</a></label>
+                                <label><input type="checkbox" name="newsletter" value="Tak">Chcę odebrać <a href="http://piwolucja.pl/felietony/piwny-ebook/" title="E-book: 15 pytań o piwo wraz z konkretnymi odpowiedziami" target="_blank">darmowego e-booka</a> i zapisać się na <a href="http://piwolucja.pl/newsletter/" title="Newsletter Piwolucja.pl" target="_blank">piwny newsletter</a></label>
                             </div>
                             <div class="checkbox">
-                                <label><input type="checkbox" name="debug" value="Tak">Debug</label>
+                                <label><input type="checkbox" name="debug" value="Tak">Pokazuj debug</label>
                             </div>
                             <input type="submit" class="btn btn-primary btn-lg btn-block" name="send" value="Wyślij">
                         </div>
