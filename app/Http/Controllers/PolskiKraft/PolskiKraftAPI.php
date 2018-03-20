@@ -33,6 +33,10 @@ class PolskiKraftAPI
         $content = 'https://www.polskikraft.pl/openapi/style/'.$beer_id.'/examples';
         $request = json_decode(file_get_contents($content));
 
+        if (count($request) == 0) {
+            return null;
+        }
+
         $del1 = mt_rand(0, count($request)-1);
         unset($request[$del1]);
         $del2 = mt_rand(0, count($request)-1);

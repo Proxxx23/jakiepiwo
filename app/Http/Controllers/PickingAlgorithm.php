@@ -392,7 +392,6 @@ class PickingAlgorithm extends Controller
 	    			$this->BA = false;
 	    		}
 
-	    		//TODO: Refactor
 	    		if ($_POST['answer-13'] == 'nie ma mowy') {
 	    			$to_excl = array(40, 42, 44, 51, 56);
 	    			$this->excludeFromRecommended($to_excl);
