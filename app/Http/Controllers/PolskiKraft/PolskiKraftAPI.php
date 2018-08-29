@@ -8,32 +8,30 @@ use App\Http\Controllers\PolskiKraft\Dictionaries as Dictionaries;
 class PolskiKraftAPI
 {
 
-    public static function getBeersList() {
+    public static function getBeersList(): ?array 
+    {
 
         $request = json_decode(file_get_contents("https://www.polskikraft.pl/openapi/style/list"));
-
         if (!empty($request)) {
             return $request;
-        } else {
-            return false;
-        }
+        } 
+
+        return null;
 
     }
 
-    public static function getBeerInfo(int $beer_id) {
+    public static function getBeerInfo(int $beer_id): ?array 
+    {
 
-        $ids_to_show = array();
-
-        if (array_key_exists($beer_id, Dictionaries::$ID)) {
-            $beer_id = Dictionaries::$ID[$beer_id];
-        } else {
+        if (!array_key_exists($beer_id, Dictionaries::$ID)) {
             return null;
         }
 
-        $content = 'https://www.polskikraft.pl/openapi/style/'.$beer_id.'/examples';
+        $beerId = Dictionaries::$ID[$beer_id];
+        $content = 'https://www.polskikraft.pl/openapi/style/'.$beerId.'/examples';
         $request = json_decode(file_get_contents($content));
 
-        if (count($request) == 0) {
+        if (empty($request) || null === $request) {
             return null;
         }
 
@@ -42,12 +40,8 @@ class PolskiKraftAPI
         $del2 = mt_rand(0, count($request)-1);
         unset($request[$del2]);
         
-        if (!empty($request)) {
-            return $request;
-        } else {
-            return null;
-        }
-
+        return $request;
+        
     }
 
 

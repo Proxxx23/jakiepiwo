@@ -82,13 +82,13 @@
                 font-weight: bold;
             }
 
-            #must_take {
+            #mustTake {
                 font-size: 22px !important;
                 font-weight: bold !important;
                 color: #8FBC8F;
             }
 
-            #must_avoid {
+            #mustAvoid {
                 font-size: 22px !important;
                 color: #aa3311;
                 font-weight: bold !important;
@@ -111,21 +111,21 @@
 
                     <h1>@if ($username != '')Hej, {{$username}}!@endif Piwa w tych stylach powinny Ci zasmakować</h1>
 
-                    @for ($i = 0; $i < count($buythis); $i++)
-                        @foreach ($buythis[$i] as $k => $v)
+                    @for ($i = 0; $i < count($buyThis); $i++)
+                        @foreach ($buyThis[$i] as $k => $v)
 
                             @if ($i < 3)
-                            <p @if ($must_take && $i == 0) id="must_take" @else id="take" @endif>
+                            <p @if ($mustTake && $i == 0) id="mustTake" @else id="take" @endif>
                                 {{$v->name}} 
                                 @if ($v->name2 != '') / {{$v->name2}} @endif 
                                 @if ($v->name_pl != '') / {{$v->name_pl}} @endif</p>
 
                                 <p>
                                     @for ($u = 0; $u < 5; $u++)
-                                        @if ($PK_style_take[$i] != '')
+                                        @if ($PKStyleTake[$i] != '')
                                             @if ($u == 0)<h5>Polecane piwa w tym stylu</h5>@endif
-                                                @if ($PK_style_take[$i][$u] != '')
-                                                    <a href="{{$PK_style_take[$i][$u]->web_url}}" target="_blank" title="Zobacz {{$PK_style_take[$i][$u]->title}} na PolskiKraft.pl">{{$PK_style_take[$i][$u]->title}}</a> z {{$PK_style_take[$i][$u]->subtitle}} <img src="images/info-icon-16-16.png" class="tltp" style="cursor: help !important;" data-html="true" data-toggle="tooltip" data-placement="right" title="<img src='{{$PK_style_take[$i][$u]->photo_thumbnail_url}}'' />"> <br />
+                                                @if ($PKStyleTake[$i][$u] != '')
+                                                    <a href="{{$PKStyleTake[$i][$u]->web_url}}" target="_blank" title="Zobacz {{$PKStyleTake[$i][$u]->title}} na PolskiKraft.pl">{{$PKStyleTake[$i][$u]->title}}</a> z {{$PKStyleTake[$i][$u]->subtitle}} <img src="images/info-icon-16-16.png" class="tltp" style="cursor: help !important;" data-html="true" data-toggle="tooltip" data-placement="right" title="<img src='{{$PKStyleTake[$i][$u]->photo_thumbnail_url}}'' />"> <br />
                                                 @endif
                                         @endif
                                     @endfor
@@ -137,9 +137,9 @@
                                 @if ($v->name_pl != '') / {{$v->name_pl}} @endif</p>
 
                     @for ($u = 0; $u <= 4; $u++)
-                        @if ($PK_style_take[$i][$u] != '')
+                        @if ($PKStyleTake[$i][$u] != '')
                             @if ($u == 0)<h5>Polecane piwa w tym stylu</h5>@endif
-                                <a href="{{$PK_style_take[$i][$u]->web_url}}" target="_blank" title="Zobacz {{$PK_style_take[$i][$u]->title}} na PolskiKraft.pl">{{$PK_style_take[$i][$u]->title}}</a> z {{$PK_style_take[$i][$u]->subtitle}} <img src="images/info-icon-16-16.png" class="tltp" style="cursor: help !important;" data-html="true" data-toggle="tooltip" data-placement="right" title="<img src='{{$PK_style_take[$i][$u]->photo_thumbnail_url}}'' />"><br />
+                                <a href="{{$PKStyleTake[$i][$u]->web_url}}" target="_blank" title="Zobacz {{$PKStyleTake[$i][$u]->title}} na PolskiKraft.pl">{{$PKStyleTake[$i][$u]->title}}</a> z {{$PKStyleTake[$i][$u]->subtitle}} <img src="images/info-icon-16-16.png" class="tltp" style="cursor: help !important;" data-html="true" data-toggle="tooltip" data-placement="right" title="<img src='{{$PKStyleTake[$i][$u]->photo_thumbnail_url}}'' />"><br />
                             @endif
                         @endfor
                         <br />
@@ -150,17 +150,17 @@
                     @endfor
 
                     <!-- TODO: tylko pod piwa rzeczywiście starzone w BA -->
-                    @if ($barrel_aged === true)
+                    @if ($barrelAged === true)
                         <br /><br /><p>Ponieważ lubisz alkohole szlachetne, powinny zainteresować Cię piwa leżakowane w beczkach po trunkach takich jak whisky czy bourbon. Szukaj w sklepie piw z dopiskiem "barrel-aged" lub "BA" na etykiecie.</p>
                     @endif
 
                     <h1>Piwa w tych stylach raczej nie przypadną Ci do gustu</h1>
 
-                    @for ($i = 0; $i < count($avoidthis); $i++)
-                        @foreach ($avoidthis[$i] as $k => $v)
+                    @for ($i = 0; $i < count($avoidThis); $i++)
+                        @foreach ($avoidThis[$i] as $k => $v)
 
                             @if ($i < 3)
-                            <p @if ($must_avoid && $i == 0) id="must_avoid" @else id="avoid" @endif>{{$v->name}} 
+                            <p @if ($mustAvoid && $i == 0) id="mustAvoid" @else id="avoid" @endif>{{$v->name}} 
                                 @if ($v->name2 != '') / {{$v->name2}} @endif 
                                 @if ($v->name_pl != '') / {{$v->name_pl}} @endif</p>
                             @else

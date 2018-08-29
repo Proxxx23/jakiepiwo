@@ -126,7 +126,7 @@
                 <h1>The Gustator v0.6 nightly <a href="/changelog" target="_blank">(changelog)</a></h1>
                 <!-- Error handling  -->
                 
-                @if ($errors_count > 0)
+                @if ($errorsCount > 0)
                 <h3>Błędy formularza</h3>
                     @foreach ($errors AS $error)
                         <p>{{$error}}</p><br/>
@@ -137,7 +137,7 @@
                     <form method="POST" action=" {{ action('StylePickerController@mix') }} ">
                     {{ csrf_field() }}
                    
-                @if ($lastvisit_name)<h3> Czołem, {{$lastvisit_name}}! Miło, że znów tu zaglądasz!</h3>@endif 
+                @if ($lastVisitName)<h3> Czołem, {{$lastVisitName}}! Miło, że znów tu zaglądasz!</h3>@endif 
                 <p>The Gustator to wirtualny kolega, który podstawie Twoich preferencji poleci piwa dopasowane do Ciebie. Odpowiedz na wszystkie poniższe pytania, aby już nigdy nie mieć problemu z wyborem piwa w sklepie.</p>
 
                     @foreach ($questions as $index => $field)

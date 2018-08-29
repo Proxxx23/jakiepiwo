@@ -16,9 +16,9 @@ use Mail;
 class StylePickerController extends Controller
 {
 
-    public $error_cnt = 0;
-	public $error_msg = array();
-	public $JSON_answers = '';
+    public $errorsCound = 0;
+	public $errorMesage = array();
+	public $JSONAnswers = '';
 
     /*
     * Show all the questions
@@ -31,9 +31,9 @@ class StylePickerController extends Controller
     	// }
 
         if ($errors === true) {
-    		return view('index', ['questions' => Questions::$questions, 'lastvisit_name' => $this->getUsername(), 'errors' => $this->error_msg, 'errors_count' => $this->error_cnt]);
+    		return view('index', ['questions' => Questions::$questions, 'lastvisitName' => $this->getUsername(), 'errors' => $this->errorMesage, 'errorsCount' => $this->errorsCound]);
     	} else {
-    		return view('index', ['questions' => Questions::$questions, 'lastvisit_name' => $this->getUsername(), 'errors' => '', 'errors_count' => 0]);
+    		return view('index', ['questions' => Questions::$questions, 'lastvisitName' => $this->getUsername(), 'errors' => '', 'errorsCount' => 0]);
     	}
 
     }
@@ -42,7 +42,7 @@ class StylePickerController extends Controller
     * Prepares a TPL for an e-mail
     * return: $mailTPL string
     */
-    private function prepareEmailTemplate() : string {
+    private function prepareEmailTemplate(): string {
 
     	$mailTPL = '';
     	$mailTPL .= '';
@@ -56,7 +56,7 @@ class StylePickerController extends Controller
     * Sends an e-mail if user wants to
     * return: bool
     */
-    public function sendEmail() : bool {
+    public function sendEmail(): bool {
 
     	$validation = new Validation();
 
@@ -78,12 +78,12 @@ class StylePickerController extends Controller
     /**
     * GitHub: https://github.com/drewm/mailchimp-api
     */
-    private function addEmailToNewsletterList($email) : void {
+    private function addEmailToNewsletterList($email): void {
 
     	$MailChimp = new MailChimp('d42a6395b596459d1e2c358525a019b7-us3');
-    	$list_id = 'e51bd39480';
+    	$listId = 'e51bd39480';
 
-		$result = $MailChimp->post("lists/$list_id/members", [
+		$result = $MailChimp->post("lists/$listId/members", [
 			'email_address' => $email,
 			'status'        => 'pending',
 		]);
@@ -92,24 +92,22 @@ class StylePickerController extends Controller
 
     /*
     * Adds email to a Mailchimp list
-    * return $set_newsletter integer
+    * return $setNewsletter integer
     */
-    private function setNewsletter(?string $email) : int {
+    private function setNewsletter(?string $email): int {
 
     	$validation = new Validation();
 
     	if ($validation->validateEmail($email)) {
     		$this->addEmailToNewsletterList($email);
-    		$set_newsletter = 1;
-    	} else {
-    		$set_newsletter = 0;
-    	}
-
-    	return $set_newsletter;
+    		return (int)1;
+    	} 
+    	
+        return (int)0;
 
     }
 
-    public function prepareAnswers() : bool {
+    public function prepareAnswers(): bool {
 
     	$answers = array();
     	$validation = new Validation();
@@ -124,14 +122,12 @@ class StylePickerController extends Controller
 
     	}
 
-		$this->JSON_answers = json_encode($answers); //JSON $_POST answers
+		$this->JSONAnswers = json_encode($answers); //JSON $_POST answers
 
-		if ($this->JSON_answers !== '') {
-			return true;
-		} else {
-			$this->logError('Brak odpowiedzi na pytania!');
-			return false;
-		}
+        if ($this->JSONAnswers === '') {
+            $this->logError('Brak odpowiedzi na pytania!');
+            return false;
+        }
 
 		return true;
 
@@ -149,13 +145,13 @@ class StylePickerController extends Controller
 
     	$this->prepareAnswers();
 
-    	if (empty($this->error_msg)) {
-    		$insert_answers = DB::insert("INSERT INTO `user_answers` (name, e_mail, newsletter, answers, created_at) 
+    	if (empty($this->errorMesage)) {
+    		$insertAnswers = DB::insert("INSERT INTO `user_answers` (name, e_mail, newsletter, answers, created_at) 
     										VALUES 
     										(?, ?, ?, ?, ?)",
-    									[$name, $email, $newsletter, $this->JSON_answers, NOW()]);
+    									[$name, $email, $newsletter, $this->JSONAnswers, NOW()]);
 
-    		if ($insert_answers === true) {
+    		if ($insertAnswers === true) {
 
     			// Wyślij maila na prośbę
     			if ($email != '' && isset($_POST['sendMeAnEmail'])) { 
@@ -173,7 +169,7 @@ class StylePickerController extends Controller
 
     			// Algorytm wybiera piwa
     			$algorithm = new Algorithm();
-				return $algorithm->includeBeerIds($this->JSON_answers, $name, $email, $newsletter);
+				return $algorithm->includeBeerIds($this->JSONAnswers, $name, $email, $newsletter);
 
     		} else {
     			$this->logError('Błąd połączenia z bazą danych!', true);
@@ -190,15 +186,15 @@ class StylePickerController extends Controller
     */
     public function getUsername() : ?string {
 
-    	$last_visit = DB::select('SELECT `username` FROM `styles_logs` WHERE `ip_address` = "'.$_SERVER['REMOTE_ADDR'].'" AND `username` <> "" ORDER BY `created_at` DESC LIMIT 1');
+    	$lastVisit = DB::select('SELECT `username` FROM `styles_logs` WHERE `ip_address` = "'.$_SERVER['REMOTE_ADDR'].'" AND `username` <> "" ORDER BY `created_at` DESC LIMIT 1');
 
-    	if ($last_visit) {
-			$v = get_object_vars($last_visit[0]);
+    	if ($lastVisit) {
+			$v = get_object_vars($lastVisit[0]);
 			return $v['username'];
-		} else {
-			return null;
-		}
+		} 
 
+        return null;
+		
     }
 
 	/**
@@ -226,8 +222,8 @@ class StylePickerController extends Controller
     	}
 
     	$this->logErrorToDB($message);
-    	array_push($this->error_msg, $message);
-    	$this->error_cnt++;
+    	array_push($this->errorMesage, $message);
+    	$this->errorsCound++;
 
     }
 

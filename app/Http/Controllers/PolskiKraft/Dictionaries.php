@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 class Dictionaries
 {
 
-    public static $ID = array(
+    public static $ID = [
         1 => 8, //American IPA
         2 => 63,// Belgian IPA
         3 => 15, // Black IPA
@@ -72,8 +72,8 @@ class Dictionaries
         //73 => '', //Milkshake IPA
         //74 => '', // Coffee Stout
         //75 => '', // Rye Porter
-        76 => 110 // Bock
-        );
+        76 => 110, // Bock
+    ];
 
 
 }
