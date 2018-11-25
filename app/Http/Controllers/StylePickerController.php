@@ -13,16 +13,16 @@ use App\Styles;
 use \DrewM\MailChimp\MailChimp;
 use Mail;
 
-class StylePickerController extends Controller
+final class StylePickerController extends Controller
 {
 
-    public $errorsCound = 0;
-	public $errorMesage = array();
-	public $JSONAnswers = '';
+    private $errorsCound = 0;
+	private $errorMesage = array();
+	private $JSONAnswers = '';
 
-    /*
+    /**
     * Show all the questions
-    * return: view
+    * @Get('/questions')
     */
     public function showQuestions(bool $errors = false) {
 
@@ -38,9 +38,9 @@ class StylePickerController extends Controller
 
     }
 
-    /*
+    /**
     * Prepares a TPL for an e-mail
-    * return: $mailTPL string
+    * @return null|string $mailTPL
     */
     private function prepareEmailTemplate(): string {
 
@@ -52,9 +52,9 @@ class StylePickerController extends Controller
 
     }
 
-    /*
+    /**
     * Sends an e-mail if user wants to
-    * return: bool
+    * @return bool
     */
     public function sendEmail(): bool {
 
@@ -90,9 +90,9 @@ class StylePickerController extends Controller
 
     }
 
-    /*
+    /**
     * Adds email to a Mailchimp list
-    * return $setNewsletter integer
+    * @return int $setNewsletter
     */
     private function setNewsletter(?string $email): int {
 
@@ -133,8 +133,11 @@ class StylePickerController extends Controller
 
     }
 
-    // Wstawia do bazy odpowiedzi użytkownika
-    // Rozdzielić na osobną funkcjędo bazy, osobną do wywołania innych rzeczy
+    /**
+    * Wstawia do bazy odpowiedzi użytkownika
+    * Rozdzielić na osobną funkcję do bazy, osobną do wywołania innych rzeczy
+    * @Get('/result')
+    */
     public function mix() {
 
     	$validation = new Validation();
