@@ -21,9 +21,12 @@ final class StylePickerController extends Controller
 	private $JSONAnswers = '';
 
     /**
-    * Show all the questions
-    * @Get('/questions')
-    */
+     * Show all the questions
+     * @Get('/questions')
+     *
+     * @param bool $errors
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function showQuestions(bool $errors = false) {
 
     	// if ($_SERVER['REMOTE_ADDR'] != '89.64.48.176') {
@@ -32,15 +35,15 @@ final class StylePickerController extends Controller
 
         if ($errors === true) {
     		return view('index', ['questions' => Questions::$questions, 'lastvisitName' => $this->getUsername(), 'errors' => $this->errorMesage, 'errorsCount' => $this->errorsCound]);
-    	} else {
-    		return view('index', ['questions' => Questions::$questions, 'lastvisitName' => $this->getUsername(), 'errors' => '', 'errorsCount' => 0]);
     	}
+
+        return view('index', ['questions' => Questions::$questions, 'lastvisitName' => $this->getUsername(), 'errors' => '', 'errorsCount' => 0]);
 
     }
 
     /**
     * Prepares a TPL for an e-mail
-    * @return null|string $mailTPL
+    * @return string $mailTPL
     */
     private function prepareEmailTemplate(): string {
 
@@ -68,17 +71,17 @@ final class StylePickerController extends Controller
     	if ($validation->validateEmail()) {
     		mail($_POST['email'], $subject, $this->prepareEmailTemplate(), $headers);
     		return true;
-    	} else {
-    		$this->logError('Błędny adres e-mail!');
-    		return false;
     	}
+
+        $this->logError('Błędny adres e-mail!');
+        return false;
 
     }
 
     /**
     * GitHub: https://github.com/drewm/mailchimp-api
     */
-    private function addEmailToNewsletterList($email): void {
+    private function addEmailToNewsletterList(?string $email): void {
 
     	$MailChimp = new MailChimp('d42a6395b596459d1e2c358525a019b7-us3');
     	$listId = 'e51bd39480';
@@ -100,21 +103,24 @@ final class StylePickerController extends Controller
 
     	if ($validation->validateEmail($email)) {
     		$this->addEmailToNewsletterList($email);
-    		return (int)1;
+    		return 1;
     	} 
     	
-        return (int)0;
+        return 0;
 
     }
 
+    /**
+     * @return bool
+     */
     public function prepareAnswers(): bool {
 
-    	$answers = array();
-    	$validation = new Validation();
+    	$answers = [];
+    	$questionsCount = count(Questions::$questions);
 
-    	for ($i = 1; $i <= count(Questions::$questions); $i++) {
+    	for ($i = 1; $i <= $questionsCount; $i++) {
     		
-	    	if (is_null($_POST['answer-'.$i.''])) { 
+	    	if (null === $_POST['answer-'.$i.'']) {
 	    		$this->logError('Pytanie numer ' . $i . ' jest puste. Odpowiedz na wszystkie pytania!');
 	    	}
 
@@ -143,8 +149,8 @@ final class StylePickerController extends Controller
     	$validation = new Validation();
 
     	$name = $_POST['username'] ?? 'Gość';
-    	($validation->validateEmail($_POST['email'])) ? $email = $_POST['email'] : $email = '';
-    	($_POST['newsletter']) ? $newsletter = 1 : $newsletter = 0;
+    	$validation->validateEmail($_POST['email']) ? $email = $_POST['email'] : $email = '';
+    	$_POST['newsletter'] ? $newsletter = 1 : $newsletter = 0;
 
     	$this->prepareAnswers();
 
@@ -157,13 +163,13 @@ final class StylePickerController extends Controller
     		if ($insertAnswers === true) {
 
     			// Wyślij maila na prośbę
-    			if ($email != '' && isset($_POST['sendMeAnEmail'])) { 
+    			if ($email !== '' && isset($_POST['sendMeAnEmail'])) {
     				$this->sendEmail($email);
     			}
 
     			// Dodaj do listy newsletterowej
     			if ($newsletter === 1) {
-    				if ($email != '') {
+    				if ($email !== '') {
     					$this->setNewsletter($email);
     				} else {
     					$this->logError('Jeżeli chcesz dopisać się do newslettera, musisz podać adres e-mail.');
@@ -216,8 +222,11 @@ final class StylePickerController extends Controller
     }
 
     /**
-    * Loguje wszelkie błędy
-    */
+     * Loguje wszelkie błędy
+     *
+     * @param string $message
+     * @param bool $die
+     */
     public function logError(string $message, bool $die = false) : void {
 
     	if ($die) {
