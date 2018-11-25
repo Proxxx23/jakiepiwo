@@ -2,6 +2,10 @@
 declare(strict_types=1);
 namespace App\Traits;
 
+/**
+ * Trait Questions
+ * @package App\Traits
+ */
 trait Questions {
 	
 	public static $questions = [

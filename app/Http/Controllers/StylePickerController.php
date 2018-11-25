@@ -9,6 +9,10 @@ use App\Traits\Questions;
 use \DrewM\MailChimp\MailChimp;
 use Mail;
 
+/**
+ * Class StylePickerController
+ * @package App\Http\Controllers
+ */
 final class StylePickerController extends Controller
 {
 
@@ -75,14 +79,16 @@ final class StylePickerController extends Controller
     }
 
     /**
-    * GitHub: https://github.com/drewm/mailchimp-api
-    */
+     * GitHub: https://github.com/drewm/mailchimp-api
+     *
+     * @param string|null $email
+     */
     private function addEmailToNewsletterList(?string $email): void {
 
     	$MailChimp = new MailChimp('d42a6395b596459d1e2c358525a019b7-us3');
     	$listId = 'e51bd39480';
 
-		$result = $MailChimp->post("lists/$listId/members", [
+    	$MailChimp->post("lists/$listId/members", [
 			'email_address' => $email,
 			'status'        => 'pending',
 		]);
@@ -97,7 +103,7 @@ final class StylePickerController extends Controller
 
     	$validation = new Validation();
 
-    	if ($validation->validateEmail($email)) {
+    	if ($validation->validateEmail()) {
     		$this->addEmailToNewsletterList($email);
     		return 1;
     	} 
@@ -145,22 +151,22 @@ final class StylePickerController extends Controller
     	$validation = new Validation();
 
     	$name = $_POST['username'] ?? 'Gość';
-    	$validation->validateEmail($_POST['email']) ? $email = $_POST['email'] : $email = '';
+    	$validation->validateEmail() ? $email = $_POST['email'] : $email = '';
     	$_POST['newsletter'] ? $newsletter = 1 : $newsletter = 0;
 
     	$this->prepareAnswers();
 
     	if (empty($this->errorMesage)) {
-    		$insertAnswers = DB::insert("INSERT INTO `user_answers` (name, e_mail, newsletter, answers, created_at) 
+    		$insertAnswers = DB::insert('INSERT INTO `user_answers` (name, e_mail, newsletter, answers, created_at) 
     										VALUES 
-    										(?, ?, ?, ?, ?)",
-    									[$name, $email, $newsletter, $this->JSONAnswers, NOW()]);
+    										(?, ?, ?, ?, ?)',
+    									[$name, $email, $newsletter, $this->JSONAnswers, now()]);
 
     		if ($insertAnswers === true) {
 
     			// Wyślij maila na prośbę
     			if ($email !== '' && isset($_POST['sendMeAnEmail'])) {
-    				$this->sendEmail($email);
+    				$this->sendEmail();
     			}
 
     			// Dodaj do listy newsletterowej
@@ -176,13 +182,15 @@ final class StylePickerController extends Controller
     			$algorithm = new Algorithm();
 				return $algorithm->includeBeerIds($this->JSONAnswers, $name, $email, $newsletter);
 
-    		} else {
-    			$this->logError('Błąd połączenia z bazą danych!', true);
-    			return $this->showQuestions(true);
     		}
-    	} else {
-    		return $this->showQuestions(true);
+
+            $this->logError('Błąd połączenia z bazą danych!', true);
+            return $this->showQuestions(true);
+
     	}
+
+    	return $this->showQuestions(true);
+
     }
 
 
@@ -210,8 +218,8 @@ final class StylePickerController extends Controller
 
     	try {
     		DB::insert("INSERT INTO error_logs (error, created_at) VALUES (:error, :created_at)",
-    					['error' => $message, 'created_at' => NOW()]);
-    	} catch (Exception $e) {
+    					['error' => $message, 'created_at' => now()]);
+    	} catch (\Exception $e) {
     		die($e->getMessage());
     	}
 
@@ -230,7 +238,7 @@ final class StylePickerController extends Controller
     	}
 
     	$this->logErrorToDB($message);
-    	array_push($this->errorMesage, $message);
+    	$this->errorMesage[] = $message;
     	$this->errorsCound++;
 
     }
