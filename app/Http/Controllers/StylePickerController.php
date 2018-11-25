@@ -2,14 +2,10 @@
 declare(strict_types=1);
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Http\Controllers\Controller;
 use App\Http\Controllers\ValidationController as Validation;
 use App\Http\Controllers\PickingAlgorithm as Algorithm;
-use App\Traits\Questions as Questions;
-use App\Http\Controllers\PolskiKraft\PolskiKraftAPI AS PKAPI;
-use App\Styles;
+use App\Traits\Questions;
 use \DrewM\MailChimp\MailChimp;
 use Mail;
 
@@ -17,7 +13,7 @@ final class StylePickerController extends Controller
 {
 
     private $errorsCound = 0;
-	private $errorMesage = array();
+	private $errorMesage = [];
 	private $JSONAnswers = '';
 
     /**
