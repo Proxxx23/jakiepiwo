@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 namespace App;
 
+/**
+ * Trait Questions
+ * @package App\Traits
+ */
 trait Questions {
 	public static $questions = [
 		1 => array("question" => "Czy smakują Ci piwa koncernowe dostępne w sklepach?", "type" => 0, "answers" => array('NO'), "tooltip" => "Chodzi o jasne piwa koncernowe, takie jak Lech, Kasztelan, Tyskie czy Specjal."),
