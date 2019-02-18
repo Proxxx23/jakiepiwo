@@ -9,8 +9,12 @@ class UserAnswers extends Authenticatable
 {
     use Notifiable;
 
+    /** @var array */
     protected $fillable = [
-        'name', 'email', 'newsletter', 'answers'
+        'name',
+        'email',
+        'newsletter',
+        'answers'
     ];
 
 }

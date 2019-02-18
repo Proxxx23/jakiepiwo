@@ -1,10 +1,11 @@
 <?php
 declare(strict_types=1);
+
 namespace App\Http\Controllers\PolskiKraft;
 
 class Dictionaries
 {
-
+    /** @var array */
     public static $ID = [
         1 => 8, //American IPA
         2 => 63,// Belgian IPA
@@ -50,7 +51,7 @@ class Dictionaries
         51 => 39, //Gose
         52 => 4, //Grodziskie
         53 => 7, // Roggen
-       // 55 => '', //Wild Ale
+        // 55 => '', //Wild Ale
         56 => 57, // Sour Ale
         57 => 135, // SMoked Ale
         //58 => '', // Smoked Baltic Porter
@@ -61,7 +62,7 @@ class Dictionaries
         //63 => '', // Smoked RIS
         64 => 66, // Brown Ale
         //65 => '', // Lite APA
-       // 67 => '', // Belgian Strong ALe
+        // 67 => '', // Belgian Strong ALe
         68 => 34, // Blonde
         69 => 28, // American WHeat
         70 => 26, // American Lager
@@ -72,6 +73,4 @@ class Dictionaries
         //75 => '', // Rye Porter
         76 => 110, // Bock
     ];
-
-
 }
