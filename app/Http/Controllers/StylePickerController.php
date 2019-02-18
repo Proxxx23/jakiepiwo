@@ -39,7 +39,15 @@ final class StylePickerController extends Controller
     		return view('index', ['questions' => Questions::$questions, 'lastvisitName' => $this->getUsername(), 'errors' => $this->errorMesage, 'errorsCount' => $this->errorsCount]);
     	}
 
-        return view('index', ['questions' => Questions::$questions, 'lastvisitName' => $this->getUsername(), 'errors' => '', 'errorsCount' => 0]);
+        $jsonQuestions = json_encode(Questions::$jsonReadyQuestions);
+
+        return view('index', [
+            'questions' => Questions::$questions,
+            'jsonQUestions' => $jsonQuestions,
+            'lastvisitName' => $this->getUsername(),
+            'errors' => '',
+            'errorsCount' => 0
+        ]);
 
     }
 
