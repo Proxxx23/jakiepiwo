@@ -1,19 +1,24 @@
 <?php
 declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
+use App\Questions;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\ValidationController as Validation;
 use App\Http\Controllers\PickingAlgorithm as Algorithm;
-use App\Traits\Questions;
 use \DrewM\MailChimp\MailChimp;
 use Mail;
 
 final class StylePickerController extends Controller
 {
+    use Questions;
 
-    private $errorsCound = 0;
+    /** @var int */
+    private $errorsCount = 0;
+    /** @var array */
 	private $errorMesage = [];
+	/** @var string */
 	private $JSONAnswers = '';
 
     /**
@@ -23,14 +28,15 @@ final class StylePickerController extends Controller
      * @param bool $errors
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function showQuestions(bool $errors = false) {
+    public function showQuestions(bool $errors = false)
+    {
 
     	// if ($_SERVER['REMOTE_ADDR'] != '89.64.48.176') {
     	// 	die('Prace serwisowe nad v 0.6 nightly. Serwis wróci do działania o 20:00.');
     	// }
 
         if ($errors === true) {
-    		return view('index', ['questions' => Questions::$questions, 'lastvisitName' => $this->getUsername(), 'errors' => $this->errorMesage, 'errorsCount' => $this->errorsCound]);
+    		return view('index', ['questions' => Questions::$questions, 'lastvisitName' => $this->getUsername(), 'errors' => $this->errorMesage, 'errorsCount' => $this->errorsCount]);
     	}
 
         return view('index', ['questions' => Questions::$questions, 'lastvisitName' => $this->getUsername(), 'errors' => '', 'errorsCount' => 0]);
@@ -41,21 +47,22 @@ final class StylePickerController extends Controller
     * Prepares a TPL for an e-mail
     * @return string $mailTPL
     */
-    private function prepareEmailTemplate(): string {
+    private function prepareEmailTemplate(): string
+    {
 
     	$mailTPL = '';
     	$mailTPL .= '';
     	$mailTPL .= '';
 
     	return $mailTPL;
-
     }
 
     /**
     * Sends an e-mail if user wants to
     * @return bool
     */
-    public function sendEmail(): bool {
+    public function sendEmail(): bool
+    {
 
     	$validation = new Validation();
 
@@ -70,14 +77,20 @@ final class StylePickerController extends Controller
     	}
 
         $this->logError('Błędny adres e-mail!');
+
         return false;
 
     }
 
     /**
-    * GitHub: https://github.com/drewm/mailchimp-api
-    */
-    private function addEmailToNewsletterList(?string $email): void {
+     * @documentation: https://github.com/drewm/mailchimp-api
+     *
+     * @param string|null $email
+     *
+     * @throws \Exception
+     */
+    private function addEmailToNewsletterList(?string $email): void
+    {
 
     	$MailChimp = new MailChimp('d42a6395b596459d1e2c358525a019b7-us3');
     	$listId = 'e51bd39480';
@@ -86,14 +99,17 @@ final class StylePickerController extends Controller
 			'email_address' => $email,
 			'status'        => 'pending',
 		]);
-
     }
 
     /**
-    * Adds email to a Mailchimp list
-    * @return int $setNewsletter
-    */
-    private function setNewsletter(?string $email): int {
+     * Adds email to a Mailchimp list
+     *
+     * @param string|null $email
+     * @return int
+     * @throws \Exception
+     */
+    private function setNewsletter(?string $email): int
+    {
 
     	$validation = new Validation();
 
@@ -103,13 +119,13 @@ final class StylePickerController extends Controller
     	} 
     	
         return 0;
-
     }
 
     /**
      * @return bool
      */
-    public function prepareAnswers(): bool {
+    public function prepareAnswers(): bool
+    {
 
     	$answers = [];
     	$questionsCount = count(Questions::$questions);
@@ -132,7 +148,6 @@ final class StylePickerController extends Controller
         }
 
 		return true;
-
     }
 
     /**
@@ -140,7 +155,8 @@ final class StylePickerController extends Controller
     * Rozdzielić na osobną funkcję do bazy, osobną do wywołania innych rzeczy
     * @Get('/result')
     */
-    public function mix() {
+    public function mix()
+    {
 
     	$validation = new Validation();
 
@@ -178,9 +194,11 @@ final class StylePickerController extends Controller
 
     		} else {
     			$this->logError('Błąd połączenia z bazą danych!', true);
+
     			return $this->showQuestions(true);
     		}
     	} else {
+
     		return $this->showQuestions(true);
     	}
     }
@@ -189,8 +207,8 @@ final class StylePickerController extends Controller
     /**
     * Gets name of an user using IP address
     */
-    public function getUsername() : ?string {
-
+    public function getUsername(): ?string
+    {
     	$lastVisit = DB::select('SELECT `username` FROM `styles_logs` WHERE `ip_address` = "'.$_SERVER['REMOTE_ADDR'].'" AND `username` <> "" ORDER BY `created_at` DESC LIMIT 1');
 
     	if ($lastVisit) {
@@ -199,22 +217,20 @@ final class StylePickerController extends Controller
 		} 
 
         return null;
-		
     }
 
 	/**
     * Zapisuje błędy do bazy
     */
     //TODO: Przebudować na zrzucanie wszystkich błędów w jednym insercie
-    public function logErrorToDB(string $message) : void {
-
+    public function logErrorToDB(string $message): void
+    {
     	try {
     		DB::insert("INSERT INTO error_logs (error, created_at) VALUES (:error, :created_at)",
     					['error' => $message, 'created_at' => NOW()]);
     	} catch (Exception $e) {
     		die($e->getMessage());
     	}
-
     }
 
     /**
@@ -223,17 +239,15 @@ final class StylePickerController extends Controller
      * @param string $message
      * @param bool $die
      */
-    public function logError(string $message, bool $die = false) : void {
-
+    public function logError(string $message, bool $die = false): void
+    {
     	if ($die) {
     		die($message);
     	}
 
     	$this->logErrorToDB($message);
-    	array_push($this->errorMesage, $message);
-    	$this->errorsCound++;
+    	$this->errorMesage[] =  $message;
+    	$this->errorsCount++;
 
     }
-
-
 }

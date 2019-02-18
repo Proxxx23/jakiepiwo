@@ -1,9 +1,11 @@
 <?php
 declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\PolskiKraft\PolskiKraftAPI AS PKAPI;
+use Illuminate\View\View;
 
 /**
  * Class PickingAlgorithm
@@ -11,7 +13,6 @@ use App\Http\Controllers\PolskiKraft\PolskiKraftAPI AS PKAPI;
  */
 class PickingAlgorithm extends Controller
 {
-
 	/**
 	* Array zawiera pary 'odpowiedź' => id_piw z bazy do zaliczenia w przypadku wyboru tej odpowiedzi + ew. dodatkowa siła
 	*/
@@ -135,12 +136,11 @@ class PickingAlgorithm extends Controller
      * @param array $idsToMultiply
      * @param float $multiplier
      */
-	private function positiveSynergy(array $idsToMultiply, float $multiplier): void {
-
+	private function positiveSynergy(array $idsToMultiply, float $multiplier): void
+    {
 		foreach ($idsToMultiply AS $id) {
 			$this->includedIds[$id] *= $multiplier;
 		}
-		
 	}
 
     /**
@@ -150,12 +150,11 @@ class PickingAlgorithm extends Controller
      * @param array $idsToDivide
      * @param float $divider
      */
-	private function negativeSynergy(array $idsToDivide, float $divider): void {
-
+	private function negativeSynergy(array $idsToDivide, float $divider): void
+    {
 		foreach ($idsToDivide AS $id) {
 			$this->excludedIds[$id] = floor($this->excludedIds[$id] / $divider);
 		}
-		
 	}
 
     /**
@@ -165,81 +164,107 @@ class PickingAlgorithm extends Controller
      *
      * @param array $answerValue
      */
-	private function synergyExecuter(array $answerValue): void {
+	private function synergyExecuter(array $answerValue): void
+    {
 
 		// Lekkie + owocowe + Kwaśne
-    	 if ($answerValue[4] === 'coś lekkiego' && $answerValue[12] === 'tak' && $answerValue[13] === 'chętnie') {
+    	 if ($answerValue[4] === 'coś lekkiego' &&
+             $answerValue[12] === 'tak' &&
+             $answerValue[13] === 'chętnie') {
     	 	echo 'Synergia Lekkie + owocowe + Kwaśne <br />';
     	 	$this->positiveSynergy([40, 56], 2);
     	 	$this->positiveSynergy([51], 1.5);
     	 }
     	 // nowe smaki LUB szokujące + złożone + jasne
-    	 if (($answerValue[2] === 'tak' || $answerValue[3] === 'tak') && $answerValue[4] === 'coś złożonego' && $answerValue[4] === 'jasne') {
+    	 if ($answerValue[4] === 'coś złożonego' &&
+             $answerValue[4] === 'jasne' &&
+             ($answerValue[2] === 'tak' || $answerValue[3] === 'tak')) {
     	 	echo 'Synergia we smaki LUB szokujące + złożone + jasne <br />';
     	 	$this->positiveSynergy([7, 15, 16, 23, 39, 42, 50, 60, 73], 2);
     	 }
 
     	 // nowe smaki LUB szokujące + złożone + ciemne
-    	 if (($answerValue[2] === 'tak' || $answerValue[3] === 'tak') && $answerValue[4] === 'coś złożonego' && $answerValue[4] === 'ciemne') {
+    	 if ($answerValue[4] === 'coś złożonego' &&
+             $answerValue[4] === 'ciemne' &&
+             ($answerValue[2] === 'tak' || $answerValue[3] === 'tak')) {
     	 	echo 'Synergia nowe smaki LUB szokujące + złożone + ciemne <br />';
     	 	$this->positiveSynergy([36, 37, 58, 59, 62, 63], 2);
     	 }
 
     	 // złożone + ciemne + nieowocowe
-    	 if ($answerValue[4] === 'coś złożonego' && $answerValue[6] === 'ciemne' && $answerValue[12] === 'nie') {
+    	 if ($answerValue[4] === 'coś złożonego' &&
+             $answerValue[6] === 'ciemne' &&
+             $answerValue[12] === 'nie') {
     	 	echo 'Synergia złożone + ciemne + nieowocowe <br />';
     	 	$this->positiveSynergy([3, 24, 35, 36, 37, 48, 58, 59, 62, 63, 75], 1.5);
     	 }
 
     	 // złożone + ciemne + nieowocowe + kawowe
-    	 if ($answerValue[4] === 'coś złożonego' && $answerValue[6] === 'ciemne' && $answerValue[10] === 'tak' && $answerValue[12] === 'nie') {
+    	 if ($answerValue[4] === 'coś złożonego' &&
+             $answerValue[6] === 'ciemne' &&
+             $answerValue[10] === 'tak' &&
+             $answerValue[12] === 'nie') {
     	 	echo 'Synergia złożone + ciemne + nieowocowe + kawowe <br />';
     	 	$this->positiveSynergy([74], 2.5);
     	 }
 
     	 // Lekkie + ciemne + słodkie + goryczka (ledwie || lekka || wyczuwalna)
-    	 if ($answerValue[4] === 'coś lekkiego' && $answerValue[6] === 'ciemne' && $answerValue[7] === 'słodsze' && !in_array($answerValue[5], array('mocną', 'jestem hopheadem'))) {
+    	 if ($answerValue[4] === 'coś lekkiego' &&
+             $answerValue[6] === 'ciemne' &&
+             $answerValue[7] === 'słodsze' &&
+             !in_array($answerValue[5], ['mocną', 'jestem hopheadem'])) {
     	 	echo 'Synergia Lekkie + ciemne + słodkie + goryczka (ledwie || lekka || wyczuwalna) <br />';
     	 	$this->positiveSynergy([12, 29, 30, 34, 64], 2);
     	 	$this->negativeSynergy([36, 37], 3);
     	 }
 
     	 // jasne + nieczekoladowe
-    	 if ($answerValue[6] === 'jasne' && $answerValue[9] === 'nie') {
+    	 if ($answerValue[6] === 'jasne' &&
+             $answerValue[9] === 'nie') {
     	 	echo 'Synergia jasne + nieczekoladowe <br />';
     	 	$this->negativeSynergy([12, 21, 24, 29, 33, 34, 35, 36, 37, 58, 59, 62, 63, 71, 74, 75], 2);
     	 }
 
     	 // ciemne + czekoladowe + lżejsze
-    	 if ($answer[6] === 'ciemne' && $answerValue[9] === 'tak' && $answerValue[8] !== 'mocne i gęste') {
+    	 if ($answerValue[6] === 'ciemne' &&
+             $answerValue[9] === 'tak' &&
+             $answerValue[8] !== 'mocne i gęste') {
     	 	echo 'Synergia ciemne + czekoladowe + lżejsze <br />';
     	 	$this->positiveSynergy([12, 31, 33, 34, 35, 59, 71], 2.5);
     	 }
 
 
     	 // goryczka ledwo || lekka + jasne + nieczkoladowe + niegęste
-    	 if (($answerValue[5] === 'ledwie wyczuwalną' || $answerValue[5] === 'lekką') && $answerValue[6] === 'jasne' && $answerValue[9] === 'nie' && $answerValue[8] !== 'mocne i gęste') {
+    	 if ($answerValue[6] === 'jasne' &&
+             $answerValue[9] === 'nie' &&
+             $answerValue[8] !== 'mocne i gęste' &&
+             ($answerValue[5] === 'ledwie wyczuwalną' || $answerValue[5] === 'lekką')) {
     	 	echo 'Synergia goryczka ledwo || lekka + jasne + nieczkoladowe + niegęste <br />';
     	 	$this->positiveSynergy([20, 25, 40, 44, 45, 47, 51, 52, 53, 68, 73], 2);
     	 	$this->negativeSynergy([3, 24, 35, 36, 37, 58, 59, 62, 63, 71, 75], 2);
     	 }
 
     	 // jasne + lekkie + wodniste + wędzone = grodziskie
-    	 if ($answerValue[4] === 'coś lekkiego' && $answerValue[6] === 'jasne' && $answerValue[8] === 'wodniste' && $answerValue[14] === 'tak') {
+    	 if ($answerValue[4] === 'coś lekkiego' &&
+             $answerValue[6] === 'jasne' &&
+             $answerValue[8] === 'wodniste' &&
+             $answerValue[14] === 'tak') {
     	 	echo 'Synergia asne + lekkie + wodniste + wędzone = grodziskie <br />';
     	 	$this->positiveSynergy([52], 3);
     	 	$this->negativeSynergy([3, 22, 23, 24, 35, 36, 37, 50, 58, 59, 62, 63, 71, 75], 2);
     	 }
 
     	 // duża/hophead goryczka + jasne
-    	 if (($answerValue[5] === 'mocną' || $answerValue[5] === 'jestem hopheadem') && $answerValue[6] === 'jasne') {
+    	 if ($answerValue[6] === 'jasne' &&
+             ($answerValue[5] === 'mocną' || $answerValue[5] === 'jestem hopheadem')) {
     	 	echo 'Synergia duża/hophead goryczka + jasne <br />';
     	 	$this->positiveSynergy([1, 2, 5, 6, 7, 8, 28, 61], 1.75);
     	 	$this->positiveSynergy([65, 69, 70, 72], 1.5);
     	 }
 
 		 // duża/hophead goryczka + ciemne
-    	 if (($answerValue[5] === 'mocną' || $answerValue[5] === 'jestem hopheadem') && $answerValue[6] === 'ciemne') {
+    	 if ($answerValue[6] === 'ciemne' &&
+             ($answerValue[5] === 'mocną' || $answerValue[5] === 'jestem hopheadem')) {
     	 	echo 'Synergia duża/hophead goryczka + ciemne <br />';
     	 	$this->positiveSynergy([3, 36, 37, 58, 62, 63, 75], 1.75);
     	 }
@@ -250,16 +275,19 @@ class PickingAlgorithm extends Controller
     	 	$this->negativeSynergy([1, 2, 3, 5, 7, 8, 28, 61], 2);
     	 	$this->negativeSynergy([6, 60, 65, 69, 71, 72], 1.5);
     	 }
-
 	}
 
-	/*
-	* Buduje siłę dla konkretnych ID stylu
-	* Jeśli id ma postać 5:2.5 to zwiększy (przy trafieniu w to ID) punktację tego stylu o 2.5 a nie o 1
-	* Domyślnie zwiększa punktację stylu o 1
-	*/
-	private function strengthBuilder(string $ids): array {
-
+    /**
+     * Buduje siłę dla konkretnych ID stylu
+     * Jeśli id ma postać 5:2.5 to zwiększy (przy trafieniu w to ID) punktację tego stylu o 2.5 a nie o 1
+     * Domyślnie zwiększa punktację stylu o
+     *
+     * @param string $ids
+     *
+     * @return array
+     */
+	private function strengthBuilder(string $ids): array
+    {
 		$idsExploded = explode(',', trim($ids));
         $strength = [];
 		foreach ($idsExploded AS $v) {
@@ -272,25 +300,25 @@ class PickingAlgorithm extends Controller
 	    }
 
 	    return $strength;
-
 	}
 
     /**
      * Excludes sour/smoked beers from recommended styles if user says NO
+     *
      * @param array $idsToExclude
      */
-	private function excludeFromRecommended(array $idsToExclude): void {
-
+	private function excludeFromRecommended(array $idsToExclude): void
+    {
 		foreach ($idsToExclude AS $id) {
 			$this->includedIds[$id] = 0;
 		}
-
 	}
 
     /**
      * Prevents beers to be both included and excluded
      */
-	private function checkDoubles(): void {
+	private function checkDoubles(): void
+    {
 
 		$included = array_slice($this->includedIds, 0, $this->countStylesToTake, true);
 		$excluded = array_slice($this->excludedIds, 0, $this->countStylesToAvoid, true);
@@ -300,15 +328,14 @@ class PickingAlgorithm extends Controller
 				unset($this->includedIds[$id]);
 			}
 		}
-
 	}
 
 	/**
 	* There must at least 125% margin between included and excluded beer
 	* included > excluded
 	*/
-	private function checkMargin(): void {
-
+	private function checkMargin(): void
+    {
 		foreach ($this->includedIds AS $id => $points) {
 			if (array_key_exists($id, $this->excludedIds)) {
 				$excludedPoints = $this->excludedIds[$id];
@@ -325,7 +352,8 @@ class PickingAlgorithm extends Controller
 	* Takes 4th or 5th style as an extra styles to take or avoid
 	* TODO: Do jednej zmiennej pakować i w widoku 4-5 styl pokazywać inaczej
 	*/
-	private function optionalStyles(): void {
+	private function optionalStyles(): void
+    {
 
 		$thirdStyleToTake = array_values(array_slice($this->includedIds, 0, 3, true));
 		$thirdStyleToAvoid = array_values(array_slice($this->excludedIds, 0, 3, true));
@@ -350,7 +378,8 @@ class PickingAlgorithm extends Controller
 	* If 1st styles to take and avoid has more than/equal 150% points of 2nd or 3rd styles
 	* Emphasize them!
 	*/
-	private function mustTakeMustAvoid(): void {
+	private function mustTakeMustAvoid(): void
+    {
 
 		$firstStyleToTake = array_values(array_slice($this->includedIds, 0, 1, true));
 		$firstStyleToAvoid = array_values(array_slice($this->excludedIds, 0, 1, true));
@@ -368,69 +397,72 @@ class PickingAlgorithm extends Controller
 		if ($secondStyleToAvoid[0] * 1.25 <= $firstStyleToAvoid[0] || $thirdStyleToAvoid[0] * 1.25 <= $firstStyleToAvoid[0]) {
 			$this->mustAvoid = true;
 		}
-
 	}
-
 
 	/**
 	* Remove points assigned to beer ids
 	*/
-	private function removePoints(): void {
-
-		$this->includedIds = ($this->shuffled === false) ? array_keys($this->includedIds) : array_values($this->includedIds);
-		$this->excludedIds = array_keys($this->excludedIds);
-
+	private function removePoints(): void
+    {
+		$this->includedIds = ($this->shuffled === false)
+            ? \array_keys($this->includedIds)
+            : \array_values($this->includedIds);
+		$this->excludedIds = \array_keys($this->excludedIds);
 	}
 
-
-	/**
-	* Shuffle n-elements of an includedIds array
-	*/
-	private function shuffleStyles($toShuffle): void {
-
+    /**
+     * Shuffle n-elements of an includedIds array
+     *
+     * @param $toShuffle
+     */
+	private function shuffleStyles($toShuffle): void
+    {
 		$this->includedIds = array_keys(array_slice($this->includedIds, 0, $toShuffle, true));
-		shuffle($this->includedIds);
 
+		\shuffle($this->includedIds);
 	}
-
 
 	/**
 	* Checks how many styles should be shuffled.
 	* Margin between first and n-th style should be less than 90% of points).
 	*/
-	 private function checkShuffleStyles() : void {
+	 private function checkShuffleStyles(): void
+     {
 
-		$firstStyleIndex = key(array_slice($this->includedIds, 0, 1, true));
+//		$firstStyleIndex = key(array_slice($this->includedIds, 0, 1, true));
 		$firstStylePoints = array_values(array_slice($this->includedIds, 0, 1, true));
 
 		$toShuffle = 0;
 		$countIncluded = count($this->includedIds);
 
 		for ($i = 1; $i <= $countIncluded; $i++) {
-
-			$nthStyleIndex = key(array_slice($this->includedIds, $i, 1, true));
+//			$nthStyleIndex = key(array_slice($this->includedIds, $i, 1, true));
 			$nthStylePoints = array_values(array_slice($this->includedIds, $i, 1, true));
 
 			if ($nthStylePoints[0] >= $firstStylePoints[0] * 0.90) {
 				//echo $nthStylePoints[0] . ' >= ' . $firstStylePoints[0] * 0.80;
 				$toShuffle++;
 			}
-
 		}
 
 		if ($toShuffle > 4) {
 			$this->shuffleStyles($toShuffle);
 			$this->shuffled = true;
 		}
+	}
 
-	} 
-    
     /**
-    * Heart of an algorithm
-    */
-    public function includeBeerIds(string $answers, string $name, string $email, int $newsletter) {
-
-    	$answersDecoded = $this->answersDecoded = json_decode($answers);
+     * Heart of an algorithm
+     *
+     * @param string $answers
+     * @param string $name
+     * @param string $email
+     * @param int $newsletter
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function includeBeerIds(string $answers, string $name, string $email, int $newsletter)
+    {
+    	$answersDecoded = $this->answersDecoded = \json_decode($answers);
 
     	foreach ($answersDecoded AS $number => &$answer) {
 	    	foreach ($this->{'toInclude'.$number} AS $yesno => $ids) {
@@ -458,16 +490,17 @@ class PickingAlgorithm extends Controller
 	    		$idsToCalculate = $this->strengthBuilder($ids);
 	    		if ($answer === $yesno && $answer !== 'bez znaczenia') {
 		    		foreach ($idsToCalculate AS $styleId => &$strength) {
-		    			if (is_numeric($styleId)) {
+		    			if (\is_numeric($styleId)) {
 		    				$this->includedIds[$styleId] += $strength;
 		    			}
 		    		}
 		    		unset($strength);
 	    		}
 
-	    		if ($answer !== $yesno && $answer !== 'bez znaczenia' && !\in_array($number, [3,5,9], true)) {
+	    		if ($answer !== $yesno && $answer !== 'bez znaczenia' &&
+                    !\in_array($number, [3, 5, 9], true)) {
 		    		foreach ($idsToCalculate AS $styleId => &$strength) {
-		    			if (is_numeric($styleId)) {
+		    			if (\is_numeric($styleId)) {
 		    				$this->excludedIds[$styleId] += $strength;
 		    			}
 		    		}
@@ -478,11 +511,10 @@ class PickingAlgorithm extends Controller
     	}
     	unset($answer);
 
-    	$answerValue = get_object_vars($answersDecoded);
+    	$answerValue = \get_object_vars($answersDecoded);
     	$this->synergyExecuter($answerValue);
 
     	return $this->chooseStyles($name, $email, $newsletter);
-
     }
 
     /**
@@ -491,8 +523,9 @@ class PickingAlgorithm extends Controller
      * @param int $newsletter
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function chooseStyles(string $name, string $email, int $newsletter) {
-    		
+    public function chooseStyles(string $name, string $email, int $newsletter): View
+    {
+
    		arsort($this->includedIds);
     	arsort($this->excludedIds);
     	$this->optionalStyles();
@@ -502,14 +535,17 @@ class PickingAlgorithm extends Controller
 		$this->checkShuffleStyles();
 
 		if ($_SERVER['REMOTE_ADDR'] === '89.64.48.176') {
-    		echo "<br /><br /><br />";
-	    	echo "Tablica ze stylami do wybrania i punktami: <br />";
+    		echo '<br /><br /><br />';
+	    	echo 'Tablica ze stylami do wybrania i punktami: <br />';
 	    	$this->printPre($this->includedIds);
-	    	echo "<br />Tablica ze stylami do odrzucenia i punktami: <br />";
+	    	echo '<br />Tablica ze stylami do odrzucenia i punktami: <br />';
 	    	$this->printPre($this->excludedIds);
     	}
 
     	$this->removePoints();
+
+        $buyThis = [];
+        $avoidThis = [];
 
     	for ($i = 0; $i < $this->countStylesToTake; $i++) {
     		$styleToTake = $this->styleToTake[] = $this->includedIds[$i];
@@ -519,7 +555,7 @@ class PickingAlgorithm extends Controller
 
     	for ($i = 0; $i < $this->countStylesToAvoid; $i++) {
     		$styleToAvoid = $this->styleToAvoid[] = $this->excludedIds[$i];
-    		$avoidThis[] = DB::select("SELECT * FROM beers WHERE id = $styleToAvoid");	
+    		$avoidThis[] = DB::select("SELECT * FROM beers WHERE id = $styleToAvoid");
     	}
 
     	//TODO
@@ -529,6 +565,7 @@ class PickingAlgorithm extends Controller
     		//mail('kontakt@piwolucja.pl', 'logStyles Exception', $e->getMessage());
     	}
 
+        $PKStyleTake = [];
     	foreach ($this->styleToTake AS $index => $id) {
     		if (PKAPI::getBeerInfo($id) !== null) {
     			$PKStyleTake[] = PKAPI::getBeerInfo($id);
@@ -537,8 +574,14 @@ class PickingAlgorithm extends Controller
     		}
     	}
 
-    	return view('results', ['buyThis' => $buyThis, 'avoidThis' => $avoidThis, 'mustTake' => $this->mustTake, 'mustavoid' => $this->mustAvoid, 'PKStyleTake' => $PKStyleTake, 'username' => $name, 'barrelAged' => $this->BA, 'answers' => $this->answersDecoded]);
-
+    	return view('results', ['buyThis' => $buyThis,
+            'avoidThis' => $avoidThis,
+            'mustTake' => $this->mustTake,
+            'mustavoid' => $this->mustAvoid,
+            'PKStyleTake' => $PKStyleTake,
+            'username' => $name,
+            'barrelAged' => $this->BA,
+            'answers' => $this->answersDecoded]);
     }
 
     /**
@@ -546,18 +589,32 @@ class PickingAlgorithm extends Controller
      * @param string $email
      * @param int $newsletter
      */
-    private function logStyles(string $name, string $email, int $newsletter): void {
+    private function logStyles(string $name, string $email, int $newsletter): void
+    {
 
     	$lastID = DB::select('SELECT MAX(id_answer) AS lastid FROM `styles_logs` LIMIT 1');
     	$nextID = (int)$lastID[0]->lastid + 1;
 
     	for ($i = 0; $i < 3; $i++) {
-    		DB::insert('INSERT INTO `styles_logs` (id_answer, username, email, newsletter, style_take, style_avoid, ip_address, created_at)
+    		DB::insert('INSERT INTO `styles_logs` 
+                          (id_answer, 
+                           username, 
+                           email, 
+                           newsletter, 
+                           style_take, 
+                           style_avoid, 
+                           ip_address, 
+                           created_at)
     					VALUES
-    					(?, ?, ?, ?, ?, ?, ?, ?)', [$nextID, $name, $email, $newsletter, $this->styleToTake[$i], $this->styleToAvoid[$i], $_SERVER['REMOTE_ADDR'], now()]);
+    					(?, ?, ?, ?, ?, ?, ?, ?)',
+                                [$nextID,
+                                $name,
+                                $email,
+                                $newsletter,
+                                $this->styleToTake[$i],
+                                $this->styleToAvoid[$i],
+                                $_SERVER['REMOTE_ADDR'],
+                                now()]);
     	}
-
     }
-
-
 }

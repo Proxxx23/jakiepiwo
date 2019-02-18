@@ -1,9 +1,10 @@
 <?php
+
 declare(strict_types=1);
-namespace App\Traits;
+
+namespace App;
 
 trait Questions {
-	
 	public static $questions = [
 		1 => array("question" => "Czy smakują Ci piwa koncernowe dostępne w sklepach?", "type" => 0, "answers" => array('NO'), "tooltip" => "Chodzi o jasne piwa koncernowe, takie jak Lech, Kasztelan, Tyskie czy Specjal."),
 		2 => array("question" => "Czy chcesz poznać nowe piwne smaki?", "type" => 0, "answers" => array('NO')),
@@ -23,5 +24,4 @@ trait Questions {
 		14 => array("question" => "Czy odpowiadałby Ci smak wędzony/dymny w piwie?", "type" => 0, "answers" => array('NO')),
 		15 => array("question" => "Czy lubisz bourbon, whisky lub inne alkohole szlachetne?", "type" => 0, "answers" => array('NO')),
 	];
-
 }
