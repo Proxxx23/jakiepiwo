@@ -25,11 +25,11 @@ class PolskiKraftAPI
      */
     public static function getBeerInfo(int $beerId): ?array
     {
-        if (!\array_key_exists($beerId, Dictionaries::$ID)) {
+        if (!\array_key_exists($beerId, Dictionaries::ID)) {
             return null;
         }
 
-        $translatedBeerId = Dictionaries::$ID[$beerId];
+        $translatedBeerId = Dictionaries::ID[$beerId];
         $content = 'https://www.polskikraft.pl/openapi/style/' . $translatedBeerId . '/examples';
         $request = \json_decode(\file_get_contents($content));
 

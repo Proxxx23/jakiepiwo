@@ -1,14 +1,12 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Http\Controllers;
+namespace App\Http\Services;
 
 use App\Questions;
 
-class ValidationController extends Controller
+class ValidationService
 {
-    use Questions;
-
     /**
      * Validates an e-mail address
      *

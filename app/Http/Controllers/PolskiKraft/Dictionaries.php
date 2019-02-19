@@ -6,7 +6,7 @@ namespace App\Http\Controllers\PolskiKraft;
 class Dictionaries
 {
     /** @var array */
-    public static $ID = [
+    public const ID = [
         1 => 8, //American IPA
         2 => 63,// Belgian IPA
         3 => 15, // Black IPA

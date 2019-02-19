@@ -415,11 +415,13 @@ class PickingAlgorithm extends Controller
         $thirdStyleToTake = array_values(array_slice($this->includedIds, 2, 1, true));
         $thirdStyleToAvoid = array_values(array_slice($this->excludedIds, 2, 1, true));
 
-        if ($secondStyleToTake[0] * 1.25 <= $firstStyleToTake[0] || $thirdStyleToTake[0] * 1.25 <= $firstStyleToTake[0]) {
+        if ($secondStyleToTake[0] * 1.25 <= $firstStyleToTake[0] ||
+            $thirdStyleToTake[0] * 1.25 <= $firstStyleToTake[0]) {
             $this->mustTake = true;
         }
 
-        if ($secondStyleToAvoid[0] * 1.25 <= $firstStyleToAvoid[0] || $thirdStyleToAvoid[0] * 1.25 <= $firstStyleToAvoid[0]) {
+        if ($secondStyleToAvoid[0] * 1.25 <= $firstStyleToAvoid[0] ||
+            $thirdStyleToAvoid[0] * 1.25 <= $firstStyleToAvoid[0]) {
             $this->mustAvoid = true;
         }
     }
@@ -432,6 +434,7 @@ class PickingAlgorithm extends Controller
         $this->includedIds = ($this->shuffled === false)
             ? \array_keys($this->includedIds)
             : \array_values($this->includedIds);
+
         $this->excludedIds = \array_keys($this->excludedIds);
     }
 
@@ -481,27 +484,32 @@ class PickingAlgorithm extends Controller
      *
      * @param string $answers
      * @param string $name
-     * @param string $email
+     * @param string|null $email
      * @param int $newsletter
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return View
+     * @throws \Exception
      */
-    public function includeBeerIds(string $answers, string $name, string $email, int $newsletter)
-    {
+    public function includeBeerIds(
+        string $answers,
+        string $name,
+        ?string $email,
+        int $newsletter
+    ): View {
         $answersDecoded = $this->answersDecoded = \json_decode($answers);
 
         foreach ($answersDecoded AS $number => &$answer) {
             foreach ($this->{'toInclude' . $number} AS $yesno => $ids) {
 
+                $this->barrelAged = false;
                 if ($_POST['answer-15'] === 'tak') {
                     $this->barrelAged = true;
-                } else {
-                    $this->barrelAged = false;
                 }
 
                 if ($_POST['answer-13'] === 'nie ma mowy') {
                     $toExclude = [40, 42, 44, 51, 56];
                     $this->excludeFromRecommended($toExclude);
                 }
+
                 if ($_POST['answer-14'] === 'nie') {
                     $toExclude = [15, 16, 52, 57, 58, 59, 62, 63];
                     $this->excludeFromRecommended($toExclude);
@@ -512,24 +520,25 @@ class PickingAlgorithm extends Controller
                     continue;
                 }
 
-                $idsToCalculate = $this->strengthBuilder($ids);
-                if ($answer === $yesno && $answer !== 'bez znaczenia') {
-                    foreach ($idsToCalculate AS $styleId => &$strength) {
+                if ($answer === $yesno &&
+                    $answer !== 'bez znaczenia') {
+                    $idsToCalculate = $this->strengthBuilder($ids);
+                    foreach ($idsToCalculate AS $styleId => $strength) {
                         if (\is_numeric($styleId)) {
                             $this->includedIds[$styleId] += $strength;
                         }
                     }
-                    unset($strength);
                 }
 
-                if ($answer !== $yesno && $answer !== 'bez znaczenia' &&
+                if ($answer !== $yesno &&
+                    $answer !== 'bez znaczenia' &&
                     !\in_array($number, [3, 5, 9], true)) {
-                    foreach ($idsToCalculate AS $styleId => &$strength) {
+                    $idsToCalculate = $this->strengthBuilder($ids);
+                    foreach ($idsToCalculate AS $styleId => $strength) {
                         if (\is_numeric($styleId)) {
                             $this->excludedIds[$styleId] += $strength;
                         }
                     }
-                    unset($strength);
                 }
 
             }
@@ -544,12 +553,16 @@ class PickingAlgorithm extends Controller
 
     /**
      * @param string $name
-     * @param string $email
+     * @param string|null $email
      * @param int $newsletter
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return View
+     * @throws \Exception
      */
-    public function chooseStyles(string $name, string $email, int $newsletter): View
-    {
+    public function chooseStyles(
+        string $name,
+        ?string $email,
+        int $newsletter
+    ): View {
 
         arsort($this->includedIds);
         arsort($this->excludedIds);
@@ -570,14 +583,12 @@ class PickingAlgorithm extends Controller
         $this->removePoints();
 
         $buyThis = [];
-        $avoidThis = [];
-
         for ($i = 0; $i < $this->countStylesToTake; $i++) {
             $styleToTake = $this->styleToTake[] = $this->includedIds[$i];
             $buyThis[] = DB::select("SELECT * FROM beers WHERE id = $styleToTake");
         }
 
-
+        $avoidThis = [];
         for ($i = 0; $i < $this->countStylesToAvoid; $i++) {
             $styleToAvoid = $this->styleToAvoid[] = $this->excludedIds[$i];
             $avoidThis[] = DB::select("SELECT * FROM beers WHERE id = $styleToAvoid");
@@ -613,11 +624,14 @@ class PickingAlgorithm extends Controller
 
     /**
      * @param string $name
-     * @param string $email
+     * @param string|null $email
      * @param int $newsletter
      */
-    private function logStyles(string $name, string $email, int $newsletter): void
-    {
+    private function logStyles(
+        string $name,
+        ?string $email,
+        int $newsletter
+    ): void {
 
         $lastID = DB::select('SELECT MAX(id_answer) AS lastid FROM `styles_logs` LIMIT 1');
         $nextID = (int)$lastID[0]->lastid + 1;

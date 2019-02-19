@@ -12,7 +12,8 @@
         "laravel/tinker": "~1.0",
         "twbs/bootstrap": "^4.0",
         "laravelcollective/annotations": "~5.0",
-        "ext-json": "*"
+        "ext-json": "*",
+        "ext-http": "*"
     },
     "require-dev": {
         "filp/whoops": "~2.0",

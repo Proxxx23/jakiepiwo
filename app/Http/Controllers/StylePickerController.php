@@ -4,10 +4,12 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Questions;
+use http\Env\Request;
 use Illuminate\Support\Facades\DB;
-use App\Http\Controllers\ValidationController as Validation;
+use App\Http\Services\ValidationService as Validation;
 use App\Http\Controllers\PickingAlgorithm as Algorithm;
 use \DrewM\MailChimp\MailChimp;
+use Illuminate\View\View;
 use Mail;
 
 final class StylePickerController extends Controller
@@ -18,8 +20,6 @@ final class StylePickerController extends Controller
     private $errorsCount = 0;
     /** @var array */
     private $errorMesage = [];
-    /** @var string */
-    private $JSONAnswers = '';
 
     /**
      * Show all the questions
@@ -48,7 +48,7 @@ final class StylePickerController extends Controller
 
         return view('index', [
             'questions' => Questions::$questions,
-            'jsonQUestions' => $jsonQuestions,
+            'jsonQuestions' => $jsonQuestions,
             'lastvisitName' => $this->getUsername(),
             'errors' => '',
             'errorsCount' => 0
@@ -121,7 +121,7 @@ final class StylePickerController extends Controller
     {
         $validation = new Validation();
 
-        if ($validation->validateEmail($email)) {
+        if ($validation->validateEmail()) {
             $this->addEmailToNewsletterList($email);
             return true;
         }
@@ -130,82 +130,88 @@ final class StylePickerController extends Controller
     }
 
     /**
-     * @return bool
+     * @param Request $request
+     * @return string|null
      */
-    public function prepareAnswers(): bool
+    protected function fetchJsonAnswers(Request $request): ?string
     {
-        $answers = [];
+        $answers = \json_decode($request->getQuery('json'));
+        if (empty($answers)) {
+            $this->logError('Brak odpowiedzi na pytania!');
+            return null;
+        }
         $questionsCount = \count(Questions::$questions);
+        if ($questionsCount !== \count($answers)) {
+            $this->logError('Liczba odpowiedni na pytania nie zgadza się z liczbą pytań!');
+            return null;
+        }
 
         for ($i = 1; $i <= $questionsCount; $i++) {
-
-            if (null === $_POST['answer-' . $i . '']) {
+            if (null === $answers[$i]) {
                 $this->logError('Pytanie numer ' . $i . ' jest puste. Odpowiedz na wszystkie pytania!');
             }
-
-            $answers = $this->array_push_assoc($answers, $i, $_POST['answer-' . $i . '']);
-
         }
 
-        $this->JSONAnswers = \json_encode($answers); //JSON $_POST answers
-
-        if ($this->JSONAnswers === '') {
-            $this->logError('Brak odpowiedzi na pytania!');
-            return false;
-        }
-
-        return true;
+        return $answers;
     }
 
     /**
-     * Wstawia do bazy odpowiedzi użytkownika
-     * Rozdzielić na osobną funkcję do bazy, osobną do wywołania innych rzeczy
      * @Get('/result')
+     *
+     * @return View
+     * @throws \Exception
      */
-    public function mix()
+    public function mix(): View
     {
         $validation = new Validation();
 
         $name = $_POST['username'] ?? 'Gość';
-        $validation->validateEmail($_POST['email']) ? $email = $_POST['email'] : $email = '';
+        $validation->validateEmail() ? $email = $_POST['email'] : $email = null;
         $_POST['newsletter'] ? $newsletter = 1 : $newsletter = 0;
 
-        $this->prepareAnswers();
+        $answers = $this->fetchJsonAnswers(new Request());
 
-        if (empty($this->errorMesage)) {
-            $insertAnswers = DB::insert("INSERT INTO `user_answers` (name, e_mail, newsletter, answers, created_at) 
-    										VALUES 
-    										(?, ?, ?, ?, ?)",
-                [$name, $email, $newsletter, $this->JSONAnswers, NOW()]);
-
-            if ($insertAnswers === true) {
-
-                // Wyślij maila na prośbę
-                if ($email !== '' && isset($_POST['sendMeAnEmail'])) {
-                    $this->sendEmail($email);
-                }
-
-                // Dodaj do listy newsletterowej
-                if ($newsletter === 1) {
-                    if ($email !== '') {
-                        $this->setNewsletter($email);
-                    } else {
-                        $this->logError('Jeżeli chcesz dopisać się do newslettera, musisz podać adres e-mail.');
-                    }
-                }
-
-                // Algorytm wybiera piwa
-                $algorithm = new Algorithm();
-                return $algorithm->includeBeerIds($this->JSONAnswers, $name, $email, $newsletter);
-
-            } else {
-                $this->logError('Błąd połączenia z bazą danych!', true);
-
-                return $this->showQuestions(true);
-            }
-        } else {
+        if (!empty($this->errorMesage)) {
             return $this->showQuestions(true);
         }
+
+        $insertAnswers = DB::insert("INSERT INTO `user_answers` 
+                                    (name, 
+                                     e_mail, 
+                                     newsletter, 
+                                     answers, 
+                                     created_at) 
+                                        VALUES 
+                                        (?, ?, ?, ?, ?)",
+            [
+                $name,
+                $email,
+                $newsletter,
+                $answers,
+                NOW()
+            ]);
+
+        if (!$insertAnswers) {
+            $this->logError('Błąd połączenia z bazą danych!', true);
+            return $this->showQuestions(true);
+        }
+
+        // Dodaj do listy newsletterowej
+        if ($newsletter === 1 && $email === null) {
+            $this->logError('Jeżeli chcesz dopisać się do newslettera, musisz podać adres e-mail.');
+        } elseif ($newsletter === 1 && $email !== null) {
+            $this->setNewsletter($email);
+        }
+
+        // Wyślij maila na prośbę
+        if ($email !== null && !empty($_POST['sendMeAnEmail'])) {
+            $this->sendEmail();
+        }
+
+        // Algorytm wybiera piwa
+        $algorithm = new Algorithm();
+
+        return $algorithm->includeBeerIds($answers, $name, $email, $newsletter);
     }
 
     /**
@@ -213,7 +219,7 @@ final class StylePickerController extends Controller
      */
     public function getUsername(): ?string
     {
-        $lastVisit = DB::select('SELECT `username` FROM `styles_logs` WHERE `ip_address` = "' . $_SERVER['REMOTE_ADDR'] . '" AND `username` <> "" ORDER BY `created_at` DESC LIMIT 1');
+        $lastVisit = DB::select('SELECT `username` FROM `styles_logs` WHERE `ip_address` = "' . $_SERVER['REMOTE_ADDR'] . '" AND `username` != "" ORDER BY `created_at` DESC LIMIT 1');
 
         if ($lastVisit) {
             $v = \get_object_vars($lastVisit[0]);
@@ -253,6 +259,5 @@ final class StylePickerController extends Controller
         $this->logErrorToDB($message);
         $this->errorMesage[] = $message;
         $this->errorsCount++;
-
     }
 }

@@ -22,10 +22,14 @@ class BetaTesters
 
     private $DEV = false;
 
+    /**
+     * @param $request
+     * @param Closure $next
+     * @return mixed
+     */
     public function handle($request, Closure $next)
     {
-
-        if (!$_GET['beta'] == 'dev') {
+        if ($_GET['beta'] !== 'dev') {
             die('Brak uprawnień!');
         }
 
