@@ -20,7 +20,7 @@ class PolskiKraftAPI
 
     /**
      * @param int $beerId
-     * @return array
+     * @return array|null
      * @throws \Exception
      */
     public static function getBeerInfo(int $beerId): ?array

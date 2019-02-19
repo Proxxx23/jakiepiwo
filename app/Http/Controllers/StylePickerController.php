@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Questions;
-use http\Env\Request;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Services\ValidationService as Validation;
 use App\Http\Controllers\PickingAlgorithm as Algorithm;
@@ -14,8 +14,6 @@ use Mail;
 
 final class StylePickerController extends Controller
 {
-    use Questions;
-
     /** @var int */
     private $errorsCount = 0;
     /** @var array */
@@ -135,7 +133,7 @@ final class StylePickerController extends Controller
      */
     protected function fetchJsonAnswers(Request $request): ?string
     {
-        $answers = \json_decode($request->getQuery('json'));
+        $answers = \json_decode($request->get('json'));
         if (empty($answers)) {
             $this->logError('Brak odpowiedzi na pytania!');
             return null;
