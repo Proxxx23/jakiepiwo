@@ -5,7 +5,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>The Gustator v0.6 nightly - changelog</title>
+        <title>The Gustator v0.7 nightly - changelog</title>
 
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
@@ -90,32 +90,26 @@
         </style>
     </head>
     <body><div class="changelog">
-                <h3>Changelog v0.6 nightly (20.03.2018 r.)</h3>
+                <h3>Changelog v0.7 nightly (20.02.2019 r.)</h3>
                 <h5>Najnowsze zmiany i funkcje</h5>
                 <ul>
-                    <li>Debug odpowiedzi z formularza w wynikach (v 0.5)</li>
-                    <li>Uzupełnienie negatywnych synergii (v 0.5)</li>
-                    <li>Piwa polecane wyświetlają się losowo z puli (v 0.5)</li>
-                    <li>Jeżeli między polecanymi stylami jest marginalna różnica punktowa, będą wyświetlane losowo dla większej różnorodności przedstawianych stylów (v 0.6)</li>
+                    <li>Przepisanie całego kodu na PHP 7.3 + ReactJs (w trakcie)</li>
                 </ul>
                 <h5>Bugfixes</h5>
                 <ul>
-                    <li>Czasami pokazywały się mniej niż 3 piwa polecane (v 0.5)</li>
+                    <li>-</li>
                 </ul>
 
                 <h5>Planowane usprawnienia (według priotytetu)</h5> 
                 <ul>
                     <li>FEATURE: Zapisywanie pól formularza w razie błędów i walidacja jQuery (v 0.1 beta)</li>
                     <li>FEATURE: Ile razy The Gustator pomógł odwiedzającym? (v 0.1 beta)</li>
-                    <li>FEATURE: Bootstrap Theme + Form (v0.1 beta)</li>
-                    <li>FEATURE: Inny układ wyników (v0.1 beta)</li>
                     <li>FEATURE: Facebook Tags, SEO oraz Twitter Cards (v0.1 beta)</li>
                     <li>FEATURE: Rotacyjne artykuły o piwie pod wynikami (v0.1 beta)</li>
                     <li>FEATURE: Mail z wynikiem na życzenie (v0.1 beta)</li>
                     <li>FEATURE: Pole (0/1) "mail" w bazie logów (v0.1 beta)</li>
                     <li>FEATURE: Dalsze prace z PK API</li>
                     <li>FEATURE: Ratebeer API dla stylów, których nie ma w PK</li>
-                    <li>FEATURE: Inny układ pytań o smaki</li>
                     <li>FEATURE: Pokazywanie tylko jednej nazwy stylu + dymek z nazwą alternatywną i PL</li>
                     <li>FEATURE: Czy danych piw możesz napić się w okolicy? (OnTap API)</li>
                     <li>FEATURE: Krótkie opisy stylów</li>

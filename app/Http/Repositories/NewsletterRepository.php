@@ -21,6 +21,7 @@ class NewsletterRepository implements NewsletterRepositoryInterface
      */
     public function __construct()
     {
+        //TODO: DI?
         $this->mailChimp = new MailChimp( self::MAILCHIMP_API_KEY );
     }
 

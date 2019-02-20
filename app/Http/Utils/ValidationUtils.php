@@ -3,6 +3,7 @@ declare( strict_types=1 );
 
 namespace App\Http\Utils;
 
+use App\Http\Repositories\QuestionsRepository;
 use App\Http\Services\QuestionsService;
 
 class ValidationUtils
@@ -31,7 +32,7 @@ class ValidationUtils
      */
     public static function validateSimpleAnswer( string $answer ): bool
     {
-        return ( \strtolower( $answer ) !== 'tak' && \strtolower( $answer ) !== 'nie');
+        return ( \strtolower( $answer ) !== 'tak' && \strtolower( $answer ) !== 'nie' );
     }
 
     /**
@@ -43,7 +44,7 @@ class ValidationUtils
      */
     public static function validateAnswers( string $answer ): bool
     {
-        $questionsService = new QuestionsService( new \QuestionsRepository() );
+        $questionsService = new QuestionsService( new QuestionsRepository() );
         $questions = $questionsService->getQuestions();
 
         return !\in_array( $answer, $questions[6]['answers'], true ) ||

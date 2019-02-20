@@ -53,7 +53,7 @@ class QuestionsService
 
 
         if ( $questionsCount !== \count( $answers ) ) {
-            $this->logError( 'Liczba odpowiedi na pytania nie zgadza się z liczbą pytań!' );
+//            $this->logError( 'Liczba odpowiedi na pytania nie zgadza się z liczbą pytań!' );
             return null;
         }
 

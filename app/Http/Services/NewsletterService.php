@@ -22,15 +22,18 @@ class NewsletterService
     }
 
     /**
-     * Adds email to a Mailchimp list
-     *
      * @param string|null $email
+     * @param int $newsletter
      *
      * @return bool
      * @throws \Exception
      */
-    public function addToNewsletterList( ?string $email ): bool
+    public function addToNewsletterList( ?string $email, int $newsletter ): bool
     {
+        if ( $newsletter === 1 && $email === null ) {
+//            $this->logError( 'Jeżeli chcesz dopisać się do newslettera, musisz podać adres e-mail.' );
+        }
+
         if ( ValidationUtils::validateEmail( $email ) ) {
             $this->addEmailToNewsletterList( $email );
             return true;

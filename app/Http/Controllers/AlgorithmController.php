@@ -9,9 +9,8 @@ use App\Http\Services\MailService;
 use App\Http\Services\NewsletterService;
 use App\Http\Services\QuestionsService;
 use App\Http\Services\UserService;
-use App\Http\Utils\CommonUtils;
 use App\Http\Utils\ValidationUtils;
-use App\Http\Services\AlgorithmService as Algorithm;
+use App\Http\Services\AlgorithmService;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -30,6 +29,8 @@ class AlgorithmController
      *
      * @return View
      * @throws \Exception
+     *
+     * TODO: Za gruby kontroler
      */
     public function presentStyles( Request $request ): View
     {
@@ -98,25 +99,22 @@ class AlgorithmController
             );
         }
 
-        if ( $newsletter === 1 && $email === null ) {
-            $this->logError( 'Jeżeli chcesz dopisać się do newslettera, musisz podać adres e-mail.' );
-        } elseif ( $newsletter === 1 && $email !== null ) {
-            $newsletterService->addToNewsletterList( $email );
-        }
+        $newsletterService->addToNewsletterList( $email, $newsletter );
 
         if ( $email !== null && !empty( $_POST['sendMeAnEmail'] ) ) {
             $mailService->sendEmail( $email );
         }
 
-        $algorithm = new Algorithm();
+        $algorithmService = new AlgorithmService();
 
-        return $algorithm->includeBeerIds( $answers, $username, $email, $newsletter );
+        return $algorithmService->includeBeerIds( $answers, $username, $email, $newsletter );
     }
 
     /**
      * @param string $message
      *
      * TODO: Przebudować na zrzucanie wszystkich błędów w jednym insercie
+     * TODO: handling winny sposób
      */
     public function logErrorToDB( string $message ): void
     {
@@ -138,6 +136,8 @@ class AlgorithmController
      *
      * @param string $message
      * @param bool $die
+     *
+     * TODO: handling w inny sposób - nie w kontrolerze, a przez Exceptiony
      */
     public function logError( string $message, bool $die = false ): void
     {

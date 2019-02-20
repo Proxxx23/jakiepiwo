@@ -24,7 +24,7 @@ class MailService
             return true;
         }
 
-        $this->logError( 'Błędny adres e-mail!' );
+//        $this->logError( 'Błędny adres e-mail!' );
 
         return false;
     }
