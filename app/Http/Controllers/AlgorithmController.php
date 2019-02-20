@@ -3,6 +3,7 @@ declare( strict_types=1 );
 
 namespace App\Http\Controllers;
 
+use App\Http\Objects\User;
 use App\Http\Repositories\NewsletterRepository;
 use App\Http\Repositories\QuestionsRepository;
 use App\Http\Services\MailService;
@@ -51,19 +52,21 @@ class AlgorithmController
             );
         }
 
-        $username = null;
+        $user = new User();
+
+        $user->username = null;
         if ( !empty( $_POST['newsletter'] ) ) {
-            $username = $_POST['newsletter'];
+            $user->username = $_POST['newsletter'];
         }
 
-        $email = null;
+        $user->email = null;
         if ( ValidationUtils::emailIsValid( $_POST['email'] ) ) {
-            $email = $_POST['email'];
+            $user->email = $_POST['email'];
         }
 
-        $newsletter = 0;
+        $user->newsletterOpt = 0;
         if ( !empty( $_POST['newsletter'] ) ) {
-            $newsletter = 1;
+            $user->newsletterOpt = 1;
         }
 
         $answers = $questionsService->fetchJsonAnswers( $request );
@@ -78,9 +81,9 @@ class AlgorithmController
                                         VALUES 
                                         (?, ?, ?, ?, ?)',
             [
-                $username,
-                $email,
-                $newsletter,
+                $user->username,
+                $user->email,
+                $user->newsletterOpt,
                 $answers,
                 now(),
             ]
@@ -99,16 +102,16 @@ class AlgorithmController
             );
         }
 
-        $newsletterService->addToNewsletterList( $email, $newsletter );
+        $newsletterService->addToNewsletterList( $user->email, $user->newsletterOpt );
 
-        if ( $email !== null && !empty( $_POST['sendMeAnEmail'] ) ) {
-            $mailService->sendEmail( $email );
+        if ( $user->email !== null && !empty( $_POST['sendMeAnEmail'] ) ) {
+            $mailService->sendEmail( $user->email );
         }
 
         $algorithmService = new AlgorithmService();
 
         // TODO: Username / email / newsletter object
-        return $algorithmService->includeBeerIds( $answers, $username, $email, $newsletter );
+        return $algorithmService->includeBeerIds( $answers, $user );
     }
 
     /**
