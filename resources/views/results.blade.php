@@ -30,32 +30,14 @@
                 margin: 0;
             }
 
-            .full-height {
-                height: 100vh;
-            }
-
             .flex-center {
                 align-items: center;
                 display: flex;
                 justify-content: center;
             }
 
-            .position-ref {
-                position: relative;
-            }
-
-            .top-right {
-                position: absolute;
-                right: 10px;
-                top: 18px;
-            }
-
             .content {
                 text-align: center;
-            }
-
-            .title {
-                font-size: 84px;
             }
 
             .links > a {
@@ -68,10 +50,6 @@
                 text-transform: uppercase;
             }
 
-            .m-b-md {
-                margin-bottom: 30px;
-            }
-
             #optional_take, #optional_avoid {
                 font-size: 18px;
                 color: grey;
@@ -80,18 +58,6 @@
             #take, #avoid {
                 font-size: 22px;
                 font-weight: bold;
-            }
-
-            #mustTake {
-                font-size: 22px !important;
-                font-weight: bold !important;
-                color: #8FBC8F;
-            }
-
-            #mustAvoid {
-                font-size: 22px !important;
-                color: #aa3311;
-                font-weight: bold !important;
             }
 
         </style>
@@ -111,7 +77,11 @@
 
                     <h1>@if ($username != '')Hej, {{$username}}!@endif Piwa w tych stylach powinny Ci zasmakować</h1>
 
-                    @for ($i = 0; $i < count($buyThis); $i++)
+                    @php
+                        $countedBuyThis = count($buyThis);
+                    @endphp
+
+                    @for ($i = 0; $i < $countedBuyThis; $i++)
                         @foreach ($buyThis[$i] as $k => $v)
 
                             @if ($i < 3)
@@ -156,7 +126,11 @@
 
                     <h1>Piwa w tych stylach raczej nie przypadną Ci do gustu</h1>
 
-                    @for ($i = 0; $i < count($avoidThis); $i++)
+                    @php
+                    $countedAvoidThis = count($avoidThis);
+                    @endphp
+
+                    @for ($i = 0; $i < $countedAvoidThis; $i++)
                         @foreach ($avoidThis[$i] as $k => $v)
 
                             @if ($i < 3)
@@ -173,7 +147,7 @@
                     @endfor<br /><br />
 
                     <legend>Czy chcesz to na maila? (nieaktywne)</legend>
-                    <form action="StylePickerController@sendEmail">
+                    <form action="MailController@sendEmail">
                         <input type="email" name="email" disabled="disabled">&nbsp;
                         <input type="submit" name="mailMe" disabled="disabled" value="Wyślij">
                     </form>

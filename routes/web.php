@@ -1,9 +1,9 @@
-<?php declare( strict_types=1 )
+<?php
 
 Route::get( '/', 'MainController@index' );
 Route::get( '/questions', 'MainController@index' );
 
-Route::get( '/results', 'AlgorithmController@presentStyles' );
+Route::post( '/results', 'AlgorithmController@presentStyles' );
 
 Route::get(
     '/changelog', function () {

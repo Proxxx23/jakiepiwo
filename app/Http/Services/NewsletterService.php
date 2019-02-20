@@ -3,19 +3,20 @@ declare( strict_types=1 );
 
 namespace App\Http\Services;
 
+use App\Http\Repositories\NewsletterRepositoryInterface;
 use App\Http\Utils\ValidationUtils;
 
 class NewsletterService
 {
-    /** @var \NewsletterRepositoryInterface */
+    /** @var NewsletterRepositoryInterface */
     protected $newsletterRepository;
 
     /**
      * Constructor.
      *
-     * @param \NewsletterRepositoryInterface $newsletterRepository
+     * @param NewsletterRepositoryInterface $newsletterRepository
      */
-    public function __construct( \NewsletterRepositoryInterface $newsletterRepository )
+    public function __construct( NewsletterRepositoryInterface $newsletterRepository )
     {
         $this->newsletterRepository = $newsletterRepository;
     }

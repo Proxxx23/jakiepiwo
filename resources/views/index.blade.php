@@ -30,24 +30,10 @@
                 margin: 0;
             }
 
-            .full-height {
-                height: 100vh;
-            }
-
             .flex-center {
                 align-items: center;
                 display: flex;
                 justify-content: center;
-            }
-
-            .position-ref {
-                position: relative;
-            }
-
-            .top-right {
-                position: absolute;
-                right: 10px;
-                top: 18px;
             }
 
             .bottom-input {
@@ -62,10 +48,6 @@
                 text-align: center;
             }
 
-            .title {
-                font-size: 84px;
-            }
-
             .links > a {
                 color: #636b6f;
                 padding: 0 25px;
@@ -76,16 +58,6 @@
                 text-transform: uppercase;
             }
 
-            .m-b-md {
-                margin-bottom: 30px;
-            }
-
-            .changelog {
-                position: absolute;
-                right: 25px;
-                top: 18px;
-            }
-
             .changelog h3 {
                 font-size: 14px;
                 color: lime;
@@ -94,12 +66,6 @@
             .changelog ul li {
                 font-size: 14px;
                 color: black;
-            }
-
-            .todo {
-                position: absolute;
-                right: 25px;
-                top: 180px;
             }
 
             .todo h3 {
@@ -125,7 +91,7 @@
             <div class="content">
                 <h1>The Gustator v0.6 nightly <a href="/changelog" target="_blank">(changelog)</a></h1>
                 <!-- Error handling  -->
-                
+
                 @if ($errorsCount > 0)
                 <h3>Błędy formularza</h3>
                     @foreach ($errors AS $error)
@@ -134,28 +100,28 @@
                 @endif
 
                 <div>
-                    <form method="POST" action=" {{ action('StylePickerController@mix') }} ">
+                    <form method="POST" action=" {{ action('AlgorithmController@presentStyles') }} ">
                     {{ csrf_field() }}
                    
                 @if ($lastVisitName)<h3> Czołem, {{$lastVisitName}}! Miło, że znów tu zaglądasz!</h3>@endif 
                 <p>The Gustator to wirtualny kolega, który podstawie Twoich preferencji poleci piwa dopasowane do Ciebie. Odpowiedz na wszystkie poniższe pytania, aby już nigdy nie mieć problemu z wyborem piwa w sklepie.</p>
 
                     @foreach ($questions as $index => $field)
-                    <h3>{{$index}}. {{$field['question']}} 
-                        @if ($field['tooltip'] != '')
-                            <img src="images/info-icon-16-16.png" class="tltp" style="cursor: help !important;" data-toggle="tooltip" data-placement="right" title="{{$field['tooltip']}}"></img>
+                    <h3>{{$index+1}}. {{$field['question']}}
+                        @if (isset($field['tooltip'])))
+                            <img src="images/info-icon-16-16.png" class="tltp" style="cursor: help !important;" data-toggle="tooltip" data-placement="right" title="{{$field['tooltip']}}">
                         @endif</h3>
                     
                         @if ($field['type'] === 1)  
                             @foreach ($field['answers'] AS $answer)
                                 <label class="radio-inline">
-                                    <input type="radio" name="answer-{{ $index }}" value="{{$answer}}" autocomplete="off" required>{{$answer}}
+                                    <input type="radio" name="answers[answer-{{ $index }}]" value="{{$answer}}" autocomplete="off" required>{{$answer}}
                                 </label>
                             @endforeach
                          
                         @else
-                            <label class="radio-inline"><input type="radio" name="answer-{{ $index }}" value="tak" autocomplete="off" required>tak</label>
-                            <label class="radio-inline"><input type="radio" name="answer-{{ $index }}" value="nie" autocomplete="off" required>nie</label>
+                            <label class="radio-inline"><input type="radio" name="answers[answer-{{ $index }}]" value="tak" autocomplete="off" required>tak</label>
+                            <label class="radio-inline"><input type="radio" name="answers[answer-{{ $index }}]" value="nie" autocomplete="off" required>nie</label>
                         @endif
 
                     @endforeach

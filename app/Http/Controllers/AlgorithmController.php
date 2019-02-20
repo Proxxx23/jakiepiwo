@@ -3,18 +3,22 @@ declare( strict_types=1 );
 
 namespace App\Http\Controllers;
 
+use App\Http\Repositories\NewsletterRepository;
+use App\Http\Repositories\QuestionsRepository;
 use App\Http\Services\MailService;
 use App\Http\Services\NewsletterService;
 use App\Http\Services\QuestionsService;
 use App\Http\Services\UserService;
+use App\Http\Utils\CommonUtils;
 use App\Http\Utils\ValidationUtils;
+use App\Http\Services\AlgorithmService as Algorithm;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Http\Services\AlgorithmService as Algorithm;
 
 use Illuminate\View\View;
 
-final class AlgorithmController extends Controller
+class AlgorithmController
 {
     /** @var int */
     private $errorsCount = 0;
@@ -32,28 +36,34 @@ final class AlgorithmController extends Controller
         // TODO: DiContainer
         $mailService = new MailService();
         $userService = new UserService();
-        $questionsService = new QuestionsService( new \QuestionsRepository() );
-        $newsletterService = new NewsletterService( new \NewsletterRepository() );
+        $questionsService = new QuestionsService( new QuestionsRepository() );
+        $newsletterService = new NewsletterService( new NewsletterRepository() );
 
         if ( !empty( $this->errorMesage ) ) {
             return view(
                 'index', [
                     'questions' => $questionsService->getQuestions(),
-                    'lastvisitName' => $userService->getUsername(),
+                    'lastVisitName' => $userService->getUsername(),
                     'errors' => $this->errorMesage,
                     'errorsCount' => $this->errorsCount,
                 ]
             );
         }
 
-        $username = $_POST['username'] ?? 'Gość';
+        $username = 'Gość';
+        if ( !empty( $_POST['newsletter'] ) ) {
+            $username = $_POST['newsletter'];
+        }
 
-        $email = null;
+        $email = '';
         if ( ValidationUtils::validateEmail( $_POST['email'] ) ) {
             $email = $_POST['email'];
         }
 
-        $newsletter = (int)$_POST['newsletter'] ?: 0;
+        $newsletter = 0;
+        if ( !empty( $_POST['newsletter'] ) ) {
+            $newsletter = 1;
+        }
 
         $answers = $questionsService->fetchJsonAnswers( $request );
 
@@ -81,7 +91,7 @@ final class AlgorithmController extends Controller
                 'index', [
                     'questions' => $questionsService->getQuestions(),
                     'jsonQuestions' => $questionsService->getJsonQuestions(),
-                    'lastvisitName' => $userService->getUsername(),
+                    'lastVisitName' => $userService->getUsername(),
                     'errors' => null,
                     'errorsCount' => 0,
                 ]
@@ -115,7 +125,7 @@ final class AlgorithmController extends Controller
                 'INSERT INTO error_logs (error, created_at) VALUES (:error, :created_at)',
                 [
                     'error' => $message,
-                    'created_at' => now()
+                    'created_at' => now(),
                 ]
             );
         } catch ( \Exception $e ) {

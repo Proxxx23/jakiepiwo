@@ -3,19 +3,20 @@ declare( strict_types=1 );
 
 namespace App\Http\Services;
 
+use App\Http\Repositories\QuestionsRepositoryInterface;
 use Illuminate\Http\Request;
 
 class QuestionsService
 {
-    /** @var \QuestionsRepository $questionsRepository */
+    /** @var QuestionsRepositoryInterface $questionsRepository */
     protected $questionsRepository;
 
     /**
      * Constructor.
      *
-     * @param \QuestionsRepository $questionsRepository
+     * @param QuestionsRepositoryInterface $questionsRepository
      */
-    public function __construct( \QuestionsRepository $questionsRepository )
+    public function __construct( QuestionsRepositoryInterface $questionsRepository )
     {
         $this->questionsRepository = $questionsRepository;
     }
@@ -43,22 +44,22 @@ class QuestionsService
      */
     public function fetchJsonAnswers( Request $request ): ?array
     {
-        if ( empty( $request->get( 'json' ) ) ) {
-            $this->logError( 'Brak odpowiedzi na pytania!' );
+        if ( empty( $answers = $request->post( 'answers' ) ) ) {
+            //            $this->logError( 'Brak odpowiedzi na pytania!' );
             return null;
         }
-
-        $answers = \json_decode( $request->get( 'json' ) );
 
         $questionsCount = \count( $this->getQuestions() );
+
+
         if ( $questionsCount !== \count( $answers ) ) {
-            $this->logError( 'Liczba odpowiedni na pytania nie zgadza się z liczbą pytań!' );
+            $this->logError( 'Liczba odpowiedi na pytania nie zgadza się z liczbą pytań!' );
             return null;
         }
 
-        for ( $i = 1; $i <= $questionsCount; $i++ ) {
-            if ( $answers[$i] === null ) {
-                $this->logError( 'Pytanie numer ' . $i . ' jest puste. Odpowiedz na wszystkie pytania!' );
+        for ( $i = 0; $i < $questionsCount; $i++ ) {
+            if ( $answers['answer-'.$i] === null ) {
+                //                $this->logError( 'Pytanie numer ' . $i . ' jest puste. Odpowiedz na wszystkie pytania!' );
             }
         }
 

@@ -3,6 +3,7 @@ declare( strict_types=1 );
 
 namespace App\Http\Controllers;
 
+use App\Http\Repositories\QuestionsRepository;
 use App\Http\Services\QuestionsService;
 use App\Http\Services\UserService;
 use Illuminate\View\View;
@@ -15,13 +16,13 @@ class MainController
     public function index(): View
     {
         $userService = new UserService();
-        $questionsService = new QuestionsService(new \QuestionsRepository());
+        $questionsService = new QuestionsService( new QuestionsRepository() );
 
         return view(
             'index', [
                 'questions' => $questionsService->getQuestions(),
                 'jsonQuestions' => $questionsService->getJsonQuestions(),
-                'lastvisitName' => $userService->getUsername(),
+                'lastVisitName' => $userService->getUsername(),
                 'errors' => null,
                 'errorsCount' => 0,
             ]

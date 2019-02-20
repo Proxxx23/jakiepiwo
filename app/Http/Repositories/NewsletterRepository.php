@@ -1,6 +1,8 @@
 <?php
 declare( strict_types=1 );
 
+namespace App\Http\Repositories;
+
 use \DrewM\MailChimp\MailChimp;
 
 class NewsletterRepository implements NewsletterRepositoryInterface
@@ -15,7 +17,7 @@ class NewsletterRepository implements NewsletterRepositoryInterface
     /**
      * Constructor.
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function __construct()
     {
