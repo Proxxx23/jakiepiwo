@@ -1,4 +1,4 @@
-<?php
+<?php declare( strict_types=1 )
 
 namespace App;
 
@@ -14,7 +14,7 @@ class UserAnswers extends Authenticatable
         'name',
         'email',
         'newsletter',
-        'answers'
+        'answers',
     ];
 
 }

@@ -1,8 +1,12 @@
-<?php
+<?php declare( strict_types=1 )
 
-Route::get('/', 'StylePickerController@showQuestions');
-Route::get('/questions', 'StylePickerController@showQuestions');
-Route::post('/results', 'StylePickerController@mix');
-Route::get('/changelog', function () {
-    return view('changelog');
-});
+Route::get( '/', 'MainController@index' );
+Route::get( '/questions', 'MainController@index' );
+
+Route::get( '/results', 'AlgorithmController@presentStyles' );
+
+Route::get(
+    '/changelog', function () {
+    return view( 'changelog' );
+}
+);

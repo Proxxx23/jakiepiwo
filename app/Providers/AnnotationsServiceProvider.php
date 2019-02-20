@@ -17,7 +17,7 @@ class AnnotationsServiceProvider extends ServiceProvider {
      * @var array
      */
     protected $scanRoutes = [
-        'App\Http\Controllers\StylePickerController',
+        'App\Http\Controllers\AlgorithmController',
     ];
 
     /**
