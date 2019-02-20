@@ -51,13 +51,13 @@ class AlgorithmController
             );
         }
 
-        $username = 'Gość';
+        $username = null;
         if ( !empty( $_POST['newsletter'] ) ) {
             $username = $_POST['newsletter'];
         }
 
-        $email = '';
-        if ( ValidationUtils::validateEmail( $_POST['email'] ) ) {
+        $email = null;
+        if ( ValidationUtils::emailIsValid( $_POST['email'] ) ) {
             $email = $_POST['email'];
         }
 
@@ -107,6 +107,7 @@ class AlgorithmController
 
         $algorithmService = new AlgorithmService();
 
+        // TODO: Username / email / newsletter object
         return $algorithmService->includeBeerIds( $answers, $username, $email, $newsletter );
     }
 

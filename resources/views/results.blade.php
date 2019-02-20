@@ -67,7 +67,7 @@
             <div class="content">
 
                 <div>
-                    @if ($_POST['debug'])
+                    @if (isset($_POST['debug']))
                     <p>DEBUG - Twoje odpowiedzi: <br />
                         @foreach ($answers AS $number => $value)
                         {{$number}} : {{$value}} |
@@ -92,9 +92,9 @@
 
                                 <p>
                                     @for ($u = 0; $u < 5; $u++)
-                                        @if ($PKStyleTake[$i] != '')
+                                        @if (isset($PKStyleTake[$i]) && $PKStyleTake[$i] != '')
                                             @if ($u == 0)<h5>Polecane piwa w tym stylu</h5>@endif
-                                                @if ($PKStyleTake[$i][$u] != '')
+                                                @if (isset($PKStyleTake[$i][$u]) && $PKStyleTake[$i][$u] != '')
                                                     <a href="{{$PKStyleTake[$i][$u]->web_url}}" target="_blank" title="Zobacz {{$PKStyleTake[$i][$u]->title}} na PolskiKraft.pl">{{$PKStyleTake[$i][$u]->title}}</a> z {{$PKStyleTake[$i][$u]->subtitle}} <img src="images/info-icon-16-16.png" class="tltp" style="cursor: help !important;" data-html="true" data-toggle="tooltip" data-placement="right" title="<img src='{{$PKStyleTake[$i][$u]->photo_thumbnail_url}}'' />"> <br />
                                                 @endif
                                         @endif
@@ -106,8 +106,8 @@
                                 @if ($v->name2 != '') / {{$v->name2}} @endif 
                                 @if ($v->name_pl != '') / {{$v->name_pl}} @endif</p>
 
-                    @for ($u = 0; $u <= 4; $u++)
-                        @if ($PKStyleTake[$i][$u] != '')
+                    @for ($u = 0; $u < 5; $u++)
+                        @if (isset($PKStyleTake[$i][$u]) && $PKStyleTake[$i][$u] != '')
                             @if ($u == 0)<h5>Polecane piwa w tym stylu</h5>@endif
                                 <a href="{{$PKStyleTake[$i][$u]->web_url}}" target="_blank" title="Zobacz {{$PKStyleTake[$i][$u]->title}} na PolskiKraft.pl">{{$PKStyleTake[$i][$u]->title}}</a> z {{$PKStyleTake[$i][$u]->subtitle}} <img src="images/info-icon-16-16.png" class="tltp" style="cursor: help !important;" data-html="true" data-toggle="tooltip" data-placement="right" title="<img src='{{$PKStyleTake[$i][$u]->photo_thumbnail_url}}'' />"><br />
                             @endif

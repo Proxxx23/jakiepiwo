@@ -19,7 +19,7 @@ class MailService
 
         $subject = $_POST['username'] . ', oto 3 najlepsze style dla Ciebie!';
 
-        if ( ValidationUtils::validateEmail($email) ) {
+        if ( ValidationUtils::emailIsValid($email) ) {
             \mail( $email, $subject, $this->prepareEmailTemplate(), $headers );
             return true;
         }

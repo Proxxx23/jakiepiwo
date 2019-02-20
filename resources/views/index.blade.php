@@ -115,13 +115,13 @@
                         @if ($field['type'] === 1)  
                             @foreach ($field['answers'] AS $answer)
                                 <label class="radio-inline">
-                                    <input type="radio" name="answers[answer-{{ $index }}]" value="{{$answer}}" autocomplete="off" required>{{$answer}}
+                                    <input type="radio" name="answers[{{ $index }}]" value="{{$answer}}" autocomplete="off" required>{{$answer}}
                                 </label>
                             @endforeach
                          
                         @else
-                            <label class="radio-inline"><input type="radio" name="answers[answer-{{ $index }}]" value="tak" autocomplete="off" required>tak</label>
-                            <label class="radio-inline"><input type="radio" name="answers[answer-{{ $index }}]" value="nie" autocomplete="off" required>nie</label>
+                            <label class="radio-inline"><input type="radio" name="answers[{{ $index }}]" value="tak" autocomplete="off" required>tak</label>
+                            <label class="radio-inline"><input type="radio" name="answers[{{ $index }}]" value="nie" autocomplete="off" required>nie</label>
                         @endif
 
                     @endforeach

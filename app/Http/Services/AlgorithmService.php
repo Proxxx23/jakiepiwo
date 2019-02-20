@@ -3,6 +3,7 @@ declare( strict_types=1 );
 
 namespace App\Http\Services;
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\PolskiKraft\PolskiKraftService AS PKAPI;
 use Illuminate\View\View;
@@ -15,28 +16,28 @@ class AlgorithmService
      */
     // Czy smakują Ci lekkie piwa koncernowe dostępne w sklepach?
     /** @var array */
-    protected $toInclude1 = [
+    protected $toInclude0 = [
         'tak' => '9:2,10:2,11:2,12:2,13:2,14:2,25:2,27:2,45:2,52:2,68:2,70:2,72:2,76:2',
         'nie' => '5,6,7,8,22,23,24,28,30,32,33,34,35,36,37,38,39,40,42,44,47,48,49,50,51,53,55,56,57,58,59,60,61,62,63,64,65,67,69,71,73,74,75',
     ];
 
     // Czy chcesz poznać nowe smaki?
     /** @var array */
-    protected $toInclude2 = [
+    protected $toInclude1 = [
         'tak' => '1,2,3,4,5,6,7,8,15,16,19,20,22,23,24,28,30,32,33,34,35,36,37,38,39,40,42,44,45,47,49,50,51,52,53,55,56,57,58,59,60,61,62,63,64,65,67,69,70,71,72,73,74,75',
         'nie' => '9:2,10:2,11:2,12:1.5,13:2,14,21,25,27:0.5,48:0:5,68,72:2',
     ];
 
     // Czy wolałbyś poznać wyłącznie style, które potrafią zszokować?
     /** @var array */
-    protected $toInclude3 = [
+    protected $toInclude2 = [
         'tak' => '1:1.5,2:2.5,3:2.5,5:2.5,6:2.5,7:2.5,8:2.5,15:2.5,16:2.5,23:2.5,24:2.5,36:2.5,37:2.5,40:2.5,42:2.5,44:2.5,50:2.5,51:2.5,55:2.5,56:2.5,57:2.5,58:2.5,59:2.5,60:1.5,61:1.5,62:2.5,63:2.5,73:2.5,74:2.5,75:2.5',
         'nie' => '',
     ];
 
     // Chcesz czegoś lekkiego do ugaszenia pragnienia, czy złożonego i degustacyjnego?
     /** @var array */
-    protected $toInclude4 = [
+    protected $toInclude3 = [
         'coś lekkiego' => '9,10,11,12,13,21,25,32,33,40,45,47,51,52',
         'coś pośrodku' => '14,15,16,19,20,25,27,28,30,34,35,38,42,44,45,47,48,49,53,55,56,57,58,59,60,61,64',
         'coś złożonego' => '1,2,3,5,6,7,8,22,23,24,36,37,39,42,44,50,62,63',
@@ -44,7 +45,7 @@ class AlgorithmService
 
     // Jak wysoką goryczkę preferujesz?
     /** @var array */
-    protected $toInclude5 = [
+    protected $toInclude4 = [
         'ledwie wyczuwalną' => '9,14,15,16,19,20,25,40,44,45,50,51,53,56',
         'lekką' => '11,12,21,22,23,34,42,45,47,48,49,50,52,55,57,59,60',
         'zdecydowanie wyczuwalną' => '1,2,3,5,6,7,8,10,13,21,24,27,28,30,32,33,35,38,39,55,57,58,59,60,61,62,63,64',
@@ -54,7 +55,7 @@ class AlgorithmService
 
     // Wolisz piwa jasne czy ciemne?
     /** @var array */
-    protected $toInclude6 = [
+    protected $toInclude5 = [
         'jasne' => '1:2.5,2:2.5,5:2.5,6:2.5,7:2.5,8:2.5,9:2.5,10:2.5,11:2.5,13:2.5,14:2.5,15:2.5,16:2.5,20:2.5,22:2.5,23:2.5,25:2.5,27:2.5,28:2.5,32:2.5,38:2.5,39:2.5,40:2.5,42:2.5,44:2.5,45:2.5,47:2.5,49:2.5,50:2.5,51:2.5,52:2.5,53:2.5,55:2.5,56:2.5,57:2.5,60:2.5,61:2.5,65:2.5,67:2.5,68:2.5,69:2.5,70:2.5,72:2.5,73:2.5',
         'bez znaczenia' => '',
         'ciemne' => '3:2.5,12:2.5,19:2.5,21:2.5,24:2.5,30:2.5,33:2.5,34:2.5,35:2.5,36:2.5,37:2.5,48:2.5,58:2.5,59:2.5,62:2.5,63:2.5,64:2.5,71:2.6,47:2.5,75:2.5,76:2.5',
@@ -62,14 +63,14 @@ class AlgorithmService
 
     // Wolisz piwa słodsze czy wytrawniejsze?
     /** @var array */
-    protected $toInclude7 = [
+    protected $toInclude6 = [
         'słodsze' => '1,2,5,6,7:1.5,8,14:1.5,15:1.5,16:1.5,19,20:1.5,22:2,23:2,25,34:2,36,38,39:1.5,49:1.5,50,53,60:1.5,62,63,67:2.5,68,69,73:2,75,76',
         'bez znaczenia' => '',
         'wytrawniejsze' => '3:1.5,5,9,10:1.5,11,12,13:1.5,21,28,33:2,35:2,36,37,40,45,47,48,52:1.5,55,57,58,59,61,62,63,64,65,70,71,72,74,75',
     ];
     // Jak mocne i gęste piwa preferujesz?
     /** @var array */
-    protected $toInclude8 = [
+    protected $toInclude7 = [
         'wodniste i lekkie' => '9:4,10:4,11:4,12:4,13:4,33:4,44:4,51:4,52:4,64:4,45:4,64:4,68:4,70:4,72:4',
         'średnie' => '1:4,2:4,3:4,5:4,6:4,7:4,14:4,15:4,16:4,19:4,21:4,25:4,27:4,28:4,29:4,30:4,32:4,34:4,38:4,42:4,47:4,48:4,53:4,55:4,56:4,57:4,59:4,60:4,61:4,64:4,69:4,71:4,72:4,73:4,74:4,75:4,75:5',
         'mocne i gęste' => '7:4,8:4,20:4,22:4,23:4,24:4,36:4,37:4,39:4,49:4,50:4,53:4,58:4,62:4,63:4,67:4,74:2,75:2',
@@ -77,49 +78,49 @@ class AlgorithmService
     //
     // Czy odpowiadałby Ci smak czekoladowy w piwie?
     /** @var array */
-    protected $toInclude9 = [
+    protected $toInclude8 = [
         'tak' => '3:1.5,12:1.5,21:1.5,24:2,30,33:1.5,34:2,35:2,36:2,37:2,48,58:2,59:1.5,62:2,63:2,71:1.5,74,75:1.5',
         'nie' => '1,2,5,6,7,8,9,10,11,13,14,15,16,19,20,22,23,25,27,28,32,38,39,40,42,44,45,47,49,50,51,52,53,55,56,57,60,61,64,65,67,68,69,70,72,73,76',
     ];
 
     // Czy odpowiadałby Ci smak kawowy w piwie?
     /** @var array */
-    protected $toInclude10 = [
+    protected $toInclude9 = [
         'tak' => '3,24,30,33,34,35,36,37,58,59,62,63,71,74:3,75',
         'nie' => '1,2,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,25,27,28,30,32,38,39,40,42,44,45,46,47,48,49,50,51,52,53,55,56,57,60,61,64,65,67,68,69,70,72,73,76',
     ];
 
     // Czy odpowiadałoby Ci piwo nieco przyprawowe
     /** @var array */
-    protected $toInclude11 = [
+    protected $toInclude10 = [
         'tak' => '2:1.5,20,25,45:1.5,47:1.5,48,49:2,50:2,53:1.5,67:1.5,68',
         'nie' => '',
     ];
 
     // Czy chciałbyś piwo w klimatach owocowych (bez soku)?
     /** @var array */
-    protected $toInclude12 = [
+    protected $toInclude11 = [
         'tak' => '1:2,2:1.5,5:1.5,6:1.5,7:2,8:2,25,40:1.5,42:1.5,44,45,47:0.5,49:1.5,50,51:1.25,55,56:1.5,60:2,61:2,65:1.5,67,69:2,70:1.5,72,73:2.5,76',
         'nie' => '3,9,10,11,12,13,14,15,16,19,20,21,22,23,24,27,28,30,32,33,34,35,36,37,38,39,47,48,52,53,57,58,59,62,63,64,68,71,74,75',
     ];
 
     // Co powiesz na piwo kwaśne?
     /** @var array */
-    protected $toInclude13 = [
+    protected $toInclude12 = [
         'tak' => '40:2,42:3,44:3,51:2,56:2',
         'nie' => '1,2,3,5,6,7,8,9,10,11,12,13,14,15,16,19,20,21,22,23,24,25,27,28,30,32,33,34,35,36,37,38,39,40,45,47,48,49,50,52,53,55:0.5,57,58,59,60,61,62,63,64,65,67,68,69,70,71,72,73,74,75,76',
     ];
 
     // Czy odpowiadałby Ci smak wędzony/dymny w piwie?
     /** @var array */
-    protected $toInclude14 = [
+    protected $toInclude13 = [
         'tak' => '15:1.5,16:1.5,52:1.5,58:1.5,59:1.5,62:1.5,63:1.5',
         'nie' => '',
     ];
 
     // BA
     /** @var array */
-    protected $toInclude15 = [
+    protected $toInclude14 = [
         'tak' => 'tak',
         'nie' => 'nie',
     ];
@@ -302,22 +303,23 @@ class AlgorithmService
     /**
      * Buduje siłę dla konkretnych ID stylu
      * Jeśli id ma postać 5:2.5 to zwiększy (przy trafieniu w to ID) punktację tego stylu o 2.5 a nie o 1
-     * Domyślnie zwiększa punktację stylu o
+     * Domyślnie zwiększa punktację stylu o 1
      *
-     * @param string $ids
+     * @param string $styleIds
      *
      * @return array
      */
-    private function strengthBuilder( string $ids ): array
+    private function buildStrength( string $styleIds ): array
     {
-        $idsExploded = \explode( ',', trim( $ids ) );
+        $idsExploded = \explode( ',', trim( $styleIds ) );
         $strength = [];
-        foreach ( $idsExploded AS $v ) {
-            if ( \strpos( $v, ':' ) !== false || \strpos( $v, ' :' ) !== false ) {
-                $tmp = \explode( ':', $v );
+
+        foreach ( $idsExploded as $idMultiplierPair ) {
+            if ( \strpos( $idMultiplierPair, ':' ) !== false || \strpos( $idMultiplierPair, ' :' ) !== false ) {
+                $tmp = \explode( ':', $idMultiplierPair );
                 $strength[$tmp[0]] = (float)$tmp[1];
             } else {
-                $strength[$v] = 1;
+                $strength[$idMultiplierPair] = 1;
             }
         }
 
@@ -458,12 +460,10 @@ class AlgorithmService
         $toShuffle = 0;
         $countIncluded = \count( $this->includedIds );
 
-        for ( $i = 1; $i <= $countIncluded; $i++ ) {
-            //			$nthStyleIndex = key(array_slice($this->includedIds, $i, 1, true));
+        for ( $i = 1; $i < $countIncluded; $i++ ) {
             $nthStylePoints = \array_values( \array_slice( $this->includedIds, $i, 1, true ) );
 
             if ( $nthStylePoints[0] >= $firstStylePoints[0] * 0.90 ) {
-                //echo $nthStylePoints[0] . ' >= ' . $firstStylePoints[0] * 0.80;
                 $toShuffle++;
             }
         }
@@ -477,8 +477,8 @@ class AlgorithmService
     /**
      * Heart of an algorithm
      *
-     * @param array $answers
-     * @param string $name
+     * @param string $answers
+     * @param string|null $name
      * @param string|null $email
      * @param int $newsletter
      *
@@ -486,53 +486,61 @@ class AlgorithmService
      * @throws \Exception
      */
     public function includeBeerIds(
-        array $answers,
-        string $name,
+        string $answers,
+        ?string $name,
         ?string $email,
         int $newsletter
     ): View {
 
-        $answersDecoded = $this->answersDecoded = $answers;
+        $answersDecoded = $this->answersDecoded = \json_decode( $answers );
 
-        foreach ( $answersDecoded AS $number => &$answer ) {
-            foreach ( $this->{'toInclude' . $number} AS $yesno => $ids ) {
+        foreach ( $answersDecoded AS $questionNumber => &$givenAnswer ) {
+
+            $answersMap = $this->{'toInclude' . $questionNumber};
+
+            foreach ( $answersMap AS $mappedAnswer => $ids ) {
 
                 $this->barrelAged = false;
-                if ( $_POST['answer-15'] === 'tak' ) {
+                if ( $answersDecoded[14] === 'tak' ) {
                     $this->barrelAged = true;
                 }
 
-                if ( $_POST['answer-13'] === 'nie ma mowy' ) {
+                if ( $answersDecoded[12] === 'nie ma mowy' ) {
                     $toExclude = [ 40, 42, 44, 51, 56 ];
                     $this->excludeFromRecommended( $toExclude );
                 }
 
-                if ( $_POST['answer-14'] === 'nie' ) {
+                if ( $answersDecoded[13] === 'nie' ) {
                     $toExclude = [ 15, 16, 52, 57, 58, 59, 62, 63 ];
                     $this->excludeFromRecommended( $toExclude );
                 }
 
                 // Nie idź dalej przy BA
+                // TODO: czemu?
                 if ( \in_array( $ids, [ 'tak', 'nie' ], true ) ) {
                     continue;
                 }
 
-                if ( $answer === $yesno &&
-                    $answer !== 'bez znaczenia' ) {
-                    $idsToCalculate = $this->strengthBuilder( $ids );
+                if ( $givenAnswer === $mappedAnswer &&
+                    $givenAnswer !== 'bez znaczenia' ) {
+                    $idsToCalculate = $this->buildStrength( $ids );
                     foreach ( $idsToCalculate AS $styleId => $strength ) {
-                        if ( \is_numeric( $styleId ) ) {
+                        if (empty($this->includedIds[$styleId])) {
+                            $this->includedIds[$styleId] = $strength;
+                        } else {
                             $this->includedIds[$styleId] += $strength;
                         }
                     }
                 }
 
-                if ( $answer !== $yesno &&
-                    $answer !== 'bez znaczenia' &&
-                    !\in_array( $number, [ 3, 5, 9 ], true ) ) {
-                    $idsToCalculate = $this->strengthBuilder( $ids );
+                if ( $givenAnswer !== $mappedAnswer &&
+                    $givenAnswer !== 'bez znaczenia' &&
+                    !\in_array( $questionNumber, [ 3, 5, 9 ], true ) ) {
+                    $idsToCalculate = $this->buildStrength( $ids );
                     foreach ( $idsToCalculate AS $styleId => $strength ) {
-                        if ( \is_numeric( $styleId ) ) {
+                        if (empty($this->excludedIds[$styleId])) {
+                            $this->excludedIds[$styleId] = $strength;
+                        } else {
                             $this->excludedIds[$styleId] += $strength;
                         }
                     }
@@ -540,7 +548,7 @@ class AlgorithmService
 
             }
         }
-        unset( $answer );
+        unset( $givenAnswer );
 
         $this->synergyExecuter( $answersDecoded );
 
@@ -548,7 +556,7 @@ class AlgorithmService
     }
 
     /**
-     * @param string $name
+     * @param string|null $name
      * @param string|null $email
      * @param int $newsletter
      *
@@ -556,7 +564,7 @@ class AlgorithmService
      * @throws \Exception
      */
     public function chooseStyles(
-        string $name,
+        ?string $name,
         ?string $email,
         int $newsletter
     ): View {
@@ -609,25 +617,25 @@ class AlgorithmService
 
         return view(
             'results', [
-            'buyThis' => $buyThis,
-            'avoidThis' => $avoidThis,
-            'mustTake' => $this->mustTake,
-            'mustavoid' => $this->mustAvoid,
-            'PKStyleTake' => $poliskiKraftStylesToTake,
-            'username' => $name,
-            'barrelAged' => $this->barrelAged,
-            'answers' => $this->answersDecoded,
-        ]
+                'buyThis' => $buyThis,
+                'avoidThis' => $avoidThis,
+                'mustTake' => $this->mustTake,
+                'mustAvoid' => $this->mustAvoid,
+                'PKStyleTake' => $poliskiKraftStylesToTake,
+                'username' => $name,
+                'barrelAged' => $this->barrelAged,
+                'answers' => $this->answersDecoded,
+            ]
         );
     }
 
     /**
-     * @param string $name
+     * @param string|null $name
      * @param string|null $email
      * @param int $newsletter
      */
     private function logStyles(
-        string $name,
+        ?string $name,
         ?string $email,
         int $newsletter
     ): void {

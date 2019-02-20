@@ -34,7 +34,7 @@ class NewsletterService
 //            $this->logError( 'Jeżeli chcesz dopisać się do newslettera, musisz podać adres e-mail.' );
         }
 
-        if ( ValidationUtils::validateEmail( $email ) ) {
+        if ( ValidationUtils::emailIsValid( $email ) ) {
             $this->addEmailToNewsletterList( $email );
             return true;
         }

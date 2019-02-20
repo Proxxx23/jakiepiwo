@@ -3,6 +3,7 @@ declare( strict_types=1 );
 
 namespace App\Http\Services;
 
+use App\Exceptions\InternalIncompatibilityException;
 use App\Http\Repositories\QuestionsRepositoryInterface;
 use Illuminate\Http\Request;
 
@@ -40,29 +41,31 @@ class QuestionsService
     /**
      * @param Request $request
      *
-     * @return array|null
+     * @return string
+     * @throws InternalIncompatibilityException
      */
-    public function fetchJsonAnswers( Request $request ): ?array
+    public function fetchJsonAnswers( Request $request ): string
     {
-        if ( empty( $answers = $request->post( 'answers' ) ) ) {
-            //            $this->logError( 'Brak odpowiedzi na pytania!' );
-            return null;
-        }
+        $answers = $request->post( 'answers' );
+//        if ( empty( $answers ) ) {
+//            $this->logError( 'Brak odpowiedzi na pytania!' );
+//            return null;
+//            //TODO Obsługa błędów
+//        }
 
         $questionsCount = \count( $this->getQuestions() );
 
-
         if ( $questionsCount !== \count( $answers ) ) {
-//            $this->logError( 'Liczba odpowiedi na pytania nie zgadza się z liczbą pytań!' );
-            return null;
+            throw new InternalIncompatibilityException('Liczba odpowiedzi na pytania nie zgadza się z liczbą pytań.');
         }
 
-        for ( $i = 0; $i < $questionsCount; $i++ ) {
-            if ( $answers['answer-'.$i] === null ) {
-                //                $this->logError( 'Pytanie numer ' . $i . ' jest puste. Odpowiedz na wszystkie pytania!' );
-            }
-        }
+//        for ( $i = 0; $i < $questionsCount; $i++ ) {
+//            if ( $answers['answer-'.$i] === null ) {
+//                $this->logError( 'Pytanie numer ' . $i . ' jest puste. Odpowiedz na wszystkie pytania!' );
+//                //TODO obłsuga błędów
+//            }
+//        }
 
-        return $answers;
+        return \json_encode($answers);
     }
 }
