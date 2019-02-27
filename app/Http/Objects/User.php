@@ -12,10 +12,10 @@ class User extends BaseObject
     /** @var int */
     protected $newsletterOpt = 0;
 
-    /** @var Options */
+    /** @var OptionsInterface */
     protected $options;
 
-    public function __construct( Options $options )
+    public function __construct( OptionsInterface $options )
     {
         $this->options = $options;
     }
