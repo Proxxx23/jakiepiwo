@@ -9,6 +9,14 @@ class User extends BaseObject
     protected $username;
     /** @var string|null */
     protected $email;
-    /** @var int|null */
-    protected $newsletterOpt;
+    /** @var int */
+    protected $newsletterOpt = 0;
+
+    /** @var Options */
+    protected $options;
+
+    public function __construct( Options $options )
+    {
+        $this->options = $options;
+    }
 }

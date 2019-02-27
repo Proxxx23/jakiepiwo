@@ -108,7 +108,7 @@
 
                     @foreach ($questions as $index => $field)
                     <h3>{{$index+1}}. {{$field['question']}}
-                        @if (isset($field['tooltip'])))
+                        @if (isset($field['tooltip']))
                             <img src="images/info-icon-16-16.png" class="tltp" style="cursor: help !important;" data-toggle="tooltip" data-placement="right" title="{{$field['tooltip']}}">
                         @endif</h3>
                     
