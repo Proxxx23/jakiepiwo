@@ -75,7 +75,7 @@
                     </p>
                     @endif
 
-                    <h1>@if ($username != '')Hej, {{$username}}!@endif Piwa w tych stylach powinny Ci zasmakować</h1>
+                    <h1>@if ($username !== null)Hej, {{$username}}!@endif Piwa w tych stylach powinny Ci zasmakować</h1>
 
                     @php
                         $countedBuyThis = count($buyThis);
@@ -85,16 +85,16 @@
                         @foreach ($buyThis[$i] as $k => $v)
 
                             @if ($i < 3)
-                            <p @if ($mustTake && $i == 0) id="mustTake" @else id="take" @endif>
+                            <p @if ($mustTake && $i === 0) id="mustTake" @else id="take" @endif>
                                 {{$v->name}} 
-                                @if ($v->name2 != '') / {{$v->name2}} @endif 
-                                @if ($v->name_pl != '') / {{$v->name_pl}} @endif</p>
+                                @if ($v->name2 !== '') / {{$v->name2}} @endif
+                                @if ($v->name_pl !== '') / {{$v->name_pl}} @endif</p>
 
                                 <p>
                                     @for ($u = 0; $u < 5; $u++)
-                                        @if (isset($PKStyleTake[$i]) && $PKStyleTake[$i] != '')
-                                            @if ($u == 0)<h5>Polecane piwa w tym stylu</h5>@endif
-                                                @if (isset($PKStyleTake[$i][$u]) && $PKStyleTake[$i][$u] != '')
+                                        @if (isset($PKStyleTake[$i]) && $PKStyleTake[$i] !== '')
+                                            @if ($u === 0)<h5>Polecane piwa w tym stylu</h5>@endif
+                                                @if (isset($PKStyleTake[$i][$u]) && $PKStyleTake[$i][$u] !== '')
                                                     <a href="{{$PKStyleTake[$i][$u]->web_url}}" target="_blank" title="Zobacz {{$PKStyleTake[$i][$u]->title}} na PolskiKraft.pl">{{$PKStyleTake[$i][$u]->title}}</a> z {{$PKStyleTake[$i][$u]->subtitle}} <img src="images/info-icon-16-16.png" class="tltp" style="cursor: help !important;" data-html="true" data-toggle="tooltip" data-placement="right" title="<img src='{{$PKStyleTake[$i][$u]->photo_thumbnail_url}}'' />"> <br />
                                                 @endif
                                         @endif
@@ -103,12 +103,12 @@
 
                             @else
                             <p id="optional_take">{{$v->name}} 
-                                @if ($v->name2 != '') / {{$v->name2}} @endif 
-                                @if ($v->name_pl != '') / {{$v->name_pl}} @endif</p>
+                                @if ($v->name2 !== '') / {{$v->name2}} @endif
+                                @if ($v->name_pl !== '') / {{$v->name_pl}} @endif</p>
 
                     @for ($u = 0; $u < 5; $u++)
-                        @if (isset($PKStyleTake[$i][$u]) && $PKStyleTake[$i][$u] != '')
-                            @if ($u == 0)<h5>Polecane piwa w tym stylu</h5>@endif
+                        @if (isset($PKStyleTake[$i][$u]) && $PKStyleTake[$i][$u] !== '')
+                            @if ($u === 0)<h5>Polecane piwa w tym stylu</h5>@endif
                                 <a href="{{$PKStyleTake[$i][$u]->web_url}}" target="_blank" title="Zobacz {{$PKStyleTake[$i][$u]->title}} na PolskiKraft.pl">{{$PKStyleTake[$i][$u]->title}}</a> z {{$PKStyleTake[$i][$u]->subtitle}} <img src="images/info-icon-16-16.png" class="tltp" style="cursor: help !important;" data-html="true" data-toggle="tooltip" data-placement="right" title="<img src='{{$PKStyleTake[$i][$u]->photo_thumbnail_url}}'' />"><br />
                             @endif
                         @endfor
@@ -134,13 +134,13 @@
                         @foreach ($avoidThis[$i] as $k => $v)
 
                             @if ($i < 3)
-                            <p @if ($mustAvoid && $i == 0) id="mustAvoid" @else id="avoid" @endif>{{$v->name}} 
-                                @if ($v->name2 != '') / {{$v->name2}} @endif 
-                                @if ($v->name_pl != '') / {{$v->name_pl}} @endif</p>
+                            <p @if ($mustAvoid && $i === 0) id="mustAvoid" @else id="avoid" @endif>{{$v->name}}
+                                @if ($v->name2 !== '') / {{$v->name2}} @endif
+                                @if ($v->name_pl !== '') / {{$v->name_pl}} @endif</p>
                             @else
                             <p id="optional_avoid">{{$v->name}} 
-                                @if ($v->name2 != '') / {{$v->name2}} @endif 
-                                @if ($v->name_pl != '') / {{$v->name_pl}} @endif</p>
+                                @if ($v->name2 !== '') / {{$v->name2}} @endif
+                                @if ($v->name_pl !== '') / {{$v->name_pl}} @endif</p>
                             @endif
 
                         @endforeach
