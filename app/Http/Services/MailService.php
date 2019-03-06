@@ -21,6 +21,7 @@ class MailService
 
         if ( ValidationUtils::emailIsValid($email) ) {
             \mail( $email, $subject, $this->prepareEmailTemplate(), $headers );
+
             return true;
         }
 
@@ -30,7 +31,6 @@ class MailService
     }
 
     /**
-     * Prepares a TPL for an e-mail
      * @return string $mailTPL
      */
     protected function prepareEmailTemplate(): string

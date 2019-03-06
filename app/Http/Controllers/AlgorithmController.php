@@ -55,14 +55,14 @@ class AlgorithmController
         }
 
         $user = new User( new Options() );
-        $user->username = $_POST['newsletter'] ?? null;
+        $user->setUsername( $_POST['username'] );
 
-        if ( isset($_POST['email']) && ValidationUtils::emailIsValid( $_POST['email'] ) ) {
-            $user->email = $_POST['email'];
+        if ( isset( $_POST['email'] ) && ValidationUtils::emailIsValid( $_POST['email'] ) ) {
+            $user->setEmail($_POST['email']);
         }
 
         if ( !empty( $_POST['newsletter'] ) ) {
-            $user->newsletterOpt = 1;
+            $user->setNewsletterOpt(1);
         }
 
         // TODO: Obiekt z wypełnianiem pól z JSON-a
@@ -78,9 +78,9 @@ class AlgorithmController
                                         VALUES 
                                         (?, ?, ?, ?, ?)',
             [
-                $user->username,
-                $user->email,
-                $user->newsletterOpt,
+                $user->getUsername(),
+                $user->getEmail(),
+                $user->getNewsletterOpt(),
                 $answers,
                 now(),
             ]
@@ -99,11 +99,13 @@ class AlgorithmController
             );
         }
 
-        // todo: na sam koniec
-        $newsletterService->addToNewsletterList( $user->email, $user->newsletterOpt );
+        $userEmail = $user->getEmail();
 
-        if ( $user->email !== null && !empty( $_POST['sendMeAnEmail'] ) ) {
-            $mailService->sendEmail( $user->email );
+        // todo: na sam koniec
+        $newsletterService->addToNewsletterList( $userEmail, $user->getNewsletterOpt() );
+
+        if ( $userEmail !== null && !empty( $_POST['sendMeAnEmail'] ) ) {
+            $mailService->sendEmail( $userEmail );
         }
 
         $algorithmService = new AlgorithmService( new ScoringRepository() );

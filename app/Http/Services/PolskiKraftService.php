@@ -38,11 +38,11 @@ class PolskiKraftService
             return null;
         }
 
-        $del1 = \random_int( 0, \count( $request ) - 1 );
-        unset( $request[$del1] );
-        $del2 = \random_int( 0, \count( $request ) - 1 );
-        unset( $request[$del2] );
+        while ( \count( $request ) > 3 ) {
+            $deletedRandomId = \random_int( 0, \count( $request ) - 1 );
+            unset( $request[$deletedRandomId] );
+        }
 
-        return $request;
+        return \array_values( \array_filter( $request ) );
     }
 }

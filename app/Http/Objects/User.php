@@ -1,9 +1,19 @@
 <?php
-declare(strict_types=1);
+declare( strict_types=1 );
 
 namespace App\Http\Objects;
 
-class User extends BaseObject
+/**
+ * @method setUsername( ?string $username )
+ * @method setEmail( ?string $email )
+ * @method setNewsletterOpt( int $int )
+ * @method getUsername()
+ * @method getEmail()
+ * @method getNewsletterOpt()
+ * @method setOptions( OptionsInterface $options )
+ * @method getOptions()
+ */
+class User extends AbstractFixedPropertyObject
 {
     /** @var string|null */
     protected $username;
@@ -17,6 +27,6 @@ class User extends BaseObject
 
     public function __construct( OptionsInterface $options )
     {
-        $this->options = $options;
+        $this->setOptions( $options );
     }
 }

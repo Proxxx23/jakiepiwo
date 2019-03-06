@@ -1,8 +1,11 @@
 <?php
+/** @noinspection ALL */
 declare( strict_types=1 );
 
 namespace App\Http\Services;
 
+use App\Http\Objects\Options;
+use App\Http\Objects\OptionsInterface;
 use App\Http\Objects\User;
 use App\Http\Repositories\ScoringRepositoryInterface;
 use Illuminate\Support\Facades\DB;
@@ -13,12 +16,6 @@ class AlgorithmService
 {
     /** @var array */
     protected $answersDecoded = [];
-
-    //todo wywalić
-    /** @var array */
-    protected $styleToTake = []; // Styles user should buy
-    /** @var array */
-    protected $styleToAvoid = []; // Styles user should avoid
 
     /** @var ScoringRepositoryInterface */
     protected $scoringRepository;
@@ -39,7 +36,7 @@ class AlgorithmService
      */
     private function buildStrength( ?string $styleIds ): ?array
     {
-        if ($styleIds === null) {
+        if ( $styleIds === null ) {
             return null;
         }
 
@@ -49,7 +46,7 @@ class AlgorithmService
         foreach ( $idsExploded as $idMultiplierPair ) {
             if ( \strpos( $idMultiplierPair, ':' ) !== false || \strpos( $idMultiplierPair, ' :' ) !== false ) {
                 $tmp = \explode( ':', $idMultiplierPair );
-                $idsToCalculate[$tmp[0]] = (float)$tmp[1];
+                $idsToCalculate[$tmp[0]] = (float) $tmp[1];
             } else {
                 $idsToCalculate[$idMultiplierPair] = 1;
             }
@@ -67,20 +64,23 @@ class AlgorithmService
      */
     public function applySynergy( array $answerValue, User $user ): void
     {
+        /** @var Options $userOptions */
+        $userOptions = $user->getOptions();
+
         // Lekkie + owocowe + Kwaśne
         if ( $answerValue[4] === 'coś lekkiego' &&
             $answerValue[12] === 'tak' &&
             $answerValue[13] === 'chętnie' ) {
             echo 'Synergia Lekkie + owocowe + Kwaśne <br />';
-            $user->options->buildPositiveSynergy( [ 40, 56 ], 2 );
-            $user->options->buildPositiveSynergy( [ 51 ], 1.5 );
+            $userOptions->buildPositiveSynergy( [ 40, 56 ], 2 );
+            $userOptions->buildPositiveSynergy( [ 51 ], 1.5 );
         }
         // nowe smaki LUB szokujące + złożone + jasne
         if ( $answerValue[4] === 'coś złożonego' &&
             $answerValue[4] === 'jasne' &&
             ( $answerValue[2] === 'tak' || $answerValue[3] === 'tak' ) ) {
             echo 'Synergia we smaki LUB szokujące + złożone + jasne <br />';
-            $user->options->buildPositiveSynergy( [ 7, 15, 16, 23, 39, 42, 50, 60, 73 ], 2 );
+            $userOptions->buildPositiveSynergy( [ 7, 15, 16, 23, 39, 42, 50, 60, 73 ], 2 );
         }
 
         // nowe smaki LUB szokujące + złożone + ciemne
@@ -88,7 +88,7 @@ class AlgorithmService
             $answerValue[4] === 'ciemne' &&
             ( $answerValue[2] === 'tak' || $answerValue[3] === 'tak' ) ) {
             echo 'Synergia nowe smaki LUB szokujące + złożone + ciemne <br />';
-            $user->options->buildPositiveSynergy( [ 36, 37, 58, 59, 62, 63 ], 2 );
+            $userOptions->buildPositiveSynergy( [ 36, 37, 58, 59, 62, 63 ], 2 );
         }
 
         // złożone + ciemne + nieowocowe
@@ -96,7 +96,7 @@ class AlgorithmService
             $answerValue[6] === 'ciemne' &&
             $answerValue[12] === 'nie' ) {
             echo 'Synergia złożone + ciemne + nieowocowe <br />';
-            $user->options->buildPositiveSynergy( [ 3, 24, 35, 36, 37, 48, 58, 59, 62, 63, 75 ], 1.5 );
+            $userOptions->buildPositiveSynergy( [ 3, 24, 35, 36, 37, 48, 58, 59, 62, 63, 75 ], 1.5 );
         }
 
         // złożone + ciemne + nieowocowe + kawowe
@@ -105,7 +105,7 @@ class AlgorithmService
             $answerValue[10] === 'tak' &&
             $answerValue[12] === 'nie' ) {
             echo 'Synergia złożone + ciemne + nieowocowe + kawowe <br />';
-            $user->options->buildPositiveSynergy( [ 74 ], 2.5 );
+            $userOptions->buildPositiveSynergy( [ 74 ], 2.5 );
         }
 
         // Lekkie + ciemne + słodkie + goryczka (ledwie || lekka || wyczuwalna)
@@ -114,15 +114,15 @@ class AlgorithmService
             $answerValue[7] === 'słodsze' &&
             !\in_array( $answerValue[5], [ 'mocną', 'jestem hopheadem' ] ) ) {
             echo 'Synergia Lekkie + ciemne + słodkie + goryczka (ledwie || lekka || wyczuwalna) <br />';
-            $user->options->buildPositiveSynergy( [ 12, 29, 30, 34, 64 ], 2 );
-            $user->options->buildNegativeSynergy( [ 36, 37 ], 3 );
+            $userOptions->buildPositiveSynergy( [ 12, 29, 30, 34, 64 ], 2 );
+            $userOptions->buildNegativeSynergy( [ 36, 37 ], 3 );
         }
 
         // jasne + nieczekoladowe
         if ( $answerValue[6] === 'jasne' &&
             $answerValue[9] === 'nie' ) {
             echo 'Synergia jasne + nieczekoladowe <br />';
-            $user->options->buildNegativeSynergy(
+            $userOptions->buildNegativeSynergy(
                 [ 12, 21, 24, 29, 33, 34, 35, 36, 37, 58, 59, 62, 63, 71, 74, 75 ], 2
             );
         }
@@ -132,7 +132,7 @@ class AlgorithmService
             $answerValue[9] === 'tak' &&
             $answerValue[8] !== 'mocne i gęste' ) {
             echo 'Synergia ciemne + czekoladowe + lżejsze <br />';
-            $user->options->buildPositiveSynergy( [ 12, 31, 33, 34, 35, 59, 71 ], 2.5 );
+            $userOptions->buildPositiveSynergy( [ 12, 31, 33, 34, 35, 59, 71 ], 2.5 );
         }
 
 
@@ -142,8 +142,8 @@ class AlgorithmService
             $answerValue[8] !== 'mocne i gęste' &&
             ( $answerValue[5] === 'ledwie wyczuwalną' || $answerValue[5] === 'lekką' ) ) {
             echo 'Synergia goryczka ledwo || lekka + jasne + nieczkoladowe + niegęste <br />';
-            $user->options->buildPositiveSynergy( [ 20, 25, 40, 44, 45, 47, 51, 52, 53, 68, 73 ], 2 );
-            $user->options->buildNegativeSynergy( [ 3, 24, 35, 36, 37, 58, 59, 62, 63, 71, 75 ], 2 );
+            $userOptions->buildPositiveSynergy( [ 20, 25, 40, 44, 45, 47, 51, 52, 53, 68, 73 ], 2 );
+            $userOptions->buildNegativeSynergy( [ 3, 24, 35, 36, 37, 58, 59, 62, 63, 71, 75 ], 2 );
         }
 
         // jasne + lekkie + wodniste + wędzone = grodziskie
@@ -152,30 +152,30 @@ class AlgorithmService
             $answerValue[8] === 'wodniste' &&
             $answerValue[14] === 'tak' ) {
             echo 'Synergia asne + lekkie + wodniste + wędzone = grodziskie <br />';
-            $user->options->buildPositiveSynergy( [ 52 ], 3 );
-            $user->options->buildNegativeSynergy( [ 3, 22, 23, 24, 35, 36, 37, 50, 58, 59, 62, 63, 71, 75 ], 2 );
+            $userOptions->buildPositiveSynergy( [ 52 ], 3 );
+            $userOptions->buildNegativeSynergy( [ 3, 22, 23, 24, 35, 36, 37, 50, 58, 59, 62, 63, 71, 75 ], 2 );
         }
 
         // duża/hophead goryczka + jasne
         if ( $answerValue[6] === 'jasne' &&
             ( $answerValue[5] === 'mocną' || $answerValue[5] === 'jestem hopheadem' ) ) {
             echo 'Synergia duża/hophead goryczka + jasne <br />';
-            $user->options->buildPositiveSynergy( [ 1, 2, 5, 6, 7, 8, 28, 61 ], 1.75 );
-            $user->options->buildPositiveSynergy( [ 65, 69, 70, 72 ], 1.5 );
+            $userOptions->buildPositiveSynergy( [ 1, 2, 5, 6, 7, 8, 28, 61 ], 1.75 );
+            $userOptions->buildPositiveSynergy( [ 65, 69, 70, 72 ], 1.5 );
         }
 
         // duża/hophead goryczka + ciemne
         if ( $answerValue[6] === 'ciemne' &&
             ( $answerValue[5] === 'mocną' || $answerValue[5] === 'jestem hopheadem' ) ) {
             echo 'Synergia duża/hophead goryczka + ciemne <br />';
-            $user->options->buildPositiveSynergy( [ 3, 36, 37, 58, 62, 63, 75 ], 1.75 );
+            $userOptions->buildPositiveSynergy( [ 3, 36, 37, 58, 62, 63, 75 ], 1.75 );
         }
 
         // goryczka ledwo || lekka
         if ( $answerValue[5] === 'ledwie wyczuwalną' || $answerValue[5] === 'lekką' ) {
             echo 'Synergia negatywna na lekkie goryczki <br />';
-            $user->options->buildNegativeSynergy( [ 1, 2, 3, 5, 7, 8, 28, 61 ], 2 );
-            $user->options->buildNegativeSynergy( [ 6, 60, 65, 69, 71, 72 ], 1.5 );
+            $userOptions->buildNegativeSynergy( [ 1, 2, 3, 5, 7, 8, 28, 61 ], 2 );
+            $userOptions->buildNegativeSynergy( [ 6, 60, 65, 69, 71, 72 ], 1.5 );
         }
     }
 
@@ -190,21 +190,26 @@ class AlgorithmService
     {
         $answersDecoded = $this->answersDecoded = \json_decode( $answers );
 
+        /** @var Options $userOptions */
+        $userOptions = $user->getOptions();
+
         //todo: intersect?
-        foreach ( $answersDecoded AS $questionNumber => &$givenAnswer ) {
+        foreach ( $answersDecoded as $questionNumber => &$givenAnswer ) {
 
             $scoringMap = $this->scoringRepository->fetchScore( $questionNumber );
 
-            foreach ( $scoringMap AS $mappedAnswer => $ids ) {
+            foreach ( $scoringMap as $mappedAnswer => $ids ) {
 
-                ($answersDecoded[14] === 'tak') ? $user->options->barrelAged = true : null;
+                $userOptions->setBarrelAged(
+                    $answersDecoded[14] === 'tak' ? true : false
+                );
 
                 if ( $answersDecoded[12] === 'nie ma mowy' ) {
-                    $user->options->excludeFromRecommended( [ 40, 42, 44, 51, 56 ] );
+                    $userOptions->excludeFromRecommended( [ 40, 42, 44, 51, 56 ] );
                 }
 
                 if ( $answersDecoded[13] === 'nie' ) {
-                    $user->options->excludeFromRecommended( [ 15, 16, 52, 57, 58, 59, 62, 63 ] );
+                    $userOptions->excludeFromRecommended( [ 15, 16, 52, 57, 58, 59, 62, 63 ] );
                 }
 
                 // Nie idź dalej przy BA
@@ -216,12 +221,12 @@ class AlgorithmService
                 if ( $givenAnswer === $mappedAnswer &&
                     $givenAnswer !== 'bez znaczenia' ) {
                     $idsToCalculate = $this->buildStrength( $ids );
-                    if ($idsToCalculate !== null) {
+                    if ( $idsToCalculate !== null ) {
                         foreach ( $idsToCalculate as $styleId => $strength ) {
-                            if ( empty( $user->options->includedIds[$styleId] ) ) {
-                                $user->options->addToIncluded( $styleId, $strength );
+                            if ( empty( $userOptions->getIncludedIds()[$styleId] ) ) { //todo bez sensu...
+                                $userOptions->addToIncluded( $styleId, $strength );
                             } else {
-                                $user->options->addStrengthToIncluded( $styleId, $strength );
+                                $userOptions->addStrengthToIncluded( $styleId, $strength );
                             }
                         }
                     }
@@ -231,12 +236,12 @@ class AlgorithmService
                     $givenAnswer !== 'bez znaczenia' &&
                     !\in_array( $questionNumber, [ 3, 5, 9 ], true ) ) {
                     $idsToCalculate = $this->buildStrength( $ids );
-                    if ($idsToCalculate !== null) {
+                    if ( $idsToCalculate !== null ) {
                         foreach ( $idsToCalculate as $styleId => $strength ) {
-                            if ( empty( $user->options->excludedIds[$styleId] ) ) {
-                                $user->options->addToExcluded( $styleId, $strength );
+                            if ( empty( $userOptions->getExcludedIds()[$styleId] ) ) { //todo bez sensu...
+                                $userOptions->addToExcluded( $styleId, $strength );
                             } else {
-                                $user->options->addStrengthToExcluded( $styleId, $strength );
+                                $userOptions->addStrengthToExcluded( $styleId, $strength );
                             }
                         }
                     }
@@ -260,54 +265,67 @@ class AlgorithmService
      */
     public function chooseStyles( User $user ): View
     {
-        $user->options->fetchAll();
+        /** @var Options $userOptions */
+        $userOptions = $user->getOptions();
+        $userOptions->fetchAll();
 
-        if ( $_SERVER['REMOTE_ADDR'] === '213.241.3.97' ) {
-            echo '<br /><br /><br />';
-            echo 'Tablica ze stylami do wybrania i punktami / Tablica ze stylami do odrzucenia i punktami: <br />';
-            dd( $user->options->includedIds, $user->options->excludedIds );
-            echo '<br />: <br />';
+        //        if ( $_SERVER['REMOTE_ADDR'] === '213.241.3.97' ) {
+        //            echo '<br /><br /><br />';
+        //            echo 'Tablica ze stylami do wybrania i punktami / Tablica ze stylami do odrzucenia i punktami: <br />';
+        //            dd( $userOptions->getIncludedIds(), $userOptions->getExcludedIds() );
+        //            echo '<br />: <br />';
+        //        }
+
+        $userOptions->removeAssignedPoints();
+
+        $idStylesToTake = [];
+        for ( $i = 0; $i < $userOptions->getCountStylesToTake(); $i++ ) {
+            $idStylesToTake[] = $userOptions->getIncludedIds()[$i];
         }
 
-        $user->options->removeAssignedPoints();
-
-        //todo refactor (poza pętlę)
         $buyThis = [];
-        for ( $i = 0; $i < $user->options->countStylesToTake; $i++ ) {
-            $styleToTake = $this->styleToTake[] = $user->options->includedIds[$i]; // todo: do obiektu
-            $buyThis[] = DB::select( "SELECT * FROM beers WHERE id = $styleToTake" );
+        if ( \count( $idStylesToTake ) > 0 ) {
+            $buyThis = DB::select( "SELECT * FROM beers WHERE id IN (" . implode( ',', $idStylesToTake ) . ")" );
         }
 
-        //todo refactor (poza pętlę)
+        $idStylesToAvoid = [];
+        for ( $i = 0; $i < $userOptions->getCountStylesToAvoid(); $i++ ) {
+            $idStylesToAvoid[] = $excludedId = $userOptions->getExcludedIds()[$i];
+        }
+
         $avoidThis = [];
-        for ( $i = 0; $i < $user->options->countStylesToAvoid; $i++ ) {
-            $styleToAvoid = $this->styleToAvoid[] = $user->options->excludedIds[$i]; // todo: do obiektu
-            $avoidThis[] = DB::select( "SELECT * FROM beers WHERE id = $styleToAvoid" );
+        if ( \count( $idStylesToAvoid ) > 0 ) {
+            $avoidThis = DB::select( "SELECT * FROM beers WHERE id IN (" . implode( ',', $idStylesToAvoid ) . ")" );
         }
 
         //TODO
         try {
-            $this->logStyles( $user );
+            $this->logStyles( $user, $idStylesToTake, $idStylesToAvoid );
         } catch ( \Exception $e ) {
             //mail('kontakt@piwolucja.pl', 'logStyles Exception', $e->getMessage());
         }
 
-        // todo: object ???
-        $poliskiKraftStylesToTake = [];
-        foreach ( $this->styleToTake as $beerId ) {
-            $poliskiKraftStylesToTake[] = PKAPI::getBeerInfo( $beerId ) ?? null;
+        // todo dumb as fuck ;/
+        $ids = [];
+        foreach ($buyThis as $beer) {
+            $ids[] = (int) $beer->id;
         }
 
-        // TODO: Ideally with no array, just serializale object
+        $polskiKraftStylesToTake = [];
+        foreach ( $ids as $beerId ) {
+            $polskiKraftStylesToTake[] = PKAPI::getBeerInfo( $beerId ) ?? null;
+        }
+
+        // TODO: Ideally with no array, just serializable object
         return view(
             'results', [
                 'buyThis' => $buyThis,
                 'avoidThis' => $avoidThis,
-                'mustTake' => $user->options->mustTakeOpt,
-                'mustAvoid' => $user->options->mustAvoidOpt,
-                'PKStyleTake' => $poliskiKraftStylesToTake,
-                'username' => $user->username,
-                'barrelAged' => $user->options->barrelAged,
+                'mustTake' => $userOptions->getMustTakeOpt(),
+                'mustAvoid' => $userOptions->getMustAvoidOpt(),
+                'polskiKraft' => $polskiKraftStylesToTake,
+                'username' => $user->getUsername(),
+                'barrelAged' => $userOptions->getBarrelAged(),
                 'answers' => $this->answersDecoded,
             ]
         );
@@ -315,11 +333,13 @@ class AlgorithmService
 
     /**
      * @param User $user
+     * @param array|null $styleToTake
+     * @param array|null $styleToAvoid
      */
-    private function logStyles( User $user ): void
+    private function logStyles( User $user, ?array $styleToTake, ?array $styleToAvoid ): void
     {
         $lastID = DB::select( 'SELECT MAX(id_answer) AS lastid FROM `styles_logs` LIMIT 1' );
-        $nextID = (int)$lastID[0]->lastid + 1;
+        $nextID = (int) $lastID[0]->lastid + 1;
 
         $stylesCount = 3;
 
@@ -339,11 +359,11 @@ class AlgorithmService
     					(?, ?, ?, ?, ?, ?, ?, ?)',
                 [
                     $nextID,
-                    $user->username,
-                    $user->email,
-                    $user->newsletterOpt,
-                    $this->styleToTake[$i],
-                    $this->styleToAvoid[$i],
+                    $user->getUsername(),
+                    $user->getEmail(),
+                    $user->getNewsletterOpt(),
+                    $styleToTake[$i],
+                    $styleToAvoid[$i],
                     $_SERVER['REMOTE_ADDR'],
                     now(),
                 ]

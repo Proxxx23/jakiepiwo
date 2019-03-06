@@ -67,83 +67,76 @@
             <div class="content">
 
                 <div>
-                    @if (isset($_POST['debug']))
+                    @if ( isset( $_POST['debug'] ) )
                     <p>DEBUG - Twoje odpowiedzi: <br />
-                        @foreach ($answers AS $number => $value)
-                        {{$number}} : {{$value}} |
+                        @foreach ( $answers as $number => $value )
+                        {{ $number }} : {{ $value }} |
                         @endforeach
                     </p>
                     @endif
 
-                    <h1>@if ($username !== null)Hej, {{$username}}!@endif Piwa w tych stylach powinny Ci zasmakować</h1>
+                    <h1>@if ( $username !== '' )Hej, {{ $username }}!@endif Piwa w tych stylach powinny Ci zasmakować</h1>
 
                     @php
-                        $countedBuyThis = count($buyThis);
+                        $countedBuyThis = \count( $buyThis );
                     @endphp
 
-                    @for ($i = 0; $i < $countedBuyThis; $i++)
-                        @foreach ($buyThis[$i] as $k => $v)
+                    @for ( $i = 0; $i < $countedBuyThis; $i++ )
 
                             @if ($i < 3)
-                            <p @if ($mustTake && $i === 0) id="mustTake" @else id="take" @endif>
-                                {{$v->name}} 
-                                @if ($v->name2 !== '') / {{$v->name2}} @endif
-                                @if ($v->name_pl !== '') / {{$v->name_pl}} @endif</p>
+                            <p @if ( $mustTake && $i === 0 ) id="mustTake" @else id="take" @endif>
+                                {{ $buyThis[$i]->name }}
+                                @if ( $buyThis[$i]->name2 !== '' ) / {{ $buyThis[$i]->name2 }} @endif
+                                @if ( $buyThis[$i]->name_pl !== '' ) / {{ $buyThis[$i]->name_pl }} @endif</p>
 
                                 <p>
-                                    @for ($u = 0; $u < 5; $u++)
-                                        @if (isset($PKStyleTake[$i]) && $PKStyleTake[$i] !== '')
+                                    @for ( $u = 0; $u < 3; $u++ )
+                                        @if ( isset($polskiKraft[$i]) && $polskiKraft[$i] !== null )
                                             @if ($u === 0)<h5>Polecane piwa w tym stylu</h5>@endif
-                                                @if (isset($PKStyleTake[$i][$u]) && $PKStyleTake[$i][$u] !== '')
-                                                    <a href="{{$PKStyleTake[$i][$u]->web_url}}" target="_blank" title="Zobacz {{$PKStyleTake[$i][$u]->title}} na PolskiKraft.pl">{{$PKStyleTake[$i][$u]->title}}</a> z {{$PKStyleTake[$i][$u]->subtitle}} <img src="images/info-icon-16-16.png" class="tltp" style="cursor: help !important;" data-html="true" data-toggle="tooltip" data-placement="right" title="<img src='{{$PKStyleTake[$i][$u]->photo_thumbnail_url}}'' />"> <br />
+                                                @if ( isset( $polskiKraft[$i][$u] ) )
+                                                    <a href="{{ $polskiKraft[$i][$u]->web_url }}" target="_blank" title="Zobacz {{ $polskiKraft[$i][$u]->title }} na PolskiKraft.pl">{{ $polskiKraft[$i][$u]->title }}</a> z {{ $polskiKraft[$i][$u]->subtitle }} <img src="images/info-icon-16-16.png" class="tltp" style="cursor: help !important;" data-html="true" data-toggle="tooltip" data-placement="right" title="<img src='{{ $polskiKraft[$i][$u]->photo_thumbnail_url }}'' />"> <br />
                                                 @endif
                                         @endif
                                     @endfor
                                 </p>
 
                             @else
-                            <p id="optional_take">{{$v->name}} 
-                                @if ($v->name2 !== '') / {{$v->name2}} @endif
-                                @if ($v->name_pl !== '') / {{$v->name_pl}} @endif</p>
+                            <p id="optional_take">{{ $buyThis[$i]->name }}
+                                @if ( $buyThis[$i]->name2 !== '' ) / {{ $buyThis[$i]->name2 }} @endif
+                                @if ( $buyThis[$i]->name_pl !== '' ) / {{ $buyThis[$i]->name_pl }} @endif</p>
 
-                    @for ($u = 0; $u < 5; $u++)
-                        @if (isset($PKStyleTake[$i][$u]) && $PKStyleTake[$i][$u] !== '')
-                            @if ($u === 0)<h5>Polecane piwa w tym stylu</h5>@endif
-                                <a href="{{$PKStyleTake[$i][$u]->web_url}}" target="_blank" title="Zobacz {{$PKStyleTake[$i][$u]->title}} na PolskiKraft.pl">{{$PKStyleTake[$i][$u]->title}}</a> z {{$PKStyleTake[$i][$u]->subtitle}} <img src="images/info-icon-16-16.png" class="tltp" style="cursor: help !important;" data-html="true" data-toggle="tooltip" data-placement="right" title="<img src='{{$PKStyleTake[$i][$u]->photo_thumbnail_url}}'' />"><br />
+                                @for ( $u = 0; $u < 3; $u++ )
+                                    @if ( isset( $polskiKraft[$i][$u] ) )
+                                        @if ( $u === 0 )<h5>Polecane piwa w tym stylu</h5>@endif
+                                            <a href="{{$polskiKraft[$i][$u]->web_url}}" target="_blank" title="Zobacz {{$polskiKraft[$i][$u]->title}} na PolskiKraft.pl">{{$polskiKraft[$i][$u]->title}}</a> z {{$polskiKraft[$i][$u]->subtitle}} <img src="images/info-icon-16-16.png" class="tltp" style="cursor: help !important;" data-html="true" data-toggle="tooltip" data-placement="right" title="<img src='{{$polskiKraft[$i][$u]->photo_thumbnail_url}}'' />"><br />
+                                    @endif
+                                @endfor
+                            <br />
+
                             @endif
-                        @endfor
-                        <br />
-
-                            @endif
-
-                        @endforeach
                     @endfor
 
                     <!-- TODO: tylko pod piwa rzeczywiście starzone w BA -->
-                    @if ($barrelAged === true)
+                    @if ( $barrelAged === true )
                         <br /><br /><p>Ponieważ lubisz alkohole szlachetne, powinny zainteresować Cię piwa leżakowane w beczkach po trunkach takich jak whisky czy bourbon. Szukaj w sklepie piw z dopiskiem "barrel-aged" lub "BA" na etykiecie.</p>
                     @endif
 
                     <h1>Piwa w tych stylach raczej nie przypadną Ci do gustu</h1>
 
                     @php
-                    $countedAvoidThis = count($avoidThis);
+                    $countedAvoidThis = \count($avoidThis);
                     @endphp
 
-                    @for ($i = 0; $i < $countedAvoidThis; $i++)
-                        @foreach ($avoidThis[$i] as $k => $v)
-
-                            @if ($i < 3)
-                            <p @if ($mustAvoid && $i === 0) id="mustAvoid" @else id="avoid" @endif>{{$v->name}}
-                                @if ($v->name2 !== '') / {{$v->name2}} @endif
-                                @if ($v->name_pl !== '') / {{$v->name_pl}} @endif</p>
-                            @else
-                            <p id="optional_avoid">{{$v->name}} 
-                                @if ($v->name2 !== '') / {{$v->name2}} @endif
-                                @if ($v->name_pl !== '') / {{$v->name_pl}} @endif</p>
-                            @endif
-
-                        @endforeach
+                    @for ( $i = 0; $i < $countedAvoidThis; $i++ )
+                        @if ( $i < 3 )
+                            <p @if ( $mustAvoid && $i === 0 ) id="mustAvoid" @else id="avoid" @endif>{{ $avoidThis[$i]->name }}
+                                @if ( $avoidThis[$i]->name2 !== '' ) / {{$avoidThis[$i]->name2 }} @endif
+                                @if ( $avoidThis[$i]->name_pl !== '' ) / {{$avoidThis[$i]->name_pl }} @endif</p>
+                        @else
+                            <p id="optional_avoid">{{ $avoidThis[$i]->name }}
+                                @if ( $avoidThis[$i]->name2 !== '' ) / {{ $avoidThis[$i]->name2 }} @endif
+                                @if ( $avoidThis[$i]->name_pl !== '' ) / {{ $avoidThis[$i]->name_pl }} @endif</p>
+                        @endif
                     @endfor<br /><br />
 
                     <legend>Czy chcesz to na maila? (nieaktywne)</legend>

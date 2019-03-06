@@ -3,9 +3,27 @@ declare( strict_types=1 );
 
 namespace App\Http\Objects;
 
-class Options extends BaseObject implements OptionsInterface
+/**
+ * @method setIncludedIds( array $array )
+ * @method getIncludedIds()
+ * @method setExcludedIds( array $array )
+ * @method getExcludedIds()
+ * @method setMustTakeOpt( bool $param )
+ * @method getMustTakeOpt()
+ * @method setMustAvoidOpt( bool $param )
+ * @method getMustAvoidOpt()
+ * @method setBarrelAged( bool $param )
+ * @method getBarrelAged()
+ * @method setShuffled( bool $param )
+ * @method getShuffled()
+ * @method setCountStylesToTake( int $param )
+ * @method getCountStylesToTake()
+ * @method setCountStylesToAvoid( int $param )
+ * @method getCountStylesToAvoid()
+ */
+class Options extends AbstractFixedPropertyObject implements OptionsInterface
 {
-    protected const POINT_PRECENT_GAP = 0.90;
+    protected const POINT_PERCENT_GAP = 0.90;
 
     /** @var array */
     protected $includedIds = [];
@@ -115,8 +133,8 @@ class Options extends BaseObject implements OptionsInterface
      */
     public function fetchAll(): void
     {
-        $this->arsortIncluded();
-        $this->arrsortExcluded();
+        $this->sortIncludedIds();
+        $this->sortExcludedIds();
         $this->fetchOptionalStyles();
         $this->removeDuplicates();
         $this->checkMarginBetweenBeerStyles();
@@ -124,12 +142,12 @@ class Options extends BaseObject implements OptionsInterface
         $this->checkHowManyStylesShouldBeShuffled();
     }
 
-    protected function arsortIncluded(): void
+    protected function sortIncludedIds(): void
     {
         \arsort( $this->includedIds );
     }
 
-    protected function arrsortExcluded(): void
+    protected function sortExcludedIds(): void
     {
         \arsort( $this->excludedIds );
     }
@@ -231,7 +249,7 @@ class Options extends BaseObject implements OptionsInterface
         for ( $i = 1; $i < $countIncluded; $i++ ) {
 
             $nthStylePoints = \array_values( \array_slice( $this->includedIds, $i, 1, true ) );
-            if ( $nthStylePoints[0] >= $firstStylePoints[0] * self::POINT_PRECENT_GAP ) {
+            if ( $nthStylePoints[0] >= $firstStylePoints[0] * self::POINT_PERCENT_GAP ) {
                 $toShuffle++;
             }
         }
