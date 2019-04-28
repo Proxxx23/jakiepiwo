@@ -32,22 +32,20 @@ class QuestionsService
     /**
      * @param array $requestData
      *
-     * @return string
-     * @throws InternalIncompatibilityException
+     * @return array
+     * @throws \Exception
      */
-    public function fetchJsonAnswers( array $requestData ): string
+    public function fetchJsonAnswers( array $requestData ): array
     {
-        //        if ( empty( $answers ) ) {
-        //            $this->logError( 'Brak odpowiedzi na pytania!' );
-        //            return null;
-        //            //TODO Obsługa błędów
-        //        }
+        if ( !isset( $requestData['answers'] ) ) {
+            throw new \Exception( 'No answers given' );
+        }
 
         $questionsCount = \count( $this->getQuestions() );
 
-        if ( $questionsCount !== \count( $requestData['answers'] ) ) {
-            throw new InternalIncompatibilityException( 'Liczba odpowiedzi na pytania nie zgadza się z liczbą pytań.' );
-        }
+//        if ( $questionsCount !== \count( $requestData['answers'] ) ) {
+//            throw new InternalIncompatibilityException( 'Liczba odpowiedzi na pytania nie zgadza się z liczbą pytań.' );
+//        }
 
         //        for ( $i = 0; $i < $questionsCount; $i++ ) {
         //            if ( $answers['answer-'.$i] === null ) {
