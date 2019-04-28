@@ -5,7 +5,6 @@ namespace App\Http\Services;
 
 use App\Exceptions\InternalIncompatibilityException;
 use App\Http\Repositories\QuestionsRepositoryInterface;
-use Illuminate\Http\Request;
 
 class QuestionsService
 {
@@ -31,14 +30,13 @@ class QuestionsService
     }
 
     /**
-     * @param Request $request
+     * @param array $requestData
      *
      * @return string
      * @throws InternalIncompatibilityException
      */
-    public function fetchJsonAnswers( Request $request ): string
+    public function fetchJsonAnswers( array $requestData ): string
     {
-        $answers = $request->post( 'answers' );
         //        if ( empty( $answers ) ) {
         //            $this->logError( 'Brak odpowiedzi na pytania!' );
         //            return null;
@@ -47,7 +45,7 @@ class QuestionsService
 
         $questionsCount = \count( $this->getQuestions() );
 
-        if ( $questionsCount !== \count( $answers ) ) {
+        if ( $questionsCount !== \count( $requestData['answers'] ) ) {
             throw new InternalIncompatibilityException( 'Liczba odpowiedzi na pytania nie zgadza się z liczbą pytań.' );
         }
 
@@ -58,6 +56,6 @@ class QuestionsService
         //            }
         //        }
 
-        return \json_encode( $answers );
+        return $requestData['answers'];
     }
 }

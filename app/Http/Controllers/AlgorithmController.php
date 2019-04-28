@@ -19,7 +19,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 use Illuminate\View\View;
-use Nwt\Utils\Parsers\JsonParser;
 
 class AlgorithmController
 {
@@ -44,22 +43,22 @@ class AlgorithmController
         $questionsService = new QuestionsService( new QuestionsRepository() );
         $newsletterService = new NewsletterService( new NewsletterRepository() );
 
-        $requestJson = $request->json();
+        $requestData = $request->input();
 
         //TODO: To wszystko lecieć będzie z requesta
         $user = new User( new Options() );
-        $user->setUsername( $_POST['username'] );
+        $user->setUsername( $requestData['username'] ?? null );
 
-        if ( isset( $_POST['email'] ) && ValidationUtils::emailIsValid( $_POST['email'] ) ) {
+        if ( isset( $requestData['email'] ) && ValidationUtils::emailIsValid( $requestData['email'] ) ) {
             $user->setEmail($_POST['email']);
         }
 
-        if ( !empty( $_POST['newsletter'] ) ) {
+        if ( isset($requestData['newsletter']) && $requestData['newsletter'] === true ) {
             $user->setNewsletterOpt(1);
         }
 
         // TODO: Obiekt z wypełnianiem pól z JSON-a
-        $answers = $questionsService->fetchJsonAnswers( $request );
+        $answers = $questionsService->fetchJsonAnswers( $requestData );
 
         $insertAnswers = DB::insert(
             'INSERT INTO `user_answers` 
