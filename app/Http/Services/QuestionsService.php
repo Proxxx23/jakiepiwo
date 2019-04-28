@@ -35,7 +35,7 @@ class QuestionsService
      */
     public function getJsonQuestions(): string
     {
-        return $this->questionsRepository->fetchJsonQuestions();
+        return $this->questionsRepository->fetchQuestions( true );
     }
 
     /**
@@ -47,25 +47,25 @@ class QuestionsService
     public function fetchJsonAnswers( Request $request ): string
     {
         $answers = $request->post( 'answers' );
-//        if ( empty( $answers ) ) {
-//            $this->logError( 'Brak odpowiedzi na pytania!' );
-//            return null;
-//            //TODO Obsługa błędów
-//        }
+        //        if ( empty( $answers ) ) {
+        //            $this->logError( 'Brak odpowiedzi na pytania!' );
+        //            return null;
+        //            //TODO Obsługa błędów
+        //        }
 
         $questionsCount = \count( $this->getQuestions() );
 
         if ( $questionsCount !== \count( $answers ) ) {
-            throw new InternalIncompatibilityException('Liczba odpowiedzi na pytania nie zgadza się z liczbą pytań.');
+            throw new InternalIncompatibilityException( 'Liczba odpowiedzi na pytania nie zgadza się z liczbą pytań.' );
         }
 
-//        for ( $i = 0; $i < $questionsCount; $i++ ) {
-//            if ( $answers['answer-'.$i] === null ) {
-//                $this->logError( 'Pytanie numer ' . $i . ' jest puste. Odpowiedz na wszystkie pytania!' );
-//                //TODO obłsuga błędów
-//            }
-//        }
+        //        for ( $i = 0; $i < $questionsCount; $i++ ) {
+        //            if ( $answers['answer-'.$i] === null ) {
+        //                $this->logError( 'Pytanie numer ' . $i . ' jest puste. Odpowiedz na wszystkie pytania!' );
+        //                //TODO obłsuga błędów
+        //            }
+        //        }
 
-        return \json_encode($answers);
+        return \json_encode( $answers );
     }
 }
