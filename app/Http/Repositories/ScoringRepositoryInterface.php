@@ -10,5 +10,5 @@ interface ScoringRepositoryInterface
      *
      * @return array|null
      */
-    public function fetchScore(?int $questionNumber): ?array;
+    public function fetchScore( ?int $questionNumber ): ?array;
 }
