@@ -19,6 +19,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 use Illuminate\View\View;
+use Nwt\Utils\Parsers\JsonParser;
 
 class AlgorithmController
 {
@@ -43,16 +44,7 @@ class AlgorithmController
         $questionsService = new QuestionsService( new QuestionsRepository() );
         $newsletterService = new NewsletterService( new NewsletterRepository() );
 
-        if ( !empty( $this->errorMesage ) ) {
-            return view(
-                'index', [
-                    'questions' => $questionsService->getQuestions(),
-                    'lastVisitName' => $userService->getUsername(),
-                    'errors' => $this->errorMesage,
-                    'errorsCount' => $this->errorsCount,
-                ]
-            );
-        }
+        $requestJson = $request->json();
 
         //TODO: To wszystko lecieć będzie z requesta
         $user = new User( new Options() );
