@@ -6,13 +6,11 @@ namespace App\Http\Repositories;
 class QuestionsRepository implements QuestionsRepositoryInterface
 {
     /**
-     * @param bool $json
-     *
-     * @return array|string
+     * @return array
      */
-    public function fetchQuestions( bool $json = false )
+    public function fetchQuestions(): array
     {
-        $questions = [
+        return [
             [
                 'question' => 'Czy smakują Ci piwa koncernowe dostępne w sklepach?',
                 'type' => 0,
@@ -36,7 +34,13 @@ class QuestionsRepository implements QuestionsRepositoryInterface
             [
                 'question' => 'Jak wysoką goryczkę preferujesz?',
                 'type' => 1,
-                'answers' => [ 'ledwie wyczuwalną', 'lekką', 'zdecydowanie wyczuwalną', 'mocną', 'jestem hopheadem' ],
+                'answers' => [
+                    'ledwie wyczuwalną',
+                    'lekką',
+                    'zdecydowanie wyczuwalną',
+                    'mocną',
+                    'jestem hopheadem',
+                ],
             ],
             [
                 'question' => 'Smakują Ci bardziej piwa jasne, czy piwa ciemne?',
@@ -87,9 +91,5 @@ class QuestionsRepository implements QuestionsRepositoryInterface
                 'type' => 0,
             ],
         ];
-
-        return $json === true
-            ? \json_encode( $questions )
-            : $questions;
     }
 }

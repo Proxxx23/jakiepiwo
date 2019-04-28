@@ -6,9 +6,7 @@ namespace App\Http\Repositories;
 interface QuestionsRepositoryInterface
 {
     /**
-     * @param bool $json
-     *
-     * @return mixed
+     * @return array
      */
-    public function fetchQuestions( bool $json = false );
+    public function fetchQuestions(): array;
 }

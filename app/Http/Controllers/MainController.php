@@ -6,26 +6,25 @@ namespace App\Http\Controllers;
 use App\Http\Repositories\QuestionsRepository;
 use App\Http\Services\QuestionsService;
 use App\Http\Services\UserService;
-use Illuminate\View\View;
+use Illuminate\Http\JsonResponse;
 
 class MainController
 {
     /**
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return JsonResponse
      */
-    public function index(): View
+    public function indexData(): JsonResponse
     {
         $userService = new UserService();
         $questionsService = new QuestionsService( new QuestionsRepository() );
 
-        return view(
-            'index', [
-                'questions' => $questionsService->getQuestions(),
-                'jsonQuestions' => $questionsService->getJsonQuestions(),
-                'lastVisitName' => $userService->getUsername(),
-                'errors' => null,
-                'errorsCount' => 0,
-            ]
-        );
+        return \response()
+            ->json(
+                [
+                    'questions' => $questionsService->getQuestions(),
+                    'visitorName' => $userService->getUsername(),
+                ], 200, [], JSON_UNESCAPED_UNICODE
+            )
+            ->setCharset( 'UTF-8' );
     }
 }

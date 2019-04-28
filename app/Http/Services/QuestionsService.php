@@ -31,14 +31,6 @@ class QuestionsService
     }
 
     /**
-     * @return string
-     */
-    public function getJsonQuestions(): string
-    {
-        return $this->questionsRepository->fetchQuestions( true );
-    }
-
-    /**
      * @param Request $request
      *
      * @return string
