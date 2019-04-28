@@ -54,6 +54,7 @@ class AlgorithmController
             );
         }
 
+        //TODO: To wszystko lecieć będzie z requesta
         $user = new User( new Options() );
         $user->setUsername( $_POST['username'] );
 

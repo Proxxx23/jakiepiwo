@@ -13,18 +13,24 @@ class MainController
     /**
      * @return JsonResponse
      */
-    public function indexData(): JsonResponse
+    public function questionsData(): JsonResponse
     {
-        $userService = new UserService();
         $questionsService = new QuestionsService( new QuestionsRepository() );
 
-        return \response()
-            ->json(
-                [
-                    'questions' => $questionsService->getQuestions(),
-                    'visitorName' => $userService->getUsername(),
-                ], 200, [], JSON_UNESCAPED_UNICODE
-            )
-            ->setCharset( 'UTF-8' );
+        return \response()->json(
+            $questionsService->getQuestions(), 200, [], JSON_UNESCAPED_UNICODE
+        );
+    }
+
+    /**
+     * @return JsonResponse
+     */
+    public function visitorData(): JsonResponse
+    {
+        $userService = new UserService();
+
+        return response()->json(
+            [ 'visitorName' => $userService->getUsername() ]
+        );
     }
 }
