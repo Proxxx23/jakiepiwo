@@ -10,25 +10,14 @@ class PolskiKraftService
     protected const DEFAULT_LIST_URI = 'https://www.polskikraft.pl/openapi/style/list';
 
     /**
-     * @return array
-     */
-    public static function getBeersList(): array
-    {
-        $request = \json_decode( \file_get_contents( self::DEFAULT_LIST_URI ) );
-        if ( !empty( $request ) ) {
-            return $request;
-        }
-
-        return null;
-    }
-
-    /**
      * @param int $beerId
      *
      * @return array|null
      * @throws \Exception
+     *
+     * TODO: collection of objects only with needed fields
      */
-    public static function getBeerInfo( int $beerId ): ?array
+    public static function fetchBeerInfo( int $beerId ): ?array
     {
         if ( !\array_key_exists( $beerId, Dictionaries::ID ) ) {
             return null;
@@ -36,19 +25,19 @@ class PolskiKraftService
 
         $translatedBeerId = Dictionaries::ID[$beerId];
 
-        $content = sprintf( self::DEFAULT_STYLE_URI, $translatedBeerId );
+        $url = sprintf( self::DEFAULT_STYLE_URI, $translatedBeerId );
 
-        $request = \json_decode( \file_get_contents( $content ) );
+        $data = \json_decode( \file_get_contents( $url ) );
 
-        if ( empty( $request ) || $request === null ) {
+        if ( empty( $data ) || $data === null ) {
             return null;
         }
 
-        while ( \count( $request ) > 3 ) {
-            $deletedRandomId = \random_int( 0, \count( $request ) - 1 );
-            unset( $request[$deletedRandomId] );
+        while ( \count( $data ) > 3 ) {
+            $randomIdToDelete = \random_int( 0, \count( $data ) - 1 );
+            unset( $data[$randomIdToDelete] );
         }
 
-        return \array_values( \array_filter( $request ) );
+        return \array_values( \array_filter( $data ) );
     }
 }

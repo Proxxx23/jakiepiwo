@@ -76,7 +76,6 @@ class AlgorithmService
         if ( $answerValue[4] === 'coś lekkiego' &&
             $answerValue[12] === 'tak' &&
             $answerValue[13] === 'chętnie' ) {
-            echo 'Synergia Lekkie + owocowe + Kwaśne <br />';
             $userOptions->buildPositiveSynergy( [ 40, 56 ], 2 );
             $userOptions->buildPositiveSynergy( [ 51 ], 1.5 );
         }
@@ -84,7 +83,6 @@ class AlgorithmService
         if ( $answerValue[4] === 'coś złożonego' &&
             $answerValue[4] === 'jasne' &&
             ( $answerValue[2] === 'tak' || $answerValue[3] === 'tak' ) ) {
-            echo 'Synergia we smaki LUB szokujące + złożone + jasne <br />';
             $userOptions->buildPositiveSynergy( [ 7, 15, 16, 23, 39, 42, 50, 60, 73 ], 2 );
         }
 
@@ -92,7 +90,6 @@ class AlgorithmService
         if ( $answerValue[4] === 'coś złożonego' &&
             $answerValue[4] === 'ciemne' &&
             ( $answerValue[2] === 'tak' || $answerValue[3] === 'tak' ) ) {
-            echo 'Synergia nowe smaki LUB szokujące + złożone + ciemne <br />';
             $userOptions->buildPositiveSynergy( [ 36, 37, 58, 59, 62, 63 ], 2 );
         }
 
@@ -100,7 +97,6 @@ class AlgorithmService
         if ( $answerValue[4] === 'coś złożonego' &&
             $answerValue[6] === 'ciemne' &&
             $answerValue[12] === 'nie' ) {
-            echo 'Synergia złożone + ciemne + nieowocowe <br />';
             $userOptions->buildPositiveSynergy( [ 3, 24, 35, 36, 37, 48, 58, 59, 62, 63, 75 ], 1.5 );
         }
 
@@ -109,7 +105,6 @@ class AlgorithmService
             $answerValue[6] === 'ciemne' &&
             $answerValue[10] === 'tak' &&
             $answerValue[12] === 'nie' ) {
-            echo 'Synergia złożone + ciemne + nieowocowe + kawowe <br />';
             $userOptions->buildPositiveSynergy( [ 74 ], 2.5 );
         }
 
@@ -118,7 +113,6 @@ class AlgorithmService
             $answerValue[6] === 'ciemne' &&
             $answerValue[7] === 'słodsze' &&
             !\in_array( $answerValue[5], [ 'mocną', 'jestem hopheadem' ] ) ) {
-            echo 'Synergia Lekkie + ciemne + słodkie + goryczka (ledwie || lekka || wyczuwalna) <br />';
             $userOptions->buildPositiveSynergy( [ 12, 29, 30, 34, 64 ], 2 );
             $userOptions->buildNegativeSynergy( [ 36, 37 ], 3 );
         }
@@ -126,7 +120,6 @@ class AlgorithmService
         // jasne + nieczekoladowe
         if ( $answerValue[6] === 'jasne' &&
             $answerValue[9] === 'nie' ) {
-            echo 'Synergia jasne + nieczekoladowe <br />';
             $userOptions->buildNegativeSynergy(
                 [ 12, 21, 24, 29, 33, 34, 35, 36, 37, 58, 59, 62, 63, 71, 74, 75 ], 2
             );
@@ -136,7 +129,6 @@ class AlgorithmService
         if ( $answerValue[6] === 'ciemne' &&
             $answerValue[9] === 'tak' &&
             $answerValue[8] !== 'mocne i gęste' ) {
-            echo 'Synergia ciemne + czekoladowe + lżejsze <br />';
             $userOptions->buildPositiveSynergy( [ 12, 31, 33, 34, 35, 59, 71 ], 2.5 );
         }
 
@@ -146,7 +138,6 @@ class AlgorithmService
             $answerValue[9] === 'nie' &&
             $answerValue[8] !== 'mocne i gęste' &&
             ( $answerValue[5] === 'ledwie wyczuwalną' || $answerValue[5] === 'lekką' ) ) {
-            echo 'Synergia goryczka ledwo || lekka + jasne + nieczkoladowe + niegęste <br />';
             $userOptions->buildPositiveSynergy( [ 20, 25, 40, 44, 45, 47, 51, 52, 53, 68, 73 ], 2 );
             $userOptions->buildNegativeSynergy( [ 3, 24, 35, 36, 37, 58, 59, 62, 63, 71, 75 ], 2 );
         }
@@ -156,7 +147,6 @@ class AlgorithmService
             $answerValue[6] === 'jasne' &&
             $answerValue[8] === 'wodniste' &&
             $answerValue[14] === 'tak' ) {
-            echo 'Synergia asne + lekkie + wodniste + wędzone = grodziskie <br />';
             $userOptions->buildPositiveSynergy( [ 52 ], 3 );
             $userOptions->buildNegativeSynergy( [ 3, 22, 23, 24, 35, 36, 37, 50, 58, 59, 62, 63, 71, 75 ], 2 );
         }
@@ -164,7 +154,6 @@ class AlgorithmService
         // duża/hophead goryczka + jasne
         if ( $answerValue[6] === 'jasne' &&
             ( $answerValue[5] === 'mocną' || $answerValue[5] === 'jestem hopheadem' ) ) {
-            echo 'Synergia duża/hophead goryczka + jasne <br />';
             $userOptions->buildPositiveSynergy( [ 1, 2, 5, 6, 7, 8, 28, 61 ], 1.75 );
             $userOptions->buildPositiveSynergy( [ 65, 69, 70, 72 ], 1.5 );
         }
@@ -172,13 +161,11 @@ class AlgorithmService
         // duża/hophead goryczka + ciemne
         if ( $answerValue[6] === 'ciemne' &&
             ( $answerValue[5] === 'mocną' || $answerValue[5] === 'jestem hopheadem' ) ) {
-            echo 'Synergia duża/hophead goryczka + ciemne <br />';
             $userOptions->buildPositiveSynergy( [ 3, 36, 37, 58, 62, 63, 75 ], 1.75 );
         }
 
         // goryczka ledwo || lekka
         if ( $answerValue[5] === 'ledwie wyczuwalną' || $answerValue[5] === 'lekką' ) {
-            echo 'Synergia negatywna na lekkie goryczki <br />';
             $userOptions->buildNegativeSynergy( [ 1, 2, 3, 5, 7, 8, 28, 61 ], 2 );
             $userOptions->buildNegativeSynergy( [ 6, 60, 65, 69, 71, 72 ], 1.5 );
         }
@@ -315,9 +302,9 @@ class AlgorithmService
             $ids[] = (int) $beer->id;
         }
 
-        $polskiKraftStylesToTake = null;
+        $beersToTake = null;
         foreach ( $ids as $beerId ) {
-            $polskiKraftStylesToTake[] = PKAPI::getBeerInfo( $beerId ) ?? null;
+            $beersToTake[] = PKAPI::fetchBeerInfo( $beerId ) ?? null;
         }
 
         return \json_encode(
@@ -326,7 +313,7 @@ class AlgorithmService
                 'avoidThis' => $avoidThis,
                 'mustTake' => $userOptions->getMustTakeOpt(),
                 'mustAvoid' => $userOptions->getMustAvoidOpt(),
-                'polskiKraft' => $polskiKraftStylesToTake,
+                'beersToTake' => $beersToTake,
                 'username' => $user->getUsername(),
                 'barrelAged' => $userOptions->getBarrelAged(),
                 'answers' => $this->answers,
