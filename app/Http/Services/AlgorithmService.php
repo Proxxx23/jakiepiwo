@@ -9,17 +9,22 @@ use App\Http\Objects\OptionsInterface;
 use App\Http\Objects\User;
 use App\Http\Repositories\ScoringRepositoryInterface;
 use Illuminate\Support\Facades\DB;
-use App\Http\Controllers\PolskiKraft\PolskiKraftService AS PKAPI;
+use App\Http\Controllers\PolskiKraft\PolskiKraftService as PKAPI;
 use Illuminate\View\View;
 
 class AlgorithmService
 {
     /** @var array */
-    protected $answersDecoded = [];
+    protected $answers = [];
 
     /** @var ScoringRepositoryInterface */
     protected $scoringRepository;
 
+    /**
+     * Constructor.
+     *
+     * @param ScoringRepositoryInterface $scoringRepository
+     */
     public function __construct( ScoringRepositoryInterface $scoringRepository )
     {
         $this->scoringRepository = $scoringRepository;
@@ -180,35 +185,35 @@ class AlgorithmService
     }
 
     /**
-     * @param string $answers
+     * @param array $answers
      * @param User $user
      *
-     * @return View
+     * @return string
      * @throws \Exception
      */
-    public function fetchProposedStyles( string $answers, User $user ): View
+    public function fetchProposedStyles( array $answers, User $user ): string
     {
-        $answersDecoded = $this->answersDecoded = \json_decode( $answers );
+        $this->answers = $answers;
 
         /** @var Options $userOptions */
         $userOptions = $user->getOptions();
 
         //todo: intersect?
-        foreach ( $answersDecoded as $questionNumber => &$givenAnswer ) {
+        foreach ( $answers as $questionNumber => &$givenAnswer ) {
 
             $scoringMap = $this->scoringRepository->fetchScore( $questionNumber );
 
             foreach ( $scoringMap as $mappedAnswer => $ids ) {
 
                 $userOptions->setBarrelAged(
-                    $answersDecoded[14] === 'tak' ? true : false
+                    $answers[14] === 'tak' ? true : false
                 );
 
-                if ( $answersDecoded[12] === 'nie ma mowy' ) {
+                if ( $answers[12] === 'nie ma mowy' ) {
                     $userOptions->excludeFromRecommended( [ 40, 42, 44, 51, 56 ] );
                 }
 
-                if ( $answersDecoded[13] === 'nie' ) {
+                if ( $answers[13] === 'nie' ) {
                     $userOptions->excludeFromRecommended( [ 15, 16, 52, 57, 58, 59, 62, 63 ] );
                 }
 
@@ -251,7 +256,7 @@ class AlgorithmService
         }
         unset( $givenAnswer );
 
-        $this->applySynergy( $answersDecoded, $user );
+        $this->applySynergy( $answers, $user );
 
         return $this->chooseStyles( $user );
     }
@@ -259,11 +264,11 @@ class AlgorithmService
     /**
      * @param User $user
      *
-     * @return View
+     * @return string
      * @throws \Exception
      * todo: dodać mechanizm, który informuje, że granice były marginalne i wyniki mogą byc niejednoznaczne
      */
-    public function chooseStyles( User $user ): View
+    public function chooseStyles( User $user ): string
     {
         /** @var Options $userOptions */
         $userOptions = $user->getOptions();
@@ -298,27 +303,25 @@ class AlgorithmService
             $avoidThis = DB::select( "SELECT * FROM beers WHERE id IN (" . implode( ',', $idStylesToAvoid ) . ")" );
         }
 
-        //TODO
         try {
             $this->logStyles( $user, $idStylesToTake, $idStylesToAvoid );
         } catch ( \Exception $e ) {
-            //mail('kontakt@piwolucja.pl', 'logStyles Exception', $e->getMessage());
+            LogService::logError( $e->getMessage() );
         }
 
         // todo dumb as fuck ;/
         $ids = [];
-        foreach ($buyThis as $beer) {
+        foreach ( $buyThis as $beer ) {
             $ids[] = (int) $beer->id;
         }
 
-        $polskiKraftStylesToTake = [];
+        $polskiKraftStylesToTake = null;
         foreach ( $ids as $beerId ) {
             $polskiKraftStylesToTake[] = PKAPI::getBeerInfo( $beerId ) ?? null;
         }
 
-        // TODO: Ideally with no array, just serializable object
-        return view(
-            'results', [
+        return \json_encode(
+            [
                 'buyThis' => $buyThis,
                 'avoidThis' => $avoidThis,
                 'mustTake' => $userOptions->getMustTakeOpt(),
@@ -326,8 +329,8 @@ class AlgorithmService
                 'polskiKraft' => $polskiKraftStylesToTake,
                 'username' => $user->getUsername(),
                 'barrelAged' => $userOptions->getBarrelAged(),
-                'answers' => $this->answersDecoded,
-            ]
+                'answers' => $this->answers,
+            ], JSON_UNESCAPED_UNICODE
         );
     }
 
@@ -361,7 +364,7 @@ class AlgorithmService
                     $nextID,
                     $user->getUsername(),
                     $user->getEmail(),
-                    $user->getNewsletterOpt(),
+                    $user->getAddToNewsletterList(),
                     $styleToTake[$i],
                     $styleToAvoid[$i],
                     $_SERVER['REMOTE_ADDR'],

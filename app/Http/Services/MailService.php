@@ -3,31 +3,19 @@ declare( strict_types=1 );
 
 namespace App\Http\Services;
 
-use App\Http\Utils\ValidationUtils;
-
 class MailService
 {
     /**
      * @param string $email
-     *
-     * @return bool
      */
-    public function sendEmail( string $email ): bool
+    public function sendEmail( string $email ): void
     {
         $headers = 'From: jakiepiwomamwybrac@piwolucja.pl' . "\r\n" .
             'Reply-To: jakiepiwomamwybrac@piwolucja.pl' . "\r\n";
 
-        $subject = $_POST['username'] . ', oto 3 najlepsze style dla Ciebie!';
+        $subject = $_POST['username'] . ', oto 3 najlepsze style piwne dla Ciebie!';
 
-        if ( ValidationUtils::emailIsValid($email) ) {
-            \mail( $email, $subject, $this->prepareEmailTemplate(), $headers );
-
-            return true;
-        }
-
-//        $this->logError( 'Błędny adres e-mail!' );
-
-        return false;
+        \mail( $email, $subject, $this->prepareEmailTemplate(), $headers );
     }
 
     /**

@@ -6,10 +6,12 @@ namespace App\Http\Objects;
 /**
  * @method setUsername( ?string $username )
  * @method setEmail( ?string $email )
- * @method setNewsletterOpt( int $int )
+ * @method setSendEmail ( bool $sendEmail )
+ * @method setAddToNewsletterList( bool $newsletter )
  * @method getUsername()
  * @method getEmail()
- * @method getNewsletterOpt()
+ * @method getSendEmail()
+ * @method getAddToNewsletterList()
  * @method setOptions( OptionsInterface $options )
  * @method getOptions()
  */
@@ -19,9 +21,10 @@ class User extends AbstractFixedPropertyObject
     protected $username;
     /** @var string|null */
     protected $email;
-    /** @var int */
-    protected $newsletterOpt = 0;
-
+    /** @var bool */
+    protected $sendEmail = false;
+    /** @var bool */
+    protected $addToNewsletterList = false;
     /** @var OptionsInterface */
     protected $options;
 

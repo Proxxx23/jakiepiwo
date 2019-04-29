@@ -4,7 +4,6 @@ declare( strict_types=1 );
 namespace App\Http\Services;
 
 use App\Http\Repositories\NewsletterRepositoryInterface;
-use App\Http\Utils\ValidationUtils;
 
 class NewsletterService
 {
@@ -22,34 +21,13 @@ class NewsletterService
     }
 
     /**
-     * @param string|null $email
-     * @param int $newsletter
-     *
-     * @return bool
-     * @throws \Exception
-     */
-    public function addToNewsletterList( ?string $email, int $newsletter ): bool
-    {
-        if ( $newsletter === 1 && $email === null ) {
-//            $this->logError( 'Jeżeli chcesz dopisać się do newslettera, musisz podać adres e-mail.' );
-        }
-
-        if ( ValidationUtils::emailIsValid( $email ) ) {
-            $this->addEmailToNewsletterList( $email );
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
      * @documentation: https://github.com/drewm/mailchimp-api
      *
-     * @param string $email
+     * @param string|null $email
      *
      * @throws \Exception
      */
-    protected function addEmailToNewsletterList( string $email ): void
+    public function addToNewsletterList( ?string $email ): void
     {
         $this->newsletterRepository->addToMailchimpSubscriptionList( $email );
     }

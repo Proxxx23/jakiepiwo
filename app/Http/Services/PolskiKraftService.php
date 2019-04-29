@@ -5,12 +5,16 @@ namespace App\Http\Controllers\PolskiKraft;
 
 class PolskiKraftService
 {
+    protected const DEFAULT_STYLE_URI = 'https://www.polskikraft.pl/openapi/style/%d/examples';
+
+    protected const DEFAULT_LIST_URI = 'https://www.polskikraft.pl/openapi/style/list';
+
     /**
      * @return array
      */
     public static function getBeersList(): array
     {
-        $request = \json_decode( \file_get_contents( 'https://www.polskikraft.pl/openapi/style/list' ) );
+        $request = \json_decode( \file_get_contents( self::DEFAULT_LIST_URI ) );
         if ( !empty( $request ) ) {
             return $request;
         }
@@ -31,7 +35,9 @@ class PolskiKraftService
         }
 
         $translatedBeerId = Dictionaries::ID[$beerId];
-        $content = 'https://www.polskikraft.pl/openapi/style/' . $translatedBeerId . '/examples';
+
+        $content = sprintf( self::DEFAULT_STYLE_URI, $translatedBeerId );
+
         $request = \json_decode( \file_get_contents( $content ) );
 
         if ( empty( $request ) || $request === null ) {
