@@ -281,11 +281,13 @@ class AlgorithmService
 
         $buyThis = [];
         if ( \count( $idStylesToTake ) > 0 ) {
+            //todo not *
             $buyThis = DB::select( "SELECT * FROM beers WHERE id IN (" . implode( ',', $idStylesToTake ) . ")" );
         }
 
+        $stylesToTake = [];
         foreach ($buyThis as $beerData) {
-            $stylesToTake[] = new StylesToTake($beerData);
+            $stylesToTake[] = (new StylesToTake($beerData))->toArray();
         }
         $stylesToTakeCollection = new StylesToTakeCollection($stylesToTake);
 
@@ -298,11 +300,13 @@ class AlgorithmService
 
         $avoidThis = [];
         if ( \count( $idStylesToAvoid ) > 0 ) {
+            //todo not *
             $avoidThis = DB::select( "SELECT * FROM beers WHERE id IN (" . implode( ',', $idStylesToAvoid ) . ")" );
         }
 
+        $stylesToAvoid = [];
         foreach ($avoidThis as $beerData) {
-            $stylesToAvoid[] = new StylesToAvoid($beerData);
+            $stylesToAvoid[] = (new StylesToAvoid($beerData))->toArray();
         }
         $stylesToAvoidCollection = new StylesToAvoidCollection($stylesToAvoid);
 
@@ -312,9 +316,11 @@ class AlgorithmService
             LogService::logError( $e->getMessage() );
         }
 
-        $beersToTake = null;
+        $beersToTake = [];
         foreach ( $buyThis as $beer ) {
             $beersToTake[] = PKAPI::fetchBeerInfo( (int) $beer->id ) ?? null;
+            //todo BeersCollection object
+            //todo incorporate into buyThis somehow
         }
 
         return \json_encode(
@@ -323,7 +329,6 @@ class AlgorithmService
                 'avoidThis' => $stylesToAvoidCollection->toArray(),
                 'mustTake' => $userOptions->getMustTakeOpt(),
                 'mustAvoid' => $userOptions->getMustAvoidOpt(),
-                'beersToTake' => $beersToTake,
                 'username' => $user->getUsername(),
                 'barrelAged' => $userOptions->getBarrelAged(),
                 'answers' => $this->answers,

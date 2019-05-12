@@ -15,8 +15,6 @@ class StylesToTake extends AbstractFixedPropertyObject
     protected $otherName;
     /** @var null|string */
     protected $polishName;
-    /** @var BeersCollection */
-    protected $beersCollection;
 
     /**
      * StylesToTake constructor.
@@ -29,5 +27,19 @@ class StylesToTake extends AbstractFixedPropertyObject
         $this->name = $data->name;
         $this->otherName = $data->name2;
         $this->polishName = $data->name_pl;
+    }
+
+    /**
+     * @return array
+     */
+    public function toArray(): array
+    {
+        return [
+            'id' => $this->id,
+            'flavourId' => $this->flavourId,
+            'name' => $this->name,
+            'otherName' => $this->otherName,
+            'polishName' => $this->polishName,
+        ];
     }
 }
