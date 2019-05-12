@@ -279,6 +279,7 @@ class AlgorithmService
         if ( \count( $idStylesToTake ) > 0 ) {
             $buyThis = DB::select( "SELECT * FROM beers WHERE id IN (" . implode( ',', $idStylesToTake ) . ")" );
         }
+        //todo pack it into object
 
         $idStylesToAvoid = [];
         for ( $i = 0; $i < $userOptions->getCountStylesToAvoid(); $i++ ) {
@@ -289,6 +290,7 @@ class AlgorithmService
         if ( \count( $idStylesToAvoid ) > 0 ) {
             $avoidThis = DB::select( "SELECT * FROM beers WHERE id IN (" . implode( ',', $idStylesToAvoid ) . ")" );
         }
+        //todo pack it into object
 
         try {
             $this->logStyles( $user, $idStylesToTake, $idStylesToAvoid );
@@ -296,15 +298,9 @@ class AlgorithmService
             LogService::logError( $e->getMessage() );
         }
 
-        // todo dumb as fuck ;/
-        $ids = [];
-        foreach ( $buyThis as $beer ) {
-            $ids[] = (int) $beer->id;
-        }
-
         $beersToTake = null;
-        foreach ( $ids as $beerId ) {
-            $beersToTake[] = PKAPI::fetchBeerInfo( $beerId ) ?? null;
+        foreach ( $buyThis as $beer ) {
+            $beersToTake[] = PKAPI::fetchBeerInfo( (int) $beer->id ) ?? null;
         }
 
         return \json_encode(

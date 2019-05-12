@@ -47,7 +47,7 @@ class AlgorithmController
 
         $emailIsValid = ValidationUtils::emailIsValid( $email );
 
-        if ( $email !== null && $emailIsValid ) {
+        if ( $emailIsValid && $email !== null ) {
             $user->setEmail( $requestData['email'] );
         }
 
@@ -78,11 +78,11 @@ class AlgorithmController
 
         $userEmail = $user->getEmail();
 
-        if ( $userEmail !== null && $user->getSendEmail() === true && $emailIsValid ) {
+        if ( $emailIsValid && $userEmail !== null && $user->getSendEmail()) {
             $mailService->sendEmail( $userEmail );
         }
 
-        if ( $user->getAddToNewsletterList() && $emailIsValid ) {
+        if ( $emailIsValid && $user->getAddToNewsletterList() ) {
             $newsletterService->addToNewsletterList( $userEmail );
         }
 
