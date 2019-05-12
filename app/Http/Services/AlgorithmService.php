@@ -6,6 +6,10 @@ namespace App\Http\Services;
 
 use App\Http\Objects\Options;
 use App\Http\Objects\OptionsInterface;
+use App\Http\Objects\StylesToAvoid;
+use App\Http\Objects\StylesToAvoidCollection;
+use App\Http\Objects\StylesToTake;
+use App\Http\Objects\StylesToTakeCollection;
 use App\Http\Objects\User;
 use App\Http\Repositories\ScoringRepositoryInterface;
 use Illuminate\Support\Facades\DB;
@@ -279,7 +283,13 @@ class AlgorithmService
         if ( \count( $idStylesToTake ) > 0 ) {
             $buyThis = DB::select( "SELECT * FROM beers WHERE id IN (" . implode( ',', $idStylesToTake ) . ")" );
         }
-        //todo pack it into object
+
+        foreach ($buyThis as $beerData) {
+            $stylesToTake[] = new StylesToTake($beerData);
+        }
+        $stylesToTakeCollection = new StylesToTakeCollection($stylesToTake);
+
+        // AVOID START
 
         $idStylesToAvoid = [];
         for ( $i = 0; $i < $userOptions->getCountStylesToAvoid(); $i++ ) {
@@ -290,7 +300,11 @@ class AlgorithmService
         if ( \count( $idStylesToAvoid ) > 0 ) {
             $avoidThis = DB::select( "SELECT * FROM beers WHERE id IN (" . implode( ',', $idStylesToAvoid ) . ")" );
         }
-        //todo pack it into object
+
+        foreach ($avoidThis as $beerData) {
+            $stylesToAvoid[] = new StylesToAvoid($beerData);
+        }
+        $stylesToAvoidCollection = new StylesToAvoidCollection($stylesToAvoid);
 
         try {
             $this->logStyles( $user, $idStylesToTake, $idStylesToAvoid );
@@ -305,8 +319,8 @@ class AlgorithmService
 
         return \json_encode(
             [
-                'buyThis' => $buyThis,
-                'avoidThis' => $avoidThis,
+                'buyThis' => $stylesToAvoidCollection->toArray(),
+                'avoidThis' => $stylesToAvoidCollection->toArray(),
                 'mustTake' => $userOptions->getMustTakeOpt(),
                 'mustAvoid' => $userOptions->getMustAvoidOpt(),
                 'beersToTake' => $beersToTake,
