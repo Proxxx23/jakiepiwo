@@ -17,7 +17,7 @@ class MainController
     {
         $questionsService = new QuestionsService( new QuestionsRepository() );
 
-        return \response()->json(
+        return response()->json(
             $questionsService->getQuestions(), 200, [], JSON_UNESCAPED_UNICODE
         );
     }
