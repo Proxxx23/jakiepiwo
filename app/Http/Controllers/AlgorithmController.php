@@ -36,7 +36,7 @@ class AlgorithmController
         $user = new User( new Options() );
         $user->setUsername( $requestData['username'] ?? null );
 
-        $emailIsValid = EmailUtils::isValid($requestData['email'] ?? null);
+        $emailIsValid = EmailUtils::isValid( $requestData['email'] ?? null );
         if ( $emailIsValid ) {
             $user->setEmail( $requestData['email'] );
         }

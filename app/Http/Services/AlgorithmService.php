@@ -189,6 +189,18 @@ class AlgorithmService
         /** @var Options $userOptions */
         $userOptions = $user->getOptions();
 
+        $userOptions->setBarrelAged(
+            $answers[14] === 'tak' ? true : false
+        );
+
+        if ( $answers[12] === 'nie ma mowy' ) {
+            $userOptions->excludeFromRecommended( [ 40, 42, 44, 51, 56 ] );
+        }
+
+        if ( $answers[13] === 'nie' ) {
+            $userOptions->excludeFromRecommended( [ 15, 16, 52, 57, 58, 59, 62, 63 ] );
+        }
+
         //todo: intersect?
         foreach ( $answers as $questionNumber => &$givenAnswer ) {
 
@@ -196,21 +208,8 @@ class AlgorithmService
 
             foreach ( $scoringMap as $mappedAnswer => $ids ) {
 
-                $userOptions->setBarrelAged(
-                    $answers[14] === 'tak' ? true : false
-                );
-
-                if ( $answers[12] === 'nie ma mowy' ) {
-                    $userOptions->excludeFromRecommended( [ 40, 42, 44, 51, 56 ] );
-                }
-
-                if ( $answers[13] === 'nie' ) {
-                    $userOptions->excludeFromRecommended( [ 15, 16, 52, 57, 58, 59, 62, 63 ] );
-                }
-
                 // Nie idź dalej przy BA
-                // TODO: czemu?
-                if ( \in_array( $ids, [ 'tak', 'nie' ], true ) ) {
+                if ( $questionNumber === 14 ) {
                     continue;
                 }
 

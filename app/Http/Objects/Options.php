@@ -4,21 +4,13 @@ declare( strict_types=1 );
 namespace App\Http\Objects;
 
 /**
- * @method setIncludedIds( array $array )
  * @method getIncludedIds()
- * @method setExcludedIds( array $array )
  * @method getExcludedIds()
- * @method setMustTakeOpt( bool $param )
  * @method getMustTakeOpt()
- * @method setMustAvoidOpt( bool $param )
  * @method getMustAvoidOpt()
  * @method setBarrelAged( bool $param )
  * @method getBarrelAged()
- * @method setShuffled( bool $param )
- * @method getShuffled()
- * @method setCountStylesToTake( int $param )
  * @method getCountStylesToTake()
- * @method setCountStylesToAvoid( int $param )
  * @method getCountStylesToAvoid()
  */
 class Options extends AbstractFixedPropertyObject implements OptionsInterface

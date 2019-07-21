@@ -36,9 +36,7 @@ class QuestionsService
      */
     public function validateInput( array $requestData ): array
     {
-        $questionsCount = \count( $this->getQuestions() );
-
-        if ( $questionsCount !== \count( $requestData['answers'] ) ) {
+        if ( \count( $this->getQuestions() ) !== \count( $requestData['answers'] ) ) {
             throw new \UnexpectedValueException( 'Liczba odpowiedzi na pytania nie zgadza się z liczbą pytań.' );
         }
 

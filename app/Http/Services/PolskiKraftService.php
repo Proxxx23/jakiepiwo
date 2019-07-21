@@ -31,7 +31,7 @@ class PolskiKraftService
 
         $data = \json_decode( \file_get_contents( $url ) );
 
-        if ( empty( $data ) || $data === null ) {
+        if ( empty( $data ) ) {
             return null;
         }
 
