@@ -3,16 +3,16 @@ declare( strict_types=1 );
 
 namespace App\Http\Utils;
 
-class ValidationUtils
+class EmailUtils
 {
     /**
      * @param string|null $email
      *
      * @return bool
      */
-    public static function emailIsValid( ?string $email ): bool
+    public static function isValid( ?string $email ): bool
     {
-        if ( empty( $email ) ) {
+        if ( $email === null ) {
             return false;
         }
 

@@ -7,12 +7,12 @@ Route::get('/', static function () {
     return 'Strona w budowie...';
 });
 
-Route::get( '/api/questions', 'MainController@questionsData' );
-Route::get( '/api/visitorName', 'MainController@visitorData' );
-Route::post( '/api/results', 'AlgorithmController@presentStyles' );
+Route::get( '/questions', 'MainController@questionsData' );
+Route::get( '/visitorName', 'MainController@visitorData' );
+Route::post( '/results', 'AlgorithmController@presentStyles' );
 
 Route::get(
-    '/api/changelog', function () {
+    '/changelog', static function () {
 //    return view( 'changelog' );
 }
 );

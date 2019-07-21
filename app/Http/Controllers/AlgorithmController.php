@@ -12,8 +12,8 @@ use App\Http\Services\LogService;
 use App\Http\Services\MailService;
 use App\Http\Services\NewsletterService;
 use App\Http\Services\QuestionsService;
-use App\Http\Utils\ValidationUtils;
 use App\Http\Services\AlgorithmService;
+use App\Http\Utils\EmailUtils;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -28,31 +28,24 @@ class AlgorithmController
      */
     public function presentStyles( Request $request ): string
     {
-        // TODO: DiContainer
-        $mailService = new MailService();
-
-        $questionsService = new QuestionsService( new QuestionsRepository() );
-        $newsletterService = new NewsletterService( new NewsletterRepository() );
-
         $requestData = $request->input();
-        if ( empty( $requestData ) || empty( $requestData['answers'] ) ) {
+        if ( $requestData === null || empty( $requestData['answers'] ) ) {
             throw new \UnexpectedValueException( 'No vaid data provided.' );
         }
-
-        $answers = $questionsService->validateInput( $requestData );
-        $email = $requestData['email'] ?? null;
 
         $user = new User( new Options() );
         $user->setUsername( $requestData['username'] ?? null );
 
-        $emailIsValid = ValidationUtils::emailIsValid( $email );
-
-        if ( $emailIsValid && $email !== null ) {
+        $emailIsValid = EmailUtils::isValid($requestData['email'] ?? null);
+        if ( $emailIsValid ) {
             $user->setEmail( $requestData['email'] );
         }
 
         $user->setSendEmail( $requestData['sendEmail'] ?? false );
         $user->setAddToNewsletterList( $requestData['newsletter'] ?? false );
+
+        $answers = ( new QuestionsService( new QuestionsRepository() ) )
+            ->validateInput( $requestData );
 
         try {
             DB::insert(
@@ -76,18 +69,18 @@ class AlgorithmController
             LogService::logError( $e->getMessage() );
         }
 
+        $mailService = new MailService();
         $userEmail = $user->getEmail();
-
-        if ( $emailIsValid && $userEmail !== null && $user->getSendEmail()) {
+        if ( $emailIsValid && $userEmail !== null && $user->getSendEmail() ) {
             $mailService->sendEmail( $userEmail );
         }
 
+        $newsletterService = new NewsletterService( new NewsletterRepository() );
         if ( $emailIsValid && $user->getAddToNewsletterList() ) {
             $newsletterService->addToNewsletterList( $userEmail );
         }
 
-        $algorithmService = new AlgorithmService( new ScoringRepository() );
-
-        return $algorithmService->fetchProposedStyles( $answers, $user );
+        return ( new AlgorithmService( new ScoringRepository() ) )
+            ->fetchProposedStyles( $answers, $user );
     }
 }

@@ -286,10 +286,10 @@ class AlgorithmService
         }
 
         $stylesToTake = [];
-        foreach ($buyThis as $beerData) {
-            $stylesToTake[] = (new StylesToTake($beerData))->toArray();
+        foreach ( $buyThis as $beerData ) {
+            $stylesToTake[] = ( new StylesToTake( $beerData ) )->toArray();
         }
-        $stylesToTakeCollection = new StylesToTakeCollection($stylesToTake);
+        $stylesToTakeCollection = new StylesToTakeCollection( $stylesToTake );
 
         // AVOID START
 
@@ -305,10 +305,10 @@ class AlgorithmService
         }
 
         $stylesToAvoid = [];
-        foreach ($avoidThis as $beerData) {
-            $stylesToAvoid[] = (new StylesToAvoid($beerData))->toArray();
+        foreach ( $avoidThis as $beerData ) {
+            $stylesToAvoid[] = ( new StylesToAvoid( $beerData ) )->toArray();
         }
-        $stylesToAvoidCollection = new StylesToAvoidCollection($stylesToAvoid);
+        $stylesToAvoidCollection = new StylesToAvoidCollection( $stylesToAvoid );
 
         try {
             $this->logStyles( $user, $idStylesToTake, $idStylesToAvoid );
@@ -325,7 +325,7 @@ class AlgorithmService
 
         return \json_encode(
             [
-                'buyThis' => $stylesToAvoidCollection->toArray(),
+                'buyThis' => $stylesToTakeCollection->toArray(),
                 'avoidThis' => $stylesToAvoidCollection->toArray(),
                 'mustTake' => $userOptions->getMustTakeOpt(),
                 'mustAvoid' => $userOptions->getMustAvoidOpt(),

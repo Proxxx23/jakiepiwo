@@ -20,7 +20,7 @@ class StylesToTake extends AbstractFixedPropertyObject
      * StylesToTake constructor.
      * @param object $data
      */
-    public function __construct(object $data)
+    public function __construct( object $data )
     {
         $this->id = (int) $data->id;
         $this->flavourId = (int) $data->id_flavour;

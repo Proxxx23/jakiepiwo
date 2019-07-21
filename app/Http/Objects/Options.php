@@ -164,12 +164,11 @@ class Options extends AbstractFixedPropertyObject implements OptionsInterface
         for ( $i = 3; $i <= 4; $i++ ) {
 
             $toTakeChunk = \array_values( \array_slice( $this->includedIds, 0, $i, true ) );
-            $toAvoidChunk = \array_values( \array_slice( $this->excludedIds, 0, $i, true ) );
-
             if ( $toTakeChunk[0] >= ( $thirdStyleToTake[0] / 100 * 90 ) ) {
                 $this->countStylesToTake++;
             }
 
+            $toAvoidChunk = \array_values( \array_slice( $this->excludedIds, 0, $i, true ) );
             if ( $toAvoidChunk[0] >= ( $thirdStyleToAvoid[0] / 100 * 90 ) ) {
                 $this->countStylesToAvoid++;
             }
@@ -241,13 +240,12 @@ class Options extends AbstractFixedPropertyObject implements OptionsInterface
     protected function checkHowManyStylesShouldBeShuffled(): void
     {
         //		$firstStyleIndex = key(array_slice($this->includedIds, 0, 1, true));
-        $firstStylePoints = \array_values( \array_slice( $this->includedIds, 0, 1, true ) );
 
         $toShuffle = 0;
         $countIncluded = \count( $this->includedIds );
+        $firstStylePoints = \array_values( \array_slice( $this->includedIds, 0, 1, true ) );
 
         for ( $i = 1; $i < $countIncluded; $i++ ) {
-
             $nthStylePoints = \array_values( \array_slice( $this->includedIds, $i, 1, true ) );
             if ( $nthStylePoints[0] >= $firstStylePoints[0] * self::POINT_PERCENT_GAP ) {
                 $toShuffle++;

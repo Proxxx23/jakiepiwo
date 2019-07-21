@@ -15,10 +15,9 @@ class MainController
      */
     public function questionsData(): JsonResponse
     {
-        $questionsService = new QuestionsService( new QuestionsRepository() );
-
         return response()->json(
-            $questionsService->getQuestions(), 200, [], JSON_UNESCAPED_UNICODE
+            ( new QuestionsService( new QuestionsRepository() ) )
+                ->getQuestions(), 200, [], JSON_UNESCAPED_UNICODE
         );
     }
 
@@ -27,10 +26,8 @@ class MainController
      */
     public function visitorData(): JsonResponse
     {
-        $userService = new UserService();
-
         return response()->json(
-            [ 'visitorName' => $userService->getUsername() ]
+            [ 'visitorName' => ( new UserService() )->getUsername() ]
         );
     }
 }
