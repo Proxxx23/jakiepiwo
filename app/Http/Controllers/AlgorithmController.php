@@ -28,6 +28,10 @@ class AlgorithmController
      */
     public function presentStyles( Request $request ): string
     {
+        if ( $request->header('Content-type') !== 'application/json' ) {
+            throw new \UnexpectedValueException( 'Set Content Type header to application/json' );
+        }
+
         $requestData = $request->input();
         if ( $requestData === null || empty( $requestData['answers'] ) ) {
             throw new \UnexpectedValueException( 'No vaid data provided.' );
