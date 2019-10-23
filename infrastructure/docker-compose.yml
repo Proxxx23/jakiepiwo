@@ -1,0 +1,37 @@
+version: '3'
+services:
+  nginx:
+    build:
+      context: nginx
+    ports:
+      - 80:80
+    links:
+      - php
+    volumes:
+      - ./../:/var/www/html
+    container_name: infrastructure_nginx
+
+  php:
+    build:
+      context: php
+    expose:
+      - 9000
+    links:
+      - mysql
+    volumes:
+      -  ./../:/var/www/html
+    container_name: infrastructure_php
+
+  mysql:
+    environment:
+      MYSQL_ROOT_PASSWORD: $DB_ROOT_PASSWORD
+      MYSQL_USER: $DB_USERNAME
+      MYSQL_PASSWORD: $DB_PASSWORD
+      MYSQL_DATABASE: $DB_DATABASE
+    build:
+      context: mysql
+    expose:
+      - 3306
+    ports:
+      - 3306:3306
+    container_name: infrastructure_mysql
