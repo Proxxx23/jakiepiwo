@@ -3,16 +3,16 @@ declare( strict_types=1 );
 
 namespace App\Http\Repositories;
 
-use App\Http\Objects\FormInput;
+use App\Http\Objects\FormData;
 use Illuminate\Support\Facades\DB;
 
 final class UserAnswersRepository implements UserAnswersRepositoryInterface
 {
     /**
-     * @param FormInput $formInput
+     * @param FormData $formInput
      * @param array $answers
      */
-    public function add( FormInput $formInput, array $answers )
+    public function add( FormData $formInput, array $answers ): void
     {
         DB::insert(
             'INSERT INTO `user_answers` 
@@ -26,7 +26,7 @@ final class UserAnswersRepository implements UserAnswersRepositoryInterface
             [
                 $formInput->getUsername(),
                 $formInput->getEmail(),
-                $formInput->getAddToNewsletterList(),
+                $formInput->addToNewsletterList(),
                 \json_encode( $answers, JSON_UNESCAPED_UNICODE ),
                 now(),
             ]

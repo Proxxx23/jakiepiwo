@@ -3,7 +3,7 @@ declare( strict_types=1 );
 
 namespace App\Exceptions;
 
-class EmptyRequestException extends \UnexpectedValueException
+final class EmptyRequestException extends \UnexpectedValueException
 {
     /**
      * @param string $message

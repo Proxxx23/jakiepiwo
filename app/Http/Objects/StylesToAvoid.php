@@ -3,18 +3,16 @@ declare(strict_types=1);
 
 namespace App\Http\Objects;
 
-final class StylesToAvoid extends AbstractFixedPropertyObject
+final class StylesToAvoid
 {
     /** @var int */
-    protected $id;
-    /** @var int */
-    protected $flavourId;
+    private $id;
     /** @var string */
-    protected $name;
+    private $name;
     /** @var null|string */
-    protected $otherName;
+    private $otherName;
     /** @var null|string */
-    protected $polishName;
+    private $polishName;
 
     /**
      * StylesToTake constructor.
@@ -23,10 +21,25 @@ final class StylesToAvoid extends AbstractFixedPropertyObject
     public function __construct( object $data )
     {
         $this->id = (int) $data->id;
-        $this->flavourId = (int) $data->id_flavour;
         $this->name = $data->name;
         $this->otherName = $data->name2;
         $this->polishName = $data->name_pl;
+    }
+
+    /**
+     * @return int
+     */
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName(): string
+    {
+        return $this->name;
     }
 
     /**
@@ -36,7 +49,6 @@ final class StylesToAvoid extends AbstractFixedPropertyObject
     {
         return [
             'id' => $this->id,
-            'flavourId' => $this->flavourId,
             'name' => $this->name,
             'otherName' => $this->otherName,
             'polishName' => $this->polishName,

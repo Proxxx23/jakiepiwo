@@ -4,16 +4,18 @@ declare( strict_types=1 );
 
 namespace App\Http\Services;
 
+use App\Http\Repositories\PolskiKraftRepository;
 use App\Http\Objects\Answers;
 use App\Http\Objects\AnswersInterface;
 use App\Http\Objects\StylesToAvoid;
 use App\Http\Objects\StylesToAvoidCollection;
 use App\Http\Objects\StylesToTake;
 use App\Http\Objects\StylesToTakeCollection;
-use App\Http\Objects\FormInput;
+use App\Http\Objects\FormData;
+use App\Http\Repositories\PolskiKraftRepositoryInterface;
 use App\Http\Repositories\ScoringRepositoryInterface;
 use Illuminate\Support\Facades\DB;
-use App\Http\Controllers\PolskiKraft\PolskiKraftService as PKAPI;
+use App\Http\Controllers\PolskiKraft\PolskiKraftRepository as PKAPI;
 use Illuminate\View\View;
 
 final class AlgorithmService
@@ -22,15 +24,18 @@ final class AlgorithmService
     private $answers = [];
     /** @var ScoringRepositoryInterface */
     private $scoringRepository;
+    /** @var PolskiKraftRepository */
+    private $polskiKraftRepository;
 
     /**
      * Constructor.
      *
      * @param ScoringRepositoryInterface $scoringRepository
      */
-    public function __construct( ScoringRepositoryInterface $scoringRepository )
+    public function __construct( ScoringRepositoryInterface $scoringRepository, PolskiKraftRepositoryInterface $polskiKraftRepository )
     {
         $this->scoringRepository = $scoringRepository;
+        $this->polskiKraftRepository = $polskiKraftRepository;
     }
 
     /**
@@ -68,9 +73,9 @@ final class AlgorithmService
      * There are all the synergies
      *
      * @param array $answerValue
-     * @param FormInput $user
+     * @param FormData $user
      */
-    public function applySynergy( array $answerValue, FormInput $user ): void
+    public function applySynergy( array $answerValue, FormData $user ): void
     {
         /** @var Answers $userOptions */
         $userOptions = $user->getAnswers();
@@ -176,12 +181,12 @@ final class AlgorithmService
 
     /**
      * @param array $answers
-     * @param FormInput $user
+     * @param FormData $user
      *
      * @return string
      * @throws \Exception
      */
-    public function fetchProposedStyles( array $answers, FormInput $user ): string
+    public function fetchProposedStyles( array $answers, FormData $user ): string
     {
         $this->answers = $answers;
 
@@ -251,18 +256,17 @@ final class AlgorithmService
     }
 
     /**
-     * @param FormInput $user
+     * @param FormData $user
      *
      * @return string
      * @throws \Exception
      * todo: dodać mechanizm, który informuje, że granice były marginalne i wyniki mogą byc niejednoznaczne
      */
-    public function chooseStyles( FormInput $user ): string
+    public function chooseStyles( FormData $user ): string
     {
         /** @var Answers $userOptions */
         $userOptions = $user->getAnswers();
         $userOptions->fetchAll();
-
         $userOptions->removeAssignedPoints();
 
         $idStylesToTake = [];
@@ -272,15 +276,14 @@ final class AlgorithmService
 
         $buyThis = [];
         if ( \count( $idStylesToTake ) > 0 ) {
-            //todo not *
-            $buyThis = DB::select( "SELECT * FROM beers WHERE id IN (" . implode( ',', $idStylesToTake ) . ")" );
+            $buyThis = DB::select( "SELECT `id`, `name`, `name2`, `name_pl` FROM beers WHERE id IN (" . implode( ',', $idStylesToTake ) . ")" );
         }
 
-        $stylesToTake = [];
-        foreach ( $buyThis as $beerData ) {
-            $stylesToTake[] = ( new StylesToTake( $beerData ) )->toArray();
+        $stylesToTakeCollection = new StylesToTakeCollection();
+        foreach ( $buyThis as $styleInfo ) {
+            $beerDataCollection = $this->polskiKraftRepository->fetchBeerInfo( (int) $styleInfo->id ) ?? null;
+            $stylesToTakeCollection->add( ( new StylesToTake( $styleInfo, $beerDataCollection ) )->toArray() );
         }
-        $stylesToTakeCollection = new StylesToTakeCollection( $stylesToTake );
 
         // AVOID START
 
@@ -291,27 +294,18 @@ final class AlgorithmService
 
         $avoidThis = [];
         if ( \count( $idStylesToAvoid ) > 0 ) {
-            //todo not *
-            $avoidThis = DB::select( "SELECT * FROM beers WHERE id IN (" . implode( ',', $idStylesToAvoid ) . ")" );
+            $avoidThis = DB::select( "SELECT `id`, `name`, `name2`, `name_pl` FROM beers WHERE id IN (" . implode( ',', $idStylesToAvoid ) . ")" );
         }
 
-        $stylesToAvoid = [];
-        foreach ( $avoidThis as $beerData ) {
-            $stylesToAvoid[] = ( new StylesToAvoid( $beerData ) )->toArray();
+        $stylesToAvoidCollection = new StylesToAvoidCollection();
+        foreach ( $avoidThis as $styleInfo ) {
+            $stylesToAvoidCollection->add( ( new StylesToAvoid( $styleInfo ) )->toArray() );
         }
-        $stylesToAvoidCollection = new StylesToAvoidCollection( $stylesToAvoid );
 
         try {
             $this->logStyles( $user, $idStylesToTake, $idStylesToAvoid );
         } catch ( \Exception $e ) {
             LogService::logError( $e->getMessage() );
-        }
-
-        $beersToTake = [];
-        foreach ( $buyThis as $beer ) {
-            $beersToTake[] = PKAPI::fetchBeerInfo( (int) $beer->id ) ?? null;
-            //todo BeersCollection object
-            //todo incorporate into buyThis somehow
         }
 
         return \json_encode(
@@ -328,11 +322,11 @@ final class AlgorithmService
     }
 
     /**
-     * @param FormInput $user
+     * @param FormData $user
      * @param array|null $styleToTake
      * @param array|null $styleToAvoid
      */
-    private function logStyles( FormInput $user, ?array $styleToTake, ?array $styleToAvoid ): void
+    private function logStyles( FormData $user, ?array $styleToTake, ?array $styleToAvoid ): void
     {
         $lastID = DB::select( 'SELECT MAX(id_answer) AS lastid FROM `styles_logs` LIMIT 1' );
         $nextID = (int) $lastID[0]->lastid + 1;
@@ -357,7 +351,7 @@ final class AlgorithmService
                     $nextID,
                     $user->getUsername(),
                     $user->getEmail(),
-                    $user->getAddToNewsletterList(),
+                    $user->addToNewsletterList(),
                     $styleToTake[$i],
                     $styleToAvoid[$i],
                     $_SERVER['REMOTE_ADDR'],

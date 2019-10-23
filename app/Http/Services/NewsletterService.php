@@ -27,6 +27,6 @@ final class NewsletterService
      */
     public function addToNewsletterList( ?string $email ): void
     {
-        $this->newsletterRepository->subscribeToEmailList( $email );
+        $this->newsletterRepository->subscribe( $email );
     }
 }

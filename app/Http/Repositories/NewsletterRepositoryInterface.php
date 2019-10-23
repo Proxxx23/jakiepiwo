@@ -8,5 +8,5 @@ interface NewsletterRepositoryInterface
     /**
      * @param string|null $email
      */
-    public function subscribeToEmailList( ?string $email ): void;
+    public function subscribe( ?string $email ): void;
 }
