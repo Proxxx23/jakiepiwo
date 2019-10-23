@@ -3,7 +3,7 @@ declare( strict_types=1 );
 
 namespace App\Http\Utils;
 
-class EmailUtils
+class Email
 {
     /**
      * @param string|null $email
@@ -12,8 +12,8 @@ class EmailUtils
      */
     public static function isValid( ?string $email ): bool
     {
-        if ( $email === null ) {
-            return false;
+        if ( $email === null || $email === '' ) {
+            return true;
         }
 
         $email = \filter_var( \trim( $email ), \FILTER_SANITIZE_EMAIL );

@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Http\Objects;
 
-class StylesToAvoid extends AbstractFixedPropertyObject
+final class StylesToAvoid extends AbstractFixedPropertyObject
 {
     /** @var int */
     protected $id;

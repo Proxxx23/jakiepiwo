@@ -6,7 +6,7 @@ namespace App\Http\Repositories;
 interface NewsletterRepositoryInterface
 {
     /**
-     * @param string $email
+     * @param string|null $email
      */
-    public function addToMailchimpSubscriptionList( string $email ): void;
+    public function subscribeToEmailList( ?string $email ): void;
 }

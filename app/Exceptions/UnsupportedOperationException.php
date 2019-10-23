@@ -3,7 +3,7 @@ declare( strict_types=1 );
 
 namespace App\Exceptions;
 
-class UnsupportedOperationException extends \RuntimeException
+final class UnsupportedOperationException extends \RuntimeException
 {
 
 }

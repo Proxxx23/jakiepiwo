@@ -4,25 +4,24 @@ declare( strict_types=1 );
 
 namespace App\Http\Services;
 
-use App\Http\Objects\Options;
-use App\Http\Objects\OptionsInterface;
+use App\Http\Objects\Answers;
+use App\Http\Objects\AnswersInterface;
 use App\Http\Objects\StylesToAvoid;
 use App\Http\Objects\StylesToAvoidCollection;
 use App\Http\Objects\StylesToTake;
 use App\Http\Objects\StylesToTakeCollection;
-use App\Http\Objects\User;
+use App\Http\Objects\FormInput;
 use App\Http\Repositories\ScoringRepositoryInterface;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\PolskiKraft\PolskiKraftService as PKAPI;
 use Illuminate\View\View;
 
-class AlgorithmService
+final class AlgorithmService
 {
     /** @var array */
-    protected $answers = [];
-
+    private $answers = [];
     /** @var ScoringRepositoryInterface */
-    protected $scoringRepository;
+    private $scoringRepository;
 
     /**
      * Constructor.
@@ -69,12 +68,12 @@ class AlgorithmService
      * There are all the synergies
      *
      * @param array $answerValue
-     * @param User $user
+     * @param FormInput $user
      */
-    public function applySynergy( array $answerValue, User $user ): void
+    public function applySynergy( array $answerValue, FormInput $user ): void
     {
-        /** @var Options $userOptions */
-        $userOptions = $user->getOptions();
+        /** @var Answers $userOptions */
+        $userOptions = $user->getAnswers();
 
         // Lekkie + owocowe + Kwaśne
         if ( $answerValue[4] === 'coś lekkiego' &&
@@ -177,17 +176,17 @@ class AlgorithmService
 
     /**
      * @param array $answers
-     * @param User $user
+     * @param FormInput $user
      *
      * @return string
      * @throws \Exception
      */
-    public function fetchProposedStyles( array $answers, User $user ): string
+    public function fetchProposedStyles( array $answers, FormInput $user ): string
     {
         $this->answers = $answers;
 
-        /** @var Options $userOptions */
-        $userOptions = $user->getOptions();
+        /** @var Answers $userOptions */
+        $userOptions = $user->getAnswers();
 
         $userOptions->setBarrelAged(
             $answers[14] === 'tak' ? true : false
@@ -252,24 +251,17 @@ class AlgorithmService
     }
 
     /**
-     * @param User $user
+     * @param FormInput $user
      *
      * @return string
      * @throws \Exception
      * todo: dodać mechanizm, który informuje, że granice były marginalne i wyniki mogą byc niejednoznaczne
      */
-    public function chooseStyles( User $user ): string
+    public function chooseStyles( FormInput $user ): string
     {
-        /** @var Options $userOptions */
-        $userOptions = $user->getOptions();
+        /** @var Answers $userOptions */
+        $userOptions = $user->getAnswers();
         $userOptions->fetchAll();
-
-        //        if ( $_SERVER['REMOTE_ADDR'] === '213.241.3.97' ) {
-        //            echo '<br /><br /><br />';
-        //            echo 'Tablica ze stylami do wybrania i punktami / Tablica ze stylami do odrzucenia i punktami: <br />';
-        //            dd( $userOptions->getIncludedIds(), $userOptions->getExcludedIds() );
-        //            echo '<br />: <br />';
-        //        }
 
         $userOptions->removeAssignedPoints();
 
@@ -326,21 +318,21 @@ class AlgorithmService
             [
                 'buyThis' => $stylesToTakeCollection->toArray(),
                 'avoidThis' => $stylesToAvoidCollection->toArray(),
-                'mustTake' => $userOptions->getMustTakeOpt(),
-                'mustAvoid' => $userOptions->getMustAvoidOpt(),
+                'mustTake' => $userOptions->isMustTakeOpt(),
+                'mustAvoid' => $userOptions->isMustAvoidOpt(),
                 'username' => $user->getUsername(),
-                'barrelAged' => $userOptions->getBarrelAged(),
+                'barrelAged' => $userOptions->isBarrelAged(),
                 'answers' => $this->answers,
             ], JSON_UNESCAPED_UNICODE
         );
     }
 
     /**
-     * @param User $user
+     * @param FormInput $user
      * @param array|null $styleToTake
      * @param array|null $styleToAvoid
      */
-    private function logStyles( User $user, ?array $styleToTake, ?array $styleToAvoid ): void
+    private function logStyles( FormInput $user, ?array $styleToTake, ?array $styleToAvoid ): void
     {
         $lastID = DB::select( 'SELECT MAX(id_answer) AS lastid FROM `styles_logs` LIMIT 1' );
         $nextID = (int) $lastID[0]->lastid + 1;

@@ -5,10 +5,11 @@ namespace App\Http\Services;
 
 use Illuminate\Support\Facades\DB;
 
-class LogService
+final class LogService
 {
     /**
      * @param string $message
+     * TODO: Repo
      */
     public static function logError( string $message ): void
     {

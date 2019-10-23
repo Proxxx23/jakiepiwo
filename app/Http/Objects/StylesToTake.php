@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Http\Objects;
 
-class StylesToTake extends AbstractFixedPropertyObject
+final class StylesToTake extends AbstractFixedPropertyObject
 {
     /** @var int */
     protected $id;

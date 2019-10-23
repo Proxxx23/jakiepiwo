@@ -3,7 +3,7 @@ declare( strict_types=1 );
 
 namespace App\Http\Repositories;
 
-class QuestionsRepository implements QuestionsRepositoryInterface
+final class QuestionsRepository implements QuestionsRepositoryInterface
 {
     /**
      * @return array

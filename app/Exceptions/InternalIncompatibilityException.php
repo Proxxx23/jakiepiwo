@@ -3,7 +3,7 @@ declare( strict_types=1 );
 
 namespace App\Exceptions;
 
-class InternalIncompatibilityException extends \Exception
+final class InternalIncompatibilityException extends \Exception
 {
     /**
      * Constructor.

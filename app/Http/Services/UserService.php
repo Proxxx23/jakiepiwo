@@ -5,10 +5,11 @@ namespace App\Http\Services;
 
 use Illuminate\Support\Facades\DB;
 
-class UserService
+final class UserService
 {
     /**
      * Gets name of an user using IP address
+     * TODO: Repo
      */
     public function getUsername(): ?string
     {
