@@ -5,7 +5,7 @@ namespace App\Http\Controllers\PolskiKraft;
 
 use App\Http\Utils\Dictionaries;
 
-class PolskiKraftService
+final class PolskiKraftService
 {
     protected const DEFAULT_STYLE_URI = 'https://www.polskikraft.pl/openapi/style/%d/examples';
 
@@ -18,6 +18,7 @@ class PolskiKraftService
      * @throws \Exception
      *
      * TODO: collection of objects only with needed fields, added to object with styles
+     * TODO: Repository
      */
     public static function fetchBeerInfo( int $beerId ): ?array
     {

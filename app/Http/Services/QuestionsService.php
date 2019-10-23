@@ -5,10 +5,10 @@ namespace App\Http\Services;
 
 use App\Http\Repositories\QuestionsRepositoryInterface;
 
-class QuestionsService
+final class QuestionsService
 {
     /** @var QuestionsRepositoryInterface $questionsRepository */
-    protected $questionsRepository;
+    private $questionsRepository;
 
     /**
      * Constructor.

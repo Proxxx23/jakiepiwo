@@ -5,7 +5,7 @@ namespace App\Http\Objects;
 
 use Tightenco\Collect\Support\Collection;
 
-class StylesToAvoidCollection extends Collection
+final class StylesToAvoidCollection extends Collection
 {
 
 }

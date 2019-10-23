@@ -3,6 +3,7 @@ declare( strict_types=1 );
 
 namespace Nwt\Utils\Exceptions;
 
-class ParserException extends \RuntimeException
+final class ParserException extends \RuntimeException
 {
+
 }

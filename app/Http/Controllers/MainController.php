@@ -8,7 +8,7 @@ use App\Http\Services\QuestionsService;
 use App\Http\Services\UserService;
 use Illuminate\Http\JsonResponse;
 
-class MainController
+final class MainController
 {
     /**
      * @return JsonResponse

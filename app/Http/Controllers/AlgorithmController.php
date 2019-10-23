@@ -15,10 +15,11 @@ use App\Http\Services\QuestionsService;
 use App\Http\Services\AlgorithmService;
 use App\Http\Utils\EmailUtils;
 
+use DrewM\MailChimp\MailChimp;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class AlgorithmController
+final class AlgorithmController
 {
     /**
      * @param Request $request
@@ -79,7 +80,10 @@ class AlgorithmController
             $mailService->sendEmail( $userEmail );
         }
 
-        $newsletterService = new NewsletterService( new NewsletterRepository() );
+        $newsletterService = new NewsletterService(
+            new NewsletterRepository( new MailChimp( config( 'mail.mailchimpApiKey' ) ) )
+        );
+
         if ( $emailIsValid && $user->getAddToNewsletterList() ) {
             $newsletterService->addToNewsletterList( $userEmail );
         }

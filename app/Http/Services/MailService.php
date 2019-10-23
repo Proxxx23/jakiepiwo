@@ -3,7 +3,7 @@ declare( strict_types=1 );
 
 namespace App\Http\Services;
 
-class MailService
+final class MailService
 {
     /**
      * @param string $email
@@ -21,7 +21,7 @@ class MailService
     /**
      * @return string $mailTPL
      */
-    protected function prepareEmailTemplate(): string
+    private function prepareEmailTemplate(): string
     {
         $mailTPL = '';
         $mailTPL .= '';

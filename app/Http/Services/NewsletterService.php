@@ -5,14 +5,12 @@ namespace App\Http\Services;
 
 use App\Http\Repositories\NewsletterRepositoryInterface;
 
-class NewsletterService
+final class NewsletterService
 {
     /** @var NewsletterRepositoryInterface */
-    protected $newsletterRepository;
+    private $newsletterRepository;
 
     /**
-     * Constructor.
-     *
      * @param NewsletterRepositoryInterface $newsletterRepository
      */
     public function __construct( NewsletterRepositoryInterface $newsletterRepository )
@@ -29,6 +27,6 @@ class NewsletterService
      */
     public function addToNewsletterList( ?string $email ): void
     {
-        $this->newsletterRepository->addToMailchimpSubscriptionList( $email );
+        $this->newsletterRepository->subscribeToEmailList( $email );
     }
 }

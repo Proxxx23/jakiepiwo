@@ -5,24 +5,17 @@ namespace App\Http\Repositories;
 
 use \DrewM\MailChimp\MailChimp;
 
-class NewsletterRepository implements NewsletterRepositoryInterface
+final class NewsletterRepository implements NewsletterRepositoryInterface
 {
     /** @var \DrewM\MailChimp\MailChimp $mailChimp */
-    protected $mailChimp;
-
-    private const MAILCHIMP_LIST_ID = 'e51bd39480';
-
-    private const MAILCHIMP_API_KEY = 'd42a6395b596459d1e2c358525a019b7-us3';
+    private $mailChimp;
 
     /**
-     * Constructor.
-     *
-     * @throws \Exception
+     * @param MailChimp $mailChimp
      */
-    public function __construct()
+    public function __construct( MailChimp $mailChimp )
     {
-        //TODO: DI?
-        $this->mailChimp = new MailChimp( self::MAILCHIMP_API_KEY );
+        $this->mailChimp = $mailChimp;
     }
 
     /**
@@ -30,10 +23,10 @@ class NewsletterRepository implements NewsletterRepositoryInterface
      *
      * TODO: Return? Try-catch?
      */
-    public function addToMailchimpSubscriptionList( string $email ): void
+    public function subscribeToEmailList( string $email ): void
     {
         $this->mailChimp->post(
-            'lists/' . self::MAILCHIMP_LIST_ID . '/members', [
+            'lists/' . config('mail.mailchimpListId') . '/members', [
                 'email_address' => $email,
                 'status' => 'pending',
             ]

@@ -5,7 +5,7 @@ namespace App\Http\Objects;
 
 use Tightenco\Collect\Support\Collection;
 
-class StylesToTakeCollection extends Collection
+final class StylesToTakeCollection extends Collection
 {
 
 }

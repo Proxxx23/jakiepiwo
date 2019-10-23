@@ -3,9 +3,9 @@ declare( strict_types=1 );
 
 namespace App\Http\Repositories;
 
-class ScoringRepository implements ScoringRepositoryInterface
+final class ScoringRepository implements ScoringRepositoryInterface
 {
-    protected const SCORE = [
+    private const SCORE = [
         // Czy smakują Ci lekkie piwa koncernowe dostępne w sklepach?
         [
             'tak' => '9:2,10:2,11:2,12:2,13:2,14:2,25:2,27:2,45:2,52:2,68:2,70:2,72:2,76:2',

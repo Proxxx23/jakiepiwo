@@ -15,7 +15,7 @@ namespace App\Http\Objects;
  * @method setOptions( OptionsInterface $options )
  * @method getOptions()
  */
-class User extends AbstractFixedPropertyObject
+final class User extends AbstractFixedPropertyObject
 {
     /** @var string|null */
     protected $username;

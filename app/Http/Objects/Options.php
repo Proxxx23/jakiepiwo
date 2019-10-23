@@ -13,7 +13,7 @@ namespace App\Http\Objects;
  * @method getCountStylesToTake()
  * @method getCountStylesToAvoid()
  */
-class Options extends AbstractFixedPropertyObject implements OptionsInterface
+final class Options extends AbstractFixedPropertyObject implements OptionsInterface
 {
     protected const POINT_PERCENT_GAP = 0.90;
 

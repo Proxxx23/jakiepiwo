@@ -16,13 +16,12 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\PolskiKraft\PolskiKraftService as PKAPI;
 use Illuminate\View\View;
 
-class AlgorithmService
+final class AlgorithmService
 {
     /** @var array */
-    protected $answers = [];
-
+    private $answers = [];
     /** @var ScoringRepositoryInterface */
-    protected $scoringRepository;
+    private $scoringRepository;
 
     /**
      * Constructor.
@@ -263,13 +262,6 @@ class AlgorithmService
         /** @var Options $userOptions */
         $userOptions = $user->getOptions();
         $userOptions->fetchAll();
-
-        //        if ( $_SERVER['REMOTE_ADDR'] === '213.241.3.97' ) {
-        //            echo '<br /><br /><br />';
-        //            echo 'Tablica ze stylami do wybrania i punktami / Tablica ze stylami do odrzucenia i punktami: <br />';
-        //            dd( $userOptions->getIncludedIds(), $userOptions->getExcludedIds() );
-        //            echo '<br />: <br />';
-        //        }
 
         $userOptions->removeAssignedPoints();
 
