@@ -7,12 +7,11 @@ namespace App\Http\Services;
 use App\Http\Repositories\PolskiKraftRepository;
 use App\Http\Objects\Answers;
 use App\Http\Objects\AnswersInterface;
-use App\Http\Objects\BeersToTakeCollection;
 use App\Http\Objects\StylesToAvoid;
 use App\Http\Objects\StylesToAvoidCollection;
 use App\Http\Objects\StylesToTake;
 use App\Http\Objects\StylesToTakeCollection;
-use App\Http\Objects\FormInput;
+use App\Http\Objects\FormData;
 use App\Http\Repositories\PolskiKraftRepositoryInterface;
 use App\Http\Repositories\ScoringRepositoryInterface;
 use Illuminate\Support\Facades\DB;
@@ -74,9 +73,9 @@ final class AlgorithmService
      * There are all the synergies
      *
      * @param array $answerValue
-     * @param FormInput $user
+     * @param FormData $user
      */
-    public function applySynergy( array $answerValue, FormInput $user ): void
+    public function applySynergy( array $answerValue, FormData $user ): void
     {
         /** @var Answers $userOptions */
         $userOptions = $user->getAnswers();
@@ -182,12 +181,12 @@ final class AlgorithmService
 
     /**
      * @param array $answers
-     * @param FormInput $user
+     * @param FormData $user
      *
      * @return string
      * @throws \Exception
      */
-    public function fetchProposedStyles( array $answers, FormInput $user ): string
+    public function fetchProposedStyles( array $answers, FormData $user ): string
     {
         $this->answers = $answers;
 
@@ -257,13 +256,13 @@ final class AlgorithmService
     }
 
     /**
-     * @param FormInput $user
+     * @param FormData $user
      *
      * @return string
      * @throws \Exception
      * todo: dodać mechanizm, który informuje, że granice były marginalne i wyniki mogą byc niejednoznaczne
      */
-    public function chooseStyles( FormInput $user ): string
+    public function chooseStyles( FormData $user ): string
     {
         /** @var Answers $userOptions */
         $userOptions = $user->getAnswers();
@@ -277,8 +276,7 @@ final class AlgorithmService
 
         $buyThis = [];
         if ( \count( $idStylesToTake ) > 0 ) {
-            //todo not *
-            $buyThis = DB::select( "SELECT * FROM beers WHERE id IN (" . implode( ',', $idStylesToTake ) . ")" );
+            $buyThis = DB::select( "SELECT `id`, `name`, `name2`, `name_pl` FROM beers WHERE id IN (" . implode( ',', $idStylesToTake ) . ")" );
         }
 
         $stylesToTakeCollection = new StylesToTakeCollection();
@@ -296,8 +294,7 @@ final class AlgorithmService
 
         $avoidThis = [];
         if ( \count( $idStylesToAvoid ) > 0 ) {
-            //todo not *
-            $avoidThis = DB::select( "SELECT * FROM beers WHERE id IN (" . implode( ',', $idStylesToAvoid ) . ")" );
+            $avoidThis = DB::select( "SELECT `id`, `name`, `name2`, `name_pl` FROM beers WHERE id IN (" . implode( ',', $idStylesToAvoid ) . ")" );
         }
 
         $stylesToAvoidCollection = new StylesToAvoidCollection();
@@ -325,11 +322,11 @@ final class AlgorithmService
     }
 
     /**
-     * @param FormInput $user
+     * @param FormData $user
      * @param array|null $styleToTake
      * @param array|null $styleToAvoid
      */
-    private function logStyles( FormInput $user, ?array $styleToTake, ?array $styleToAvoid ): void
+    private function logStyles( FormData $user, ?array $styleToTake, ?array $styleToAvoid ): void
     {
         $lastID = DB::select( 'SELECT MAX(id_answer) AS lastid FROM `styles_logs` LIMIT 1' );
         $nextID = (int) $lastID[0]->lastid + 1;
@@ -354,7 +351,7 @@ final class AlgorithmService
                     $nextID,
                     $user->getUsername(),
                     $user->getEmail(),
-                    $user->getAddToNewsletterList(),
+                    $user->addToNewsletterList(),
                     $styleToTake[$i],
                     $styleToAvoid[$i],
                     $_SERVER['REMOTE_ADDR'],

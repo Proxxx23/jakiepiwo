@@ -5,7 +5,7 @@ namespace App\Http\Objects;
 
 use App\Http\Utils\Email;
 
-final class FormInput
+final class FormData
 {
     /** @var bool */
     private $addToNewsletterList = false;
@@ -26,7 +26,7 @@ final class FormInput
     {
         $this->addToNewsletterList = \is_bool( $requestData['newsletter'] ) ? $requestData['newsletter'] : false;
         $this->answers = $answers;
-        $this->email = Email::isValid( $requestData['email'] )
+        $this->email = Email::isValid( $requestData['email'] ) //todo: info this object
             ? $requestData['email']
             : null;
         $this->sendEmail = \is_bool( $requestData['sendEmail'] ) ? $requestData['sendEmail'] : false;
@@ -38,7 +38,7 @@ final class FormInput
     /**
      * @return bool
      */
-    public function getAddToNewsletterList(): bool
+    public function addToNewsletterList(): bool
     {
         return $this->addToNewsletterList;
     }
@@ -57,14 +57,6 @@ final class FormInput
     public function getAnswers(): AnswersInterface
     {
         return $this->answers;
-    }
-
-    /**
-     * @return bool
-     */
-    public function getSendEmail(): bool
-    {
-        return $this->sendEmail;
     }
 
     /**

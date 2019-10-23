@@ -3,7 +3,7 @@ declare( strict_types=1 );
 
 namespace App\Http\Services;
 
-use App\Http\Objects\FormInput;
+use App\Http\Objects\FormData;
 use App\Http\Repositories\UserAnswersRepositoryInterface;
 
 final class DatabaseLoggerService
@@ -23,10 +23,10 @@ final class DatabaseLoggerService
     }
 
     /**
-     * @param FormInput $formInput
+     * @param FormData $formInput
      * @param array $answers
      */
-    public function logAnswers( FormInput $formInput, array $answers )
+    public function logAnswers( FormData $formInput, array $answers )
     {
         $this->userAnswersRepository->add($formInput, $answers);
     }

@@ -43,22 +43,6 @@ final class StylesToAvoid
     }
 
     /**
-     * @return string|null
-     */
-    public function getOtherName(): ?string
-    {
-        return $this->otherName;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getPolishName(): ?string
-    {
-        return $this->polishName;
-    }
-
-    /**
      * @return array
      */
     public function toArray(): array

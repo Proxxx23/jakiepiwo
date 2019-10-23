@@ -5,7 +5,7 @@ namespace App\Http\Repositories;
 
 use Illuminate\Support\Facades\DB;
 
-class StylesLogsRepository implements StylesLogsRepositoryInterface
+final class StylesLogsRepository implements StylesLogsRepositoryInterface
 {
     /**
      * @param string $ipAddress

@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 
 use App\Exceptions\InvalidContentTypeException;
 use App\Http\Objects\Answers;
-use App\Http\Objects\FormInput;
+use App\Http\Objects\FormData;
 use App\Http\Repositories\NewsletterRepository;
 use App\Http\Repositories\PolskiKraftRepository;
 use App\Http\Repositories\QuestionsRepository;
@@ -27,12 +27,14 @@ final class AlgorithmController
     private const INVALID_CONTENT_TYPE_EXCEPTION_MESSAGE = 'Set Content Type header to application/json.';
     private const EMPTY_DATA_EXCEPTION_MESSAGE = 'No valid data provided.';
     private const APPLICATION_JSON_HEADER = 'application/json';
+    private const SLEEP_TIME = 3;
 
     /**
      * @param Request $request
      *
      * @return string
      * @throws \Exception
+     * todo: return response->json
      */
     public function handle( Request $request ): string
     {
@@ -45,31 +47,31 @@ final class AlgorithmController
             throw new \UnexpectedValueException( self::EMPTY_DATA_EXCEPTION_MESSAGE );
         }
 
-        $formInput = new FormInput( new Answers(), $requestData );
+        $formData = new FormData( new Answers(), $requestData );
         $answers = ( new QuestionsService( new QuestionsRepository() ) )->validateInput( $requestData );
 
         try {
             $databaseLoggerService = new DatabaseLoggerService( new UserAnswersRepository() );
-            $databaseLoggerService->logAnswers( $formInput, $answers );
+            $databaseLoggerService->logAnswers( $formData, $answers );
         } catch ( \Exception $e ) {
             LogService::logError( $e->getMessage() );
         }
 
-        $mailService = new MailService();
-        $userEmail = $formInput->getEmail();
-        if ( $userEmail !== null && $formInput->getSendEmail() ) {
-            $mailService->sendEmail( $userEmail );
-        }
+        $proposedStyles = ( new AlgorithmService( new ScoringRepository(), new PolskiKraftRepository( new Dictionary()) ) )
+            ->fetchProposedStyles( $answers, $formData );
 
-        $newsletterService = new NewsletterService(
-            new NewsletterRepository( new MailChimp( config( 'mail.mailchimpApiKey' ) ) )
-        );
+//        if ( $formData->hasEmail() && $formData->getSendEmail() ) {
+//            //todo: any info about mail has been sent
+//            ( new MailService() )->sendEmail( $proposedStyles, $formData->getUsername(), $formData->getEmail() );
+//        }
 
-        if ( $formInput->getAddToNewsletterList() ) {
-            $newsletterService->addToNewsletterList( $userEmail );
-        }
-
-        return ( new AlgorithmService( new ScoringRepository(), new PolskiKraftRepository( new Dictionary()) ) )
-            ->fetchProposedStyles( $answers, $formInput );
+//        if ( $formData->addToNewsletterList() ) {
+//            $newsletterService = new NewsletterService(
+//                new NewsletterRepository( new MailChimp( config( 'mail.mailchimpApiKey' ) ) )
+//            );
+//            $newsletterService->addToNewsletterList( $formData->getEmail() );
+//        }
+        \sleep(self::SLEEP_TIME);
+        return $proposedStyles;
     }
 }

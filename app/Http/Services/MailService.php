@@ -3,28 +3,42 @@ declare( strict_types=1 );
 
 namespace App\Http\Services;
 
+// TODO
 final class MailService
 {
     /**
+     * @param string $proposedStyles
+     * @param string|null $username
      * @param string $email
      */
-    public function sendEmail( string $email ): void
+    public function sendEmail( string $proposedStyles, ?string $username, string $email ): void
     {
-        $headers = 'From: jakiepiwomamwybrac@piwolucja.pl' . "\r\n" .
-            'Reply-To: jakiepiwomamwybrac@piwolucja.pl' . "\r\n";
+        $headers = 'From: thegustator@piwolucja.pl' . "\r\n" .
+            'Reply-To: thegustator@piwolucja.pl' . "\r\n";
 
-        $subject = $_POST['username'] . ', oto 3 najlepsze style piwne dla Ciebie!';
+        if ( $username !== null ) {
+            $subject = $username . ', oto najlepsze style piwne dla Ciebie!';
+        } else {
+            $subject = 'Oto najlepsze style piwne dla Ciebie!';
+        }
 
-        \mail( $email, $subject, $this->prepareEmailTemplate(), $headers );
+        \mail( $email, $subject, $this->prepareEmailTemplate($proposedStyles), $headers );
     }
 
     /**
+     * @param string $proposedStyles
+     *
      * @return string $mailTPL
      */
-    private function prepareEmailTemplate(): string
+    private function prepareEmailTemplate(string $proposedStyles): string
     {
-        $mailTPL = '';
-        $mailTPL .= '';
+        $proposedStyles = \json_decode($proposedStyles, true);
+
+        $mailTPL = 'Oto style, których powinieneś poszukiwać w sklepie:' . PHP_EOL;
+        foreach ($proposedStyles['buyThis'] as $style) {
+            $mailTPL .= $style['name'];
+        }
+
         $mailTPL .= '';
 
         return $mailTPL;
