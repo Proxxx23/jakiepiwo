@@ -3,7 +3,7 @@ declare( strict_types=1 );
 
 namespace App\Http\Utils;
 
-class EmailUtils
+class Email
 {
     /**
      * @param string|null $email

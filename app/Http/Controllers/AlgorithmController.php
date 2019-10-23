@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 
 use App\Exceptions\InvalidContentTypeException;
 use App\Http\Objects\Answers;
-use App\Http\Objects\UserOptions;
+use App\Http\Objects\FormInput;
 use App\Http\Repositories\NewsletterRepository;
 use App\Http\Repositories\QuestionsRepository;
 use App\Http\Repositories\ScoringRepository;
@@ -14,7 +14,6 @@ use App\Http\Services\MailService;
 use App\Http\Services\NewsletterService;
 use App\Http\Services\QuestionsService;
 use App\Http\Services\AlgorithmService;
-use App\Http\Utils\EmailUtils;
 
 use DrewM\MailChimp\MailChimp;
 use Illuminate\Http\Request;
@@ -24,6 +23,7 @@ final class AlgorithmController
 {
     private const INVALID_CONTENT_TYPE_EXCEPTION_MESSAGE = 'Set Content Type header to application/json.';
     private const EMPTY_DATA_EXCEPTION_MESSAGE = 'No valid data provided.';
+    private const APPLICATION_JSON_HEADER = 'application/json';
 
     /**
      * @param Request $request
@@ -31,9 +31,9 @@ final class AlgorithmController
      * @return string
      * @throws \Exception
      */
-    public function presentStyles( Request $request ): string
+    public function handle( Request $request ): string
     {
-        if ( $request->header( 'Content-type' ) !== 'application/json' ) {
+        if ( \stripos( $request->header( 'Content-type' ), self::APPLICATION_JSON_HEADER ) === false ) {
             throw new InvalidContentTypeException( self::INVALID_CONTENT_TYPE_EXCEPTION_MESSAGE );
         }
 
@@ -42,12 +42,7 @@ final class AlgorithmController
             throw new \UnexpectedValueException( self::EMPTY_DATA_EXCEPTION_MESSAGE );
         }
 
-        // todo: normalize from array?
-        $userOptions = ( new UserOptions( new Answers() ) )
-            ->setUsername( $requestData['username'] )
-            ->setEmail( $requestData['email'] )
-            ->setSendEmail( $requestData['sendEmail'] )
-            ->setAddToNewsletterList( $requestData['newsletter'] );
+        $formInput = new FormInput( new Answers(), $requestData );
 
         $answers = ( new QuestionsService( new QuestionsRepository() ) )
             ->validateInput( $requestData );
@@ -64,9 +59,9 @@ final class AlgorithmController
                                         VALUES 
                                         (?, ?, ?, ?, ?)',
                 [
-                    $userOptions->getUsername(),
-                    $userOptions->getEmail(),
-                    $userOptions->getAddToNewsletterList(),
+                    $formInput->getUsername(),
+                    $formInput->getEmail(),
+                    $formInput->getAddToNewsletterList(),
                     \json_encode( $answers, JSON_UNESCAPED_UNICODE ),
                     now(),
                 ]
@@ -76,8 +71,8 @@ final class AlgorithmController
         }
 
         $mailService = new MailService();
-        $userEmail = $userOptions->getEmail();
-        if ( $userEmail !== null && $userOptions->getSendEmail() ) {
+        $userEmail = $formInput->getEmail();
+        if ( $userEmail !== null && $formInput->getSendEmail() ) {
             $mailService->sendEmail( $userEmail );
         }
 
@@ -85,11 +80,11 @@ final class AlgorithmController
             new NewsletterRepository( new MailChimp( config( 'mail.mailchimpApiKey' ) ) )
         );
 
-        if ( $userOptions->getAddToNewsletterList() ) {
+        if ( $formInput->getAddToNewsletterList() ) {
             $newsletterService->addToNewsletterList( $userEmail );
         }
 
         return ( new AlgorithmService( new ScoringRepository() ) )
-            ->fetchProposedStyles( $answers, $userOptions );
+            ->fetchProposedStyles( $answers, $formInput );
     }
 }
