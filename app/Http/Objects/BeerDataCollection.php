@@ -5,7 +5,7 @@ namespace App\Http\Objects;
 
 use Tightenco\Collect\Support\Collection;
 
-class BeersCollection extends Collection
+final class BeerDataCollection extends Collection
 {
 
 }

@@ -4,16 +4,19 @@ declare( strict_types=1 );
 
 namespace App\Http\Services;
 
+use App\Http\Repositories\PolskiKraftRepository;
 use App\Http\Objects\Answers;
 use App\Http\Objects\AnswersInterface;
+use App\Http\Objects\BeersToTakeCollection;
 use App\Http\Objects\StylesToAvoid;
 use App\Http\Objects\StylesToAvoidCollection;
 use App\Http\Objects\StylesToTake;
 use App\Http\Objects\StylesToTakeCollection;
 use App\Http\Objects\FormInput;
+use App\Http\Repositories\PolskiKraftRepositoryInterface;
 use App\Http\Repositories\ScoringRepositoryInterface;
 use Illuminate\Support\Facades\DB;
-use App\Http\Controllers\PolskiKraft\PolskiKraftService as PKAPI;
+use App\Http\Controllers\PolskiKraft\PolskiKraftRepository as PKAPI;
 use Illuminate\View\View;
 
 final class AlgorithmService
@@ -22,15 +25,18 @@ final class AlgorithmService
     private $answers = [];
     /** @var ScoringRepositoryInterface */
     private $scoringRepository;
+    /** @var PolskiKraftRepository */
+    private $polskiKraftRepository;
 
     /**
      * Constructor.
      *
      * @param ScoringRepositoryInterface $scoringRepository
      */
-    public function __construct( ScoringRepositoryInterface $scoringRepository )
+    public function __construct( ScoringRepositoryInterface $scoringRepository, PolskiKraftRepositoryInterface $polskiKraftRepository )
     {
         $this->scoringRepository = $scoringRepository;
+        $this->polskiKraftRepository = $polskiKraftRepository;
     }
 
     /**
@@ -262,7 +268,6 @@ final class AlgorithmService
         /** @var Answers $userOptions */
         $userOptions = $user->getAnswers();
         $userOptions->fetchAll();
-
         $userOptions->removeAssignedPoints();
 
         $idStylesToTake = [];
@@ -276,11 +281,11 @@ final class AlgorithmService
             $buyThis = DB::select( "SELECT * FROM beers WHERE id IN (" . implode( ',', $idStylesToTake ) . ")" );
         }
 
-        $stylesToTake = [];
-        foreach ( $buyThis as $beerData ) {
-            $stylesToTake[] = ( new StylesToTake( $beerData ) )->toArray();
+        $stylesToTakeCollection = new StylesToTakeCollection();
+        foreach ( $buyThis as $styleInfo ) {
+            $beerDataCollection = $this->polskiKraftRepository->fetchBeerInfo( (int) $styleInfo->id ) ?? null;
+            $stylesToTakeCollection->add( ( new StylesToTake( $styleInfo, $beerDataCollection ) )->toArray() );
         }
-        $stylesToTakeCollection = new StylesToTakeCollection( $stylesToTake );
 
         // AVOID START
 
@@ -295,23 +300,15 @@ final class AlgorithmService
             $avoidThis = DB::select( "SELECT * FROM beers WHERE id IN (" . implode( ',', $idStylesToAvoid ) . ")" );
         }
 
-        $stylesToAvoid = [];
-        foreach ( $avoidThis as $beerData ) {
-            $stylesToAvoid[] = ( new StylesToAvoid( $beerData ) )->toArray();
+        $stylesToAvoidCollection = new StylesToAvoidCollection();
+        foreach ( $avoidThis as $styleInfo ) {
+            $stylesToAvoidCollection->add( ( new StylesToAvoid( $styleInfo ) )->toArray() );
         }
-        $stylesToAvoidCollection = new StylesToAvoidCollection( $stylesToAvoid );
 
         try {
             $this->logStyles( $user, $idStylesToTake, $idStylesToAvoid );
         } catch ( \Exception $e ) {
             LogService::logError( $e->getMessage() );
-        }
-
-        $beersToTake = [];
-        foreach ( $buyThis as $beer ) {
-            $beersToTake[] = PKAPI::fetchBeerInfo( (int) $beer->id ) ?? null;
-            //todo BeersCollection object
-            //todo incorporate into buyThis somehow
         }
 
         return \json_encode(

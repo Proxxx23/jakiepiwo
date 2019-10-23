@@ -3,30 +3,32 @@ declare(strict_types=1);
 
 namespace App\Http\Objects;
 
-final class StylesToTake extends AbstractFixedPropertyObject
+final class StylesToTake
 {
+    /** @var BeerDataCollection|null */
+    private $beerDataCollection;
     /** @var int */
-    protected $id;
-    /** @var int */
-    protected $flavourId;
+    private $id;
     /** @var string */
-    protected $name;
+    private $name;
     /** @var null|string */
-    protected $otherName;
+    private $otherName;
     /** @var null|string */
-    protected $polishName;
+    private $polishName;
 
     /**
      * StylesToTake constructor.
-     * @param object $data
+     *
+     * @param object $styleInfo
+     * @param BeerDataCollection|null $beerDataCollection
      */
-    public function __construct( object $data )
+    public function __construct( object $styleInfo, ?BeerDataCollection $beerDataCollection )
     {
-        $this->id = (int) $data->id;
-        $this->flavourId = (int) $data->id_flavour;
-        $this->name = $data->name;
-        $this->otherName = $data->name2;
-        $this->polishName = $data->name_pl;
+        $this->beerDataCollection = $beerDataCollection;
+        $this->id = (int) $styleInfo->id;
+        $this->name = $styleInfo->name;
+        $this->otherName = $styleInfo->name2;
+        $this->polishName = $styleInfo->name_pl;
     }
 
     /**
@@ -35,8 +37,8 @@ final class StylesToTake extends AbstractFixedPropertyObject
     public function toArray(): array
     {
         return [
+            'beerDataCollection' => $this->beerDataCollection !== null ? $this->beerDataCollection->toArray() : null,
             'id' => $this->id,
-            'flavourId' => $this->flavourId,
             'name' => $this->name,
             'otherName' => $this->otherName,
             'polishName' => $this->polishName,

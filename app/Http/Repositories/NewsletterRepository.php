@@ -23,7 +23,7 @@ final class NewsletterRepository implements NewsletterRepositoryInterface
      *
      * TODO: Return? Try-catch?
      */
-    public function subscribeToEmailList( string $email ): void
+    public function subscribe( ?string $email ): void
     {
         $this->mailChimp->post(
             'lists/' . config('mail.mailchimpListId') . '/members', [

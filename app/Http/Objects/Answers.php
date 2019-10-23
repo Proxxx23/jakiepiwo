@@ -33,35 +33,11 @@ final class Answers implements AnswersInterface
     }
 
     /**
-     * @param array $includedIds
-     *
-     * @return Answers
-     */
-    public function setIncludedIds( array $includedIds ): Answers
-    {
-        $this->includedIds = $includedIds;
-
-        return $this;
-    }
-
-    /**
      * @return array
      */
     public function getExcludedIds(): array
     {
         return $this->excludedIds;
-    }
-
-    /**
-     * @param array $excludedIds
-     *
-     * @return Answers
-     */
-    public function setExcludedIds( array $excludedIds ): Answers
-    {
-        $this->excludedIds = $excludedIds;
-
-        return $this;
     }
 
     /**
@@ -73,35 +49,11 @@ final class Answers implements AnswersInterface
     }
 
     /**
-     * @param bool $mustTakeOpt
-     *
-     * @return Answers
-     */
-    public function setMustTakeOpt( bool $mustTakeOpt ): Answers
-    {
-        $this->mustTakeOpt = $mustTakeOpt;
-
-        return $this;
-    }
-
-    /**
      * @return bool
      */
     public function isMustAvoidOpt(): bool
     {
         return $this->mustAvoidOpt;
-    }
-
-    /**
-     * @param bool $mustAvoidOpt
-     *
-     * @return Answers
-     */
-    public function setMustAvoidOpt( bool $mustAvoidOpt ): Answers
-    {
-        $this->mustAvoidOpt = $mustAvoidOpt;
-
-        return $this;
     }
 
     /**
@@ -125,26 +77,6 @@ final class Answers implements AnswersInterface
     }
 
     /**
-     * @return bool
-     */
-    public function isShuffled(): bool
-    {
-        return $this->shuffled;
-    }
-
-    /**
-     * @param bool $shuffled
-     *
-     * @return Answers
-     */
-    public function setShuffled( bool $shuffled ): Answers
-    {
-        $this->shuffled = $shuffled;
-
-        return $this;
-    }
-
-    /**
      * @return int
      */
     public function getCountStylesToTake(): int
@@ -153,35 +85,11 @@ final class Answers implements AnswersInterface
     }
 
     /**
-     * @param int $countStylesToTake
-     *
-     * @return Answers
-     */
-    public function setCountStylesToTake( int $countStylesToTake ): Answers
-    {
-        $this->countStylesToTake = $countStylesToTake;
-
-        return $this;
-    }
-
-    /**
      * @return int
      */
     public function getCountStylesToAvoid(): int
     {
         return $this->countStylesToAvoid;
-    }
-
-    /**
-     * @param int $countStylesToAvoid
-     *
-     * @return Answers
-     */
-    public function setCountStylesToAvoid( int $countStylesToAvoid ): Answers
-    {
-        $this->countStylesToAvoid = $countStylesToAvoid;
-
-        return $this;
     }
 
     /**

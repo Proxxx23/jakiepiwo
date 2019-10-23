@@ -7,6 +7,7 @@ use App\Exceptions\InvalidContentTypeException;
 use App\Http\Objects\Answers;
 use App\Http\Objects\FormInput;
 use App\Http\Repositories\NewsletterRepository;
+use App\Http\Repositories\PolskiKraftRepository;
 use App\Http\Repositories\QuestionsRepository;
 use App\Http\Repositories\ScoringRepository;
 use App\Http\Repositories\UserAnswersRepository;
@@ -17,9 +18,9 @@ use App\Http\Services\NewsletterService;
 use App\Http\Services\QuestionsService;
 use App\Http\Services\AlgorithmService;
 
+use App\Http\Utils\Dictionary;
 use DrewM\MailChimp\MailChimp;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 final class AlgorithmController
 {
@@ -68,7 +69,7 @@ final class AlgorithmController
             $newsletterService->addToNewsletterList( $userEmail );
         }
 
-        return ( new AlgorithmService( new ScoringRepository() ) )
+        return ( new AlgorithmService( new ScoringRepository(), new PolskiKraftRepository( new Dictionary()) ) )
             ->fetchProposedStyles( $answers, $formInput );
     }
 }
