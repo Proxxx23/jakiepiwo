@@ -9,6 +9,8 @@ use App\Http\Objects\FormInput;
 use App\Http\Repositories\NewsletterRepository;
 use App\Http\Repositories\QuestionsRepository;
 use App\Http\Repositories\ScoringRepository;
+use App\Http\Repositories\UserAnswersRepository;
+use App\Http\Services\DatabaseLoggerService;
 use App\Http\Services\LogService;
 use App\Http\Services\MailService;
 use App\Http\Services\NewsletterService;
@@ -43,29 +45,11 @@ final class AlgorithmController
         }
 
         $formInput = new FormInput( new Answers(), $requestData );
+        $answers = ( new QuestionsService( new QuestionsRepository() ) )->validateInput( $requestData );
 
-        $answers = ( new QuestionsService( new QuestionsRepository() ) )
-            ->validateInput( $requestData );
-
-        //todo: repo, service
         try {
-            DB::insert(
-                'INSERT INTO `user_answers` 
-                                    (`name`, 
-                                     `e_mail`, 
-                                     `newsletter`, 
-                                     `answers`, 
-                                     `created_at`) 
-                                        VALUES 
-                                        (?, ?, ?, ?, ?)',
-                [
-                    $formInput->getUsername(),
-                    $formInput->getEmail(),
-                    $formInput->getAddToNewsletterList(),
-                    \json_encode( $answers, JSON_UNESCAPED_UNICODE ),
-                    now(),
-                ]
-            );
+            $databaseLoggerService = new DatabaseLoggerService( new UserAnswersRepository() );
+            $databaseLoggerService->logAnswers( $formInput, $answers );
         } catch ( \Exception $e ) {
             LogService::logError( $e->getMessage() );
         }
