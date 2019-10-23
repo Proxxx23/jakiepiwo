@@ -4,13 +4,13 @@ declare( strict_types=1 );
 
 namespace App\Http\Services;
 
-use App\Http\Objects\Options;
-use App\Http\Objects\OptionsInterface;
+use App\Http\Objects\Answers;
+use App\Http\Objects\AnswersInterface;
 use App\Http\Objects\StylesToAvoid;
 use App\Http\Objects\StylesToAvoidCollection;
 use App\Http\Objects\StylesToTake;
 use App\Http\Objects\StylesToTakeCollection;
-use App\Http\Objects\User;
+use App\Http\Objects\UserOptions;
 use App\Http\Repositories\ScoringRepositoryInterface;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\PolskiKraft\PolskiKraftService as PKAPI;
@@ -68,11 +68,11 @@ final class AlgorithmService
      * There are all the synergies
      *
      * @param array $answerValue
-     * @param User $user
+     * @param UserOptions $user
      */
-    public function applySynergy( array $answerValue, User $user ): void
+    public function applySynergy( array $answerValue, UserOptions $user ): void
     {
-        /** @var Options $userOptions */
+        /** @var Answers $userOptions */
         $userOptions = $user->getOptions();
 
         // Lekkie + owocowe + Kwaśne
@@ -176,16 +176,16 @@ final class AlgorithmService
 
     /**
      * @param array $answers
-     * @param User $user
+     * @param UserOptions $user
      *
      * @return string
      * @throws \Exception
      */
-    public function fetchProposedStyles( array $answers, User $user ): string
+    public function fetchProposedStyles( array $answers, UserOptions $user ): string
     {
         $this->answers = $answers;
 
-        /** @var Options $userOptions */
+        /** @var Answers $userOptions */
         $userOptions = $user->getOptions();
 
         $userOptions->setBarrelAged(
@@ -251,15 +251,15 @@ final class AlgorithmService
     }
 
     /**
-     * @param User $user
+     * @param UserOptions $user
      *
      * @return string
      * @throws \Exception
      * todo: dodać mechanizm, który informuje, że granice były marginalne i wyniki mogą byc niejednoznaczne
      */
-    public function chooseStyles( User $user ): string
+    public function chooseStyles( UserOptions $user ): string
     {
-        /** @var Options $userOptions */
+        /** @var Answers $userOptions */
         $userOptions = $user->getOptions();
         $userOptions->fetchAll();
 
@@ -318,21 +318,21 @@ final class AlgorithmService
             [
                 'buyThis' => $stylesToTakeCollection->toArray(),
                 'avoidThis' => $stylesToAvoidCollection->toArray(),
-                'mustTake' => $userOptions->getMustTakeOpt(),
-                'mustAvoid' => $userOptions->getMustAvoidOpt(),
+                'mustTake' => $userOptions->isMustTakeOpt(),
+                'mustAvoid' => $userOptions->isMustAvoidOpt(),
                 'username' => $user->getUsername(),
-                'barrelAged' => $userOptions->getBarrelAged(),
+                'barrelAged' => $userOptions->isBarrelAged(),
                 'answers' => $this->answers,
             ], JSON_UNESCAPED_UNICODE
         );
     }
 
     /**
-     * @param User $user
+     * @param UserOptions $user
      * @param array|null $styleToTake
      * @param array|null $styleToAvoid
      */
-    private function logStyles( User $user, ?array $styleToTake, ?array $styleToAvoid ): void
+    private function logStyles( UserOptions $user, ?array $styleToTake, ?array $styleToAvoid ): void
     {
         $lastID = DB::select( 'SELECT MAX(id_answer) AS lastid FROM `styles_logs` LIMIT 1' );
         $nextID = (int) $lastID[0]->lastid + 1;

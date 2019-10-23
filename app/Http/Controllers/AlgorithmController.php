@@ -3,8 +3,9 @@ declare( strict_types=1 );
 
 namespace App\Http\Controllers;
 
-use App\Http\Objects\Options;
-use App\Http\Objects\User;
+use App\Exceptions\InvalidContentTypeException;
+use App\Http\Objects\Answers;
+use App\Http\Objects\UserOptions;
 use App\Http\Repositories\NewsletterRepository;
 use App\Http\Repositories\QuestionsRepository;
 use App\Http\Repositories\ScoringRepository;
@@ -21,6 +22,9 @@ use Illuminate\Support\Facades\DB;
 
 final class AlgorithmController
 {
+    private const INVALID_CONTENT_TYPE_EXCEPTION_MESSAGE = 'Set Content Type header to application/json.';
+    private const EMPTY_DATA_EXCEPTION_MESSAGE = 'No valid data provided.';
+
     /**
      * @param Request $request
      *
@@ -29,29 +33,26 @@ final class AlgorithmController
      */
     public function presentStyles( Request $request ): string
     {
-        if ( $request->header('Content-type') !== 'application/json' ) {
-            throw new \UnexpectedValueException( 'Set Content Type header to application/json' );
+        if ( $request->header( 'Content-type' ) !== 'application/json' ) {
+            throw new InvalidContentTypeException( self::INVALID_CONTENT_TYPE_EXCEPTION_MESSAGE );
         }
 
         $requestData = $request->input();
         if ( $requestData === null || empty( $requestData['answers'] ) ) {
-            throw new \UnexpectedValueException( 'No vaid data provided.' );
+            throw new \UnexpectedValueException( self::EMPTY_DATA_EXCEPTION_MESSAGE );
         }
 
-        $user = new User( new Options() );
-        $user->setUsername( $requestData['username'] ?? null );
-
-        $emailIsValid = EmailUtils::isValid( $requestData['email'] ?? null );
-        if ( $emailIsValid ) {
-            $user->setEmail( $requestData['email'] );
-        }
-
-        $user->setSendEmail( $requestData['sendEmail'] ?? false );
-        $user->setAddToNewsletterList( $requestData['newsletter'] ?? false );
+        // todo: normalize from array?
+        $userOptions = ( new UserOptions( new Answers() ) )
+            ->setUsername( $requestData['username'] )
+            ->setEmail( $requestData['email'] )
+            ->setSendEmail( $requestData['sendEmail'] )
+            ->setAddToNewsletterList( $requestData['newsletter'] );
 
         $answers = ( new QuestionsService( new QuestionsRepository() ) )
             ->validateInput( $requestData );
 
+        //todo: repo, service
         try {
             DB::insert(
                 'INSERT INTO `user_answers` 
@@ -63,9 +64,9 @@ final class AlgorithmController
                                         VALUES 
                                         (?, ?, ?, ?, ?)',
                 [
-                    $user->getUsername(),
-                    $user->getEmail(),
-                    $user->getAddToNewsletterList(),
+                    $userOptions->getUsername(),
+                    $userOptions->getEmail(),
+                    $userOptions->getAddToNewsletterList(),
                     \json_encode( $answers, JSON_UNESCAPED_UNICODE ),
                     now(),
                 ]
@@ -75,8 +76,8 @@ final class AlgorithmController
         }
 
         $mailService = new MailService();
-        $userEmail = $user->getEmail();
-        if ( $emailIsValid && $userEmail !== null && $user->getSendEmail() ) {
+        $userEmail = $userOptions->getEmail();
+        if ( $userEmail !== null && $userOptions->getSendEmail() ) {
             $mailService->sendEmail( $userEmail );
         }
 
@@ -84,11 +85,11 @@ final class AlgorithmController
             new NewsletterRepository( new MailChimp( config( 'mail.mailchimpApiKey' ) ) )
         );
 
-        if ( $emailIsValid && $user->getAddToNewsletterList() ) {
+        if ( $userOptions->getAddToNewsletterList() ) {
             $newsletterService->addToNewsletterList( $userEmail );
         }
 
         return ( new AlgorithmService( new ScoringRepository() ) )
-            ->fetchProposedStyles( $answers, $user );
+            ->fetchProposedStyles( $answers, $userOptions );
     }
 }

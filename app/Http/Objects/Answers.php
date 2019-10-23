@@ -3,36 +3,186 @@ declare( strict_types=1 );
 
 namespace App\Http\Objects;
 
-/**
- * @method getIncludedIds()
- * @method getExcludedIds()
- * @method getMustTakeOpt()
- * @method getMustAvoidOpt()
- * @method setBarrelAged( bool $param )
- * @method getBarrelAged()
- * @method getCountStylesToTake()
- * @method getCountStylesToAvoid()
- */
-final class Options extends AbstractFixedPropertyObject implements OptionsInterface
+final class Answers implements AnswersInterface
 {
-    protected const POINT_PERCENT_GAP = 0.90;
+    private const POINT_PERCENT_GAP = 0.90;
 
     /** @var array */
-    protected $includedIds = [];
+    private $includedIds = [];
     /** @var array */
-    protected $excludedIds = [];
+    private $excludedIds = [];
     /** @var bool */
-    protected $mustTakeOpt = false;
+    private $mustTakeOpt = false;
     /** @var bool */
-    protected $mustAvoidOpt = false;
+    private $mustAvoidOpt = false;
     /** @var bool */
-    protected $barrelAged = false;
+    private $barrelAged = false;
     /** @var bool */
-    protected $shuffled = false;
+    private $shuffled = false;
     /** @var int */
-    protected $countStylesToTake = 3;
+    private $countStylesToTake = 3;
     /** @var int */
-    protected $countStylesToAvoid = 3;
+    private $countStylesToAvoid = 3;
+
+    /**
+     * @return array
+     */
+    public function getIncludedIds(): array
+    {
+        return $this->includedIds;
+    }
+
+    /**
+     * @param array $includedIds
+     *
+     * @return Answers
+     */
+    public function setIncludedIds( array $includedIds ): Answers
+    {
+        $this->includedIds = $includedIds;
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getExcludedIds(): array
+    {
+        return $this->excludedIds;
+    }
+
+    /**
+     * @param array $excludedIds
+     *
+     * @return Answers
+     */
+    public function setExcludedIds( array $excludedIds ): Answers
+    {
+        $this->excludedIds = $excludedIds;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isMustTakeOpt(): bool
+    {
+        return $this->mustTakeOpt;
+    }
+
+    /**
+     * @param bool $mustTakeOpt
+     *
+     * @return Answers
+     */
+    public function setMustTakeOpt( bool $mustTakeOpt ): Answers
+    {
+        $this->mustTakeOpt = $mustTakeOpt;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isMustAvoidOpt(): bool
+    {
+        return $this->mustAvoidOpt;
+    }
+
+    /**
+     * @param bool $mustAvoidOpt
+     *
+     * @return Answers
+     */
+    public function setMustAvoidOpt( bool $mustAvoidOpt ): Answers
+    {
+        $this->mustAvoidOpt = $mustAvoidOpt;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isBarrelAged(): bool
+    {
+        return $this->barrelAged;
+    }
+
+    /**
+     * @param bool $barrelAged
+     *
+     * @return Answers
+     */
+    public function setBarrelAged( bool $barrelAged ): Answers
+    {
+        $this->barrelAged = $barrelAged;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isShuffled(): bool
+    {
+        return $this->shuffled;
+    }
+
+    /**
+     * @param bool $shuffled
+     *
+     * @return Answers
+     */
+    public function setShuffled( bool $shuffled ): Answers
+    {
+        $this->shuffled = $shuffled;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCountStylesToTake(): int
+    {
+        return $this->countStylesToTake;
+    }
+
+    /**
+     * @param int $countStylesToTake
+     *
+     * @return Answers
+     */
+    public function setCountStylesToTake( int $countStylesToTake ): Answers
+    {
+        $this->countStylesToTake = $countStylesToTake;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCountStylesToAvoid(): int
+    {
+        return $this->countStylesToAvoid;
+    }
+
+    /**
+     * @param int $countStylesToAvoid
+     *
+     * @return Answers
+     */
+    public function setCountStylesToAvoid( int $countStylesToAvoid ): Answers
+    {
+        $this->countStylesToAvoid = $countStylesToAvoid;
+
+        return $this;
+    }
 
     /**
      * @param int $styleId
@@ -134,12 +284,12 @@ final class Options extends AbstractFixedPropertyObject implements OptionsInterf
         $this->checkHowManyStylesShouldBeShuffled();
     }
 
-    protected function sortIncludedIds(): void
+    private function sortIncludedIds(): void
     {
         \arsort( $this->includedIds );
     }
 
-    protected function sortExcludedIds(): void
+    private function sortExcludedIds(): void
     {
         \arsort( $this->excludedIds );
     }
@@ -148,7 +298,7 @@ final class Options extends AbstractFixedPropertyObject implements OptionsInterf
      * If there's an 4th and 5rd style with a little 'margin" to 3rd style
      * Takes 4th or 5th style as an extra styles to take or avoid
      */
-    protected function fetchOptionalStyles(): void
+    private function fetchOptionalStyles(): void
     {
         $thirdStyleToTake = \array_values( \array_slice( $this->includedIds, 0, 3, true ) );
         $thirdStyleToAvoid = \array_values( \array_slice( $this->excludedIds, 0, 3, true ) );
@@ -171,7 +321,7 @@ final class Options extends AbstractFixedPropertyObject implements OptionsInterf
      * If 1st styles to take and avoid has more than/equal 150% points of 2nd or 3rd styles
      * Emphasize them!
      */
-    protected function fetchStylesToTakeAndAvoid(): void
+    private function fetchStylesToTakeAndAvoid(): void
     {
         $firstStyleToTake = \array_values( \array_slice( $this->includedIds, 0, 1, true ) );
         $firstStyleToAvoid = \array_values( \array_slice( $this->excludedIds, 0, 1, true ) );
@@ -196,7 +346,7 @@ final class Options extends AbstractFixedPropertyObject implements OptionsInterf
     /**
      * Prevents beers to be both included and excluded
      */
-    protected function removeDuplicates(): void
+    private function removeDuplicates(): void
     {
         $included = \array_slice( $this->includedIds, 0, $this->countStylesToTake, true );
         $excluded = \array_slice( $this->excludedIds, 0, $this->countStylesToAvoid, true );
@@ -212,7 +362,7 @@ final class Options extends AbstractFixedPropertyObject implements OptionsInterf
      * There must at least 125% margin between included and excluded beer
      * included > excluded
      */
-    protected function checkMarginBetweenBeerStyles(): void
+    private function checkMarginBetweenBeerStyles(): void
     {
         foreach ( $this->includedIds as $id => $points ) {
             if ( \array_key_exists( $id, $this->excludedIds ) ) {
@@ -229,7 +379,7 @@ final class Options extends AbstractFixedPropertyObject implements OptionsInterf
      * Checks how many styles should be shuffled.
      * Margin between first and n-th style should be less than 90% of points).
      */
-    protected function checkHowManyStylesShouldBeShuffled(): void
+    private function checkHowManyStylesShouldBeShuffled(): void
     {
         //		$firstStyleIndex = key(array_slice($this->includedIds, 0, 1, true));
 
@@ -254,7 +404,7 @@ final class Options extends AbstractFixedPropertyObject implements OptionsInterf
      *
      * @param int $toShuffle
      */
-    protected function shuffleStyles( int $toShuffle ): void
+    private function shuffleStyles( int $toShuffle ): void
     {
         $this->includedIds = \array_keys( \array_slice( $this->includedIds, 0, $toShuffle, true ) );
 

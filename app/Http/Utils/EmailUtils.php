@@ -12,8 +12,8 @@ class EmailUtils
      */
     public static function isValid( ?string $email ): bool
     {
-        if ( $email === null ) {
-            return false;
+        if ( $email === null || $email === '' ) {
+            return true;
         }
 
         $email = \filter_var( \trim( $email ), \FILTER_SANITIZE_EMAIL );
