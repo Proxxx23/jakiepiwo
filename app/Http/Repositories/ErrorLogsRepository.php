@@ -1,17 +1,16 @@
 <?php
 declare( strict_types=1 );
 
-namespace App\Http\Services;
+namespace App\Http\Repositories;
 
 use Illuminate\Support\Facades\DB;
 
-final class LogService
+class ErrorLogsRepository implements ErrorLogsRepositoryInterface
 {
     /**
      * @param string $message
-     * TODO: Repo
      */
-    public static function logError( string $message ): void
+    public function add( string $message ): void
     {
         DB::insert(
             'INSERT INTO error_logs (error, created_at) VALUES (:error, :created_at)',

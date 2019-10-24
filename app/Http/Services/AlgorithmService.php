@@ -4,6 +4,7 @@ declare( strict_types=1 );
 
 namespace App\Http\Services;
 
+use App\Http\Repositories\ErrorLogsRepository;
 use App\Http\Repositories\PolskiKraftRepository;
 use App\Http\Objects\Answers;
 use App\Http\Objects\AnswersInterface;
@@ -305,7 +306,7 @@ final class AlgorithmService
         try {
             $this->logStyles( $user, $idStylesToTake, $idStylesToAvoid );
         } catch ( \Exception $e ) {
-            LogService::logError( $e->getMessage() );
+            ( new ErrorsLoggerService( new ErrorLogsRepository() ) )->logError( $e->getMessage() );
         }
 
         return \json_encode(
