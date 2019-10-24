@@ -214,11 +214,19 @@ final class Answers implements AnswersInterface
         for ( $i = 3; $i <= 4; $i++ ) {
 
             $toTakeChunk = \array_values( \array_slice( $this->includedIds, 0, $i, true ) );
+            if ( empty( $toTakeChunk ) ) {
+                continue;
+            }
+
             if ( $toTakeChunk[0] >= ( $thirdStyleToTake[0] / 100 * 90 ) ) {
                 $this->countStylesToTake++;
             }
 
             $toAvoidChunk = \array_values( \array_slice( $this->excludedIds, 0, $i, true ) );
+            if ( empty( $toAvoidChunk ) ) {
+                continue;
+            }
+
             if ( $toAvoidChunk[0] >= ( $thirdStyleToAvoid[0] / 100 * 90 ) ) {
                 $this->countStylesToAvoid++;
             }
@@ -240,9 +248,18 @@ final class Answers implements AnswersInterface
         $thirdStyleToTake = \array_values( \array_slice( $this->includedIds, 2, 1, true ) );
         $thirdStyleToAvoid = \array_values( \array_slice( $this->excludedIds, 2, 1, true ) );
 
+        if ( empty( $firstStyleToTake ) || empty( $secondStyleToTake ) || empty( $thirdStyleToTake ) ) {
+            return;
+        }
+
+
         if ( $secondStyleToTake[0] * 1.25 <= $firstStyleToTake[0] ||
             $thirdStyleToTake[0] * 1.25 <= $firstStyleToTake[0] ) {
             $this->mustTakeOpt = true;
+        }
+
+        if ( empty( $firstStyleToAvoid ) || empty( $secondStyleToAvoid ) || empty( $thirdStyleToAvoid ) ) {
+            return;
         }
 
         if ( $secondStyleToAvoid[0] * 1.25 <= $firstStyleToAvoid[0] ||

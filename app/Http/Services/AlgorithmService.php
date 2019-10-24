@@ -271,36 +271,51 @@ final class AlgorithmService
         $userOptions->removeAssignedPoints();
 
         $idStylesToTake = [];
-        for ( $i = 0; $i < $userOptions->getCountStylesToTake(); $i++ ) {
-            $idStylesToTake[] = $userOptions->getIncludedIds()[$i];
-        }
+        if ($userOptions->getIncludedIds() !== []) {
+            for ( $i = 0; $i < $userOptions->getCountStylesToTake(); $i++ ) {
+                $idStylesToTake[] = $userOptions->getIncludedIds()[$i];
+            }
 
-        $buyThis = [];
-        if ( \count( $idStylesToTake ) > 0 ) {
-            $buyThis = DB::select( "SELECT `id`, `name`, `name2`, `name_pl` FROM beers WHERE id IN (" . implode( ',', $idStylesToTake ) . ")" );
-        }
+            $buyThis = [];
+            if ( \count( $idStylesToTake ) > 0 ) {
+                $buyThis = DB::select(
+                    "SELECT `id`, `name`, `name2`, `name_pl` FROM beers WHERE id IN (" . implode(
+                        ',', $idStylesToTake
+                    ) . ")"
+                );
+            }
 
-        $stylesToTakeCollection = new StylesToTakeCollection();
-        foreach ( $buyThis as $styleInfo ) {
-            $beerDataCollection = $this->polskiKraftRepository->fetchBeerInfo( (int) $styleInfo->id ) ?? null;
-            $stylesToTakeCollection->add( ( new StylesToTake( $styleInfo, $beerDataCollection ) )->toArray() );
+            $stylesToTakeCollection = new StylesToTakeCollection();
+            foreach ( $buyThis as $styleInfo ) {
+                $beerDataCollection = $this->polskiKraftRepository->fetchBeerInfo( (int) $styleInfo->id ) ?? null;
+                $stylesToTakeCollection->add( ( new StylesToTake( $styleInfo, $beerDataCollection ) )->toArray() );
+            }
+        } else {
+            $stylesToTakeCollection = null;
         }
 
         // AVOID START
-
         $idStylesToAvoid = [];
-        for ( $i = 0; $i < $userOptions->getCountStylesToAvoid(); $i++ ) {
-            $idStylesToAvoid[] = $excludedId = $userOptions->getExcludedIds()[$i];
-        }
+        if ($userOptions->getExcludedIds() !== []) {
+            for ( $i = 0; $i < $userOptions->getCountStylesToAvoid(); $i++ ) {
+                $idStylesToAvoid[] = $excludedId = $userOptions->getExcludedIds()[$i];
+            }
 
-        $avoidThis = [];
-        if ( \count( $idStylesToAvoid ) > 0 ) {
-            $avoidThis = DB::select( "SELECT `id`, `name`, `name2`, `name_pl` FROM beers WHERE id IN (" . implode( ',', $idStylesToAvoid ) . ")" );
-        }
+            $avoidThis = [];
+            if ( \count( $idStylesToAvoid ) > 0 ) {
+                $avoidThis = DB::select(
+                    "SELECT `id`, `name`, `name2`, `name_pl` FROM beers WHERE id IN (" . implode(
+                        ',', $idStylesToAvoid
+                    ) . ")"
+                );
+            }
 
-        $stylesToAvoidCollection = new StylesToAvoidCollection();
-        foreach ( $avoidThis as $styleInfo ) {
-            $stylesToAvoidCollection->add( ( new StylesToAvoid( $styleInfo ) )->toArray() );
+            $stylesToAvoidCollection = new StylesToAvoidCollection();
+            foreach ( $avoidThis as $styleInfo ) {
+                $stylesToAvoidCollection->add( ( new StylesToAvoid( $styleInfo ) )->toArray() );
+            }
+        } else {
+            $stylesToAvoidCollection = null;
         }
 
         try {
@@ -311,8 +326,8 @@ final class AlgorithmService
 
         return \json_encode(
             [
-                'buyThis' => $stylesToTakeCollection->toArray(),
-                'avoidThis' => $stylesToAvoidCollection->toArray(),
+                'buyThis' => $stylesToTakeCollection !== null ? $stylesToTakeCollection->toArray() : null,
+                'avoidThis' => $stylesToAvoidCollection !== null ? $stylesToAvoidCollection->toArray() : null,
                 'mustTake' => $userOptions->isMustTakeOpt(),
                 'mustAvoid' => $userOptions->isMustAvoidOpt(),
                 'username' => $user->getUsername(),
