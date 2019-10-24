@@ -6,7 +6,7 @@ namespace App\Http\Services;
 use App\Http\Objects\FormData;
 use App\Http\Repositories\UserAnswersRepositoryInterface;
 
-final class DatabaseLoggerService
+final class AnswersLoggerService
 {
     /**
      * @var UserAnswersRepositoryInterface
@@ -26,7 +26,7 @@ final class DatabaseLoggerService
      * @param FormData $formInput
      * @param array $answers
      */
-    public function logAnswers( FormData $formInput, array $answers )
+    public function logAnswers( FormData $formInput, array $answers ): void
     {
         $this->userAnswersRepository->add($formInput, $answers);
     }

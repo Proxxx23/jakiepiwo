@@ -6,13 +6,14 @@ namespace App\Http\Controllers;
 use App\Exceptions\InvalidContentTypeException;
 use App\Http\Objects\Answers;
 use App\Http\Objects\FormData;
+use App\Http\Repositories\ErrorLogsRepository;
 use App\Http\Repositories\NewsletterRepository;
 use App\Http\Repositories\PolskiKraftRepository;
 use App\Http\Repositories\QuestionsRepository;
 use App\Http\Repositories\ScoringRepository;
 use App\Http\Repositories\UserAnswersRepository;
-use App\Http\Services\DatabaseLoggerService;
-use App\Http\Services\LogService;
+use App\Http\Services\AnswersLoggerService;
+use App\Http\Services\ErrorsLoggerService;
 use App\Http\Services\MailService;
 use App\Http\Services\NewsletterService;
 use App\Http\Services\QuestionsService;
@@ -50,11 +51,11 @@ final class AlgorithmController
         $formData = new FormData( new Answers(), $requestData );
         $answers = ( new QuestionsService( new QuestionsRepository() ) )->validateInput( $requestData );
 
+        //todo: one service/repo
         try {
-            $databaseLoggerService = new DatabaseLoggerService( new UserAnswersRepository() );
-            $databaseLoggerService->logAnswers( $formData, $answers );
+            ( new AnswersLoggerService( new UserAnswersRepository() ) )->logAnswers( $formData, $answers );
         } catch ( \Exception $e ) {
-            LogService::logError( $e->getMessage() );
+            ( new ErrorsLoggerService( new ErrorLogsRepository() ) )->logError( $e->getMessage() );
         }
 
         $proposedStyles = ( new AlgorithmService( new ScoringRepository(), new PolskiKraftRepository( new Dictionary()) ) )
