@@ -40,6 +40,12 @@ final class QuestionsService
             throw new \UnexpectedValueException( 'Number of answers do not match number of questions.' );
         }
 
+        $answersFiltered = \array_filter( $requestData['answers'] );
+
+        if ( \count( $answersFiltered ) !== \count( $this->getQuestions() ) ) {
+            throw new \UnexpectedValueException( 'You must answer on all the questions.' );
+        }
+
         return $requestData['answers'];
     }
 }
