@@ -10,7 +10,7 @@ class ErrorLogsRepository implements ErrorLogsRepositoryInterface
     /**
      * @param string $message
      */
-    public function add( string $message ): void
+    public function log( string $message ): void
     {
         DB::insert(
             'INSERT INTO error_logs (error, created_at) VALUES (:error, :created_at)',

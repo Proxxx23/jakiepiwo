@@ -5,7 +5,7 @@ namespace App\Http\Objects;
 
 final class StylesToTake
 {
-    /** @var BeerDataCollection|null */
+    /** @var PolskiKraftBeerDataCollection|null */
     private $beerDataCollection;
     /** @var int */
     private $id;
@@ -17,13 +17,13 @@ final class StylesToTake
     private $polishName;
 
     /**
-     * StylesToTake constructor.
-     *
      * @param object $styleInfo
-     * @param BeerDataCollection|null $beerDataCollection
+     * @param PolskiKraftBeerDataCollection|null $beerDataCollection
      */
-    public function __construct( object $styleInfo, ?BeerDataCollection $beerDataCollection )
-    {
+    public function __construct(
+        object $styleInfo,
+        ?PolskiKraftBeerDataCollection $beerDataCollection
+    ) {
         $this->beerDataCollection = $beerDataCollection;
         $this->id = (int) $styleInfo->id;
         $this->name = $styleInfo->name;

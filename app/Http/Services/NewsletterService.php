@@ -19,7 +19,7 @@ final class NewsletterService
     }
 
     /**
-     * @documentation: https://github.com/drewm/mailchimp-api
+     * @see: https://github.com/drewm/mailchimp-api
      *
      * @param string|null $email
      *

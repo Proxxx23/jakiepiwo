@@ -23,6 +23,6 @@ final class ErrorsLoggerService
      */
     public function logError( string $message ): void
     {
-        $this->errorLogsRepository->add($message);
+        $this->errorLogsRepository->log($message);
     }
 }

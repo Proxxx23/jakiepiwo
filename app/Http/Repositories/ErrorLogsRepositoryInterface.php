@@ -8,5 +8,5 @@ interface ErrorLogsRepositoryInterface
     /**
      * @param string $message
      */
-    public function add( string $message ): void;
+    public function log( string $message ): void;
 }

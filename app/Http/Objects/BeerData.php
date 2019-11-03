@@ -1,52 +1,52 @@
 <?php
-declare( strict_types=1 );
+declare(strict_types=1);
 
 namespace App\Http\Objects;
 
 final class BeerData
 {
-    /** @var string */
-    private $webUrl;
-    /** @var string */
-    private $photoThumbnailUrl;
-    /** @var string */
-    private $photoUrl;
-    /** @var string */
-    private $title;
-    /** @var string */
-    private $subtitle;
-    /** @var string */
-    private $subtitleAlt;
-    /** @var int */
-    private $rating;
+    /** @var array */
+    private $answers;
+    /** @var array|null */
+    private $avoidThis;
+    /** @var bool */
+    private $barrelAged;
+    /** @var array|null */
+    private $buyThis;
+    /** @var bool */
+    private $mustAvoid;
+    /** @var bool */
+    private $mustTake;
+    /** @var string|null */
+    private $username;
 
     /**
      * @param array $data
      */
     public function __construct( array $data )
     {
-        $this->webUrl = $data['web_url'];
-        $this->photoThumbnailUrl = $data['photo_thumbnail_url'];
-        $this->photoUrl = $data['photo_url'];
-        $this->title = $data['title'];
-        $this->subtitle = $data['subtitle'];
-        $this->subtitleAlt = $data['subtitle_alt'];
-        $this->rating = $data['rating'];
+        $this->answers = $data['answers'];
+        $this->avoidThis = $data['avoidThis'];
+        $this->barrelAged = $data['barrelAged'];
+        $this->buyThis = $data['buyThis'];
+        $this->mustAvoid = $data['mustAvoid'];
+        $this->mustTake = $data['mustTake'];
+        $this->username = $data['username'];
     }
 
     /**
-     * @return array
+     * @return string
      */
-    public function toArray(): array
+    public function toJson(): string
     {
-        return [
-            'webUrl' => $this->webUrl,
-            'photoThumbnailUrl' => $this->photoThumbnailUrl,
-            'photoUrl' => $this->photoUrl,
-            'title' => $this->title,
-            'subtitle' => $this->subtitle,
-            'subtitleAlt' => $this->subtitleAlt,
-            'rating' => $this->rating,
-        ];
+        return \json_encode([
+            'answers' => $this->answers,
+            'avoidThis' => $this->avoidThis,
+            'barrelAged' => $this->barrelAged,
+            'buyThis' => $this->buyThis,
+            'mustAvoid' => $this->mustAvoid,
+            'mustTake' => $this->mustTake,
+            'username' => $this->username,
+        ], JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE, 512);
     }
 }

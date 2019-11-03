@@ -7,7 +7,7 @@ use \DrewM\MailChimp\MailChimp;
 
 final class NewsletterRepository implements NewsletterRepositoryInterface
 {
-    /** @var \DrewM\MailChimp\MailChimp $mailChimp */
+    /** @var MailChimp $mailChimp */
     private $mailChimp;
 
     /**

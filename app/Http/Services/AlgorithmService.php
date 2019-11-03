@@ -1,23 +1,20 @@
 <?php
-/** @noinspection ALL */
 declare( strict_types=1 );
 
 namespace App\Http\Services;
 
-use App\Http\Repositories\ErrorLogsRepository;
-use App\Http\Repositories\PolskiKraftRepository;
 use App\Http\Objects\Answers;
-use App\Http\Objects\AnswersInterface;
+use App\Http\Objects\BeerData;
 use App\Http\Objects\StylesToAvoid;
 use App\Http\Objects\StylesToAvoidCollection;
 use App\Http\Objects\StylesToTake;
 use App\Http\Objects\StylesToTakeCollection;
 use App\Http\Objects\FormData;
+use App\Http\Repositories\BeersRepositoryInterface;
+use App\Http\Repositories\ErrorLogsRepository;
 use App\Http\Repositories\PolskiKraftRepositoryInterface;
 use App\Http\Repositories\ScoringRepositoryInterface;
-use Illuminate\Support\Facades\DB;
-use App\Http\Controllers\PolskiKraft\PolskiKraftRepository as PKAPI;
-use Illuminate\View\View;
+use App\Http\Repositories\StylesLogsRepositoryInterface;
 
 final class AlgorithmService
 {
@@ -25,18 +22,30 @@ final class AlgorithmService
     private $answers = [];
     /** @var ScoringRepositoryInterface */
     private $scoringRepository;
-    /** @var PolskiKraftRepository */
+    /** @var PolskiKraftRepositoryInterface */
     private $polskiKraftRepository;
+    /** @var StylesLogsRepositoryInterface */
+    private $stylesLogsRepository;
+    /** @var BeersRepositoryInterface */
+    private $beersRepository;
 
     /**
-     * Constructor.
-     *
      * @param ScoringRepositoryInterface $scoringRepository
+     * @param PolskiKraftRepositoryInterface $polskiKraftRepository
+     * @param StylesLogsRepositoryInterface $stylesLogsRepository
+     * @param BeersRepositoryInterface $beersRepository
      */
-    public function __construct( ScoringRepositoryInterface $scoringRepository, PolskiKraftRepositoryInterface $polskiKraftRepository )
-    {
+    public function __construct
+    (
+        ScoringRepositoryInterface $scoringRepository,
+        PolskiKraftRepositoryInterface $polskiKraftRepository,
+        StylesLogsRepositoryInterface $stylesLogsRepository,
+        BeersRepositoryInterface $beersRepository
+    ) {
         $this->scoringRepository = $scoringRepository;
         $this->polskiKraftRepository = $polskiKraftRepository;
+        $this->stylesLogsRepository = $stylesLogsRepository;
+        $this->beersRepository = $beersRepository;
     }
 
     /**
@@ -88,6 +97,7 @@ final class AlgorithmService
             $userOptions->buildPositiveSynergy( [ 40, 56 ], 2 );
             $userOptions->buildPositiveSynergy( [ 51 ], 1.5 );
         }
+
         // nowe smaki LUB szokujące + złożone + jasne
         if ( $answerValue[4] === 'coś złożonego' &&
             $answerValue[4] === 'jasne' &&
@@ -194,9 +204,7 @@ final class AlgorithmService
         /** @var Answers $userOptions */
         $userOptions = $user->getAnswers();
 
-        $userOptions->setBarrelAged(
-            $answers[14] === 'tak' ? true : false
-        );
+        $userOptions->setBarrelAged( $answers[14] === 'tak' );
 
         if ( $answers[12] === 'nie ma mowy' ) {
             $userOptions->excludeFromRecommended( [ 40, 42, 44, 51, 56 ] );
@@ -206,10 +214,9 @@ final class AlgorithmService
             $userOptions->excludeFromRecommended( [ 15, 16, 52, 57, 58, 59, 62, 63 ] );
         }
 
-        //todo: intersect?
         foreach ( $answers as $questionNumber => &$givenAnswer ) {
 
-            $scoringMap = $this->scoringRepository->fetchScore( $questionNumber );
+            $scoringMap = $this->scoringRepository->fetchByQuestionNumber( $questionNumber );
 
             foreach ( $scoringMap as $mappedAnswer => $ids ) {
 
@@ -265,115 +272,100 @@ final class AlgorithmService
      */
     public function chooseStyles( FormData $user ): string
     {
-        /** @var Answers $userOptions */
-        $userOptions = $user->getAnswers();
-        $userOptions->fetchAll();
-        $userOptions->removeAssignedPoints();
+        /** @var Answers $answers */
+        $answers = $user->getAnswers();
+        $answers->fetchAll();
+        $answers->removeAssignedPoints();
 
-        $idStylesToTake = [];
-        if ($userOptions->getIncludedIds() !== []) {
-            for ( $i = 0; $i < $userOptions->getCountStylesToTake(); $i++ ) {
-                $idStylesToTake[] = $userOptions->getIncludedIds()[$i];
-            }
+        $stylesToTakeCollection = $this->createStylesToTakeCollection( $answers );
+        $stylesToAvoidCollection = $this->createStylesToAvoidCollection( $answers );
 
-            $buyThis = [];
-            if ( \count( $idStylesToTake ) > 0 ) {
-                $buyThis = DB::select(
-                    "SELECT `id`, `name`, `name2`, `name_pl` FROM beers WHERE id IN (" . implode(
-                        ',', $idStylesToTake
-                    ) . ")"
-                );
-            }
+        $idStylesToTake = $stylesToTakeCollection !== null
+            ? $stylesToTakeCollection->getIdStylesToTake()
+            : null;
 
-            $stylesToTakeCollection = new StylesToTakeCollection();
-            foreach ( $buyThis as $styleInfo ) {
-                $beerDataCollection = $this->polskiKraftRepository->fetchBeerInfo( (int) $styleInfo->id ) ?? null;
-                $stylesToTakeCollection->add( ( new StylesToTake( $styleInfo, $beerDataCollection ) )->toArray() );
-            }
-        } else {
-            $stylesToTakeCollection = null;
-        }
-
-        // AVOID START
-        $idStylesToAvoid = [];
-        if ($userOptions->getExcludedIds() !== []) {
-            for ( $i = 0; $i < $userOptions->getCountStylesToAvoid(); $i++ ) {
-                $idStylesToAvoid[] = $excludedId = $userOptions->getExcludedIds()[$i];
-            }
-
-            $avoidThis = [];
-            if ( \count( $idStylesToAvoid ) > 0 ) {
-                $avoidThis = DB::select(
-                    "SELECT `id`, `name`, `name2`, `name_pl` FROM beers WHERE id IN (" . implode(
-                        ',', $idStylesToAvoid
-                    ) . ")"
-                );
-            }
-
-            $stylesToAvoidCollection = new StylesToAvoidCollection();
-            foreach ( $avoidThis as $styleInfo ) {
-                $stylesToAvoidCollection->add( ( new StylesToAvoid( $styleInfo ) )->toArray() );
-            }
-        } else {
-            $stylesToAvoidCollection = null;
-        }
+        $idStylesToAvoid = $stylesToAvoidCollection !== null
+            ? $stylesToAvoidCollection->getIdStylesToAvoid()
+            : null;
 
         try {
-            $this->logStyles( $user, $idStylesToTake, $idStylesToAvoid );
+            $this->stylesLogsRepository->logStyles( $user, $idStylesToTake, $idStylesToAvoid );
         } catch ( \Exception $e ) {
+            // todo: shouldn't call other service
             ( new ErrorsLoggerService( new ErrorLogsRepository() ) )->logError( $e->getMessage() );
         }
 
-        return \json_encode(
+        return ( new BeerData(
             [
                 'buyThis' => $stylesToTakeCollection !== null ? $stylesToTakeCollection->toArray() : null,
                 'avoidThis' => $stylesToAvoidCollection !== null ? $stylesToAvoidCollection->toArray() : null,
-                'mustTake' => $userOptions->isMustTakeOpt(),
-                'mustAvoid' => $userOptions->isMustAvoidOpt(),
+                'mustTake' => $answers->isMustTakeOpt(),
+                'mustAvoid' => $answers->isMustAvoidOpt(),
                 'username' => $user->getUsername(),
-                'barrelAged' => $userOptions->isBarrelAged(),
+                'barrelAged' => $answers->isBarrelAged(),
                 'answers' => $this->answers,
-            ], JSON_UNESCAPED_UNICODE
-        );
+            ]
+        ) )->toJson();
     }
 
     /**
-     * @param FormData $user
-     * @param array|null $styleToTake
-     * @param array|null $styleToAvoid
+     * @param Answers $answers
+     * @return StylesToTakeCollection|null
      */
-    private function logStyles( FormData $user, ?array $styleToTake, ?array $styleToAvoid ): void
+    private function createStylesToTakeCollection( Answers $answers ): ?StylesToTakeCollection
     {
-        $lastID = DB::select( 'SELECT MAX(id_answer) AS lastid FROM `styles_logs` LIMIT 1' );
-        $nextID = (int) $lastID[0]->lastid + 1;
-
-        $stylesCount = 3;
-
-        //todo: jeden insert
-        for ( $i = 0; $i < $stylesCount; $i++ ) {
-            DB::insert(
-                'INSERT INTO `styles_logs` 
-                          (id_answer, 
-                           username, 
-                           email, 
-                           newsletter, 
-                           style_take, 
-                           style_avoid, 
-                           ip_address, 
-                           created_at)
-    					VALUES
-    					(?, ?, ?, ?, ?, ?, ?, ?)',
-                [
-                    $nextID,
-                    $user->getUsername(),
-                    $user->getEmail(),
-                    $user->addToNewsletterList(),
-                    $styleToTake[$i],
-                    $styleToAvoid[$i],
-                    $_SERVER['REMOTE_ADDR'],
-                    now(),
-                ]
-            );
+        if ( $answers->getIncludedIds() === [] ) {
+            return null;
         }
+
+        $idStylesToTake = [];
+        for ( $i = 0; $i < $answers->getCountStylesToTake(); $i++ ) {
+            $idStylesToTake[] = $answers->getIncludedIds()[$i];
+        }
+
+        $buyThis = [];
+        if ( $idStylesToTake !== [] ) {
+            $buyThis = $this->beersRepository->fetchByIds( $idStylesToTake );
+        }
+
+        $stylesToTakeCollection = ( new StylesToTakeCollection() )
+            ->setIdStylesToTake( $idStylesToTake );
+
+        foreach ( $buyThis as $styleInfo ) {
+            $beerDataCollection = $this->polskiKraftRepository->fetchByBeerId( (int) $styleInfo->id );
+            $stylesToTakeCollection->add( ( new StylesToTake( $styleInfo, $beerDataCollection ) )->toArray() );
+        }
+
+        return $stylesToTakeCollection;
+    }
+
+    /**
+     * @param Answers $answers
+     * @return StylesToAvoidCollection|null
+     */
+    private function createStylesToAvoidCollection( Answers $answers ): ?StylesToAvoidCollection
+    {
+        if ( $answers->getExcludedIds() === [] ) {
+            return null;
+        }
+
+        $idStylesToAvoid = [];
+        for ( $i = 0; $i < $answers->getCountStylesToAvoid(); $i++ ) {
+            $idStylesToAvoid[] = $answers->getExcludedIds()[$i];
+        }
+
+        $avoidThis = [];
+        if ( $idStylesToAvoid !== [] ) {
+            $avoidThis = $this->beersRepository->fetchByIds( $idStylesToAvoid );
+        }
+
+        $stylesToAvoidCollection = ( new StylesToAvoidCollection() )
+            ->setIdStylesToAvoid( $idStylesToAvoid );
+
+        foreach ( $avoidThis as $styleInfo ) {
+            $stylesToAvoidCollection->add( ( new StylesToAvoid( $styleInfo ) )->toArray() );
+        }
+
+        return $stylesToAvoidCollection;
     }
 }

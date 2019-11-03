@@ -32,7 +32,7 @@ final class MailService
      */
     private function prepareEmailTemplate(string $proposedStyles): string
     {
-        $proposedStyles = \json_decode($proposedStyles, true);
+        $proposedStyles = \json_decode($proposedStyles, true, 512, JSON_THROW_ON_ERROR);
 
         $mailTPL = 'Oto style, których powinieneś poszukiwać w sklepie:' . PHP_EOL;
         foreach ($proposedStyles['buyThis'] as $style) {

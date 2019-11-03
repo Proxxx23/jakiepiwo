@@ -8,5 +8,5 @@ interface QuestionsRepositoryInterface
     /**
      * @return array
      */
-    public function fetchQuestions(): array;
+    public function fetchAllQuestions(): array;
 }
