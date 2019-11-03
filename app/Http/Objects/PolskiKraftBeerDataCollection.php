@@ -5,7 +5,7 @@ namespace App\Http\Objects;
 
 use Illuminate\Support\Collection;
 
-final class BeerDataCollection extends Collection
+final class PolskiKraftBeerDataCollection extends Collection
 {
 
 }

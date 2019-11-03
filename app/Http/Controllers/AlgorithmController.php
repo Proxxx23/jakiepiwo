@@ -53,7 +53,7 @@ final class AlgorithmController
         $formData = new FormData( new Answers(), $requestData );
         $answers = ( new QuestionsService( new QuestionsRepository() ) )->validateInput( $requestData );
 
-        //todo: one service/repo
+        //todo: one service/repo - strategy?
         try {
             ( new AnswersLoggerService( new UserAnswersRepository() ) )->logAnswers( $formData, $answers );
         } catch ( \Exception $e ) {
@@ -62,7 +62,7 @@ final class AlgorithmController
 
         $proposedStyles = ( new AlgorithmService(
             new ScoringRepository(),
-            new PolskiKraftRepository( new Dictionary()),
+            new PolskiKraftRepository( new Dictionary() ),
             new StylesLogsRepository(),
             new BeersRepository() ) )
             ->fetchProposedStyles( $answers, $formData );

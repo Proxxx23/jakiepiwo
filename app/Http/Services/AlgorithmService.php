@@ -1,11 +1,10 @@
 <?php
-/** @noinspection ALL */
 declare( strict_types=1 );
 
 namespace App\Http\Services;
 
 use App\Http\Objects\Answers;
-use App\Http\Objects\AnswersInterface;
+use App\Http\Objects\BeerData;
 use App\Http\Objects\StylesToAvoid;
 use App\Http\Objects\StylesToAvoidCollection;
 use App\Http\Objects\StylesToTake;
@@ -98,6 +97,7 @@ final class AlgorithmService
             $userOptions->buildPositiveSynergy( [ 40, 56 ], 2 );
             $userOptions->buildPositiveSynergy( [ 51 ], 1.5 );
         }
+
         // nowe smaki LUB szokujące + złożone + jasne
         if ( $answerValue[4] === 'coś złożonego' &&
             $answerValue[4] === 'jasne' &&
@@ -204,9 +204,7 @@ final class AlgorithmService
         /** @var Answers $userOptions */
         $userOptions = $user->getAnswers();
 
-        $userOptions->setBarrelAged(
-            $answers[14] === 'tak' ? true : false
-        );
+        $userOptions->setBarrelAged( $answers[14] === 'tak' );
 
         if ( $answers[12] === 'nie ma mowy' ) {
             $userOptions->excludeFromRecommended( [ 40, 42, 44, 51, 56 ] );
@@ -216,7 +214,6 @@ final class AlgorithmService
             $userOptions->excludeFromRecommended( [ 15, 16, 52, 57, 58, 59, 62, 63 ] );
         }
 
-        //todo: intersect?
         foreach ( $answers as $questionNumber => &$givenAnswer ) {
 
             $scoringMap = $this->scoringRepository->fetchByQuestionNumber( $questionNumber );
@@ -275,50 +272,21 @@ final class AlgorithmService
      */
     public function chooseStyles( FormData $user ): string
     {
-        /** @var Answers $userOptions */
-        $userOptions = $user->getAnswers();
-        $userOptions->fetchAll();
-        $userOptions->removeAssignedPoints();
+        /** @var Answers $answers */
+        $answers = $user->getAnswers();
+        $answers->fetchAll();
+        $answers->removeAssignedPoints();
 
-        $idStylesToTake = [];
-        if ( $userOptions->getIncludedIds() !== [] ) {
-            for ( $i = 0; $i < $userOptions->getCountStylesToTake(); $i++ ) {
-                $idStylesToTake[] = $userOptions->getIncludedIds()[$i];
-            }
+        $stylesToTakeCollection = $this->createStylesToTakeCollection( $answers );
+        $stylesToAvoidCollection = $this->createStylesToAvoidCollection( $answers );
 
-            $buyThis = [];
-            if ( $idStylesToTake !== [] ) {
-                $buyThis = $this->beersRepository->fetchByIds( $idStylesToTake );
-            }
+        $idStylesToTake = $stylesToTakeCollection !== null
+            ? $stylesToTakeCollection->getIdStylesToTake()
+            : null;
 
-            $stylesToTakeCollection = new StylesToTakeCollection();
-            foreach ( $buyThis as $styleInfo ) {
-                $beerDataCollection = $this->polskiKraftRepository->fetchByBeerId( (int) $styleInfo->id ) ?? null;
-                $stylesToTakeCollection->add( ( new StylesToTake( $styleInfo, $beerDataCollection ) )->toArray() );
-            }
-        } else {
-            $stylesToTakeCollection = null;
-        }
-
-        // AVOID START
-        $idStylesToAvoid = [];
-        if ($userOptions->getExcludedIds() !== []) {
-            for ( $i = 0; $i < $userOptions->getCountStylesToAvoid(); $i++ ) {
-                $idStylesToAvoid[] = $excludedId = $userOptions->getExcludedIds()[$i];
-            }
-
-            $avoidThis = [];
-            if ( $idStylesToAvoid !== [] ) {
-                $avoidThis = $this->beersRepository->fetchByIds( $idStylesToAvoid );
-            }
-
-            $stylesToAvoidCollection = new StylesToAvoidCollection();
-            foreach ( $avoidThis as $styleInfo ) {
-                $stylesToAvoidCollection->add( ( new StylesToAvoid( $styleInfo ) )->toArray() );
-            }
-        } else {
-            $stylesToAvoidCollection = null;
-        }
+        $idStylesToAvoid = $stylesToAvoidCollection !== null
+            ? $stylesToAvoidCollection->getIdStylesToAvoid()
+            : null;
 
         try {
             $this->stylesLogsRepository->logStyles( $user, $idStylesToTake, $idStylesToAvoid );
@@ -327,16 +295,77 @@ final class AlgorithmService
             ( new ErrorsLoggerService( new ErrorLogsRepository() ) )->logError( $e->getMessage() );
         }
 
-        return \json_encode(
+        return ( new BeerData(
             [
                 'buyThis' => $stylesToTakeCollection !== null ? $stylesToTakeCollection->toArray() : null,
                 'avoidThis' => $stylesToAvoidCollection !== null ? $stylesToAvoidCollection->toArray() : null,
-                'mustTake' => $userOptions->isMustTakeOpt(),
-                'mustAvoid' => $userOptions->isMustAvoidOpt(),
+                'mustTake' => $answers->isMustTakeOpt(),
+                'mustAvoid' => $answers->isMustAvoidOpt(),
                 'username' => $user->getUsername(),
-                'barrelAged' => $userOptions->isBarrelAged(),
+                'barrelAged' => $answers->isBarrelAged(),
                 'answers' => $this->answers,
-            ], JSON_UNESCAPED_UNICODE
-        );
+            ]
+        ) )->toJson();
+    }
+
+    /**
+     * @param Answers $answers
+     * @return StylesToTakeCollection|null
+     */
+    private function createStylesToTakeCollection( Answers $answers ): ?StylesToTakeCollection
+    {
+        if ( $answers->getIncludedIds() === [] ) {
+            return null;
+        }
+
+        $idStylesToTake = [];
+        for ( $i = 0; $i < $answers->getCountStylesToTake(); $i++ ) {
+            $idStylesToTake[] = $answers->getIncludedIds()[$i];
+        }
+
+        $buyThis = [];
+        if ( $idStylesToTake !== [] ) {
+            $buyThis = $this->beersRepository->fetchByIds( $idStylesToTake );
+        }
+
+        $stylesToTakeCollection = ( new StylesToTakeCollection() )
+            ->setIdStylesToTake( $idStylesToTake );
+
+        foreach ( $buyThis as $styleInfo ) {
+            $beerDataCollection = $this->polskiKraftRepository->fetchByBeerId( (int) $styleInfo->id );
+            $stylesToTakeCollection->add( ( new StylesToTake( $styleInfo, $beerDataCollection ) )->toArray() );
+        }
+
+        return $stylesToTakeCollection;
+    }
+
+    /**
+     * @param Answers $answers
+     * @return StylesToAvoidCollection|null
+     */
+    private function createStylesToAvoidCollection( Answers $answers ): ?StylesToAvoidCollection
+    {
+        if ( $answers->getExcludedIds() === [] ) {
+            return null;
+        }
+
+        $idStylesToAvoid = [];
+        for ( $i = 0; $i < $answers->getCountStylesToAvoid(); $i++ ) {
+            $idStylesToAvoid[] = $answers->getExcludedIds()[$i];
+        }
+
+        $avoidThis = [];
+        if ( $idStylesToAvoid !== [] ) {
+            $avoidThis = $this->beersRepository->fetchByIds( $idStylesToAvoid );
+        }
+
+        $stylesToAvoidCollection = ( new StylesToAvoidCollection() )
+            ->setIdStylesToAvoid( $idStylesToAvoid );
+
+        foreach ( $avoidThis as $styleInfo ) {
+            $stylesToAvoidCollection->add( ( new StylesToAvoid( $styleInfo ) )->toArray() );
+        }
+
+        return $stylesToAvoidCollection;
     }
 }

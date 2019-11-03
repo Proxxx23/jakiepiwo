@@ -5,7 +5,7 @@ use App\Http\Repositories\QuestionsRepository;
 use App\Http\Services\QuestionsService;
 use PHPUnit\Framework\TestCase;
 
-class QuestionsServideTest extends TestCase
+class QuestionsServiceTest extends TestCase
 {
     /**
      * @group integration
