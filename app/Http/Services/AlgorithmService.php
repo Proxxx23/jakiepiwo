@@ -4,8 +4,6 @@ declare( strict_types=1 );
 
 namespace App\Http\Services;
 
-use App\Http\Repositories\ErrorLogsRepository;
-use App\Http\Repositories\PolskiKraftRepository;
 use App\Http\Objects\Answers;
 use App\Http\Objects\AnswersInterface;
 use App\Http\Objects\StylesToAvoid;
@@ -13,11 +11,11 @@ use App\Http\Objects\StylesToAvoidCollection;
 use App\Http\Objects\StylesToTake;
 use App\Http\Objects\StylesToTakeCollection;
 use App\Http\Objects\FormData;
+use App\Http\Repositories\BeersRepositoryInterface;
+use App\Http\Repositories\ErrorLogsRepository;
 use App\Http\Repositories\PolskiKraftRepositoryInterface;
 use App\Http\Repositories\ScoringRepositoryInterface;
-use Illuminate\Support\Facades\DB;
-use App\Http\Controllers\PolskiKraft\PolskiKraftRepository as PKAPI;
-use Illuminate\View\View;
+use App\Http\Repositories\StylesLogsRepositoryInterface;
 
 final class AlgorithmService
 {
@@ -25,18 +23,30 @@ final class AlgorithmService
     private $answers = [];
     /** @var ScoringRepositoryInterface */
     private $scoringRepository;
-    /** @var PolskiKraftRepository */
+    /** @var PolskiKraftRepositoryInterface */
     private $polskiKraftRepository;
+    /** @var StylesLogsRepositoryInterface */
+    private $stylesLogsRepository;
+    /** @var BeersRepositoryInterface */
+    private $beersRepository;
 
     /**
-     * Constructor.
-     *
      * @param ScoringRepositoryInterface $scoringRepository
+     * @param PolskiKraftRepositoryInterface $polskiKraftRepository
+     * @param StylesLogsRepositoryInterface $stylesLogsRepository
+     * @param BeersRepositoryInterface $beersRepository
      */
-    public function __construct( ScoringRepositoryInterface $scoringRepository, PolskiKraftRepositoryInterface $polskiKraftRepository )
-    {
+    public function __construct
+    (
+        ScoringRepositoryInterface $scoringRepository,
+        PolskiKraftRepositoryInterface $polskiKraftRepository,
+        StylesLogsRepositoryInterface $stylesLogsRepository,
+        BeersRepositoryInterface $beersRepository
+    ) {
         $this->scoringRepository = $scoringRepository;
         $this->polskiKraftRepository = $polskiKraftRepository;
+        $this->stylesLogsRepository = $stylesLogsRepository;
+        $this->beersRepository = $beersRepository;
     }
 
     /**
@@ -209,7 +219,7 @@ final class AlgorithmService
         //todo: intersect?
         foreach ( $answers as $questionNumber => &$givenAnswer ) {
 
-            $scoringMap = $this->scoringRepository->fetchScore( $questionNumber );
+            $scoringMap = $this->scoringRepository->fetchByQuestionNumber( $questionNumber );
 
             foreach ( $scoringMap as $mappedAnswer => $ids ) {
 
@@ -271,23 +281,19 @@ final class AlgorithmService
         $userOptions->removeAssignedPoints();
 
         $idStylesToTake = [];
-        if ($userOptions->getIncludedIds() !== []) {
+        if ( $userOptions->getIncludedIds() !== [] ) {
             for ( $i = 0; $i < $userOptions->getCountStylesToTake(); $i++ ) {
                 $idStylesToTake[] = $userOptions->getIncludedIds()[$i];
             }
 
             $buyThis = [];
-            if ( \count( $idStylesToTake ) > 0 ) {
-                $buyThis = DB::select(
-                    "SELECT `id`, `name`, `name2`, `name_pl` FROM beers WHERE id IN (" . implode(
-                        ',', $idStylesToTake
-                    ) . ")"
-                );
+            if ( $idStylesToTake !== [] ) {
+                $buyThis = $this->beersRepository->fetchByIds( $idStylesToTake );
             }
 
             $stylesToTakeCollection = new StylesToTakeCollection();
             foreach ( $buyThis as $styleInfo ) {
-                $beerDataCollection = $this->polskiKraftRepository->fetchBeerInfo( (int) $styleInfo->id ) ?? null;
+                $beerDataCollection = $this->polskiKraftRepository->fetchByBeerId( (int) $styleInfo->id ) ?? null;
                 $stylesToTakeCollection->add( ( new StylesToTake( $styleInfo, $beerDataCollection ) )->toArray() );
             }
         } else {
@@ -302,12 +308,8 @@ final class AlgorithmService
             }
 
             $avoidThis = [];
-            if ( \count( $idStylesToAvoid ) > 0 ) {
-                $avoidThis = DB::select(
-                    "SELECT `id`, `name`, `name2`, `name_pl` FROM beers WHERE id IN (" . implode(
-                        ',', $idStylesToAvoid
-                    ) . ")"
-                );
+            if ( $idStylesToAvoid !== [] ) {
+                $avoidThis = $this->beersRepository->fetchByIds( $idStylesToAvoid );
             }
 
             $stylesToAvoidCollection = new StylesToAvoidCollection();
@@ -319,8 +321,9 @@ final class AlgorithmService
         }
 
         try {
-            $this->logStyles( $user, $idStylesToTake, $idStylesToAvoid );
+            $this->stylesLogsRepository->logStyles( $user, $idStylesToTake, $idStylesToAvoid );
         } catch ( \Exception $e ) {
+            // todo: shouldn't call other service
             ( new ErrorsLoggerService( new ErrorLogsRepository() ) )->logError( $e->getMessage() );
         }
 
@@ -335,45 +338,5 @@ final class AlgorithmService
                 'answers' => $this->answers,
             ], JSON_UNESCAPED_UNICODE
         );
-    }
-
-    /**
-     * @param FormData $user
-     * @param array|null $styleToTake
-     * @param array|null $styleToAvoid
-     */
-    private function logStyles( FormData $user, ?array $styleToTake, ?array $styleToAvoid ): void
-    {
-        $lastID = DB::select( 'SELECT MAX(id_answer) AS lastid FROM `styles_logs` LIMIT 1' );
-        $nextID = (int) $lastID[0]->lastid + 1;
-
-        $stylesCount = 3;
-
-        //todo: jeden insert
-        for ( $i = 0; $i < $stylesCount; $i++ ) {
-            DB::insert(
-                'INSERT INTO `styles_logs` 
-                          (id_answer, 
-                           username, 
-                           email, 
-                           newsletter, 
-                           style_take, 
-                           style_avoid, 
-                           ip_address, 
-                           created_at)
-    					VALUES
-    					(?, ?, ?, ?, ?, ?, ?, ?)',
-                [
-                    $nextID,
-                    $user->getUsername(),
-                    $user->getEmail(),
-                    $user->addToNewsletterList(),
-                    $styleToTake[$i],
-                    $styleToAvoid[$i],
-                    $_SERVER['REMOTE_ADDR'],
-                    now(),
-                ]
-            );
-        }
     }
 }

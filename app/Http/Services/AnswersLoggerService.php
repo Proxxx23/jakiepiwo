@@ -28,7 +28,7 @@ final class AnswersLoggerService
      */
     public function logAnswers( FormData $formInput, array $answers ): void
     {
-        $this->userAnswersRepository->add($formInput, $answers);
+        $this->userAnswersRepository->addAnswers($formInput, $answers);
     }
 
 }

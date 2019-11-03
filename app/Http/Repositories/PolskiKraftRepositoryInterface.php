@@ -7,5 +7,5 @@ use App\Http\Objects\BeerDataCollection;
 
 interface PolskiKraftRepositoryInterface
 {
-    public function fetchBeerInfo( int $beerId ): ?BeerDataCollection;
+    public function fetchByBeerId( int $beerId ): ?BeerDataCollection;
 }

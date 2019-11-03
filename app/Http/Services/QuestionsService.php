@@ -25,7 +25,7 @@ final class QuestionsService
      */
     public function getQuestions(): array
     {
-        return $this->questionsRepository->fetchQuestions();
+        return $this->questionsRepository->fetchAllQuestions();
     }
 
     /**

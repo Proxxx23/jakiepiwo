@@ -6,11 +6,13 @@ namespace App\Http\Controllers;
 use App\Exceptions\InvalidContentTypeException;
 use App\Http\Objects\Answers;
 use App\Http\Objects\FormData;
+use App\Http\Repositories\BeersRepository;
 use App\Http\Repositories\ErrorLogsRepository;
 use App\Http\Repositories\NewsletterRepository;
 use App\Http\Repositories\PolskiKraftRepository;
 use App\Http\Repositories\QuestionsRepository;
 use App\Http\Repositories\ScoringRepository;
+use App\Http\Repositories\StylesLogsRepository;
 use App\Http\Repositories\UserAnswersRepository;
 use App\Http\Services\AnswersLoggerService;
 use App\Http\Services\ErrorsLoggerService;
@@ -58,7 +60,11 @@ final class AlgorithmController
             ( new ErrorsLoggerService( new ErrorLogsRepository() ) )->logError( $e->getMessage() );
         }
 
-        $proposedStyles = ( new AlgorithmService( new ScoringRepository(), new PolskiKraftRepository( new Dictionary()) ) )
+        $proposedStyles = ( new AlgorithmService(
+            new ScoringRepository(),
+            new PolskiKraftRepository( new Dictionary()),
+            new StylesLogsRepository(),
+            new BeersRepository() ) )
             ->fetchProposedStyles( $answers, $formData );
 
 //        if ( $formData->hasEmail() && $formData->getSendEmail() ) {

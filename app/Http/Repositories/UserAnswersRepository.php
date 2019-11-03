@@ -12,7 +12,7 @@ final class UserAnswersRepository implements UserAnswersRepositoryInterface
      * @param FormData $formInput
      * @param array $answers
      */
-    public function add( FormData $formInput, array $answers ): void
+    public function addAnswers( FormData $formInput, array $answers ): void
     {
         DB::insert(
             'INSERT INTO `user_answers` 

@@ -28,7 +28,7 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
      * @return BeerDataCollection|null
      * @throws \Exception
      */
-    public function fetchBeerInfo( int $beerId ): ?BeerDataCollection
+    public function fetchByBeerId( int $beerId ): ?BeerDataCollection
     {
         if ( !\array_key_exists( $beerId, $this->dictionary->get() ) ) {
             return null;
@@ -37,7 +37,7 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
         $translatedBeerId = $this->dictionary->getById( $beerId );
 
         $url = 'https://www.polskikraft.pl/openapi/style/' . $translatedBeerId . '/examples';
-        $data = \json_decode( \file_get_contents( $url ), true );
+        $data = \json_decode(\file_get_contents($url), true, 512, JSON_THROW_ON_ERROR);
 
         if ( empty( $data ) ) {
             return null;

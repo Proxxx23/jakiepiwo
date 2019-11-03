@@ -23,6 +23,6 @@ final class UserService
      */
     public function getUsername(): ?string
     {
-        return $this->stylesLogsRepository->fetchUsername( $_SERVER['REMOTE_ADDR'] );
+        return $this->stylesLogsRepository->fetchUsernameByIpAddress( $_SERVER['REMOTE_ADDR'] );
     }
 }

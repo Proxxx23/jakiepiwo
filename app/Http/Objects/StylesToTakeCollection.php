@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Http\Objects;
 
-use Tightenco\Collect\Support\Collection;
+use Illuminate\Support\Collection;
 
 final class StylesToTakeCollection extends Collection
 {
