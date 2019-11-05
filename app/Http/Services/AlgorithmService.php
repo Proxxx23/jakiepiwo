@@ -4,6 +4,7 @@ declare( strict_types=1 );
 namespace App\Http\Services;
 
 use App\Http\Objects\Answers;
+use App\Http\Objects\AnswersInterface;
 use App\Http\Objects\BeerData;
 use App\Http\Objects\StylesToAvoid;
 use App\Http\Objects\StylesToAvoidCollection;
@@ -193,9 +194,10 @@ final class AlgorithmService
     /**
      * @param array $answers
      * @param FormData $user
-     *
      * @return string
-     * @throws \Exception
+     *
+     * todo: dodać mechanizm, który informuje, że granice były marginalne i wyniki mogą byc niejednoznaczne
+     * todo rename method
      */
     public function fetchProposedStyles( array $answers, FormData $user ): string
     {
@@ -213,6 +215,11 @@ final class AlgorithmService
         if ( $answers[13] === 'nie' ) {
             $userOptions->excludeFromRecommended( [ 15, 16, 52, 57, 58, 59, 62, 63 ] );
         }
+
+        $answers = \array_filter( $answers, static function ( $v )
+        {
+            return $v !== 'nie wiem';
+        });
 
         foreach ( $answers as $questionNumber => &$givenAnswer ) {
 
@@ -260,19 +267,7 @@ final class AlgorithmService
 
         $this->applySynergy( $answers, $user );
 
-        return $this->chooseStyles( $user );
-    }
-
-    /**
-     * @param FormData $user
-     *
-     * @return string
-     * @throws \Exception
-     * todo: dodać mechanizm, który informuje, że granice były marginalne i wyniki mogą byc niejednoznaczne
-     */
-    public function chooseStyles( FormData $user ): string
-    {
-        /** @var Answers $answers */
+        /** @var AnswersInterface $answers */
         $answers = $user->getAnswers();
         $answers->fetchAll();
         $answers->removeAssignedPoints();
@@ -309,10 +304,10 @@ final class AlgorithmService
     }
 
     /**
-     * @param Answers $answers
+     * @param AnswersInterface $answers
      * @return StylesToTakeCollection|null
      */
-    private function createStylesToTakeCollection( Answers $answers ): ?StylesToTakeCollection
+    private function createStylesToTakeCollection( AnswersInterface $answers ): ?StylesToTakeCollection
     {
         if ( $answers->getIncludedIds() === [] ) {
             return null;
@@ -340,10 +335,10 @@ final class AlgorithmService
     }
 
     /**
-     * @param Answers $answers
+     * @param AnswersInterface $answers
      * @return StylesToAvoidCollection|null
      */
-    private function createStylesToAvoidCollection( Answers $answers ): ?StylesToAvoidCollection
+    private function createStylesToAvoidCollection( AnswersInterface $answers ): ?StylesToAvoidCollection
     {
         if ( $answers->getExcludedIds() === [] ) {
             return null;
