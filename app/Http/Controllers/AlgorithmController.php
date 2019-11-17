@@ -30,7 +30,6 @@ final class AlgorithmController
     private const INVALID_CONTENT_TYPE_EXCEPTION_MESSAGE = 'Set Content Type header to application/json.';
     private const EMPTY_DATA_EXCEPTION_MESSAGE = 'No valid data provided.';
     private const APPLICATION_JSON_HEADER = 'application/json';
-    private const SLEEP_TIME = 3;
 
     /**
      * @param Request $request
@@ -78,7 +77,6 @@ final class AlgorithmController
 //            );
 //            $newsletterService->addToNewsletterList( $formData->getEmail() );
 //        }
-        \sleep(self::SLEEP_TIME);
         return $proposedStyles;
     }
 }
