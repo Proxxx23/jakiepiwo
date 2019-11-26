@@ -3,18 +3,20 @@ declare( strict_types=1 );
 
 namespace App\Http\Services;
 
-// TODO
+use App\Http\Objects\BeerData;
+use App\Http\Objects\StylesToTakeCollection;
+
 final class MailService
 {
     /**
-     * @param string $proposedStyles
+     * @param BeerData $proposedStyles
      * @param string|null $username
      * @param string $email
      */
-    public function sendEmail( string $proposedStyles, ?string $username, string $email ): void
+    public function sendEmail( BeerData $proposedStyles, ?string $username, string $email ): void
     {
-        $headers = 'From: thegustator@piwolucja.pl' . "\r\n" .
-            'Reply-To: thegustator@piwolucja.pl' . "\r\n";
+        $headers = 'From: Degustator <degustator@piwolucja.pl>' . "\r\n" .
+            'Reply-To: Degustator <degustator@piwolucja.pl>' . "\r\n";
 
         if ( $username !== null ) {
             $subject = $username . ', oto najlepsze style piwne dla Ciebie!';
@@ -26,20 +28,23 @@ final class MailService
     }
 
     /**
-     * @param string $proposedStyles
+     * @param BeerData $proposedStyles
      *
      * @return string $mailTPL
      */
-    private function prepareEmailTemplate(string $proposedStyles): string
+    private function prepareEmailTemplate(BeerData $proposedStyles): string
     {
-        $proposedStyles = \json_decode($proposedStyles, true, 512, JSON_THROW_ON_ERROR);
-
         $mailTPL = 'Oto style, których powinieneś poszukiwać w sklepie:' . PHP_EOL;
-        foreach ($proposedStyles['buyThis'] as $style) {
-            $mailTPL .= $style['name'];
+        /** @var StylesToTakeCollection $style */
+        foreach ( $proposedStyles->getBuyThis() as $style ) {
+            $mailTPL .= $style['name'] . PHP_EOL;
         }
 
-        $mailTPL .= '';
+        $mailTPL .= PHP_EOL . 'Tych styli powinieneś unikać:' . PHP_EOL;
+        /** @var StylesToTakeCollection $style */
+        foreach ( $proposedStyles->getAvoidThis() as $style ) {
+            $mailTPL .= $style['name'] . PHP_EOL;
+        }
 
         return $mailTPL;
     }

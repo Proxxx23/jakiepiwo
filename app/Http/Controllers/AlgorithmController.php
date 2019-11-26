@@ -66,17 +66,18 @@ final class AlgorithmController
             new BeersRepository() ) )
             ->fetchProposedStyles( $answers, $formData );
 
-//        if ( $formData->hasEmail() && $formData->getSendEmail() ) {
-//            //todo: any info about mail has been sent
-//            ( new MailService() )->sendEmail( $proposedStyles, $formData->getUsername(), $formData->getEmail() );
-//        }
+        if ( $formData->hasEmail() && $formData->sendEmail() ) {
+            //todo: any info about mail has been sent
+            ( new MailService() )->sendEmail( $proposedStyles, $formData->getUsername(), $formData->getEmail() );
+        }
 
-//        if ( $formData->addToNewsletterList() ) {
-//            $newsletterService = new NewsletterService(
-//                new NewsletterRepository( new MailChimp( config( 'mail.mailchimpApiKey' ) ) )
-//            );
-//            $newsletterService->addToNewsletterList( $formData->getEmail() );
-//        }
-        return $proposedStyles;
+        if ( $formData->addToNewsletterList() ) {
+            $newsletterService = new NewsletterService(
+                new NewsletterRepository(new MailChimp( config( 'mail.mailchimpApiKey' )) )
+            );
+            $newsletterService->addToNewsletterList( $formData->getEmail() );
+        }
+
+        return $proposedStyles->toJson();
     }
 }

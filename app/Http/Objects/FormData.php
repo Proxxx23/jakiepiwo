@@ -50,6 +50,22 @@ final class FormData
     }
 
     /**
+     * @return bool
+     */
+    public function hasEmail(): bool
+    {
+        return !empty( $this->email );
+    }
+
+    /**
+     * @return bool
+     */
+    public function sendEmail(): bool
+    {
+        return $this->sendEmail;
+    }
+
+    /**
      * @return AnswersInterface
      */
     public function getAnswers(): AnswersInterface

@@ -194,12 +194,12 @@ final class AlgorithmService
     /**
      * @param array $answers
      * @param FormData $user
-     * @return string
+     * @return BeerData
      *
      * todo: dodać mechanizm, który informuje, że granice były marginalne i wyniki mogą byc niejednoznaczne
      * todo rename method
      */
-    public function fetchProposedStyles( array $answers, FormData $user ): string
+    public function fetchProposedStyles( array $answers, FormData $user ): BeerData
     {
         $this->answers = $answers;
 
@@ -290,7 +290,7 @@ final class AlgorithmService
             ( new ErrorsLoggerService( new ErrorLogsRepository() ) )->logError( $e->getMessage() );
         }
 
-        return ( new BeerData(
+        return new BeerData(
             [
                 'buyThis' => $stylesToTakeCollection !== null ? $stylesToTakeCollection->toArray() : null,
                 'avoidThis' => $stylesToAvoidCollection !== null ? $stylesToAvoidCollection->toArray() : null,
@@ -300,7 +300,7 @@ final class AlgorithmService
                 'barrelAged' => $answers->isBarrelAged(),
                 'answers' => $this->answers,
             ]
-        ) )->toJson();
+        );
     }
 
     /**

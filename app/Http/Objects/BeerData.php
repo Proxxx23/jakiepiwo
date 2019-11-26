@@ -35,6 +35,22 @@ final class BeerData
     }
 
     /**
+     * @return array|null
+     */
+    public function getBuyThis(): ?array
+    {
+        return $this->buyThis;
+    }
+
+    /**
+     * @return array|null
+     */
+    public function getAvoidThis(): ?array
+    {
+        return $this->avoidThis;
+    }
+
+    /**
      * @return string
      */
     public function toJson(): string
