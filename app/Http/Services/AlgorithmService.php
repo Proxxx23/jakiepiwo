@@ -236,6 +236,7 @@ final class AlgorithmService
                     continue;
                 }
 
+                // todo rozplątać
                 if ( $givenAnswer === $mappedAnswer &&
                     $givenAnswer !== 'bez znaczenia' ) {
                     $idsToCalculate = $this->buildStrength( $ids );
@@ -250,6 +251,7 @@ final class AlgorithmService
                     }
                 }
 
+                // todo rozplątać
                 if ( $givenAnswer !== $mappedAnswer &&
                     $givenAnswer !== 'bez znaczenia' &&
                     !\in_array( $questionNumber, [ 3, 5, 9 ], true ) ) {
