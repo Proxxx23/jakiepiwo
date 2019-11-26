@@ -48,10 +48,12 @@ final class StylesLogsRepository implements StylesLogsRepositoryInterface
         $lastID = DB::select( 'SELECT MAX(id_answer) AS lastid FROM `styles_logs` LIMIT 1' );
         $nextID = (int) $lastID[0]->lastid + 1;
 
-        $stylesCount = 3;
+        $insertsCount = $styleToTake !== null ? \count( $styleToTake ) : \count($styleToAvoid) ?? null;
+        if ($insertsCount === null || $insertsCount === 0) {
+            return;
+        }
 
-        //todo: jeden insert
-        for ( $i = 0; $i < $stylesCount; $i++ ) {
+        for ( $i = 0; $i < $insertsCount; $i++ ) {
             DB::insert(
                 'INSERT INTO `styles_logs` 
                           (id_answer, 
@@ -69,8 +71,8 @@ final class StylesLogsRepository implements StylesLogsRepositoryInterface
                     $user->getUsername(),
                     $user->getEmail(),
                     $user->addToNewsletterList(),
-                    $styleToTake[$i],
-                    $styleToAvoid[$i],
+                    $styleToTake[$i] ?? null,
+                    $styleToAvoid[$i] ?? null,
                     $_SERVER['REMOTE_ADDR'],
                     now(),
                 ]

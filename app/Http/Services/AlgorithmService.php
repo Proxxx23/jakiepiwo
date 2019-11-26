@@ -12,10 +12,10 @@ use App\Http\Objects\StylesToTake;
 use App\Http\Objects\StylesToTakeCollection;
 use App\Http\Objects\FormData;
 use App\Http\Repositories\BeersRepositoryInterface;
-use App\Http\Repositories\ErrorLogsRepository;
 use App\Http\Repositories\PolskiKraftRepositoryInterface;
 use App\Http\Repositories\ScoringRepositoryInterface;
 use App\Http\Repositories\StylesLogsRepositoryInterface;
+use App\Http\Utils\ErrorsLoggerInterface;
 
 final class AlgorithmService
 {
@@ -29,24 +29,29 @@ final class AlgorithmService
     private $stylesLogsRepository;
     /** @var BeersRepositoryInterface */
     private $beersRepository;
+    /** @var ErrorsLoggerInterface */
+    private $errorsLogger;
 
     /**
      * @param ScoringRepositoryInterface $scoringRepository
      * @param PolskiKraftRepositoryInterface $polskiKraftRepository
      * @param StylesLogsRepositoryInterface $stylesLogsRepository
      * @param BeersRepositoryInterface $beersRepository
+     * @param ErrorsLoggerInterface $errorsLogger
      */
     public function __construct
     (
         ScoringRepositoryInterface $scoringRepository,
         PolskiKraftRepositoryInterface $polskiKraftRepository,
         StylesLogsRepositoryInterface $stylesLogsRepository,
-        BeersRepositoryInterface $beersRepository
+        BeersRepositoryInterface $beersRepository,
+        ErrorsLoggerInterface $errorsLogger
     ) {
         $this->scoringRepository = $scoringRepository;
         $this->polskiKraftRepository = $polskiKraftRepository;
         $this->stylesLogsRepository = $stylesLogsRepository;
         $this->beersRepository = $beersRepository;
+        $this->errorsLogger = $errorsLogger;
     }
 
     /**
@@ -197,9 +202,8 @@ final class AlgorithmService
      * @return BeerData
      *
      * todo: dodać mechanizm, który informuje, że granice były marginalne i wyniki mogą byc niejednoznaczne
-     * todo rename method
      */
-    public function fetchProposedStyles( array $answers, FormData $user ): BeerData
+    public function createBeerData( array $answers, FormData $user ): BeerData
     {
         $this->answers = $answers;
 
@@ -286,8 +290,7 @@ final class AlgorithmService
         try {
             $this->stylesLogsRepository->logStyles( $user, $idStylesToTake, $idStylesToAvoid );
         } catch ( \Exception $e ) {
-            // todo: shouldn't call other service
-            ( new ErrorsLoggerService( new ErrorLogsRepository() ) )->logError( $e->getMessage() );
+            $this->errorsLogger->logError( $e->getMessage() );
         }
 
         return new BeerData(

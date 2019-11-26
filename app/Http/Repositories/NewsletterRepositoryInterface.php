@@ -6,7 +6,7 @@ namespace App\Http\Repositories;
 interface NewsletterRepositoryInterface
 {
     /**
-     * @param string|null $email
+     * @param string $email
      */
-    public function subscribe( ?string $email ): void;
+    public function subscribe( string $email ): void;
 }

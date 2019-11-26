@@ -15,13 +15,13 @@ use App\Http\Repositories\ScoringRepository;
 use App\Http\Repositories\StylesLogsRepository;
 use App\Http\Repositories\UserAnswersRepository;
 use App\Http\Services\AnswersLoggerService;
-use App\Http\Services\ErrorsLoggerService;
 use App\Http\Services\MailService;
 use App\Http\Services\NewsletterService;
 use App\Http\Services\QuestionsService;
 use App\Http\Services\AlgorithmService;
 
 use App\Http\Utils\Dictionary;
+use App\Http\Utils\ErrorsLogger;
 use DrewM\MailChimp\MailChimp;
 use Illuminate\Http\Request;
 
@@ -36,7 +36,6 @@ final class AlgorithmController
      *
      * @return string
      * @throws \Exception
-     * todo: return response->json
      */
     public function handle( Request $request ): string
     {
@@ -56,22 +55,23 @@ final class AlgorithmController
         try {
             ( new AnswersLoggerService( new UserAnswersRepository() ) )->logAnswers( $formData, $answers );
         } catch ( \Exception $e ) {
-            ( new ErrorsLoggerService( new ErrorLogsRepository() ) )->logError( $e->getMessage() );
+            ( new ErrorsLogger( new ErrorLogsRepository() ) )->logError( $e->getMessage() );
         }
 
         $proposedStyles = ( new AlgorithmService(
             new ScoringRepository(),
             new PolskiKraftRepository( new Dictionary() ),
             new StylesLogsRepository(),
-            new BeersRepository() ) )
-            ->fetchProposedStyles( $answers, $formData );
+            new BeersRepository(),
+            new ErrorsLogger( new ErrorLogsRepository() )) )
+                ->createBeerData( $answers, $formData );
 
         if ( $formData->hasEmail() && $formData->sendEmail() ) {
             //todo: any info about mail has been sent
             ( new MailService() )->sendEmail( $proposedStyles, $formData->getUsername(), $formData->getEmail() );
         }
 
-        if ( $formData->addToNewsletterList() ) {
+        if ( $formData->addToNewsletterList() && $formData->getEmail() !== null ) {
             $newsletterService = new NewsletterService(
                 new NewsletterRepository(new MailChimp( config( 'mail.mailchimpApiKey' )) )
             );

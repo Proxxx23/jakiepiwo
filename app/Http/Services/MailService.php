@@ -35,6 +35,7 @@ final class MailService
     private function prepareEmailTemplate(BeerData $proposedStyles): string
     {
         $mailTPL = 'Oto style, których powinieneś poszukiwać w sklepie:' . PHP_EOL;
+
         /** @var StylesToTakeCollection $style */
         foreach ( $proposedStyles->getBuyThis() as $style ) {
             $mailTPL .= $style['name'] . PHP_EOL;

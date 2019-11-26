@@ -21,11 +21,11 @@ final class NewsletterService
     /**
      * @see: https://github.com/drewm/mailchimp-api
      *
-     * @param string|null $email
+     * @param string $email
      *
      * @throws \Exception
      */
-    public function addToNewsletterList( ?string $email ): void
+    public function addToNewsletterList( string $email ): void
     {
         $this->newsletterRepository->subscribe( $email );
     }

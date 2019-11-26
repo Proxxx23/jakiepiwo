@@ -1,11 +1,11 @@
 <?php
 declare( strict_types=1 );
 
-namespace App\Http\Services;
+namespace App\Http\Utils;
 
 use App\Http\Repositories\ErrorLogsRepositoryInterface;
 
-final class ErrorsLoggerService
+final class ErrorsLogger implements ErrorsLoggerInterface
 {
     /** @var ErrorLogsRepositoryInterface */
     private $errorLogsRepository;

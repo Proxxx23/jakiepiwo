@@ -84,8 +84,6 @@ final class FormData
     /**
      * @param string|null $email
      * @return bool
-     *
-     * todo test
      */
     private function emailIsValid( ?string $email ): bool
     {
