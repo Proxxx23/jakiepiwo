@@ -27,6 +27,8 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
      *
      * @return PolskiKraftBeerDataCollection|null
      * @throws \Exception
+     *
+     * @todo: guzzle
      */
     public function fetchByBeerId( int $beerId ): ?PolskiKraftBeerDataCollection
     {

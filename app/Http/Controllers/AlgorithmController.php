@@ -9,6 +9,7 @@ use App\Http\Objects\FormData;
 use App\Http\Repositories\BeersRepository;
 use App\Http\Repositories\ErrorLogsRepository;
 use App\Http\Repositories\NewsletterRepository;
+use App\Http\Repositories\OnTapRepository;
 use App\Http\Repositories\PolskiKraftRepository;
 use App\Http\Repositories\QuestionsRepository;
 use App\Http\Repositories\ScoringRepository;
@@ -23,6 +24,7 @@ use App\Http\Services\AlgorithmService;
 use App\Http\Utils\Dictionary;
 use App\Http\Utils\ErrorsLogger;
 use DrewM\MailChimp\MailChimp;
+use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 
 final class AlgorithmController
@@ -63,7 +65,8 @@ final class AlgorithmController
             new PolskiKraftRepository( new Dictionary() ),
             new StylesLogsRepository(),
             new BeersRepository(),
-            new ErrorsLogger( new ErrorLogsRepository() )) )
+            new ErrorsLogger( new ErrorLogsRepository() ),
+            new OnTapRepository( new Client() ) ) )
                 ->createBeerData( $answers, $formData );
 
         if ( $formData->hasEmail() && $formData->sendEmail() ) {

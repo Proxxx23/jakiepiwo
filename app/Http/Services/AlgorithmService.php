@@ -12,6 +12,7 @@ use App\Http\Objects\StylesToTake;
 use App\Http\Objects\StylesToTakeCollection;
 use App\Http\Objects\FormData;
 use App\Http\Repositories\BeersRepositoryInterface;
+use App\Http\Repositories\OnTapRepositoryInterface;
 use App\Http\Repositories\PolskiKraftRepositoryInterface;
 use App\Http\Repositories\ScoringRepositoryInterface;
 use App\Http\Repositories\StylesLogsRepositoryInterface;
@@ -31,6 +32,8 @@ final class AlgorithmService
     private $beersRepository;
     /** @var ErrorsLoggerInterface */
     private $errorsLogger;
+    /** @var OnTapRepositoryInterface */
+    private $onTapRepository;
 
     /**
      * @param ScoringRepositoryInterface $scoringRepository
@@ -45,13 +48,15 @@ final class AlgorithmService
         PolskiKraftRepositoryInterface $polskiKraftRepository,
         StylesLogsRepositoryInterface $stylesLogsRepository,
         BeersRepositoryInterface $beersRepository,
-        ErrorsLoggerInterface $errorsLogger
+        ErrorsLoggerInterface $errorsLogger,
+        OnTapRepositoryInterface $onTapRepository
     ) {
         $this->scoringRepository = $scoringRepository;
         $this->polskiKraftRepository = $polskiKraftRepository;
         $this->stylesLogsRepository = $stylesLogsRepository;
         $this->beersRepository = $beersRepository;
         $this->errorsLogger = $errorsLogger;
+        $this->onTapRepository = $onTapRepository;
     }
 
     /**
