@@ -20,9 +20,6 @@ final class PolskiKraftBeerData
     /** @var int */
     private $rating;
 
-    /**
-     * @param array $data
-     */
     public function __construct( array $data )
     {
         $this->webUrl = $data['web_url'];
@@ -34,9 +31,11 @@ final class PolskiKraftBeerData
         $this->rating = $data['rating'];
     }
 
-    /**
-     * @return array
-     */
+    public function getTitle(): string
+    {
+        return $this->title;
+    }
+
     public function toArray(): array
     {
         return [

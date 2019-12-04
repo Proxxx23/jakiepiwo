@@ -5,9 +5,10 @@ namespace App\Http\Repositories;
 
 interface OnTapRepositoryInterface
 {
-    public function fetchCityIdByName( string $cityName ): array;
-
-    public function fetchPlacesByCityId(): ?array;
-
-    public function fetchTapsByPlaceId( string $placeId ): ?array;
+    /**
+     * @param string $beerName
+     * @return array|null
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function fetchTapsByBeerName( string $beerName ): ?array;
 }

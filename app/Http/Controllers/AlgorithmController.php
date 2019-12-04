@@ -35,9 +35,8 @@ final class AlgorithmController
 
     /**
      * @param Request $request
-     *
      * @return string
-     * @throws \Exception
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function handle( Request $request ): string
     {
@@ -66,7 +65,7 @@ final class AlgorithmController
             new StylesLogsRepository(),
             new BeersRepository(),
             new ErrorsLogger( new ErrorLogsRepository() ),
-            new OnTapRepository( new Client() ) ) )
+            new OnTapRepository( new Client(), 'Gdańsk' ) ) )
                 ->createBeerData( $answers, $formData );
 
         if ( $formData->hasEmail() && $formData->sendEmail() ) {

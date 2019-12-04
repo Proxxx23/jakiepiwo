@@ -35,13 +35,6 @@ final class AlgorithmService
     /** @var OnTapRepositoryInterface */
     private $onTapRepository;
 
-    /**
-     * @param ScoringRepositoryInterface $scoringRepository
-     * @param PolskiKraftRepositoryInterface $polskiKraftRepository
-     * @param StylesLogsRepositoryInterface $stylesLogsRepository
-     * @param BeersRepositoryInterface $beersRepository
-     * @param ErrorsLoggerInterface $errorsLogger
-     */
     public function __construct
     (
         ScoringRepositoryInterface $scoringRepository,
@@ -316,6 +309,7 @@ final class AlgorithmService
     /**
      * @param AnswersInterface $answers
      * @return StylesToTakeCollection|null
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     private function createStylesToTakeCollection( AnswersInterface $answers ): ?StylesToTakeCollection
     {
@@ -338,16 +332,15 @@ final class AlgorithmService
 
         foreach ( $buyThis as $styleInfo ) {
             $beerDataCollection = $this->polskiKraftRepository->fetchByBeerId( (int) $styleInfo->id );
+//            foreach ($beerDataCollection as $beerData) {
+//                $onTap = $this->onTapRepository->fetchTapsByBeerName('Gdańsk');
+//            }
             $stylesToTakeCollection->add( ( new StylesToTake( $styleInfo, $beerDataCollection ) )->toArray() );
         }
 
         return $stylesToTakeCollection;
     }
 
-    /**
-     * @param AnswersInterface $answers
-     * @return StylesToAvoidCollection|null
-     */
     private function createStylesToAvoidCollection( AnswersInterface $answers ): ?StylesToAvoidCollection
     {
         if ( $answers->getExcludedIds() === [] ) {
