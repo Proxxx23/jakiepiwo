@@ -13,7 +13,8 @@
         "nesbot/carbon": "^2.5",
         "laravel/framework": "^6.4",
         "laravel/tinker": "~1.0",
-        "barryvdh/laravel-cors": "0.11.4"
+        "barryvdh/laravel-cors": "0.11.4",
+        "symfony/dotenv": "5.0.1"
     },
     "require-dev": {
         "drewm/mailchimp-api": "^2.5",

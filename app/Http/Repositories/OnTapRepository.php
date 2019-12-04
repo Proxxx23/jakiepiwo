@@ -10,7 +10,6 @@ final class OnTapRepository implements OnTapRepositoryInterface
     private const CITIES_LIST_URI = 'https://ontap.pl/api/v1/cities';
     private const PLACES_LIST_URI = 'https://ontap.pl/api/v1/cities/%s/pubs';
     private const TAPS_LIST_URI = 'https://ontap.pl/api/v1/pubs/%s/taps';
-    private const API_KEY = 'a7f1daa6b8e99440217f78d601e6779c';
 
     /** @var ClientInterface */
     private $httpClient;
@@ -92,7 +91,7 @@ final class OnTapRepository implements OnTapRepositoryInterface
             'headers' => [
                 'Accept' => 'application/json',
                 'Content-Type' => 'application/json',
-                'Api-Key' => self::API_KEY //todo: from env
+                'Api-Key' => $_ENV['ONTAP_API_KEY']
             ]
         ] );
 
@@ -110,7 +109,7 @@ final class OnTapRepository implements OnTapRepositoryInterface
             'headers' => [
                 'Accept' => 'application/json',
                 'Content-Type' => 'application/json',
-                'Api-Key' => self::API_KEY //todo: from env
+                'Api-Key' => $_ENV['ONTAP_API_KEY']
             ]
         ] );
 
@@ -128,7 +127,7 @@ final class OnTapRepository implements OnTapRepositoryInterface
             'headers' => [
                 'Accept' => 'application/json',
                 'Content-Type' => 'application/json',
-                'Api-Key' => self::API_KEY //todo: from env
+                'Api-Key' => $_ENV['ONTAP_API_KEY']
             ]
         ] );
 
