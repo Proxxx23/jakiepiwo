@@ -5,7 +5,7 @@ namespace App\Http\Objects;
 
 final class StylesToTake
 {
-    private ?PolskiKraftBeerDataCollection $beerDataCollection;
+    private ?PolskiKraftDataCollection $beerDataCollection;
     private int $id;
     private string $name;
     private ?string $otherName;
@@ -13,7 +13,7 @@ final class StylesToTake
 
     public function __construct(
         object $styleInfo,
-        ?PolskiKraftBeerDataCollection $beerDataCollection
+        ?PolskiKraftDataCollection $beerDataCollection
     ) {
         $this->beerDataCollection = $beerDataCollection;
         $this->id = (int) $styleInfo->id;

@@ -3,30 +3,32 @@ declare( strict_types=1 );
 
 namespace App\Http\Repositories;
 
-use App\Http\Objects\PolskiKraftBeerData;
-use App\Http\Objects\PolskiKraftBeerDataCollection;
+use App\Http\Objects\PolskiKraftData;
+use App\Http\Objects\PolskiKraftDataCollection;
 use App\Http\Utils\Dictionary;
 
-final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
+final class BeerInfoHelper implements PolskiKraftRepositoryInterface
 {
     private const DEFAULT_LIST_URI = 'https://www.polskikraft.pl/openapi/style/list';
 
     private Dictionary $dictionary;
+    private OnTapRepositoryInterface $onTapRepository;
 
-    public function __construct( Dictionary $dictionary )
+    public function __construct( Dictionary $dictionary, OnTapRepositoryInterface $onTapRepository )
     {
         $this->dictionary = $dictionary;
+        $this->onTapRepository = $onTapRepository;
     }
 
     /**
      * @param int $beerId
      *
-     * @return PolskiKraftBeerDataCollection|null
+     * @return PolskiKraftDataCollection|null
      * @throws \Exception
      *
      * @todo: guzzle
      */
-    public function fetchByBeerId( int $beerId ): ?PolskiKraftBeerDataCollection
+    public function fetchByBeerId( int $beerId ): ?PolskiKraftDataCollection
     {
         if ( !\array_key_exists( $beerId, $this->dictionary->get() ) ) {
             return null;
@@ -46,12 +48,16 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
             unset( $data[$randomIdToDelete] );
         }
 
-        $beerDataCollection = new PolskiKraftBeerDataCollection();
+        $polskiKraftCollection = new PolskiKraftDataCollection();
         foreach ( $data as $item ) {
-            $beerData = new PolskiKraftBeerData( $item );
-            $beerDataCollection->add( $beerData->toArray() );
+            $polskiKraft = new PolskiKraftData( $item );
+
+            $onTap = $this->onTapRepository->fetchTapsByBeerData( $polskiKraft );
+            $polskiKraft->setOnTap( $onTap );
+
+            $polskiKraftCollection->add( $polskiKraft->toArray() );
         }
 
-        return $beerDataCollection;
+        return $polskiKraftCollection;
     }
 }

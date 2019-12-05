@@ -13,7 +13,6 @@ use App\Http\Objects\StylesToTake;
 use App\Http\Objects\StylesToTakeCollection;
 use App\Http\Objects\FormData;
 use App\Http\Repositories\BeersRepositoryInterface;
-use App\Http\Repositories\OnTapRepositoryInterface;
 use App\Http\Repositories\PolskiKraftRepositoryInterface;
 use App\Http\Repositories\ScoringRepositoryInterface;
 use App\Http\Repositories\StylesLogsRepositoryInterface;
@@ -33,8 +32,6 @@ final class AlgorithmService
     private BeersRepositoryInterface $beersRepository;
     /** @var ErrorsLoggerInterface */
     private ErrorsLoggerInterface $errorsLogger;
-    /** @var OnTapRepositoryInterface */
-    private OnTapRepositoryInterface $onTapRepository;
 
     public function __construct
     (
@@ -42,15 +39,13 @@ final class AlgorithmService
         PolskiKraftRepositoryInterface $polskiKraftRepository,
         StylesLogsRepositoryInterface $stylesLogsRepository,
         BeersRepositoryInterface $beersRepository,
-        ErrorsLoggerInterface $errorsLogger,
-        OnTapRepositoryInterface $onTapRepository
+        ErrorsLoggerInterface $errorsLogger
     ) {
         $this->scoringRepository = $scoringRepository;
         $this->polskiKraftRepository = $polskiKraftRepository;
         $this->stylesLogsRepository = $stylesLogsRepository;
         $this->beersRepository = $beersRepository;
         $this->errorsLogger = $errorsLogger;
-        $this->onTapRepository = $onTapRepository;
     }
 
     /**
@@ -328,12 +323,10 @@ final class AlgorithmService
         $stylesToTakeCollection = ( new StylesToTakeCollection() )
             ->setIdStylesToTake( $idStylesToTake );
 
+        //todo to jest tak złe xDDDDD - rozplątać koniecznie
         foreach ( $buyThis as $styleInfo ) {
-            $beerDataCollection = $this->polskiKraftRepository->fetchByBeerId( (int) $styleInfo->id );
-//            foreach ($beerDataCollection as $beerData) {
-//                $onTap = $this->onTapRepository->fetchTapsByBeerName('Gdańsk');
-//            }
-            $stylesToTakeCollection->add( ( new StylesToTake( $styleInfo, $beerDataCollection ) )->toArray() );
+            $polskiKraftBeerDataCollection = $this->polskiKraftRepository->fetchByBeerId( (int) $styleInfo->id );
+            $stylesToTakeCollection->add( ( new StylesToTake( $styleInfo, $polskiKraftBeerDataCollection ) )->toArray() );
         }
 
         return $stylesToTakeCollection;

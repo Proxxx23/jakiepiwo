@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Http\Repositories;
 
+use App\Http\Objects\PolskiKraftData;
 use GuzzleHttp\ClientInterface;
 
 final class OnTapRepository implements OnTapRepositoryInterface
@@ -12,7 +13,7 @@ final class OnTapRepository implements OnTapRepositoryInterface
     private const TAPS_LIST_URI = 'https://ontap.pl/api/v1/pubs/%s/taps';
 
     private ClientInterface $httpClient;
-    private string $cityId;
+    private ?string $cityId;
 
     /**
      * @param ClientInterface $httpClient
@@ -26,13 +27,13 @@ final class OnTapRepository implements OnTapRepositoryInterface
     }
 
     /**
-     * @param string $beerName
+     * @param PolskiKraftData $beerData
      * @return array|null
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function fetchTapsByBeerName( string $beerName ): ?array
+    public function fetchTapsByBeerData( PolskiKraftData $beerData ): ?array
     {
-        if ( $this->cityId === null || $beerName === '' ) {
+        if ( $this->cityId === null || $beerData === null ) {
             return null;
         }
 
@@ -45,37 +46,35 @@ final class OnTapRepository implements OnTapRepositoryInterface
         // then - fetch all the taps in given places and find beer
         $tapsData = [];
         foreach ( $places as $place ) {
-            $taps = $this->fetchTapsByPlaceId($place['id']);
-            if ( $taps === [] ) {
+            $taps = $this->fetchTapsByPlaceId( $place['id'] );
+            if ( empty($taps) ) {
                 continue;
             }
 
-            if ( $this->hasBeer( $beerName, $taps ) ) {
+            if ( $this->hasBeer( $beerData, $taps ) ) {
                 $tapsData[$place['name']] = true;
                 continue;
             }
         }
 
-        return $tapsData;
+        return $tapsData !== []
+            ? $tapsData
+            : null;
     }
 
     /**
      * @param string $cityName
-     * @return string
+     * @return string|null
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    private function fetchCityIdByName( string $cityName ): string
+    private function fetchCityIdByName( string $cityName ): ?string
     {
         $cities = $this->fetchAllCities();
+        $cityId = \array_search( $cityName, \array_column( $cities, 'name' ), true );
 
-        if ( \in_array( $cityName, $cities, true ) ) {
-            foreach ( $cities as $city ) {
-                dd( $city );
-            }
-        }
-
-        return '';
-
+        return \is_int( $cityId )
+            ? $cities[$cityId]['id']
+            : null;
     }
 
     /**
@@ -96,11 +95,11 @@ final class OnTapRepository implements OnTapRepositoryInterface
     }
 
     /**
-     * @param string $cityId
-     * @return array|null
+     * @param string|null $cityId
+     * @return array
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    private function fetchPlacesByCityId( string $cityId ): ?array
+    private function fetchPlacesByCityId( ?string $cityId ): array
     {
         $response = $this->httpClient->request( 'GET', \sprintf( self::PLACES_LIST_URI, $cityId ), [
             'headers' => [
@@ -131,10 +130,13 @@ final class OnTapRepository implements OnTapRepositoryInterface
         return \json_decode( $response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR );
     }
 
-    private function hasBeer( string $beerName, array $tap ): bool
+    private function hasBeer( PolskiKraftData $beerData, array $tapBeerData ): bool
     {
-        foreach ( $tap as $beer ) {
-            if ( stripos( $beer['name'], $beerName ) ) {
+        foreach ( $tapBeerData as $tapBeer ) {
+            if ( empty( $tapBeer['beer'] ) ) {
+                continue;
+            }
+            if ( stripos( $tapBeer['beer']['name'], $beerData->getTitle() ) !== false ) {
                 return true;
             }
         }

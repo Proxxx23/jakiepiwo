@@ -3,7 +3,7 @@ declare( strict_types=1 );
 
 namespace App\Http\Objects;
 
-final class PolskiKraftBeerData
+final class PolskiKraftData
 {
     private string $webUrl;
     private string $photoThumbnailUrl;
@@ -11,7 +11,8 @@ final class PolskiKraftBeerData
     private string $title;
     private string $subtitle;
     private string $subtitleAlt;
-    private int $rating;
+    private float $rating;
+    private ?array $onTap;
 
     public function __construct( array $data )
     {
@@ -29,6 +30,16 @@ final class PolskiKraftBeerData
         return $this->title;
     }
 
+    public function setTitle( string $title ): void
+    {
+        $this->title = $title;
+    }
+
+    public function setOnTap( ?array $onTap ): void
+    {
+        $this->onTap = $onTap;
+    }
+
     public function toArray(): array
     {
         return [
@@ -39,6 +50,7 @@ final class PolskiKraftBeerData
             'subtitle' => $this->subtitle,
             'subtitleAlt' => $this->subtitleAlt,
             'rating' => $this->rating,
+            'onTap' => $this->onTap,
         ];
     }
 }

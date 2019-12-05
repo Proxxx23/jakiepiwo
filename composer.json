@@ -8,12 +8,13 @@
         "php": ">=7.4",
         "ext-json": "*",
         "ext-pdo": "*",
+        "barryvdh/laravel-cors": "0.11.4",
         "fideloper/proxy": "^4.0",
         "guzzlehttp/guzzle": "^6.3",
-        "nesbot/carbon": "^2.5",
         "laravel/framework": "^6.4",
+        "laravel/helpers": "^1.0",
         "laravel/tinker": "~1.0",
-        "barryvdh/laravel-cors": "0.11.4",
+        "nesbot/carbon": "^2.5",
         "symfony/dotenv": "5.0.1"
     },
     "require-dev": {

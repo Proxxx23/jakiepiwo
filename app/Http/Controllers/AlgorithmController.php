@@ -12,7 +12,7 @@ use App\Http\Repositories\BeersRepository;
 use App\Http\Repositories\ErrorLogsRepository;
 use App\Http\Repositories\NewsletterRepository;
 use App\Http\Repositories\OnTapRepository;
-use App\Http\Repositories\PolskiKraftRepository;
+use App\Http\Repositories\BeerInfoHelper;
 use App\Http\Repositories\QuestionsRepository;
 use App\Http\Repositories\ScoringRepository;
 use App\Http\Repositories\StylesLogsRepository;
@@ -39,6 +39,7 @@ final class AlgorithmController
      * @param Request $request
      * @return string
      * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws Exception
      */
     public function handle( Request $request ): string
     {
@@ -63,11 +64,10 @@ final class AlgorithmController
 
         $proposedStyles = ( new AlgorithmService(
             new ScoringRepository(),
-            new PolskiKraftRepository( new Dictionary() ),
+            new BeerInfoHelper( new Dictionary(), new OnTapRepository( new Client(), 'Gdańsk' ) ) ,
             new StylesLogsRepository(),
             new BeersRepository(),
-            new ErrorsLogger( new ErrorLogsRepository() ),
-            new OnTapRepository( new Client(), 'Gdańsk' ) ) )
+            new ErrorsLogger( new ErrorLogsRepository() )))
                 ->createBeerData( $answers, $formData );
 
         if ( $formData->hasEmail() && $formData->sendEmail() ) {
