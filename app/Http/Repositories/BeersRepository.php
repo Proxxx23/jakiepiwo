@@ -7,10 +7,6 @@ use Illuminate\Support\Facades\DB;
 
 final class BeersRepository implements BeersRepositoryInterface
 {
-    /**
-     * @param array $ids
-     * @return array
-     */
     public function fetchByIds( array $ids ): array
     {
         return DB::select(

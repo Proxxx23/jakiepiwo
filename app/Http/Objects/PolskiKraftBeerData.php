@@ -5,20 +5,13 @@ namespace App\Http\Objects;
 
 final class PolskiKraftBeerData
 {
-    /** @var string */
-    private $webUrl;
-    /** @var string */
-    private $photoThumbnailUrl;
-    /** @var string */
-    private $photoUrl;
-    /** @var string */
-    private $title;
-    /** @var string */
-    private $subtitle;
-    /** @var string */
-    private $subtitleAlt;
-    /** @var int */
-    private $rating;
+    private string $webUrl;
+    private string $photoThumbnailUrl;
+    private string $photoUrl;
+    private string $title;
+    private string $subtitle;
+    private string $subtitleAlt;
+    private int $rating;
 
     public function __construct( array $data )
     {

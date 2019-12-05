@@ -3,6 +3,7 @@ declare( strict_types=1 );
 
 namespace App\Http\Services;
 
+use Exception;
 use App\Http\Objects\Answers;
 use App\Http\Objects\AnswersInterface;
 use App\Http\Objects\BeerData;
@@ -21,19 +22,19 @@ use App\Http\Utils\ErrorsLoggerInterface;
 final class AlgorithmService
 {
     /** @var array */
-    private $answers = [];
+    private array $answers = [];
     /** @var ScoringRepositoryInterface */
-    private $scoringRepository;
+    private ScoringRepositoryInterface $scoringRepository;
     /** @var PolskiKraftRepositoryInterface */
-    private $polskiKraftRepository;
+    private PolskiKraftRepositoryInterface $polskiKraftRepository;
     /** @var StylesLogsRepositoryInterface */
-    private $stylesLogsRepository;
+    private StylesLogsRepositoryInterface $stylesLogsRepository;
     /** @var BeersRepositoryInterface */
-    private $beersRepository;
+    private BeersRepositoryInterface $beersRepository;
     /** @var ErrorsLoggerInterface */
-    private $errorsLogger;
+    private ErrorsLoggerInterface $errorsLogger;
     /** @var OnTapRepositoryInterface */
-    private $onTapRepository;
+    private OnTapRepositoryInterface $onTapRepository;
 
     public function __construct
     (
@@ -218,10 +219,7 @@ final class AlgorithmService
             $userOptions->excludeFromRecommended( [ 15, 16, 52, 57, 58, 59, 62, 63 ] );
         }
 
-        $answers = \array_filter( $answers, static function ( $v )
-        {
-            return $v !== 'nie wiem';
-        });
+        $answers = \array_filter( $answers, fn($v) => $v !== 'nie wiem');
 
         foreach ( $answers as $questionNumber => &$givenAnswer ) {
 
@@ -289,7 +287,7 @@ final class AlgorithmService
 
         try {
             $this->stylesLogsRepository->logStyles( $user, $idStylesToTake, $idStylesToAvoid );
-        } catch ( \Exception $e ) {
+        } catch ( Exception $e ) {
             $this->errorsLogger->logError( $e->getMessage() );
         }
 

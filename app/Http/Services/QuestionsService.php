@@ -3,26 +3,18 @@ declare( strict_types=1 );
 
 namespace App\Http\Services;
 
+use UnexpectedValueException;
 use App\Http\Repositories\QuestionsRepositoryInterface;
 
 final class QuestionsService
 {
-    /** @var QuestionsRepositoryInterface $questionsRepository */
-    private $questionsRepository;
+    private QuestionsRepositoryInterface $questionsRepository;
 
-    /**
-     * Constructor.
-     *
-     * @param QuestionsRepositoryInterface $questionsRepository
-     */
     public function __construct( QuestionsRepositoryInterface $questionsRepository )
     {
         $this->questionsRepository = $questionsRepository;
     }
 
-    /**
-     * @return array
-     */
     public function getQuestions(): array
     {
         return $this->questionsRepository->fetchAllQuestions();
@@ -37,13 +29,13 @@ final class QuestionsService
     public function validateInput( array $requestData ): array
     {
         if ( \count( $this->getQuestions() ) !== \count( $requestData['answers'] ) ) {
-            throw new \UnexpectedValueException( 'Number of answers do not match number of questions.' );
+            throw new UnexpectedValueException( 'Number of answers do not match number of questions.' );
         }
 
         $answersFiltered = \array_filter( $requestData['answers'] );
 
         if ( \count( $answersFiltered ) !== \count( $this->getQuestions() ) ) {
-            throw new \UnexpectedValueException( 'You must answer on all the questions.' );
+            throw new UnexpectedValueException( 'You must answer on all the questions.' );
         }
 
         return $requestData['answers'];

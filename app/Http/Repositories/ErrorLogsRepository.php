@@ -7,9 +7,6 @@ use Illuminate\Support\Facades\DB;
 
 class ErrorLogsRepository implements ErrorLogsRepositoryInterface
 {
-    /**
-     * @param string $message
-     */
     public function log( string $message ): void
     {
         DB::insert(

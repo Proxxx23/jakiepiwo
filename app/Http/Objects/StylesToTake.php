@@ -5,21 +5,12 @@ namespace App\Http\Objects;
 
 final class StylesToTake
 {
-    /** @var PolskiKraftBeerDataCollection|null */
-    private $beerDataCollection;
-    /** @var int */
-    private $id;
-    /** @var string */
-    private $name;
-    /** @var null|string */
-    private $otherName;
-    /** @var null|string */
-    private $polishName;
+    private ?PolskiKraftBeerDataCollection $beerDataCollection;
+    private int $id;
+    private string $name;
+    private ?string $otherName;
+    private ?string $polishName;
 
-    /**
-     * @param object $styleInfo
-     * @param PolskiKraftBeerDataCollection|null $beerDataCollection
-     */
     public function __construct(
         object $styleInfo,
         ?PolskiKraftBeerDataCollection $beerDataCollection
@@ -31,9 +22,6 @@ final class StylesToTake
         $this->polishName = $styleInfo->name_pl;
     }
 
-    /**
-     * @return array
-     */
     public function toArray(): array
     {
         return [

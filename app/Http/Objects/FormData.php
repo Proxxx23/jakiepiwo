@@ -5,21 +5,12 @@ namespace App\Http\Objects;
 
 final class FormData
 {
-    /** @var bool */
-    private $addToNewsletterList;
-    /** @var AnswersInterface */
-    private $answers;
-    /** @var string|null */
-    private $email;
-    /** @var bool */
-    private $sendEmail;
-    /** @var string|null */
-    private $username;
+    private bool $addToNewsletterList;
+    private AnswersInterface $answers;
+    private ?string $email;
+    private bool $sendEmail;
+    private ?string $username;
 
-    /**
-     * @param AnswersInterface $answers
-     * @param array $requestData
-     */
     public function __construct( AnswersInterface $answers, array $requestData )
     {
         $this->addToNewsletterList = \is_bool( $requestData['newsletter'] ) ? $requestData['newsletter'] : false;
@@ -33,58 +24,36 @@ final class FormData
             : null;
     }
 
-    /**
-     * @return bool
-     */
     public function addToNewsletterList(): bool
     {
         return $this->addToNewsletterList;
     }
 
-    /**
-     * @return string|null
-     */
     public function getEmail(): ?string
     {
         return $this->email;
     }
 
-    /**
-     * @return bool
-     */
     public function hasEmail(): bool
     {
         return !empty( $this->email );
     }
 
-    /**
-     * @return bool
-     */
     public function sendEmail(): bool
     {
         return $this->sendEmail;
     }
 
-    /**
-     * @return AnswersInterface
-     */
     public function getAnswers(): AnswersInterface
     {
         return $this->answers;
     }
 
-    /**
-     * @return string|null
-     */
     public function getUsername(): ?string
     {
         return $this->username;
     }
 
-    /**
-     * @param string|null $email
-     * @return bool
-     */
     private function emailIsValid( ?string $email ): bool
     {
         if ( $email === null || $email === '' ) {

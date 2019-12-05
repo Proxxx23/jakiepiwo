@@ -11,13 +11,10 @@ final class OnTapRepository implements OnTapRepositoryInterface
     private const PLACES_LIST_URI = 'https://ontap.pl/api/v1/cities/%s/pubs';
     private const TAPS_LIST_URI = 'https://ontap.pl/api/v1/pubs/%s/taps';
 
-    /** @var ClientInterface */
-    private $httpClient;
-    /** @var string */
-    private $cityId;
+    private ClientInterface $httpClient;
+    private string $cityId;
 
     /**
-     * OnTapRepository constructor.
      * @param ClientInterface $httpClient
      * @param string $cityName
      * @throws \GuzzleHttp\Exception\GuzzleException

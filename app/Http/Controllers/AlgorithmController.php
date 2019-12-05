@@ -3,6 +3,8 @@ declare( strict_types=1 );
 
 namespace App\Http\Controllers;
 
+use UnexpectedValueException;
+use Exception;
 use App\Exceptions\InvalidContentTypeException;
 use App\Http\Objects\Answers;
 use App\Http\Objects\FormData;
@@ -46,7 +48,7 @@ final class AlgorithmController
 
         $requestData = $request->input();
         if ( $requestData === null || empty( $requestData['answers'] ) ) {
-            throw new \UnexpectedValueException( self::EMPTY_DATA_EXCEPTION_MESSAGE );
+            throw new UnexpectedValueException( self::EMPTY_DATA_EXCEPTION_MESSAGE );
         }
 
         $formData = new FormData( new Answers(), $requestData );
@@ -55,7 +57,7 @@ final class AlgorithmController
         //todo: one service/repo - strategy?
         try {
             ( new AnswersLoggerService( new UserAnswersRepository() ) )->logAnswers( $formData, $answers );
-        } catch ( \Exception $e ) {
+        } catch ( Exception $e ) {
             ( new ErrorsLogger( new ErrorLogsRepository() ) )->logError( $e->getMessage() );
         }
 

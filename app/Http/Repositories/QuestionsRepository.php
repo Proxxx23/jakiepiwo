@@ -5,9 +5,6 @@ namespace App\Http\Repositories;
 
 final class QuestionsRepository implements QuestionsRepositoryInterface
 {
-    /**
-     * @return array
-     */
     public function fetchAllQuestions(): array
     {
         return [

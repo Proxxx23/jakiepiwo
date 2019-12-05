@@ -38,11 +38,6 @@ final class StylesLogsRepository implements StylesLogsRepositoryInterface
         return null;
     }
 
-    /**
-     * @param FormData $user
-     * @param array|null $styleToTake
-     * @param array|null $styleToAvoid
-     */
     public function logStyles( FormData $user, ?array $styleToTake, ?array $styleToAvoid ): void
     {
         $lastID = DB::select( 'SELECT MAX(id_answer) AS lastid FROM `styles_logs` LIMIT 1' );

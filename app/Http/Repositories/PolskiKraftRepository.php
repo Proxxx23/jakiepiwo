@@ -9,14 +9,10 @@ use App\Http\Utils\Dictionary;
 
 final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
 {
-    protected const DEFAULT_LIST_URI = 'https://www.polskikraft.pl/openapi/style/list';
+    private const DEFAULT_LIST_URI = 'https://www.polskikraft.pl/openapi/style/list';
 
-    /** @var Dictionary */
-    private $dictionary;
+    private Dictionary $dictionary;
 
-    /**
-     * @param Dictionary $dictionary
-     */
     public function __construct( Dictionary $dictionary )
     {
         $this->dictionary = $dictionary;

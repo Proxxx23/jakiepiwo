@@ -8,7 +8,7 @@ use Illuminate\Support\Collection;
 final class StylesToTakeCollection extends Collection
 {
     /** @var array */
-    private $idStylesToTake;
+    private array $idStylesToTake;
 
     /**
      * @param array $idStylesToTake

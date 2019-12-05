@@ -5,24 +5,14 @@ namespace App\Http\Objects;
 
 final class BeerData
 {
-    /** @var array */
-    private $answers;
-    /** @var array|null */
-    private $avoidThis;
-    /** @var bool */
-    private $barrelAged;
-    /** @var array|null */
-    private $buyThis;
-    /** @var bool */
-    private $mustAvoid;
-    /** @var bool */
-    private $mustTake;
-    /** @var string|null */
-    private $username;
+    private array $answers;
+    private ?array $avoidThis;
+    private bool $barrelAged;
+    private ?array $buyThis;
+    private bool $mustAvoid;
+    private bool $mustTake;
+    private ?string $username;
 
-    /**
-     * @param array $data
-     */
     public function __construct( array $data )
     {
         $this->answers = $data['answers'];
@@ -34,25 +24,16 @@ final class BeerData
         $this->username = $data['username'];
     }
 
-    /**
-     * @return array|null
-     */
     public function getBuyThis(): ?array
     {
         return $this->buyThis;
     }
 
-    /**
-     * @return array|null
-     */
     public function getAvoidThis(): ?array
     {
         return $this->avoidThis;
     }
 
-    /**
-     * @return string
-     */
     public function toJson(): string
     {
         return \json_encode([

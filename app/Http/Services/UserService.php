@@ -7,20 +7,13 @@ use App\Http\Repositories\StylesLogsRepositoryInterface;
 
 final class UserService
 {
-    /** @var StylesLogsRepositoryInterface */
-    private $stylesLogsRepository;
+    private StylesLogsRepositoryInterface $stylesLogsRepository;
 
-    /**
-     * @param StylesLogsRepositoryInterface $stylesLogsRepository
-     */
     public function __construct( StylesLogsRepositoryInterface $stylesLogsRepository )
     {
         $this->stylesLogsRepository = $stylesLogsRepository;
     }
 
-    /**
-     * @return string|null
-     */
     public function getUsername(): ?string
     {
         return $this->stylesLogsRepository->fetchUsernameByIpAddress( $_SERVER['REMOTE_ADDR'] );

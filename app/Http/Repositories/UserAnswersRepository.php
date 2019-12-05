@@ -8,10 +8,6 @@ use Illuminate\Support\Facades\DB;
 
 final class UserAnswersRepository implements UserAnswersRepositoryInterface
 {
-    /**
-     * @param FormData $formInput
-     * @param array $answers
-     */
     public function addAnswers( FormData $formInput, array $answers ): void
     {
         DB::insert(

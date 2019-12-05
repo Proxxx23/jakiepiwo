@@ -11,7 +11,7 @@ final class AnswersLoggerService
     /**
      * @var UserAnswersRepositoryInterface
      */
-    private $userAnswersRepository;
+    private UserAnswersRepositoryInterface $userAnswersRepository;
 
     /**
      *

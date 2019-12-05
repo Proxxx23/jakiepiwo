@@ -5,8 +5,5 @@ namespace App\Http\Repositories;
 
 interface ErrorLogsRepositoryInterface
 {
-    /**
-     * @param string $message
-     */
     public function log( string $message ): void;
 }

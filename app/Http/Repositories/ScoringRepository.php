@@ -90,11 +90,6 @@ final class ScoringRepository implements ScoringRepositoryInterface
         ],
     ];
 
-    /**
-     * @param int|null $questionNumber
-     *
-     * @return array|null
-     */
     public function fetchByQuestionNumber( ?int $questionNumber ): ?array
     {
         if ( $questionNumber === null ) {

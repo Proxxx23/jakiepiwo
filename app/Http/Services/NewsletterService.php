@@ -7,12 +7,8 @@ use App\Http\Repositories\NewsletterRepositoryInterface;
 
 final class NewsletterService
 {
-    /** @var NewsletterRepositoryInterface */
-    private $newsletterRepository;
+    private NewsletterRepositoryInterface $newsletterRepository;
 
-    /**
-     * @param NewsletterRepositoryInterface $newsletterRepository
-     */
     public function __construct( NewsletterRepositoryInterface $newsletterRepository )
     {
         $this->newsletterRepository = $newsletterRepository;

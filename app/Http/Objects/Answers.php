@@ -8,67 +8,47 @@ final class Answers implements AnswersInterface
     private const POINT_PERCENT_GAP = 0.90;
 
     /** @var array */
-    private $includedIds = [];
+    private array $includedIds = [];
     /** @var array */
-    private $excludedIds = [];
+    private array $excludedIds = [];
     /** @var bool */
-    private $mustTakeOpt = false;
+    private bool $mustTakeOpt = false;
     /** @var bool */
-    private $mustAvoidOpt = false;
+    private bool $mustAvoidOpt = false;
     /** @var bool */
-    private $barrelAged = false;
+    private bool $barrelAged = false;
     /** @var bool */
-    private $shuffled = false;
+    private bool $shuffled = false;
     /** @var int */
-    private $countStylesToTake = 3;
+    private int $countStylesToTake = 3;
     /** @var int */
-    private $countStylesToAvoid = 3;
+    private int $countStylesToAvoid = 3;
 
-    /**
-     * @return array
-     */
     public function getIncludedIds(): array
     {
         return $this->includedIds;
     }
 
-    /**
-     * @return array
-     */
     public function getExcludedIds(): array
     {
         return $this->excludedIds;
     }
 
-    /**
-     * @return bool
-     */
     public function isMustTakeOpt(): bool
     {
         return $this->mustTakeOpt;
     }
 
-    /**
-     * @return bool
-     */
     public function isMustAvoidOpt(): bool
     {
         return $this->mustAvoidOpt;
     }
 
-    /**
-     * @return bool
-     */
     public function isBarrelAged(): bool
     {
         return $this->barrelAged;
     }
 
-    /**
-     * @param bool $barrelAged
-     *
-     * @return Answers
-     */
     public function setBarrelAged( bool $barrelAged ): Answers
     {
         $this->barrelAged = $barrelAged;
@@ -76,53 +56,31 @@ final class Answers implements AnswersInterface
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getCountStylesToTake(): int
     {
         return $this->countStylesToTake;
     }
 
-    /**
-     * @return int
-     */
     public function getCountStylesToAvoid(): int
     {
         return $this->countStylesToAvoid;
     }
 
-    /**
-     * @param int $styleId
-     * @param float $strength
-     */
     public function addToIncluded( int $styleId, float $strength ): void
     {
         $this->includedIds[$styleId] = $strength;
     }
 
-    /**
-     * @param int $styleId
-     * @param float $strength
-     */
     public function addStrengthToIncluded( int $styleId, float $strength ): void
     {
         $this->includedIds[$styleId] += $strength;
     }
 
-    /**
-     * @param int $styleId
-     * @param float $strength
-     */
     public function addToExcluded( int $styleId, float $strength ): void
     {
         $this->excludedIds[$styleId] = $strength;
     }
 
-    /**
-     * @param int $styleId
-     * @param float $strength
-     */
     public function addStrengthToExcluded( int $styleId, float $strength ): void
     {
         $this->excludedIds[$styleId] += $strength;
@@ -178,9 +136,6 @@ final class Answers implements AnswersInterface
         $this->excludedIds = \array_keys( $this->excludedIds );
     }
 
-    /**
-     * Facade
-     */
     public function fetchAll(): void
     {
         $this->sortIncludedIds();

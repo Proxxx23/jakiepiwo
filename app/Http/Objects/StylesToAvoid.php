@@ -5,19 +5,11 @@ namespace App\Http\Objects;
 
 final class StylesToAvoid
 {
-    /** @var int */
-    private $id;
-    /** @var string */
-    private $name;
-    /** @var null|string */
-    private $otherName;
-    /** @var null|string */
-    private $polishName;
+    private int $id;
+    private string $name;
+    private ?string $otherName;
+    private ?string $polishName;
 
-    /**
-     * StylesToTake constructor.
-     * @param object $data
-     */
     public function __construct( object $data )
     {
         $this->id = (int) $data->id;
@@ -26,25 +18,16 @@ final class StylesToAvoid
         $this->polishName = $data->name_pl;
     }
 
-    /**
-     * @return int
-     */
     public function getId(): int
     {
         return $this->id;
     }
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @return array
-     */
     public function toArray(): array
     {
         return [
