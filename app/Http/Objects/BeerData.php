@@ -34,6 +34,19 @@ final class BeerData
         return $this->avoidThis;
     }
 
+    public function toArray(): array
+    {
+        return [
+            'answers' => $this->answers,
+            'avoidThis' => $this->avoidThis,
+            'barrelAged' => $this->barrelAged,
+            'buyThis' => $this->buyThis,
+            'mustAvoid' => $this->mustAvoid,
+            'mustTake' => $this->mustTake,
+            'username' => $this->username,
+        ];
+    }
+
     public function toJson(): string
     {
         return \json_encode([

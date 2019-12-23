@@ -3,6 +3,7 @@ declare( strict_types=1 );
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\JsonResponse;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use UnexpectedValueException;
 use Exception;
@@ -38,11 +39,11 @@ final class AlgorithmController
 
     /**
      * @param Request $request
-     * @return string
+     * @return JsonResponse
      * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws Exception
      */
-    public function handle( Request $request ): string
+    public function handle( Request $request ): JsonResponse
     {
         if ( \stripos( $request->header( 'Content-type' ), self::APPLICATION_JSON_HEADER ) === false ) {
             throw new InvalidContentTypeException( self::INVALID_CONTENT_TYPE_EXCEPTION_MESSAGE );
@@ -84,11 +85,12 @@ final class AlgorithmController
 
         if ( $formData->addToNewsletterList() && $formData->getEmail() !== null ) {
             $newsletterService = new NewsletterService(
-                new NewsletterRepository(new MailChimp( config( 'mail.mailchimpApiKey' )) )
+                new NewsletterRepository( new MailChimp( config( 'mail.mailchimpApiKey' ) ) )
             );
             $newsletterService->addToNewsletterList( $formData->getEmail() );
         }
 
-        return $proposedStyles->toJson();
+        return response()
+            ->json( $proposedStyles->toArray(), 200, [], JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE );
     }
 }

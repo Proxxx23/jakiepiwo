@@ -122,5 +122,5 @@ return [
 
     'mailchimpApiKey' => env('MAILCHIMP_API_KEY'),
 
-    'mailchimpListId' => env('MAILCHIMP_LIST_ID'),
+    'mailchimpAudienceId' => env('MAILCHIMP_AUDIENCE_ID'),
 ];
