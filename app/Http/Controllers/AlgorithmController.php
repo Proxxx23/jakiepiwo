@@ -66,11 +66,11 @@ final class AlgorithmController
 
         $httpClient = new Client();
 
-        $proposedStyles = ( new AlgorithmService(
+        $beerData = ( new AlgorithmService(
             new ScoringRepository(),
             new BeerInfoHelper(
                 new Dictionary(),
-                new OnTapRepository( $httpClient, new FilesystemAdapter('', 3600), 'Gdańsk' ),
+                new OnTapRepository( $httpClient, new FilesystemAdapter( '', 3600 ), 'Gdańsk' ),
                 $httpClient
             ) ,
             new StylesLogsRepository(),
@@ -79,8 +79,8 @@ final class AlgorithmController
                 ->createBeerData( $answers, $formData );
 
         if ( $formData->hasEmail() && $formData->sendEmail() ) {
-            //todo: any info about mail has been sent
-            ( new MailService() )->sendEmail( $proposedStyles, $formData->getUsername(), $formData->getEmail() );
+            ( new MailService() )->sendEmail( $beerData, $formData->getUsername(), $formData->getEmail() );
+            $beerData->setMailSent( true );
         }
 
         if ( $formData->addToNewsletterList() && $formData->getEmail() !== null ) {
@@ -91,6 +91,6 @@ final class AlgorithmController
         }
 
         return response()
-            ->json( $proposedStyles->toArray(), 200, [], JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE );
+            ->json( $beerData->toArray(), 200, [], JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE );
     }
 }

@@ -12,6 +12,7 @@ final class BeerData
     private bool $mustAvoid;
     private bool $mustTake;
     private ?string $username;
+    private bool $mailSent = false;
 
     public function __construct( array $data )
     {
@@ -34,6 +35,11 @@ final class BeerData
         return $this->avoidThis;
     }
 
+    public function setMailSent( bool $mailSent ): void
+    {
+        $this->mailSent = $mailSent;
+    }
+
     public function toArray(): array
     {
         return [
@@ -44,6 +50,7 @@ final class BeerData
             'mustAvoid' => $this->mustAvoid,
             'mustTake' => $this->mustTake,
             'username' => $this->username,
+            'mailSent' => $this->mailSent,
         ];
     }
 

@@ -11,7 +11,7 @@ final class FormData
     private bool $sendEmail;
     private ?string $username;
 
-    public function __construct( AnswersInterface $answers, array $requestData )
+    public function  __construct( AnswersInterface $answers, array $requestData )
     {
         $this->addToNewsletterList = \is_bool( $requestData['newsletter'] ) ? $requestData['newsletter'] : false;
         $this->answers = $answers;

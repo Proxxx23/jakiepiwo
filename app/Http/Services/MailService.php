@@ -8,7 +8,7 @@ use App\Http\Objects\StylesToTakeCollection;
 
 final class MailService
 {
-    public function sendEmail( BeerData $proposedStyles, ?string $username, string $email ): void
+    public function sendEmail( BeerData $beerData, ?string $username, string $email ): void
     {
         $headers = 'From: Degustator <degustator@piwolucja.pl>' . "\r\n" .
             'Reply-To: Degustator <degustator@piwolucja.pl>' . "\r\n";
@@ -19,21 +19,21 @@ final class MailService
             $subject = 'Oto najlepsze style piwne dla Ciebie!';
         }
 
-        \mail( $email, $subject, $this->prepareEmailTemplate($proposedStyles), $headers );
+        \mail( $email, $subject, $this->prepareEmailTemplate( $beerData ), $headers );
     }
 
-    private function prepareEmailTemplate(BeerData $proposedStyles): string
+    private function prepareEmailTemplate( BeerData $beerData ): string
     {
         $mailTPL = 'Oto style, których powinieneś poszukiwać w sklepie:' . PHP_EOL;
 
         /** @var StylesToTakeCollection $style */
-        foreach ( $proposedStyles->getBuyThis() as $style ) {
+        foreach ( $beerData->getBuyThis() as $style ) {
             $mailTPL .= $style['name'] . PHP_EOL;
         }
 
         $mailTPL .= PHP_EOL . 'Tych styli powinieneś unikać:' . PHP_EOL;
         /** @var StylesToTakeCollection $style */
-        foreach ( $proposedStyles->getAvoidThis() as $style ) {
+        foreach ( $beerData->getAvoidThis() as $style ) {
             $mailTPL .= $style['name'] . PHP_EOL;
         }
 
