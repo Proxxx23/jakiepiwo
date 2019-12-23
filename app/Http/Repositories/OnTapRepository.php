@@ -5,6 +5,7 @@ namespace App\Http\Repositories;
 
 use App\Http\Objects\PolskiKraftData;
 use GuzzleHttp\ClientInterface;
+use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 
 final class OnTapRepository implements OnTapRepositoryInterface
 {
@@ -13,16 +14,19 @@ final class OnTapRepository implements OnTapRepositoryInterface
     private const TAPS_LIST_URI = 'https://ontap.pl/api/v1/pubs/%s/taps';
 
     private ClientInterface $httpClient;
+    private FilesystemAdapter $cache;
     private ?string $cityId;
 
     /**
      * @param ClientInterface $httpClient
+     * @param FilesystemAdapter $cache
      * @param string $cityName
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function __construct( ClientInterface $httpClient, string $cityName )
+    public function __construct( ClientInterface $httpClient, FilesystemAdapter $cache, string $cityName )
     {
         $this->httpClient = $httpClient; //todo: set headers globally
+        $this->cache = $cache;
         $this->cityId = $this->fetchCityIdByName( $cityName );
     }
 
@@ -30,6 +34,7 @@ final class OnTapRepository implements OnTapRepositoryInterface
      * @param PolskiKraftData $beerData
      * @return array|null
      * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function fetchTapsByBeerData( PolskiKraftData $beerData ): ?array
     {
@@ -41,6 +46,13 @@ final class OnTapRepository implements OnTapRepositoryInterface
         $places = $this->fetchPlacesByCityId( $this->cityId );
         if ( $places === [] ) {
             return null;
+        }
+
+        $toHash = $this->cityId . '_' . $beerData->getTitle();
+        $cacheKey = md5( $toHash ) . '_ONTAP';
+        $item = $this->cache->getItem( $cacheKey );
+        if ( $item->isHit() ) {
+            return $item->get();
         }
 
         // then - fetch all the taps in given places and find beer
@@ -57,9 +69,15 @@ final class OnTapRepository implements OnTapRepositoryInterface
             }
         }
 
-        return $tapsData !== []
-            ? $tapsData
-            : null;
+        if ( $tapsData !== [] ) {
+            $dataCollection = $this->cache->getItem( $cacheKey );
+            $dataCollection->set( $tapsData );
+            $this->cache->save( $dataCollection );
+
+            return $tapsData;
+        }
+
+        return null;
     }
 
     /**

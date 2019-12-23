@@ -16,7 +16,7 @@
         "laravel/tinker": "~1.0",
         "nesbot/carbon": "^2.5",
         "symfony/dotenv": "5.0.1",
-        "psr/cache": "1.0.1"
+        "symfony/cache": "^5.0"
     },
     "require-dev": {
         "drewm/mailchimp-api": "^2.5",

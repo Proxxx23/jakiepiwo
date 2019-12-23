@@ -48,43 +48,6 @@ final class AlgorithmService
         $this->errorsLogger = $errorsLogger;
     }
 
-    /**
-     * Buduje siłę dla konkretnych ID stylu
-     * Jeśli id ma postać 5:2.5 to zwiększy (przy trafieniu w to ID) punktację tego stylu o 2.5 a nie o 1
-     * Domyślnie zwiększa punktację stylu o 1
-     *
-     * @param string $styleIds
-     *
-     * @return array|null
-     */
-    private function buildStrength( ?string $styleIds ): ?array
-    {
-        if ( $styleIds === null ) {
-            return null;
-        }
-
-        $idsExploded = \explode( ',', trim( $styleIds ) );
-        $idsToCalculate = [];
-
-        foreach ( $idsExploded as $idMultiplierPair ) {
-            if ( \strpos( $idMultiplierPair, ':' ) !== false || \strpos( $idMultiplierPair, ' :' ) !== false ) {
-                $tmp = \explode( ':', $idMultiplierPair );
-                $idsToCalculate[$tmp[0]] = (float) $tmp[1];
-            } else {
-                $idsToCalculate[$idMultiplierPair] = 1;
-            }
-        }
-
-        return $idsToCalculate;
-    }
-
-    /**
-     * Positive and negative synergies executor
-     * There are all the synergies
-     *
-     * @param array $answerValue
-     * @param FormData $user
-     */
     public function applySynergy( array $answerValue, FormData $user ): void
     {
         /** @var Answers $userOptions */
@@ -300,10 +263,35 @@ final class AlgorithmService
     }
 
     /**
-     * @param AnswersInterface $answers
-     * @return StylesToTakeCollection|null
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * Buduje siłę dla konkretnych ID stylu
+     * Jeśli id ma postać 5:2.5 to zwiększy (przy trafieniu w to ID) punktację tego stylu o 2.5 a nie o 1
+     * Domyślnie zwiększa punktację stylu o 1
+     *
+     * @param string $styleIds
+     *
+     * @return array|null
      */
+    private function buildStrength( ?string $styleIds ): ?array
+    {
+        if ( $styleIds === null ) {
+            return null;
+        }
+
+        $idsExploded = \explode( ',', trim( $styleIds ) );
+        $idsToCalculate = [];
+
+        foreach ( $idsExploded as $idMultiplierPair ) {
+            if ( \strpos( $idMultiplierPair, ':' ) !== false || \strpos( $idMultiplierPair, ' :' ) !== false ) {
+                $tmp = \explode( ':', $idMultiplierPair );
+                $idsToCalculate[$tmp[0]] = (float) $tmp[1];
+            } else {
+                $idsToCalculate[$idMultiplierPair] = 1;
+            }
+        }
+
+        return $idsToCalculate;
+    }
+
     private function createStylesToTakeCollection( AnswersInterface $answers ): ?StylesToTakeCollection
     {
         if ( $answers->getIncludedIds() === [] ) {

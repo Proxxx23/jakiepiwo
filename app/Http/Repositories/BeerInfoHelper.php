@@ -6,6 +6,7 @@ namespace App\Http\Repositories;
 use App\Http\Objects\PolskiKraftData;
 use App\Http\Objects\PolskiKraftDataCollection;
 use App\Http\Utils\Dictionary;
+use GuzzleHttp\ClientInterface;
 
 final class BeerInfoHelper implements PolskiKraftRepositoryInterface
 {
@@ -13,11 +14,15 @@ final class BeerInfoHelper implements PolskiKraftRepositoryInterface
 
     private Dictionary $dictionary;
     private OnTapRepositoryInterface $onTapRepository;
+    private ClientInterface $httpClient;
 
-    public function __construct( Dictionary $dictionary, OnTapRepositoryInterface $onTapRepository )
+    public function __construct( Dictionary $dictionary,
+        OnTapRepositoryInterface $onTapRepository,
+        ClientInterface $httpClient )
     {
         $this->dictionary = $dictionary;
         $this->onTapRepository = $onTapRepository;
+        $this->httpClient = $httpClient;
     }
 
     /**
@@ -25,6 +30,7 @@ final class BeerInfoHelper implements PolskiKraftRepositoryInterface
      *
      * @return PolskiKraftDataCollection|null
      * @throws \Exception
+     * @throws \GuzzleHttp\Exception\GuzzleException
      *
      * @todo: guzzle
      */
@@ -37,8 +43,12 @@ final class BeerInfoHelper implements PolskiKraftRepositoryInterface
         $translatedBeerId = $this->dictionary->getById( $beerId );
 
         $url = 'https://www.polskikraft.pl/openapi/style/' . $translatedBeerId . '/examples';
-        $data = \json_decode(\file_get_contents($url), true, 512, JSON_THROW_ON_ERROR);
+        $response = $this->httpClient->request('GET', $url);
+        if ( $response->getStatusCode() !== 200 ) {
+            return null; //todo: any message
+        }
 
+        $data = \json_decode($response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR);
         if ( empty( $data ) ) {
             return null;
         }

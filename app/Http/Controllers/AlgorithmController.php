@@ -3,6 +3,7 @@ declare( strict_types=1 );
 
 namespace App\Http\Controllers;
 
+use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use UnexpectedValueException;
 use Exception;
 use App\Exceptions\InvalidContentTypeException;
@@ -62,9 +63,15 @@ final class AlgorithmController
             ( new ErrorsLogger( new ErrorLogsRepository() ) )->logError( $e->getMessage() );
         }
 
+        $httpClient = new Client();
+
         $proposedStyles = ( new AlgorithmService(
             new ScoringRepository(),
-            new BeerInfoHelper( new Dictionary(), new OnTapRepository( new Client(), 'Gdańsk' ) ) ,
+            new BeerInfoHelper(
+                new Dictionary(),
+                new OnTapRepository( $httpClient, new FilesystemAdapter('', 3600), 'Gdańsk' ),
+                $httpClient
+            ) ,
             new StylesLogsRepository(),
             new BeersRepository(),
             new ErrorsLogger( new ErrorLogsRepository() )))
