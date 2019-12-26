@@ -16,7 +16,8 @@ final class BeerInfoHelper implements PolskiKraftRepositoryInterface
     private OnTapRepositoryInterface $onTapRepository;
     private ClientInterface $httpClient;
 
-    public function __construct( Dictionary $dictionary,
+    public function __construct(
+        Dictionary $dictionary,
         OnTapRepositoryInterface $onTapRepository,
         ClientInterface $httpClient )
     {
@@ -62,8 +63,10 @@ final class BeerInfoHelper implements PolskiKraftRepositoryInterface
         foreach ( $data as $item ) {
             $polskiKraft = new PolskiKraftData( $item );
 
-            $onTap = $this->onTapRepository->fetchTapsByBeerData( $polskiKraft );
-            $polskiKraft->setOnTap( $onTap );
+            if ( $this->onTapRepository->connected() ) {
+                $onTap = $this->onTapRepository->fetchTapsByBeerData( $polskiKraft );
+                $polskiKraft->setOnTap( $onTap );
+            }
 
             $polskiKraftCollection->add( $polskiKraft->toArray() );
         }

@@ -16,6 +16,7 @@ final class OnTapRepository implements OnTapRepositoryInterface
     private ClientInterface $httpClient;
     private FilesystemAdapter $cache;
     private ?string $cityId;
+    private bool $connectionError;
 
     /**
      * @param ClientInterface $httpClient
@@ -28,6 +29,12 @@ final class OnTapRepository implements OnTapRepositoryInterface
         $this->httpClient = $httpClient; //todo: set headers globally
         $this->cache = $cache;
         $this->cityId = $this->fetchCityIdByName( $cityName );
+        $this->connectionError = $this->cityId === null;
+    }
+
+    public function connected(): bool
+    {
+        return !$this->connectionError;
     }
 
     /**

@@ -12,7 +12,7 @@ final class PolskiKraftData
     private string $subtitle;
     private string $subtitleAlt;
     private float $rating;
-    private ?array $onTap;
+    private ?array $onTap = null;
 
     public function __construct( array $data )
     {
