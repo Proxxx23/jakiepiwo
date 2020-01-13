@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace App\Http\Repositories;
 
-use App\Http\Objects\PolskiKraftData;
 use GuzzleHttp\ClientInterface;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 
@@ -15,8 +14,8 @@ final class OnTapRepository implements OnTapRepositoryInterface
 
     private ClientInterface $httpClient;
     private FilesystemAdapter $cache;
-    private ?string $cityId;
-    private ?array $places;
+    private ?string $cityId = null;
+    private ?array $places = [];
     private bool $connectionError;
     private int $reqCount = 0;
 
@@ -26,8 +25,13 @@ final class OnTapRepository implements OnTapRepositoryInterface
      * @param string $cityName
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function __construct( ClientInterface $httpClient, FilesystemAdapter $cache, string $cityName )
+    public function __construct( ClientInterface $httpClient, FilesystemAdapter $cache, ?string $cityName )
     {
+        if ( $cityName === null ) {
+            $this->connectionError = true;
+            return;
+        }
+
         $this->httpClient = $httpClient; //todo: set headers globally
         $this->cache = $cache;
         $this->cityId = $this->fetchCityIdByName( $cityName );
@@ -46,18 +50,18 @@ final class OnTapRepository implements OnTapRepositoryInterface
     }
 
     /**
-     * @param PolskiKraftData $beerData
+     * @param string $beerName
      * @return array|null
      * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \Psr\Cache\InvalidArgumentException
      */
-    public function fetchTapsByBeerData( PolskiKraftData $beerData ): ?array
+    public function fetchTapsByBeerName( string $beerName ): ?array
     {
-        if ( $beerData === null ) {
+        if ( empty( $beerName ) ) {
             return null;
         }
 
-        $toHash = $this->cityId . '_' . $beerData->getTitle();
+        $toHash = $this->cityId . '_' . $beerName;
         $cacheKey = md5( $toHash ) . '_ONTAP';
         $item = $this->cache->getItem( $cacheKey );
         if ( $item->isHit() ) {
@@ -72,8 +76,8 @@ final class OnTapRepository implements OnTapRepositoryInterface
                 continue;
             }
 
-            if ( $this->hasBeer( $beerData, $taps ) ) {
-                $tapsData[$place['name']] = true;
+            if ( $this->hasBeer( $beerName, $taps ) ) {
+                $tapsData[ $place['name'] ] = true;
                 continue;
             }
         }
@@ -163,13 +167,13 @@ final class OnTapRepository implements OnTapRepositoryInterface
         return \json_decode( $response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR );
     }
 
-    private function hasBeer( PolskiKraftData $beerData, array $tapBeerData ): bool
+    private function hasBeer( string $beerName, array $tapBeerData ): bool
     {
         foreach ( $tapBeerData as $tapBeer ) {
             if ( empty( $tapBeer['beer'] ) ) {
                 continue;
             }
-            if ( stripos( $tapBeer['beer']['name'], $beerData->getTitle() ) !== false ) {
+            if ( stripos( $tapBeer['beer']['name'], $beerName ) !== false ) {
                 return true;
             }
         }

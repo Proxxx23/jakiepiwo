@@ -12,7 +12,6 @@ final class PolskiKraftData
     private string $subtitle;
     private string $subtitleAlt;
     private float $rating;
-    private ?array $onTap = null;
 
     public function __construct( array $data )
     {
@@ -30,16 +29,6 @@ final class PolskiKraftData
         return $this->title;
     }
 
-    public function setTitle( string $title ): void
-    {
-        $this->title = $title;
-    }
-
-    public function setOnTap( ?array $onTap ): void
-    {
-        $this->onTap = $onTap;
-    }
-
     public function toArray(): array
     {
         return [
@@ -50,7 +39,6 @@ final class PolskiKraftData
             'subtitle' => $this->subtitle,
             'subtitleAlt' => $this->subtitleAlt,
             'rating' => $this->rating,
-            'onTap' => $this->onTap,
         ];
     }
 }

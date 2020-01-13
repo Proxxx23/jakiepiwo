@@ -9,9 +9,6 @@ use Illuminate\Http\JsonResponse;
 
 final class VisitorController
 {
-    /**
-     * @return JsonResponse
-     */
     public function handle(): JsonResponse
     {
         return response()->json(
