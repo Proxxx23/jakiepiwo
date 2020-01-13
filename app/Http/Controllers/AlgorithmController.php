@@ -70,7 +70,7 @@ final class AlgorithmController
             new ScoringRepository(),
             new BeerInfoHelper(
                 new Dictionary(),
-                new OnTapRepository( $httpClient, new FilesystemAdapter( '', 3600 ), 'Gdańsk' ),
+                new OnTapRepository( $httpClient, new FilesystemAdapter( '', 3600 ), '' ),
                 $httpClient
             ) ,
             new StylesLogsRepository(),

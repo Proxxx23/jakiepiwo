@@ -308,8 +308,7 @@ final class AlgorithmService
             $buyThis = $this->beersRepository->fetchByIds( $idStylesToTake );
         }
 
-        $stylesToTakeCollection = ( new StylesToTakeCollection() )
-            ->setIdStylesToTake( $idStylesToTake );
+        $stylesToTakeCollection = ( new StylesToTakeCollection() )->setIdStylesToTake( $idStylesToTake );
 
         //todo to jest tak złe xDDDDD - rozplątać koniecznie
         foreach ( $buyThis as $styleInfo ) {

@@ -16,7 +16,9 @@ final class OnTapRepository implements OnTapRepositoryInterface
     private ClientInterface $httpClient;
     private FilesystemAdapter $cache;
     private ?string $cityId;
+    private ?array $places;
     private bool $connectionError;
+    private int $reqCount = 0;
 
     /**
      * @param ClientInterface $httpClient
@@ -29,12 +31,18 @@ final class OnTapRepository implements OnTapRepositoryInterface
         $this->httpClient = $httpClient; //todo: set headers globally
         $this->cache = $cache;
         $this->cityId = $this->fetchCityIdByName( $cityName );
+        $this->places = $this->fetchPlacesByCityId( $this->cityId );
         $this->connectionError = $this->cityId === null;
     }
 
     public function connected(): bool
     {
         return !$this->connectionError;
+    }
+
+    public function placesFound(): bool
+    {
+        return $this->places !== [];
     }
 
     /**
@@ -45,13 +53,7 @@ final class OnTapRepository implements OnTapRepositoryInterface
      */
     public function fetchTapsByBeerData( PolskiKraftData $beerData ): ?array
     {
-        if ( $this->cityId === null || $beerData === null ) {
-            return null;
-        }
-
-        // first - find all places in the city
-        $places = $this->fetchPlacesByCityId( $this->cityId );
-        if ( $places === [] ) {
+        if ( $beerData === null ) {
             return null;
         }
 
@@ -62,11 +64,11 @@ final class OnTapRepository implements OnTapRepositoryInterface
             return $item->get();
         }
 
-        // then - fetch all the taps in given places and find beer
+        //fetch all the taps in given places and find beer
         $tapsData = [];
-        foreach ( $places as $place ) {
+        foreach ( $this->places as $place ) {
             $taps = $this->fetchTapsByPlaceId( $place['id'] );
-            if ( empty($taps) ) {
+            if ( empty( $taps ) ) {
                 continue;
             }
 
@@ -76,15 +78,15 @@ final class OnTapRepository implements OnTapRepositoryInterface
             }
         }
 
-        if ( $tapsData !== [] ) {
-            $dataCollection = $this->cache->getItem( $cacheKey );
-            $dataCollection->set( $tapsData );
-            $this->cache->save( $dataCollection );
-
-            return $tapsData;
+        if ( $tapsData === [] ) {
+            return null;
         }
 
-        return null;
+        $dataCollection = $this->cache->getItem( $cacheKey );
+        $dataCollection->set( $tapsData );
+        $this->cache->save( $dataCollection );
+
+        return $tapsData;
     }
 
     /**
@@ -116,6 +118,8 @@ final class OnTapRepository implements OnTapRepositoryInterface
             ]
         ] );
 
+        $this->reqCount++;
+
         return \json_decode( $response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR );
     }
 
@@ -134,6 +138,8 @@ final class OnTapRepository implements OnTapRepositoryInterface
             ]
         ] );
 
+        $this->reqCount++;
+
         return \json_decode( $response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR );
     }
 
@@ -151,6 +157,8 @@ final class OnTapRepository implements OnTapRepositoryInterface
                 'Api-Key' => $_ENV['ONTAP_API_KEY']
             ]
         ] );
+
+        $this->reqCount++;
 
         return \json_decode( $response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR );
     }

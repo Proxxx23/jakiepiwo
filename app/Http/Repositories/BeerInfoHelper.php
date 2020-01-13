@@ -63,7 +63,7 @@ final class BeerInfoHelper implements PolskiKraftRepositoryInterface
         foreach ( $data as $item ) {
             $polskiKraft = new PolskiKraftData( $item );
 
-            if ( $this->onTapRepository->connected() ) {
+            if ( $this->onTapRepository->connected() && $this->onTapRepository->placesFound() ) {
                 $onTap = $this->onTapRepository->fetchTapsByBeerData( $polskiKraft );
                 $polskiKraft->setOnTap( $onTap );
             }
