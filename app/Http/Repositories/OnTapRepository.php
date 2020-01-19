@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Http\Repositories;
 
 use GuzzleHttp\ClientInterface;
+use Psr\Cache\InvalidArgumentException;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 
 final class OnTapRepository implements OnTapRepositoryInterface
@@ -12,11 +13,16 @@ final class OnTapRepository implements OnTapRepositoryInterface
     private const PLACES_LIST_URI = 'https://ontap.pl/api/v1/cities/%s/pubs';
     private const TAPS_LIST_URI = 'https://ontap.pl/api/v1/pubs/%s/taps';
 
+    private const CACHE_KEY_BEER_PATTERN = '%s_BEER_ONTAP';
+    private const CACHE_KEY_PLACE_PATTERN = '%s_PLACE_ONTAP';
+    private const CACHE_KEY_TAPS_PATTERN = '%s_TAPS_ONTAP';
+    private const CACHE_KEY_CITIES = 'CITIES_ONTAP';
+
     private ClientInterface $httpClient;
     private FilesystemAdapter $cache;
     private ?string $cityId = null;
     private ?array $places = [];
-    private bool $connectionError;
+    private bool $connectionError = false;
     private int $reqCount = 0;
 
     /**
@@ -32,11 +38,15 @@ final class OnTapRepository implements OnTapRepositoryInterface
             return;
         }
 
-        $this->httpClient = $httpClient; //todo: set headers globally
         $this->cache = $cache;
+        $this->httpClient = $httpClient; //todo: set headers globally
+
         $this->cityId = $this->fetchCityIdByName( $cityName );
+        if ( $this->cityId === null ) {
+            $this->connectionError = true;
+        }
+        
         $this->places = $this->fetchPlacesByCityId( $this->cityId );
-        $this->connectionError = $this->cityId === null;
     }
 
     public function connected(): bool
@@ -61,11 +71,12 @@ final class OnTapRepository implements OnTapRepositoryInterface
             return null;
         }
 
+        //todo: strategy?
         $toHash = $this->cityId . '_' . $beerName;
-        $cacheKey = md5( $toHash ) . '_ONTAP';
-        $item = $this->cache->getItem( $cacheKey );
-        if ( $item->isHit() ) {
-            return $item->get();
+        $cacheKey = \sprintf( self::CACHE_KEY_BEER_PATTERN, md5( $toHash ) );
+        $item = $this->getFromCache( $cacheKey );
+        if ( $item !== null ) {
+            return $item;
         }
 
         //fetch all the taps in given places and find beer
@@ -86,9 +97,7 @@ final class OnTapRepository implements OnTapRepositoryInterface
             return null;
         }
 
-        $dataCollection = $this->cache->getItem( $cacheKey );
-        $dataCollection->set( $tapsData );
-        $this->cache->save( $dataCollection );
+        $this->setToCache( $cacheKey, $tapsData );
 
         return $tapsData;
     }
@@ -114,6 +123,11 @@ final class OnTapRepository implements OnTapRepositoryInterface
      */
     private function fetchAllCities(): array
     {
+        $cachedData = $this->getFromCache( self::CACHE_KEY_CITIES );
+        if ( $cachedData !== null ) {
+            return $cachedData;
+        }
+
         $response = $this->httpClient->request( 'GET', self::CITIES_LIST_URI, [
             'headers' => [
                 'Accept' => 'application/json',
@@ -124,7 +138,10 @@ final class OnTapRepository implements OnTapRepositoryInterface
 
         $this->reqCount++;
 
-        return \json_decode( $response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR );
+        $data = \json_decode( $response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR );
+        $this->setToCache( self::CACHE_KEY_CITIES, $data );
+
+        return $data;
     }
 
     /**
@@ -134,6 +151,12 @@ final class OnTapRepository implements OnTapRepositoryInterface
      */
     private function fetchPlacesByCityId( ?string $cityId ): array
     {
+        $cacheKey = \sprintf(self::CACHE_KEY_PLACE_PATTERN, $cityId);
+        $cachedData = $this->getFromCache( $cacheKey );
+        if ( $cachedData !== null ) {
+            return $cachedData;
+        }
+
         $response = $this->httpClient->request( 'GET', \sprintf( self::PLACES_LIST_URI, $cityId ), [
             'headers' => [
                 'Accept' => 'application/json',
@@ -144,7 +167,10 @@ final class OnTapRepository implements OnTapRepositoryInterface
 
         $this->reqCount++;
 
-        return \json_decode( $response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR );
+        $data = \json_decode( $response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR );
+        $this->setToCache( $cacheKey, $data );
+
+        return $data;
     }
 
     /**
@@ -154,6 +180,12 @@ final class OnTapRepository implements OnTapRepositoryInterface
      */
     private function fetchTapsByPlaceId( string $placeId ): ?array
     {
+        $cacheKey = \sprintf(self::CACHE_KEY_TAPS_PATTERN, $placeId);
+        $cachedData = $this->getFromCache( $cacheKey );
+        if ( $cachedData !== null ) {
+            return $cachedData;
+        }
+
         $response = $this->httpClient->request( 'GET', \sprintf(self::TAPS_LIST_URI, $placeId), [
             'headers' => [
                 'Accept' => 'application/json',
@@ -164,7 +196,10 @@ final class OnTapRepository implements OnTapRepositoryInterface
 
         $this->reqCount++;
 
-        return \json_decode( $response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR );
+        $data = \json_decode( $response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR );
+        $this->setToCache( $cacheKey, $data );
+
+        return $data;
     }
 
     private function hasBeer( string $beerName, array $tapBeerData ): bool
@@ -179,5 +214,41 @@ final class OnTapRepository implements OnTapRepositoryInterface
         }
 
         return false;
+    }
+
+    // todo standalone class
+
+    /**
+     * @param string $cacheKey
+     * @return mixed|null
+     */
+    private function getFromCache( string $cacheKey )
+    {
+        $item = null;
+
+        try {
+            $item = $this->cache->getItem($cacheKey);
+        } catch (InvalidArgumentException $e) {
+
+        }
+
+        return $item !== null && $item->isHit()
+            ? $item->get()
+            : null;
+    }
+
+    private function setToCache( string $cacheKey, $data ): void
+    {
+        $dataCollection = null;
+        try {
+            $dataCollection = $this->cache->getItem( $cacheKey );
+        } catch ( InvalidArgumentException $e ) {
+
+        }
+
+        if ( $dataCollection !== null ) {
+            $dataCollection->set( $data );
+            $this->cache->save( $dataCollection );
+        }
     }
 }

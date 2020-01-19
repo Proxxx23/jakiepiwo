@@ -23,7 +23,7 @@ final class OntapController
         $httpClient = new Client();
 
         $ontapService = new OntapService(
-            new OnTapRepository( $httpClient, new FilesystemAdapter( '', 3600 ), $payload['city'] ?? null )
+            new OnTapRepository( $httpClient, new FilesystemAdapter( '', 1800 ), $payload['city'] ?? null )
         );
 
         $data = [];
