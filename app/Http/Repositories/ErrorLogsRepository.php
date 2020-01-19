@@ -5,7 +5,7 @@ namespace App\Http\Repositories;
 
 use Illuminate\Support\Facades\DB;
 
-class ErrorLogsRepository implements ErrorLogsRepositoryInterface
+final class ErrorLogsRepository implements ErrorLogsRepositoryInterface
 {
     public function log( string $message ): void
     {
