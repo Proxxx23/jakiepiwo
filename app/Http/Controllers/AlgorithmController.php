@@ -14,7 +14,7 @@ use App\Http\Repositories\BeersRepository;
 use App\Http\Repositories\ErrorLogsRepository;
 use App\Http\Repositories\NewsletterRepository;
 use App\Http\Repositories\OnTapRepository;
-use App\Http\Repositories\BeerInfoHelper;
+use App\Http\Repositories\PolskiKraftRepository;
 use App\Http\Repositories\QuestionsRepository;
 use App\Http\Repositories\ScoringRepository;
 use App\Http\Repositories\StylesLogsRepository;
@@ -68,8 +68,9 @@ final class AlgorithmController
 
         $beerData = ( new AlgorithmService(
             new ScoringRepository(),
-            new BeerInfoHelper(
+            new PolskiKraftRepository(
                 new Dictionary(),
+                new FilesystemAdapter( '', 1800 ),
                 $httpClient
             ) ,
             new StylesLogsRepository(),

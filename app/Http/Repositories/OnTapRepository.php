@@ -45,7 +45,7 @@ final class OnTapRepository implements OnTapRepositoryInterface
         if ( $this->cityId === null ) {
             $this->connectionError = true;
         }
-        
+
         $this->places = $this->fetchPlacesByCityId( $this->cityId );
     }
 
@@ -88,7 +88,7 @@ final class OnTapRepository implements OnTapRepositoryInterface
             }
 
             if ( $this->hasBeer( $beerName, $taps ) ) {
-                $tapsData[ $place['name'] ] = true;
+                $tapsData[$place['name']] = true;
                 continue;
             }
         }
@@ -151,7 +151,7 @@ final class OnTapRepository implements OnTapRepositoryInterface
      */
     private function fetchPlacesByCityId( ?string $cityId ): array
     {
-        $cacheKey = \sprintf(self::CACHE_KEY_PLACE_PATTERN, $cityId);
+        $cacheKey = \sprintf( self::CACHE_KEY_PLACE_PATTERN, $cityId );
         $cachedData = $this->getFromCache( $cacheKey );
         if ( $cachedData !== null ) {
             return $cachedData;
@@ -180,13 +180,13 @@ final class OnTapRepository implements OnTapRepositoryInterface
      */
     private function fetchTapsByPlaceId( string $placeId ): ?array
     {
-        $cacheKey = \sprintf(self::CACHE_KEY_TAPS_PATTERN, $placeId);
+        $cacheKey = \sprintf( self::CACHE_KEY_TAPS_PATTERN, $placeId );
         $cachedData = $this->getFromCache( $cacheKey );
         if ( $cachedData !== null ) {
             return $cachedData;
         }
 
-        $response = $this->httpClient->request( 'GET', \sprintf(self::TAPS_LIST_URI, $placeId), [
+        $response = $this->httpClient->request( 'GET', \sprintf( self::TAPS_LIST_URI, $placeId ), [
             'headers' => [
                 'Accept' => 'application/json',
                 'Content-Type' => 'application/json',
@@ -221,14 +221,15 @@ final class OnTapRepository implements OnTapRepositoryInterface
     /**
      * @param string $cacheKey
      * @return mixed|null
+     *
+     * todo: ale to jest kurwa złe, wynieść to w pizdu SRP
      */
     private function getFromCache( string $cacheKey )
     {
         $item = null;
-
         try {
-            $item = $this->cache->getItem($cacheKey);
-        } catch (InvalidArgumentException $e) {
+            $item = $this->cache->getItem( $cacheKey );
+        } catch ( InvalidArgumentException $e ) {
 
         }
 
@@ -237,6 +238,7 @@ final class OnTapRepository implements OnTapRepositoryInterface
             : null;
     }
 
+    // todo: ale to jest kurwa złe, wynieść to w pizdu SRP
     private function setToCache( string $cacheKey, $data ): void
     {
         $dataCollection = null;

@@ -7,20 +7,25 @@ use App\Http\Objects\PolskiKraftData;
 use App\Http\Objects\PolskiKraftDataCollection;
 use App\Http\Utils\Dictionary;
 use GuzzleHttp\ClientInterface;
+use Psr\Cache\InvalidArgumentException;
+use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 
-final class BeerInfoHelper implements PolskiKraftRepositoryInterface
+final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
 {
     private const DEFAULT_LIST_URI = 'https://www.polskikraft.pl/openapi/style/list';
+    private const CACHE_KEY_PATTERN = '%s_POLSKIKRAFT';
 
     private Dictionary $dictionary;
-    private OnTapRepositoryInterface $onTapRepository;
+    private FilesystemAdapter $cache;
     private ClientInterface $httpClient;
 
     public function __construct(
         Dictionary $dictionary,
+        FilesystemAdapter $cache,
         ClientInterface $httpClient )
     {
         $this->dictionary = $dictionary;
+        $this->cache = $cache;
         $this->httpClient = $httpClient;
     }
 
@@ -30,8 +35,6 @@ final class BeerInfoHelper implements PolskiKraftRepositoryInterface
      * @return PolskiKraftDataCollection|null
      * @throws \Exception
      * @throws \GuzzleHttp\Exception\GuzzleException
-     *
-     * @todo: guzzle
      */
     public function fetchByBeerId( int $beerId ): ?PolskiKraftDataCollection
     {
@@ -41,8 +44,14 @@ final class BeerInfoHelper implements PolskiKraftRepositoryInterface
 
         $translatedBeerId = $this->dictionary->getById( $beerId );
 
+        $cacheKey = \sprintf( self::CACHE_KEY_PATTERN, $translatedBeerId );
+        $cachedData = $this->getFromCache( $cacheKey );
+        if ( $cachedData !== null ) {
+            return $cachedData;
+        }
+
         $url = 'https://www.polskikraft.pl/openapi/style/' . $translatedBeerId . '/examples';
-        $response = $this->httpClient->request('GET', $url);
+        $response = $this->httpClient->request( 'GET', $url );
         if ( $response->getStatusCode() !== 200 ) {
             return null; //todo: any message
         }
@@ -63,6 +72,44 @@ final class BeerInfoHelper implements PolskiKraftRepositoryInterface
             $polskiKraftCollection->add( $polskiKraft->toArray() );
         }
 
+        $this->setToCache( $cacheKey, $polskiKraftCollection );
+
         return $polskiKraftCollection;
+    }
+
+    /**
+     * @param string $cacheKey
+     * @return mixed|null
+     *
+     * todo: ale to jest kurwa złe, wynieść to w pizdu SRP
+     */
+    private function getFromCache( string $cacheKey )
+    {
+        $item = null;
+        try {
+            $item = $this->cache->getItem( $cacheKey );
+        } catch ( InvalidArgumentException $e ) {
+
+        }
+
+        return $item !== null && $item->isHit()
+            ? $item->get()
+            : null;
+    }
+
+    // todo: ale to jest kurwa złe, wynieść to w pizdu SRP
+    private function setToCache( string $cacheKey, $data ): void
+    {
+        $dataCollection = null;
+        try {
+            $dataCollection = $this->cache->getItem( $cacheKey );
+        } catch ( InvalidArgumentException $e ) {
+
+        }
+
+        if ( $dataCollection !== null ) {
+            $dataCollection->set( $data );
+            $this->cache->save( $dataCollection );
+        }
     }
 }
