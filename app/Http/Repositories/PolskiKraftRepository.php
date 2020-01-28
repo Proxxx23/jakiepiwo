@@ -44,9 +44,14 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
 
         $translatedBeerId = $this->dictionary->getById( $beerId );
 
-        $cacheKey = \sprintf( self::CACHE_KEY_PATTERN, $translatedBeerId );
+        $cacheKey = $translatedBeerId !== null
+            ? \sprintf( self::CACHE_KEY_PATTERN, $translatedBeerId )
+            : null;
+
         $cachedData = $this->getFromCache( $cacheKey );
         if ( $cachedData !== null ) {
+            $cachedData->setCacheKey( $cacheKey );
+
             return $cachedData;
         }
 
@@ -73,6 +78,7 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
         }
 
         $this->setToCache( $cacheKey, $polskiKraftCollection );
+        $polskiKraftCollection->setCacheKey( $cacheKey );
 
         return $polskiKraftCollection;
     }

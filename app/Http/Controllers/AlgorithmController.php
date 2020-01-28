@@ -91,6 +91,6 @@ final class AlgorithmController
         }
 
         return response()
-            ->json( $beerData->toArray(), 200, [], JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE );
+            ->json( $beerData->toArray(), JsonResponse::HTTP_OK, [], JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE );
     }
 }

@@ -3,33 +3,66 @@ declare( strict_types=1 );
 
 namespace App\Http\Controllers;
 
+use App\Http\Objects\ValueObject\Coordinates;
 use App\Http\Repositories\OnTapRepository;
 use App\Http\Services\OntapService;
 use GuzzleHttp\Client;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
+use Symfony\Component\HttpFoundation\Response;
 
 final class OntapController
 {
+    private const DEFAULT_CACHE_TIME = 900;
+
     /**
      * @param Request $request
      * @return JsonResponse
      * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Psr\Cache\InvalidArgumentException
      */
-    public function handle( Request $request ): JsonResponse
+    public function handle( Request $request ): Response
     {
-        $payload = $request->input(); //todo: validate + command/object
-        $httpClient = new Client();
+        $payload = $request->input();
+        $coordinates = new Coordinates( $payload['lng'], $payload['lat'] );
+        if ( !$coordinates->isValid() ) {
+            return response()->json( [
+                'message' => 'Invalid coordinated format'
+            ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR );
+        }
 
+        $cacheKeys = $payload['cacheKeys'];
+        if ( empty( $cacheKeys ) ) {
+            return response()->json( [
+                'message' => 'No cache keys provided'
+            ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR );
+        }
+
+        $cityName = 'Gdańsk'; //todo: get by lat/lng
+        if ( $cityName === null ) {
+            return response()->json( [
+                'message' => 'Could not determine city name'
+            ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR );
+        }
+
+        $cache = new FilesystemAdapter( '', self::DEFAULT_CACHE_TIME );
         $ontapService = new OntapService(
-            new OnTapRepository( $httpClient, new FilesystemAdapter( '', 1800 ), $payload['city'] ?? null )
+            new OnTapRepository( new Client(), $cache, $cityName )
         );
 
+        $styles = [];
+        foreach ( $cacheKeys as $key ) {
+            $item = $cache->getItem( $key );
+            $styles[] = $item !== null && $item->isHit()
+                ? $item->get()
+                : null;
+        }
+
         $data = [];
-        foreach ( $payload['styles'] as $style ) {
-            foreach ( $style as $beerName ) { //todo: one foreach
-                $ontapBeer = $ontapService->get( $beerName );
+        foreach ( $styles as $style ) {
+            foreach ( $style as $item ) { //todo: one foreach
+                $ontapBeer = $ontapService->get( $item['title'] );
                 if ( $ontapBeer !== null ) {
                     $data[] = $ontapBeer;
                 }

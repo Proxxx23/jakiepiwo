@@ -53,17 +53,4 @@ final class BeerData
             'mailSent' => $this->mailSent,
         ];
     }
-
-    public function toJson(): string
-    {
-        return \json_encode([
-            'answers' => $this->answers,
-            'avoidThis' => $this->avoidThis,
-            'barrelAged' => $this->barrelAged,
-            'buyThis' => $this->buyThis,
-            'mustAvoid' => $this->mustAvoid,
-            'mustTake' => $this->mustTake,
-            'username' => $this->username,
-        ], JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE, 512);
-    }
 }
