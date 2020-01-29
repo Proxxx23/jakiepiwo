@@ -5,5 +5,5 @@ namespace App\Http\Repositories;
 
 interface BeersRepositoryInterface
 {
-    public function fetchByIds( array $ids ): array;
+    public function fetchByIds( array $ids, bool $shuffle = false ): array;
 }

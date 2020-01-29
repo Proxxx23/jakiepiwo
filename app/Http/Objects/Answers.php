@@ -5,23 +5,18 @@ namespace App\Http\Objects;
 
 final class Answers implements AnswersInterface
 {
-    private const POINT_PERCENT_GAP = 0.90;
+    private const POINT_PERCENT_GAP_WITH_PREVIOUS = 0.90;
+    private const POINT_PERCENT_GAP_WITH_FIRST = 0.80;
+    private const MARGIN_INCLUDED_EXCLUDED = 1.25;
+    private const MARGIN_FOR_OPTIONAL_TO_SHOW = 90;
 
-    /** @var array */
     private array $includedIds = [];
-    /** @var array */
     private array $excludedIds = [];
-    /** @var bool */
     private bool $mustTakeOpt = false;
-    /** @var bool */
     private bool $mustAvoidOpt = false;
-    /** @var bool */
     private bool $barrelAged = false;
-    /** @var bool */
     private bool $shuffled = false;
-    /** @var int */
     private int $countStylesToTake = 3;
-    /** @var int */
     private int $countStylesToAvoid = 3;
 
     public function getIncludedIds(): array
@@ -54,6 +49,11 @@ final class Answers implements AnswersInterface
         $this->barrelAged = $barrelAged;
 
         return $this;
+    }
+
+    public function isShuffled(): bool
+    {
+        return $this->shuffled;
     }
 
     public function getCountStylesToTake(): int
@@ -144,7 +144,7 @@ final class Answers implements AnswersInterface
         $this->removeDuplicates();
         $this->checkMarginBetweenBeerStyles();
         $this->fetchStylesToTakeAndAvoid();
-        $this->checkHowManyStylesShouldBeShuffled();
+        $this->shuffleIncludedStyles();
     }
 
     private function sortIncludedIds(): void
@@ -173,7 +173,7 @@ final class Answers implements AnswersInterface
                 continue;
             }
 
-            if ( $toTakeChunk[0] >= ( $thirdStyleToTake[0] / 100 * 90 ) ) {
+            if ( $toTakeChunk[0] >= ( $thirdStyleToTake[0] / 100 * self::MARGIN_FOR_OPTIONAL_TO_SHOW ) ) {
                 $this->countStylesToTake++;
             }
 
@@ -182,7 +182,7 @@ final class Answers implements AnswersInterface
                 continue;
             }
 
-            if ( $toAvoidChunk[0] >= ( $thirdStyleToAvoid[0] / 100 * 90 ) ) {
+            if ( $toAvoidChunk[0] >= ( $thirdStyleToAvoid[0] / 100 * self::MARGIN_FOR_OPTIONAL_TO_SHOW ) ) {
                 $this->countStylesToAvoid++;
             }
         }
@@ -206,7 +206,6 @@ final class Answers implements AnswersInterface
         if ( empty( $firstStyleToTake ) || empty( $secondStyleToTake ) || empty( $thirdStyleToTake ) ) {
             return;
         }
-
 
         if ( $secondStyleToTake[0] * 1.25 <= $firstStyleToTake[0] ||
             $thirdStyleToTake[0] * 1.25 <= $firstStyleToTake[0] ) {
@@ -241,6 +240,7 @@ final class Answers implements AnswersInterface
     /**
      * There must at least 125% margin between included and excluded beer
      * included > excluded
+     * If not - remove from excluded
      */
     private function checkMarginBetweenBeerStyles(): void
     {
@@ -248,7 +248,8 @@ final class Answers implements AnswersInterface
             if ( \array_key_exists( $id, $this->excludedIds ) ) {
                 $excludedPoints = $this->excludedIds[$id];
                 $includedPoints = $points;
-                if ( $includedPoints > $excludedPoints && $includedPoints <= $excludedPoints * 1.25 ) {
+                if ( $includedPoints > $excludedPoints &&
+                    $includedPoints <= $excludedPoints * self::MARGIN_INCLUDED_EXCLUDED ) {
                     unset( $this->excludedIds[$id] );
                 }
             }
@@ -256,40 +257,37 @@ final class Answers implements AnswersInterface
     }
 
     /**
-     * Checks how many styles should be shuffled.
-     * Margin between first and n-th style should be less than 90% of points).
+     * Checks how many styles should be shuffled and shuffle those
+     * Margin between previous and next style should be less than 90% of points
+     * Margin between first and n-th style should not be less than 80% of points
      */
-    private function checkHowManyStylesShouldBeShuffled(): void
+    private function shuffleIncludedStyles(): void
     {
-        //		$firstStyleIndex = key(array_slice($this->includedIds, 0, 1, true));
-
         $toShuffle = 0;
-        $countIncluded = \count( $this->includedIds );
-        $firstStylePoints = \array_values( \array_slice( $this->includedIds, 0, 1, true ) );
+        $allIncludedStyles = \count( $this->includedIds );
+        $firstStylePoints = \array_values( \array_slice( $this->includedIds, 0, 1, true ) )[0];
 
-        for ( $i = 1; $i < $countIncluded; $i++ ) {
-            $nthStylePoints = \array_values( \array_slice( $this->includedIds, $i, 1, true ) );
-            if ( $nthStylePoints[0] >= $firstStylePoints[0] * self::POINT_PERCENT_GAP ) {
+        for ( $i = 1; $i < $allIncludedStyles; $i++ ) {
+            $previousStylePoints = \array_values( \array_slice( $this->includedIds, $i-1, 1, true ) )[0];
+            $followingStylePoints = \array_values( \array_slice( $this->includedIds, $i, 1, true ) )[0];
+
+            if ( $followingStylePoints >= $previousStylePoints * self::POINT_PERCENT_GAP_WITH_PREVIOUS ) {
                 $toShuffle++;
+            }
+
+            if ( $followingStylePoints <= $previousStylePoints * self::POINT_PERCENT_GAP_WITH_PREVIOUS && $i > 5 ) {
+                break; // we want to shuffle from 5 to n-th style, where gap is to much
+            }
+
+            if ( $followingStylePoints <= $firstStylePoints * self::POINT_PERCENT_GAP_WITH_FIRST && $i > 5 ) {
+                break; // we want to include up to POINT_PERCENT_GAP_WITH_FIRST of first points
             }
         }
 
         if ( $toShuffle > 4 ) {
-            $this->shuffleStyles( $toShuffle );
+            $this->includedIds = \array_keys( \array_slice( $this->includedIds, 0, $toShuffle, true ) );
+            \shuffle( $this->includedIds );
+            $this->shuffled = true;
         }
-    }
-
-    /**
-     * Shuffle n-elements of an includedIds array
-     *
-     * @param int $toShuffle
-     */
-    private function shuffleStyles( int $toShuffle ): void
-    {
-        $this->includedIds = \array_keys( \array_slice( $this->includedIds, 0, $toShuffle, true ) );
-
-        \shuffle( $this->includedIds );
-
-        $this->shuffled = true;
     }
 }

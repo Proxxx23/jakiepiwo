@@ -45,7 +45,7 @@ final class Dictionary
             38 => 100, // Old Ale
             39 => 52, // English Barleywine
             40 => 56, // Berliner
-            42 => 72, // FLanders / Oud Bruin
+            42 => 72, // Flanders / Oud Bruin
             44 => 16, // Lambic
             45 => 17,// Witbier
             47 => 18, // Saison

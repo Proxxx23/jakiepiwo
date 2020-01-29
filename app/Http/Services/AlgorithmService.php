@@ -17,6 +17,7 @@ use App\Http\Repositories\PolskiKraftRepositoryInterface;
 use App\Http\Repositories\ScoringRepositoryInterface;
 use App\Http\Repositories\StylesLogsRepositoryInterface;
 use App\Http\Utils\ErrorsLoggerInterface;
+use function Rector\Php71\Tests\Rector\FuncCall\CountOnNullRector\Fixture\d;
 
 final class AlgorithmService
 {
@@ -169,14 +170,6 @@ final class AlgorithmService
 
         $userOptions->setBarrelAged( $answers[14] === 'tak' );
 
-        if ( $answers[12] === 'nie ma mowy' ) {
-            $userOptions->excludeFromRecommended( [ 40, 42, 44, 51, 56 ] );
-        }
-
-        if ( $answers[13] === 'nie' ) {
-            $userOptions->excludeFromRecommended( [ 15, 16, 52, 57, 58, 59, 62, 63 ] );
-        }
-
         $answers = \array_filter( $answers, fn($v) => $v !== 'nie wiem');
 
         foreach ( $answers as $questionNumber => &$givenAnswer ) {
@@ -225,6 +218,18 @@ final class AlgorithmService
         }
         unset( $givenAnswer );
 
+        if ( $answers[12] === 'nie ma mowy' ) {
+            $userOptions->excludeFromRecommended( [ 40, 42, 44, 51, 56 ] );
+        }
+
+        if ( $answers[13] === 'nie' ) {
+            $userOptions->excludeFromRecommended( [ 15, 16, 52, 57, 58, 59, 62, 63 ] );
+        }
+
+        if ( $answers[3] === 'coś lekkiego' ) {
+            $userOptions->excludeFromRecommended( [ 50 ] );
+        }
+
         $this->applySynergy( $answers, $user );
 
         /** @var AnswersInterface $answers */
@@ -235,11 +240,11 @@ final class AlgorithmService
         $stylesToTakeCollection = $this->createStylesToTakeCollection( $answers );
         $stylesToAvoidCollection = $this->createStylesToAvoidCollection( $answers );
 
-        $idStylesToTake = $stylesToTakeCollection !== null
+        $idStylesToTake = ( $stylesToTakeCollection !== null )
             ? $stylesToTakeCollection->getIdStylesToTake()
             : null;
 
-        $idStylesToAvoid = $stylesToAvoidCollection !== null
+        $idStylesToAvoid = ( $stylesToAvoidCollection !== null )
             ? $stylesToAvoidCollection->getIdStylesToAvoid()
             : null;
 
@@ -305,7 +310,7 @@ final class AlgorithmService
 
         $buyThis = [];
         if ( $idStylesToTake !== [] ) {
-            $buyThis = $this->beersRepository->fetchByIds( $idStylesToTake );
+            $buyThis = $this->beersRepository->fetchByIds( $idStylesToTake, $answers->isShuffled() );
         }
 
         $stylesToTakeCollection = ( new StylesToTakeCollection() )->setIdStylesToTake( $idStylesToTake );

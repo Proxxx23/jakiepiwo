@@ -7,8 +7,12 @@ use Illuminate\Support\Facades\DB;
 
 final class BeersRepository implements BeersRepositoryInterface
 {
-    public function fetchByIds( array $ids ): array
+    public function fetchByIds( array $ids, bool $shuffle = false ): array
     {
+        $randomizeOrder = ( $shuffle === true )
+            ? 'ORDER BY RAND()'
+            : '';
+
         return DB::select(
             "SELECT `id`, 
                     `name`, 
@@ -18,6 +22,6 @@ final class BeersRepository implements BeersRepositoryInterface
                     beers 
             WHERE 
                   id 
-            IN (" . implode( ',', $ids ) . ')');
+            IN (" . implode( ',', $ids ) . ')' . $randomizeOrder);
     }
 }
