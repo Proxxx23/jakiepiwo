@@ -13,15 +13,19 @@ final class BeersRepository implements BeersRepositoryInterface
             ? 'ORDER BY RAND()'
             : '';
 
-        return DB::select(
-            "SELECT `id`, 
+        try {
+            return DB::select(
+                "SELECT `id`, 
                     `name`, 
                     `name2`, 
                     `name_pl` 
-            FROM 
+                FROM 
                     beers 
-            WHERE 
-                  id 
-            IN (" . implode( ',', $ids ) . ')' . $randomizeOrder);
+                WHERE 
+                    id 
+                IN (" . implode(',', $ids) . ')' . $randomizeOrder);
+        } catch (\Exception $exception) {
+            return [];
+        }
     }
 }

@@ -30,9 +30,13 @@ final class StylesLogsRepository implements StylesLogsRepositoryInterface
               LIMIT 1'
         );
 
-        if ( $lastVisit ) {
-            $v = \get_object_vars( $lastVisit[0] );
-            return $v['username'];
+        try {
+            if ($lastVisit) {
+                $v = \get_object_vars($lastVisit[0]);
+                return $v['username'];
+            }
+        } catch (\Exception $exception) {
+
         }
 
         return null;
