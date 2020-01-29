@@ -12,7 +12,7 @@ final class VisitorController
     public function handle(): JsonResponse
     {
         return response()->json(
-            [ 'visitorName' => ( new UserService( new StylesLogsRepository() ) )->getUsername() ]
+            [ 'data' => ( new UserService( new StylesLogsRepository() ) )->getUsername() ]
         );
     }
 }

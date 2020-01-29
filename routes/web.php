@@ -9,6 +9,6 @@ Route::get('/', static function () {
 });
 
 Route::get( '/questions', 'QuestionsController@handle' );
-Route::get( '/visitorName', 'VisitorController@handle' );
+Route::get( '/visitor', 'VisitorController@handle' );
 Route::post( '/results', 'AlgorithmController@handle' );
 Route::post( '/ontap', 'OntapController@handle' );
