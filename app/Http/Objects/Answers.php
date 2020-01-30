@@ -15,6 +15,7 @@ final class Answers implements AnswersInterface
     private bool $mustTakeOpt = false;
     private bool $mustAvoidOpt = false;
     private bool $barrelAged = false;
+    private bool $smoked = false;
     private bool $shuffled = false;
     private int $countStylesToTake = 3;
     private int $countStylesToAvoid = 3;
@@ -47,6 +48,18 @@ final class Answers implements AnswersInterface
     public function setBarrelAged( bool $barrelAged ): Answers
     {
         $this->barrelAged = $barrelAged;
+
+        return $this;
+    }
+
+    public function isSmoked(): bool
+    {
+        return $this->smoked;
+    }
+
+    public function setSmoked( bool $smoked ): Answers
+    {
+        $this->smoked = $smoked;
 
         return $this;
     }

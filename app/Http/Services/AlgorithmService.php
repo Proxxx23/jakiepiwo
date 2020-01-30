@@ -3,6 +3,7 @@ declare( strict_types=1 );
 
 namespace App\Http\Services;
 
+use App\Http\Repositories\ScoringRepository;
 use Exception;
 use App\Http\Objects\Answers;
 use App\Http\Objects\AnswersInterface;
@@ -17,10 +18,10 @@ use App\Http\Repositories\PolskiKraftRepositoryInterface;
 use App\Http\Repositories\ScoringRepositoryInterface;
 use App\Http\Repositories\StylesLogsRepositoryInterface;
 use App\Http\Utils\ErrorsLoggerInterface;
-use function Rector\Php71\Tests\Rector\FuncCall\CountOnNullRector\Fixture\d;
 
 final class AlgorithmService
 {
+
     /** @var array */
     private array $answers = [];
     /** @var ScoringRepositoryInterface */
@@ -168,6 +169,7 @@ final class AlgorithmService
         /** @var Answers $userOptions */
         $userOptions = $user->getAnswers();
 
+        $userOptions->setSmoked( $answers[13] === 'tak' );
         $userOptions->setBarrelAged( $answers[14] === 'tak' );
 
         $answers = \array_filter( $answers, fn($v) => $v !== 'nie wiem');
@@ -223,8 +225,9 @@ final class AlgorithmService
         }
 
         if ( $answers[13] === 'nie' ) {
-            $userOptions->excludeFromRecommended( [ 15, 16, 52, 57, 58, 59, 62, 63 ] );
+            $userOptions->excludeFromRecommended( [ 15, 16, 52, 57 ] );
         }
+
 
         if ( $answers[3] === 'coś lekkiego' ) {
             $userOptions->excludeFromRecommended( [ 50 ] );
@@ -232,12 +235,12 @@ final class AlgorithmService
 
         $this->applySynergy( $answers, $user );
 
-        /** @var AnswersInterface $answers */
+        /** @var FormData $user */
         $answers = $user->getAnswers();
         $answers->fetchAll();
         $answers->removeAssignedPoints();
 
-        $stylesToTakeCollection = $this->createStylesToTakeCollection( $answers );
+        $stylesToTakeCollection = $this->createStylesToTakeCollection( $answers, $userOptions->isSmoked() );
         $stylesToAvoidCollection = $this->createStylesToAvoidCollection( $answers );
 
         $idStylesToTake = ( $stylesToTakeCollection !== null )
@@ -297,7 +300,7 @@ final class AlgorithmService
         return $idsToCalculate;
     }
 
-    private function createStylesToTakeCollection( AnswersInterface $answers ): ?StylesToTakeCollection
+    private function createStylesToTakeCollection( AnswersInterface $answers, bool $isSmoked ): ?StylesToTakeCollection
     {
         if ( $answers->getIncludedIds() === [] ) {
             return null;
@@ -312,11 +315,14 @@ final class AlgorithmService
         if ( $idStylesToTake !== [] ) {
             $buyThis = $this->beersRepository->fetchByIds( $idStylesToTake, $answers->isShuffled() );
         }
-
         $stylesToTakeCollection = ( new StylesToTakeCollection() )->setIdStylesToTake( $idStylesToTake );
 
-        //todo to jest tak złe xDDDDD - rozplątać koniecznie
+        //todo to jest tak złe xDDDDD - rozplątać koniecznie w pizdu tę rzeźbę
         foreach ( $buyThis as $styleInfo ) {
+            if ( $isSmoked && \in_array( (int) $styleInfo->id, ScoringRepository::POSSIBLE_SMOKED_DARK_BEERS, true ) ) {
+                $styleInfo->name = '(Smoked) ' . $styleInfo->name;
+                $styleInfo->name_pl = '(Wędzony) ' . $styleInfo->name_pl;
+            }
             $polskiKraftBeerDataCollection = $this->polskiKraftRepository->fetchByBeerId( (int) $styleInfo->id );
             $stylesToTakeCollection->add( ( new StylesToTake( $styleInfo, $polskiKraftBeerDataCollection ) )->toArray() );
         }
