@@ -8,24 +8,14 @@ use App\Http\Repositories\UserAnswersRepositoryInterface;
 
 final class AnswersLoggerService
 {
-    /**
-     * @var UserAnswersRepositoryInterface
-     */
+    /** @var UserAnswersRepositoryInterface */
     private UserAnswersRepositoryInterface $userAnswersRepository;
 
-    /**
-     *
-     * @param $userAnswersRepository
-     */
     public function __construct( UserAnswersRepositoryInterface $userAnswersRepository )
     {
         $this->userAnswersRepository = $userAnswersRepository;
     }
 
-    /**
-     * @param FormData $formInput
-     * @param array $answers
-     */
     public function logAnswers( FormData $formInput, array $answers ): void
     {
         $this->userAnswersRepository->addAnswers($formInput, $answers);

@@ -13,7 +13,6 @@ use App\Http\Objects\FormData;
 use App\Http\Repositories\BeersRepository;
 use App\Http\Repositories\ErrorLogsRepository;
 use App\Http\Repositories\NewsletterRepository;
-use App\Http\Repositories\OnTapRepository;
 use App\Http\Repositories\PolskiKraftRepository;
 use App\Http\Repositories\QuestionsRepository;
 use App\Http\Repositories\ScoringRepository;

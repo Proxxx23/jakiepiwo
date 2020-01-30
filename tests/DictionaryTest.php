@@ -4,7 +4,7 @@ declare( strict_types=1 );
 use App\Http\Utils\Dictionary;
 use PHPUnit\Framework\TestCase;
 
-class DictionariesTest extends TestCase
+class DictionaryTest extends TestCase
 {
     public function testGetsTranslatedIdProperly(): void
     {

@@ -10,17 +10,11 @@ final class ErrorsLogger implements ErrorsLoggerInterface
     /** @var ErrorLogsRepositoryInterface */
     private ErrorLogsRepositoryInterface $errorLogsRepository;
 
-    /**
-     * @param ErrorLogsRepositoryInterface $errorLogsRepository
-     */
     public function __construct( ErrorLogsRepositoryInterface $errorLogsRepository )
     {
         $this->errorLogsRepository = $errorLogsRepository;
     }
 
-    /**
-     * @param string $message
-     */
     public function logError( string $message ): void
     {
         $this->errorLogsRepository->log($message);

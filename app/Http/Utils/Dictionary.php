@@ -76,11 +76,6 @@ final class Dictionary
         ];
     }
 
-    /**
-     * @param int $id
-     *
-     * @return int|null
-     */
     public function getById( int $id ): ?int
     {
         return $this->get()[$id] ?? null;
