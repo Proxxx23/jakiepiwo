@@ -118,7 +118,7 @@ final class AlgorithmService
         }
 
 
-        // goryczka ledwo || lekka + jasne + nieczkoladowe + niegęste
+        // goryczka ledwo || lekka + jasne + nieczekoladowe + niegęste
         if ( $answerValue[6] === 'jasne' &&
             $answerValue[9] === 'nie' &&
             $answerValue[8] !== 'mocne i gęste' &&
@@ -141,6 +141,7 @@ final class AlgorithmService
             ( $answerValue[5] === 'mocną' || $answerValue[5] === 'jestem hopheadem' ) ) {
             $userOptions->buildPositiveSynergy( [ 1, 2, 5, 6, 7, 8, 28, 61 ], 1.75 );
             $userOptions->buildPositiveSynergy( [ 65, 69, 70, 72 ], 1.5 );
+            $userOptions->buildNegativeSynergy( [ 14, 25, 45, 47 ], 1.75 );
         }
 
         // duża/hophead goryczka + ciemne

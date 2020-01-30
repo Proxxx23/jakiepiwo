@@ -29,11 +29,11 @@ final class ScoringRepository implements ScoringRepositoryInterface
         ],
         // Jak wysoką goryczkę preferujesz?
         [
-            'ledwie wyczuwalną' => '9,14,15,16,19,20,25,40,44,45,50,51,53,56',
+            'ledwie wyczuwalną' => '9:1.25,14:1.25,15:1.25,16:1.25,19:1.25,20:1.25,25:1.25,40:1.25,44:1.25,45:1.25,50:1.25,51:1.25,53:1.25,56:1.25',
             'lekką' => '11,12,21,22,23,34,42,45,47,48,49,50,52,55,57,59,60',
             'zdecydowanie wyczuwalną' => '1,2,3,5,6,7,8,10,13,21,24,27,28,30,32,33,35,38,39,55,57,58,59,60,61,62,64',
             'mocną' => '1,2,3,5,6,7,8,35,36,37,58,59',
-            'jestem hopheadem' => '1,3,5,7,8',
+            'jestem hopheadem' => '1:1.25,3:1.25,5:1.25,7:1.25,8:1.25',
         ],
         // Wolisz piwa jasne czy ciemne?
         [

@@ -36,7 +36,7 @@ final class QuestionsRepository implements QuestionsRepositoryInterface
                     'lekką',
                     'zdecydowanie wyczuwalną',
                     'mocną',
-                    'jestem hopheadem',
+                    'jestem hopheadem', // todo:skrócić do 3
                 ],
             ],
             [
