@@ -64,6 +64,11 @@ final class Answers implements AnswersInterface
         return $this;
     }
 
+    public function setShuffled( bool $shuffled ): void
+    {
+        $this->shuffled = $shuffled;
+    }
+
     public function isShuffled(): bool
     {
         return $this->shuffled;
@@ -79,25 +84,21 @@ final class Answers implements AnswersInterface
         return $this->countStylesToAvoid;
     }
 
-    // todo: otestować
     public function addToIncluded( int $styleId, float $strength ): void
     {
         $this->includedIds[$styleId] = $strength;
     }
 
-    // todo: otestować
     public function addStrengthToIncluded( int $styleId, float $strength ): void
     {
         $this->includedIds[$styleId] += $strength;
     }
 
-    // todo: otestować
     public function addToExcluded( int $styleId, float $strength ): void
     {
         $this->excludedIds[$styleId] = $strength;
     }
 
-    // todo: otestować
     public function addStrengthToExcluded( int $styleId, float $strength ): void
     {
         $this->excludedIds[$styleId] += $strength;
@@ -108,12 +109,14 @@ final class Answers implements AnswersInterface
      *
      * @param array $idsToMultiply
      * @param float $multiplier
-     *
-     * todo: otestować
      */
     public function buildPositiveSynergy( array $idsToMultiply, float $multiplier ): void
     {
         foreach ( $idsToMultiply as $id ) {
+            if ( !isset( $this->includedIds[$id] ) ) {
+                $this->includedIds[$id] = $multiplier;
+                continue;
+            }
             $this->includedIds[$id] *= $multiplier;
         }
     }
@@ -123,12 +126,13 @@ final class Answers implements AnswersInterface
      *
      * @param array $idsToDivide
      * @param float $divider
-     *
-     * todo: otestować
      */
     public function buildNegativeSynergy( array $idsToDivide, float $divider ): void
     {
         foreach ( $idsToDivide as $id ) {
+            if ( !isset( $this->excludedIds[$id] ) ) {
+                continue;
+            }
             $this->excludedIds[$id] = \floor( $this->excludedIds[$id] / $divider );
         }
     }
@@ -137,26 +141,25 @@ final class Answers implements AnswersInterface
      * Excludes sour/smoked beers from recommended styles if user says NO
      *
      * @param array $idsToExclude
-     *
-     * todo: otestować
      */
     public function excludeFromRecommended( array $idsToExclude ): void
     {
         foreach ( $idsToExclude as $id ) {
-            $this->includedIds[$id] = 0;
+            if ( !isset( $this->includedIds[$id] ) ) {
+                continue;
+            }
+            $this->includedIds[$id] = 0; //shouldn't be null?
         }
     }
 
     /**
-     * Remove points assigned to beer ids
-     *
-     * todo: otestować
+     * Remove points assigned to beer ids, transforms from [id => strength] to [index => id]
      */
     public function removeAssignedPoints(): void
     {
         $this->includedIds = ( $this->shuffled === false )
             ? \array_keys( $this->includedIds )
-            : \array_values( $this->includedIds );
+            : \array_values( $this->includedIds ); //todo: check WTF here
 
         $this->excludedIds = \array_keys( $this->excludedIds );
     }
@@ -293,7 +296,7 @@ final class Answers implements AnswersInterface
         $firstStylePoints = \array_values( \array_slice( $this->includedIds, 0, 1, true ) )[0];
 
         for ( $i = 1; $i < $allIncludedStyles; $i++ ) {
-            $previousStylePoints = \array_values( \array_slice( $this->includedIds, $i-1, 1, true ) )[0];
+            $previousStylePoints = \array_values( \array_slice( $this->includedIds, $i - 1, 1, true ) )[0];
             $followingStylePoints = \array_values( \array_slice( $this->includedIds, $i, 1, true ) )[0];
 
             if ( $followingStylePoints >= $previousStylePoints * self::POINT_PERCENT_GAP_WITH_PREVIOUS ) {
