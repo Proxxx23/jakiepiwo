@@ -97,7 +97,7 @@ final class AlgorithmService
         if ( $answerValue[4] === 'coś lekkiego' &&
             $answerValue[6] === 'ciemne' &&
             $answerValue[7] === 'słodsze' &&
-            !\in_array( $answerValue[5], [ 'mocną', 'jestem hopheadem' ] ) ) {
+            !\in_array( $answerValue[5], [ 'zdecydowanie wyczuwalną', 'jestem hopheadem' ], true ) ) {
             $userOptions->buildPositiveSynergy( [ 12, 29, 30, 34, 64 ], 2 );
             $userOptions->buildNegativeSynergy( [ 36, 37 ], 3 );
         }
@@ -122,7 +122,7 @@ final class AlgorithmService
         if ( $answerValue[6] === 'jasne' &&
             $answerValue[9] === 'nie' &&
             $answerValue[8] !== 'mocne i gęste' &&
-            ( $answerValue[5] === 'ledwie wyczuwalną' || $answerValue[5] === 'lekką' ) ) {
+            \in_array( $answerValue[5], ['ledwie wyczuwalną', 'lekką'], true ) ) {
             $userOptions->buildPositiveSynergy( [ 20, 25, 40, 44, 45, 47, 51, 52, 53, 68, 73 ], 2 );
             $userOptions->buildNegativeSynergy( [ 3, 24, 35, 36, 37, 59, 71, 75 ], 2 );
         }
@@ -138,7 +138,7 @@ final class AlgorithmService
 
         // duża/hophead goryczka + jasne
         if ( $answerValue[6] === 'jasne' &&
-            ( $answerValue[5] === 'mocną' || $answerValue[5] === 'jestem hopheadem' ) ) {
+            \in_array( $answerValue[5], [ 'zdecydowanie wyczuwalną', 'jestem hopheadem' ], true ) ) {
             $userOptions->buildPositiveSynergy( [ 1, 2, 5, 6, 7, 8, 28, 61 ], 1.75 );
             $userOptions->buildPositiveSynergy( [ 65, 69, 70, 72 ], 1.5 );
             $userOptions->buildNegativeSynergy( [ 14, 25, 45, 47 ], 1.75 );
@@ -146,7 +146,7 @@ final class AlgorithmService
 
         // duża/hophead goryczka + ciemne
         if ( $answerValue[6] === 'ciemne' &&
-            ( $answerValue[5] === 'mocną' || $answerValue[5] === 'jestem hopheadem' ) ) {
+            \in_array( $answerValue[5], [ 'zdecydowanie wyczuwalną', 'jestem hopheadem' ], true ) ) {
             $userOptions->buildPositiveSynergy( [ 3, 36, 37, 75 ], 1.75 );
         }
 
@@ -178,22 +178,24 @@ final class AlgorithmService
 
         foreach ( $answers as $questionNumber => &$givenAnswer ) {
 
-            $scoringMap = $this->scoringRepository->fetchByQuestionNumber( $questionNumber );
+            // we calculate nothing
+            if ( $givenAnswer === 'bez znaczenia' ) {
+                continue;
+            }
 
+            // Nie idź dalej przy BA bo nic nie liczymy na tej podstawie
+            if ( $questionNumber === 14 ) {
+                continue;
+            }
+
+            $scoringMap = $this->scoringRepository->fetchByQuestionNumber( $questionNumber );
             foreach ( $scoringMap as $mappedAnswer => $ids ) {
 
-                // Nie idź dalej przy BA
-                if ( $questionNumber === 14 ) {
-                    continue;
-                }
-
-                // todo rozplątać
-                if ( $givenAnswer === $mappedAnswer &&
-                    $givenAnswer !== 'bez znaczenia' ) {
+                if ( $givenAnswer === $mappedAnswer ) {
                     $idsToCalculate = $this->buildStrength( $ids );
                     if ( $idsToCalculate !== null ) {
                         foreach ( $idsToCalculate as $styleId => $strength ) {
-                            if ( empty( $userOptions->getIncludedIds()[$styleId] ) ) { //todo bez sensu...
+                            if ( empty( $userOptions->getIncludedIds()[$styleId] ) ) {
                                 $userOptions->addToIncluded( $styleId, $strength );
                             } else {
                                 $userOptions->addStrengthToIncluded( $styleId, $strength );
@@ -202,14 +204,16 @@ final class AlgorithmService
                     }
                 }
 
-                // todo rozplątać
-                if ( $givenAnswer !== $mappedAnswer &&
-                    $givenAnswer !== 'bez znaczenia' &&
-                    !\in_array( $questionNumber, [ 3, 5, 9 ], true ) ) {
+                //todo: wtf?
+//                if ( \in_array( $questionNumber, [ 3, 5, 9 ], true ) ) {
+//                    continue;
+//                }
+
+                if ( $givenAnswer !== $mappedAnswer ) {
                     $idsToCalculate = $this->buildStrength( $ids );
                     if ( $idsToCalculate !== null ) {
                         foreach ( $idsToCalculate as $styleId => $strength ) {
-                            if ( empty( $userOptions->getExcludedIds()[$styleId] ) ) { //todo bez sensu...
+                            if ( empty( $userOptions->getExcludedIds()[$styleId] ) ) {
                                 $userOptions->addToExcluded( $styleId, $strength );
                             } else {
                                 $userOptions->addStrengthToExcluded( $styleId, $strength );
@@ -222,19 +226,7 @@ final class AlgorithmService
         }
         unset( $givenAnswer );
 
-        if ( $answers[12] === 'nie ma mowy' ) {
-            $userOptions->excludeFromRecommended( [ 40, 42, 44, 51, 56 ] );
-        }
-
-        if ( $answers[13] === 'nie' ) {
-            $userOptions->excludeFromRecommended( [ 15, 16, 52, 57 ] );
-        }
-
-
-        if ( $answers[3] === 'coś lekkiego' ) {
-            $userOptions->excludeFromRecommended( [ 50 ] );
-        }
-
+        $this->excludeBatch( $answers, $userOptions );
         $this->applySynergy( $answers, $user );
 
         /** @var FormData $user */
@@ -357,5 +349,25 @@ final class AlgorithmService
         }
 
         return $stylesToAvoidCollection;
+    }
+
+    /**
+     * @param array $answers
+     * @param Answers $userOptions
+     */
+    private function excludeBatch( array $answers, Answers $userOptions ): void
+    {
+        if ( $answers[12] === 'nie ma mowy' ) {
+            $userOptions->excludeFromRecommended( [ 40, 42, 44, 51, 56 ] );
+        }
+
+        if ( $answers[13] === 'nie' ) {
+            $userOptions->excludeFromRecommended( [ 15, 16, 52, 57 ] );
+        }
+
+
+        if ( $answers[3] === 'coś lekkiego' ) {
+            $userOptions->excludeFromRecommended( [ 50 ] );
+        }
     }
 }
