@@ -39,7 +39,6 @@ final class AlgorithmController
     /**
      * @param Request $request
      * @return JsonResponse
-     * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws Exception
      */
     public function handle( Request $request ): JsonResponse
@@ -84,12 +83,12 @@ final class AlgorithmController
 
         if ( $formData->addToNewsletterList() && $formData->getEmail() !== null ) {
             $newsletterService = new NewsletterService(
-                new NewsletterRepository( new MailChimp( config( 'mail.mailchimpApiKey' ) ) )
+                new NewsletterRepository( new MailChimp( \config( 'mail.mailchimpApiKey' ) ) )
             );
             $newsletterService->addToNewsletterList( $formData->getEmail() );
         }
 
-        return response()
+        return \response()
             ->json( $beerData->toArray(), JsonResponse::HTTP_OK, [], JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE );
     }
 }

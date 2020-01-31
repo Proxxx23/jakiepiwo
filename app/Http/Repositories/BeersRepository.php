@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare( strict_types=1 );
 
 namespace App\Http\Repositories;
 
@@ -23,8 +23,9 @@ final class BeersRepository implements BeersRepositoryInterface
                     beers 
                 WHERE 
                     id 
-                IN (" . implode(',', $ids) . ')' . $randomizeOrder);
-        } catch (\Exception $exception) {
+                IN (" . \implode( ',', $ids ) . ')' . $randomizeOrder
+            );
+        } catch ( \Exception $exception ) {
             return [];
         }
     }

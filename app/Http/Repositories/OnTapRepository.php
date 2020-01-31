@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare( strict_types=1 );
 
 namespace App\Http\Repositories;
 
@@ -29,6 +29,7 @@ final class OnTapRepository implements OnTapRepositoryInterface
      * @param ClientInterface $httpClient
      * @param FilesystemAdapter $cache
      * @param string $cityName
+     *
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function __construct( ClientInterface $httpClient, FilesystemAdapter $cache, ?string $cityName )
@@ -61,9 +62,9 @@ final class OnTapRepository implements OnTapRepositoryInterface
 
     /**
      * @param string $beerName
+     *
      * @return array|null
      * @throws \GuzzleHttp\Exception\GuzzleException
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function fetchTapsByBeerName( string $beerName ): ?array
     {
@@ -73,7 +74,7 @@ final class OnTapRepository implements OnTapRepositoryInterface
 
         //todo: strategy?
         $toHash = $this->cityId . '_' . $beerName;
-        $cacheKey = \sprintf( self::CACHE_KEY_BEER_PATTERN, md5( $toHash ) );
+        $cacheKey = \sprintf( self::CACHE_KEY_BEER_PATTERN, \md5( $toHash ) );
         $item = $this->getFromCache( $cacheKey );
         if ( $item !== null ) {
             return $item;
@@ -104,6 +105,7 @@ final class OnTapRepository implements OnTapRepositoryInterface
 
     /**
      * @param string $cityName
+     *
      * @return string|null
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
@@ -128,17 +130,22 @@ final class OnTapRepository implements OnTapRepositoryInterface
             return $cachedData;
         }
 
-        $response = $this->httpClient->request( 'GET', self::CITIES_LIST_URI, [
+        $response = $this->httpClient->request(
+            'GET', self::CITIES_LIST_URI, [
             'headers' => [
                 'Accept' => 'application/json',
                 'Content-Type' => 'application/json',
-                'Api-Key' => $_ENV['ONTAP_API_KEY']
-            ]
-        ] );
+                'Api-Key' => $_ENV['ONTAP_API_KEY'],
+            ],
+        ]
+        );
 
         $this->reqCount++;
 
-        $data = \json_decode( $response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR );
+        $data = \json_decode(
+            $response->getBody()
+                ->getContents(), true, 512, JSON_THROW_ON_ERROR
+        );
         $this->setToCache( self::CACHE_KEY_CITIES, $data );
 
         return $data;
@@ -146,6 +153,7 @@ final class OnTapRepository implements OnTapRepositoryInterface
 
     /**
      * @param string|null $cityId
+     *
      * @return array
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
@@ -157,17 +165,22 @@ final class OnTapRepository implements OnTapRepositoryInterface
             return $cachedData;
         }
 
-        $response = $this->httpClient->request( 'GET', \sprintf( self::PLACES_LIST_URI, $cityId ), [
+        $response = $this->httpClient->request(
+            'GET', \sprintf( self::PLACES_LIST_URI, $cityId ), [
             'headers' => [
                 'Accept' => 'application/json',
                 'Content-Type' => 'application/json',
-                'Api-Key' => $_ENV['ONTAP_API_KEY']
-            ]
-        ] );
+                'Api-Key' => $_ENV['ONTAP_API_KEY'],
+            ],
+        ]
+        );
 
         $this->reqCount++;
 
-        $data = \json_decode( $response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR );
+        $data = \json_decode(
+            $response->getBody()
+                ->getContents(), true, 512, JSON_THROW_ON_ERROR
+        );
         $this->setToCache( $cacheKey, $data );
 
         return $data;
@@ -175,6 +188,7 @@ final class OnTapRepository implements OnTapRepositoryInterface
 
     /**
      * @param string $placeId
+     *
      * @return array|null
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
@@ -186,17 +200,22 @@ final class OnTapRepository implements OnTapRepositoryInterface
             return $cachedData;
         }
 
-        $response = $this->httpClient->request( 'GET', \sprintf( self::TAPS_LIST_URI, $placeId ), [
+        $response = $this->httpClient->request(
+            'GET', \sprintf( self::TAPS_LIST_URI, $placeId ), [
             'headers' => [
                 'Accept' => 'application/json',
                 'Content-Type' => 'application/json',
-                'Api-Key' => $_ENV['ONTAP_API_KEY']
-            ]
-        ] );
+                'Api-Key' => $_ENV['ONTAP_API_KEY'],
+            ],
+        ]
+        );
 
         $this->reqCount++;
 
-        $data = \json_decode( $response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR );
+        $data = \json_decode(
+            $response->getBody()
+                ->getContents(), true, 512, JSON_THROW_ON_ERROR
+        );
         $this->setToCache( $cacheKey, $data );
 
         return $data;
@@ -208,7 +227,7 @@ final class OnTapRepository implements OnTapRepositoryInterface
             if ( empty( $tapBeer['beer'] ) ) {
                 continue;
             }
-            if ( stripos( $tapBeer['beer']['name'], $beerName ) !== false ) {
+            if ( \stripos( $tapBeer['beer']['name'], $beerName ) !== false ) {
                 return true;
             }
         }
@@ -220,6 +239,7 @@ final class OnTapRepository implements OnTapRepositoryInterface
 
     /**
      * @param string $cacheKey
+     *
      * @return mixed|null
      *
      * todo: ale to jest kurwa złe, wynieść to w pizdu SRP

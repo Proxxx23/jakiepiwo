@@ -14,10 +14,10 @@ final class ErrorLogsRepository implements ErrorLogsRepositoryInterface
                 'INSERT INTO error_logs (error, created_at) VALUES (:error, :created_at)',
                 [
                     'error' => $message,
-                    'created_at' => now(),
+                    'created_at' => \now(),
                 ]
             );
-        } catch (\Exception $exception) {
+        } catch ( \Exception $exception ) {
 
         }
     }

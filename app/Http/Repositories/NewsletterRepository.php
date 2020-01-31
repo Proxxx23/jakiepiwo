@@ -17,7 +17,7 @@ final class NewsletterRepository implements NewsletterRepositoryInterface
     public function subscribe( string $email ): void
     {
         $this->mailChimp->post(
-            'lists/' . config('mail.mailchimpAudienceId') . '/members', [
+            'lists/' . \config( 'mail.mailchimpAudienceId' ) . '/members', [
                 'email_address' => $email,
                 'status' => 'pending',
             ]

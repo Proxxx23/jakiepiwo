@@ -22,8 +22,8 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
     public function __construct(
         Dictionary $dictionary,
         FilesystemAdapter $cache,
-        ClientInterface $httpClient )
-    {
+        ClientInterface $httpClient
+    ) {
         $this->dictionary = $dictionary;
         $this->cache = $cache;
         $this->httpClient = $httpClient;
@@ -61,7 +61,10 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
             return null; //todo: any message
         }
 
-        $data = \json_decode($response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR);
+        $data = \json_decode(
+            $response->getBody()
+                ->getContents(), true, 512, JSON_THROW_ON_ERROR
+        );
         if ( empty( $data ) ) {
             return null;
         }
@@ -85,6 +88,7 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
 
     /**
      * @param string $cacheKey
+     *
      * @return mixed|null
      *
      * todo: ale to jest kurwa złe, wynieść to w pizdu SRP

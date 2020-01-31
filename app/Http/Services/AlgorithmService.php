@@ -21,7 +21,6 @@ use App\Http\Utils\ErrorsLoggerInterface;
 
 final class AlgorithmService
 {
-
     /** @var array */
     private array $answers = [];
     /** @var ScoringRepositoryInterface */
@@ -157,13 +156,6 @@ final class AlgorithmService
         }
     }
 
-    /**
-     * @param array $answers
-     * @param FormData $user
-     * @return BeerData
-     *
-     * todo: dodać mechanizm, który informuje, że granice były marginalne i wyniki mogą byc niejednoznaczne
-     */
     public function createBeerData( array $answers, FormData $user ): BeerData
     {
         $this->answers = $answers;
@@ -279,7 +271,7 @@ final class AlgorithmService
             return null;
         }
 
-        $idsExploded = \explode( ',', trim( $styleIds ) );
+        $idsExploded = \explode( ',', \trim( $styleIds ) );
         $idsToCalculate = [];
 
         foreach ( $idsExploded as $idMultiplierPair ) {
@@ -351,10 +343,6 @@ final class AlgorithmService
         return $stylesToAvoidCollection;
     }
 
-    /**
-     * @param array $answers
-     * @param Answers $userOptions
-     */
     private function excludeBatch( array $answers, Answers $userOptions ): void
     {
         if ( $answers[12] === 'nie ma mowy' ) {

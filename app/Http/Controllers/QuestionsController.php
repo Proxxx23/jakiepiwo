@@ -11,7 +11,7 @@ final class QuestionsController
 {
     public function handle(): JsonResponse
     {
-        return response()->json(
+        return \response()->json(
             ( new QuestionsService( new QuestionsRepository() ) )
                 ->getQuestions(), 200, [], JSON_UNESCAPED_UNICODE
         );

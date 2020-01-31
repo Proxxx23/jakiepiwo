@@ -25,10 +25,10 @@ final class UserAnswersRepository implements UserAnswersRepositoryInterface
                     $formInput->getEmail(),
                     $formInput->addToNewsletterList(),
                     \json_encode( $answers, JSON_UNESCAPED_UNICODE ),
-                    now(),
+                    \now(),
                 ]
             );
-        } catch (\Exception $exception) {
+        } catch ( \Exception $exception ) {
 
         }
     }

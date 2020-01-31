@@ -18,6 +18,7 @@ final class OntapController
 
     /**
      * @param Request $request
+     *
      * @return JsonResponse
      * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \Psr\Cache\InvalidArgumentException
@@ -27,23 +28,29 @@ final class OntapController
         $payload = $request->input();
         $coordinates = new Coordinates( $payload['lng'], $payload['lat'] );
         if ( !$coordinates->isValid() ) {
-            return response()->json( [
-                'message' => 'Invalid coordinated format'
-            ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR );
+            return \response()->json(
+                [
+                    'message' => 'Invalid coordinated format',
+                ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR
+            );
         }
 
         $cacheKeys = $payload['cacheKeys'];
         if ( empty( $cacheKeys ) ) {
-            return response()->json( [
-                'message' => 'No cache keys provided'
-            ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR );
+            return \response()->json(
+                [
+                    'message' => 'No cache keys provided',
+                ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR
+            );
         }
 
         $cityName = 'Gdańsk'; //todo: get by lat/lng
         if ( $cityName === null ) {
-            return response()->json( [
-                'message' => 'Could not determine city name'
-            ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR );
+            return \response()->json(
+                [
+                    'message' => 'Could not determine city name',
+                ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR
+            );
         }
 
         $cache = new FilesystemAdapter( '', self::DEFAULT_CACHE_TIME );
@@ -69,6 +76,6 @@ final class OntapController
             }
         }
 
-        return response()->json( [ 'data' => $data ] );
+        return \response()->json( [ 'data' => $data ] );
     }
 }
