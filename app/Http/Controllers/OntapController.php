@@ -26,7 +26,7 @@ final class OntapController
     public function handle( Request $request ): Response
     {
         $payload = $request->input();
-        $coordinates = new Coordinates( $payload['lng'], $payload['lat'] );
+        $coordinates = new Coordinates( $payload['userLocation']['longitude'], $payload['userLocation']['latitude'] );
         if ( !$coordinates->isValid() ) {
             return \response()->json(
                 [
@@ -49,7 +49,7 @@ final class OntapController
             return \response()->json(
                 [
                     'message' => 'Could not determine city name',
-                ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR
+                ], JsonResponse::HTTP_NO_CONTENT
             );
         }
 

@@ -13,6 +13,7 @@ final class BeerData
     private bool $mustTake;
     private ?string $username;
     private bool $mailSent = false;
+    private ?array $cacheKeys = null;
 
     public function __construct( array $data )
     {
@@ -23,7 +24,10 @@ final class BeerData
         $this->mustAvoid = $data['mustAvoid'];
         $this->mustTake = $data['mustTake'];
         $this->username = $data['username'];
+        $this->completeCacheKeys( $data['buyThis'] ); //todo: unit test
     }
+
+    //todo: from Array named constructor
 
     public function getBuyThis(): ?array
     {
@@ -51,6 +55,17 @@ final class BeerData
             'mustTake' => $this->mustTake,
             'username' => $this->username,
             'mailSent' => $this->mailSent,
+            'cacheKeys' => $this->cacheKeys,
         ];
+    }
+
+    private function completeCacheKeys( array $buyThis ): void
+    {
+        foreach ($buyThis as $item) {
+            if ( $item['cacheKey'] !== null ) {
+                $this->cacheKeys[] = $item['cacheKey'];
+                continue;
+            }
+        }
     }
 }
