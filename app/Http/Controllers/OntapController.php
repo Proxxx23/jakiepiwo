@@ -4,8 +4,9 @@ declare( strict_types=1 );
 namespace App\Http\Controllers;
 
 use App\Http\Objects\ValueObject\Coordinates;
+use App\Http\Repositories\GeolocationRepository;
 use App\Http\Repositories\OnTapRepository;
-use App\Http\Services\OntapService;
+use App\Http\Services\OnTapService;
 use GuzzleHttp\Client;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -26,7 +27,7 @@ final class OntapController
     public function handle( Request $request ): Response
     {
         $payload = $request->input();
-        $coordinates = new Coordinates( $payload['userLocation']['longitude'], $payload['userLocation']['latitude'] );
+        $coordinates = new Coordinates( $payload['userLocation']['latitude'], $payload['userLocation']['longitude'] );
         if ( !$coordinates->isValid() ) {
             return \response()->json(
                 [
@@ -44,7 +45,14 @@ final class OntapController
             );
         }
 
-        $cityName = 'Gdańsk'; //todo: get by lat/lng
+        $cache = new FilesystemAdapter( '', self::DEFAULT_CACHE_TIME );
+        $ontapService = new OnTapService(
+            new OnTapRepository( new Client(), $cache, 'Gdańsk' ) //todo: rozplątać, aby nie wymagało tutaj cityId
+        );
+
+        $cities = $ontapService->getAllCities();
+        $repository = new GeolocationRepository( new Client(), $cities );
+        $cityName = $repository->fetchCityByCoordinates( $coordinates );
         if ( $cityName === null ) {
             return \response()->json(
                 [
@@ -53,12 +61,7 @@ final class OntapController
             );
         }
 
-        $cache = new FilesystemAdapter( '', self::DEFAULT_CACHE_TIME );
-        $ontapService = new OntapService(
-            new OnTapRepository( new Client(), $cache, $cityName )
-        );
-
-        $styles = [];
+        $styles = null;
         foreach ( $cacheKeys as $key ) {
             $item = $cache->getItem( $key );
             if ( $item !== null && $item->isHit() ) {
@@ -67,7 +70,7 @@ final class OntapController
             }
         }
 
-        if ( $styles === [] ) {
+        if ( $styles === null ) {
             return \response()->json(
                 [
                     'message' => 'No styles found in given city.',
@@ -75,17 +78,17 @@ final class OntapController
             );
         }
 
-        $data = [];
+        $data = null;
         foreach ( $styles as $style ) {
             foreach ( $style as $item ) { //todo: one foreach
-                $ontapBeer = $ontapService->get( $item['title'] );
+                $ontapBeer = $ontapService->getTapsByBeerName( $item['title'] );
                 if ( $ontapBeer !== null ) {
-                    $data[] = $ontapBeer;
+                    $data[][$item['title']] = $ontapBeer;
                 }
             }
         }
 
-        if ( $data === [] ) {
+        if ( $data === null ) {
             return \response()->json(
                 [
                     'message' => 'No beers found in given city.',

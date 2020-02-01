@@ -3,7 +3,7 @@
 namespace Tests;
 
 use App\Http\Repositories\OnTapRepository;
-use App\Http\Services\OntapService;
+use App\Http\Services\OnTapService;
 use Prophecy\Prophet;
 
 final class OnTapServiceTest extends FinalsBypassedTestCase
@@ -16,9 +16,9 @@ final class OnTapServiceTest extends FinalsBypassedTestCase
         $prophecy->connected()->willReturn( true );
         $prophecy->placesFound()->willReturn( true );
 
-        $service = new OntapService( $prophecy->reveal() );
+        $service = new OnTapService( $prophecy->reveal() );
 
-        self::assertNotNull( $service->get( 'mockBeerName' ) );
+        self::assertNotNull( $service->getTapsByBeerName( 'mockBeerName' ) );
         $prophecy->checkProphecyMethodsPredictions();
     }
 
@@ -28,9 +28,9 @@ final class OnTapServiceTest extends FinalsBypassedTestCase
         $repository->method( 'connected' )->willReturn( false );
         $repository->method( 'placesFound' )->willReturn( true );
 
-        $service = new OntapService( $repository );
+        $service = new OnTapService( $repository );
 
-        self::assertNull( $service->get( 'mockBeerName' ) );
+        self::assertNull( $service->getTapsByBeerName( 'mockBeerName' ) );
     }
 
     public function testReturnsNullIfNoPlacesFound(): void
@@ -39,9 +39,9 @@ final class OnTapServiceTest extends FinalsBypassedTestCase
         $repository->method( 'connected' )->willReturn( true );
         $repository->method( 'placesFound' )->willReturn( false );
 
-        $service = new OntapService( $repository );
+        $service = new OnTapService( $repository );
 
-        self::assertNull( $service->get( 'mockBeerName' ) );
+        self::assertNull( $service->getTapsByBeerName( 'mockBeerName' ) );
     }
 
     public function testReturnsNullIfNoPlacesFoundAndNotConnected(): void
@@ -50,8 +50,8 @@ final class OnTapServiceTest extends FinalsBypassedTestCase
         $repository->method( 'connected' )->willReturn( false );
         $repository->method( 'placesFound' )->willReturn( false );
 
-        $service = new OntapService( $repository );
+        $service = new OnTapService( $repository );
 
-        self::assertNull( $service->get( 'mockBeerName' ) );
+        self::assertNull( $service->getTapsByBeerName( 'mockBeerName' ) );
     }
 }

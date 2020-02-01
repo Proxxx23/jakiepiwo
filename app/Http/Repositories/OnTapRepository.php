@@ -123,7 +123,7 @@ final class OnTapRepository implements OnTapRepositoryInterface
      * @return array
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    private function fetchAllCities(): array
+    public function fetchAllCities(): array
     {
         $cachedData = $this->getFromCache( self::CACHE_KEY_CITIES );
         if ( $cachedData !== null ) {
