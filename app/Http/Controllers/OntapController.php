@@ -66,6 +66,14 @@ final class OntapController
                 : null;
         }
 
+        if ( $styles === [] ) {
+            return \response()->json(
+                [
+                    'message' => 'No styles found in given city.',
+                ], JsonResponse::HTTP_NO_CONTENT
+            );
+        }
+
         $data = [];
         foreach ( $styles as $style ) {
             foreach ( $style as $item ) { //todo: one foreach
@@ -74,6 +82,14 @@ final class OntapController
                     $data[] = $ontapBeer;
                 }
             }
+        }
+
+        if ( $data === [] ) {
+            return \response()->json(
+                [
+                    'message' => 'No beers found in given city.',
+                ], JsonResponse::HTTP_NO_CONTENT
+            );
         }
 
         return \response()->json( [ 'data' => $data ] );
