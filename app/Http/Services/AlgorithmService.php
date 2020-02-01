@@ -345,16 +345,15 @@ final class AlgorithmService
 
     private function excludeBatch( array $answers, Answers $userOptions ): void
     {
-        if ( $answers[12] === 'nie ma mowy' ) {
+        if ( isset( $answers[13] ) && $answers[12] === 'nie ma mowy' ) {
             $userOptions->excludeFromRecommended( [ 40, 42, 44, 51, 56 ] );
         }
 
-        if ( $answers[13] === 'nie' ) {
+        if ( isset( $answers[13] ) && $answers[13] === 'nie' ) {
             $userOptions->excludeFromRecommended( [ 15, 16, 52, 57 ] );
         }
 
-
-        if ( $answers[3] === 'coś lekkiego' ) {
+        if ( isset( $answers[13] ) && $answers[3] === 'coś lekkiego' ) {
             $userOptions->excludeFromRecommended( [ 50 ] );
         }
     }

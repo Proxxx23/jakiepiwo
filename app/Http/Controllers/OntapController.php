@@ -61,9 +61,10 @@ final class OntapController
         $styles = [];
         foreach ( $cacheKeys as $key ) {
             $item = $cache->getItem( $key );
-            $styles[] = $item !== null && $item->isHit()
-                ? $item->get()
-                : null;
+            if ( $item !== null && $item->isHit() ) {
+                $styles[] = $item->get();
+                continue;
+            }
         }
 
         if ( $styles === [] ) {
