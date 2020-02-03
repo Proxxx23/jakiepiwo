@@ -34,20 +34,14 @@ final class OnTapRepository implements OnTapRepositoryInterface
      */
     public function __construct( ClientInterface $httpClient, FilesystemAdapter $cache, ?string $cityName )
     {
-        if ( $cityName === null ) {
-            $this->connectionError = true;
-            return;
-        }
-
         $this->cache = $cache;
         $this->httpClient = $httpClient; //todo: set headers globally
 
-        $this->cityId = $this->fetchCityIdByName( $cityName );
-        if ( $this->cityId === null ) {
-            $this->connectionError = true;
+        if ( $cityName !== null ) {
+            $this->cityId = $this->fetchCityIdByName( $cityName );
+            $this->connectionError = ( $this->cityId === null );
+            $this->places = $this->fetchPlacesByCityId( $this->cityId ); //todo rozplątać, niech to działa na czymś innym
         }
-
-        $this->places = $this->fetchPlacesByCityId( $this->cityId );
     }
 
     public function connected(): bool

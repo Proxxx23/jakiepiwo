@@ -1,4 +1,5 @@
 <?php
+declare( strict_types=1 );
 
 namespace App\Http\Repositories;
 
@@ -12,30 +13,41 @@ final class GeolocationRepository implements GeolocationRepositoryInterface
     private ClientInterface $httpClient;
     private array $citiesList;
 
-    public function __construct( ClientInterface $httpClient, array $citiesList )
+    //todo idicator like in ontap - errorconnection
+
+    public function __construct( ClientInterface $httpClient )
     {
         $this->httpClient = $httpClient;
+    }
+
+    public function setCitiesList( array $citiesList ): void
+    {
         $this->citiesList = \array_column( $citiesList, 'name' );
     }
 
     public function fetchCityByCoordinates( Coordinates $coordinates ): ?string
     {
-        $request = $this->httpClient->request('GET',
-            \sprintf(self::API_URL_PATTERN, $coordinates->getLatitude(), $coordinates->getLongitude()));
+        $request = $this->httpClient->request(
+            'GET',
+            \sprintf( self::API_URL_PATTERN, $coordinates->getLatitude(), $coordinates->getLongitude() )
+        );
 
         if ( $request->getStatusCode() !== 200 ) {
             return null;
         }
 
-        $content = \json_decode( $request->getBody()->getContents() , true);
-        $found = \preg_grep( '/^miasto.*$/', \array_column( $content['localityInfo']['administrative'], 'description') );
-        if ( empty( $found )) {
+        $content = \json_decode(
+            $request->getBody()
+                ->getContents(), true
+        );
+        $found = \preg_grep( '/^miasto.*$/', \array_column( $content['localityInfo']['administrative'], 'description' ) );
+        if ( empty( $found ) ) {
             return null;
         }
 
-        $index = array_keys($found)[0];
+        $index = \array_keys( $found )[0];
         $cityName = $content['localityInfo']['administrative'][$index]['name'];
-        if ( !in_array( $cityName, $this->citiesList, true ) ) {
+        if ( !\in_array( $cityName, $this->citiesList, true ) ) {
             return null;
         }
 

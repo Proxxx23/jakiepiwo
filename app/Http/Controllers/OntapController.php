@@ -31,7 +31,7 @@ final class OntapController
         if ( !$coordinates->isValid() ) {
             return \response()->json(
                 [
-                    'message' => 'Invalid coordinated format',
+                    'message' => 'Invalid coordinates format.',
                 ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR
             );
         }
@@ -40,23 +40,23 @@ final class OntapController
         if ( empty( $cacheKeys ) ) {
             return \response()->json(
                 [
-                    'message' => 'No cache keys provided',
+                    'message' => 'No cache keys provided.',
                 ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR
             );
         }
 
         $cache = new FilesystemAdapter( '', self::DEFAULT_CACHE_TIME );
+        $httpClient = new Client();
         $ontapService = new OnTapService(
-            new OnTapRepository( new Client(), $cache, 'Gdańsk' ) //todo: rozplątać, aby nie wymagało tutaj cityId
+            new OnTapRepository( $httpClient, $cache, null ),
+            new GeolocationRepository( $httpClient )
         );
 
-        $cities = $ontapService->getAllCities();
-        $repository = new GeolocationRepository( new Client(), $cities );
-        $cityName = $repository->fetchCityByCoordinates( $coordinates );
+        $cityName = $ontapService->getCityByCoordinates( $coordinates );
         if ( $cityName === null ) {
             return \response()->json(
                 [
-                    'message' => 'Could not determine city name',
+                    'message' => 'Could not determine city name.',
                 ], JsonResponse::HTTP_NO_CONTENT
             );
         }
