@@ -77,9 +77,19 @@ class AnswersTest extends TestCase
         self::assertSame( [], $answers->getExcludedIds() );
     }
 
-    public function testExcludesFromReccomendedProperly(): void
+    public function testExcludesFromRecommendedProperlyIfNotPreviouslyInIncludes(): void
     {
         $answers = new Answers();
+        $answers->excludeFromRecommended( [ 1, 2 ] );
+
+        self::assertEmpty( $answers->getIncludedIds() );
+    }
+
+    public function testExcludesFromRecommendedProperlyIfPreviouslyInIncludes(): void
+    {
+        $answers = new Answers();
+        $answers->addToIncluded(1, 1);
+        $answers->addToIncluded(2, 2);
         $answers->excludeFromRecommended( [ 1, 2 ] );
 
         self::assertSame( 0, $answers->getIncludedIds()[1] );

@@ -157,10 +157,7 @@ final class Answers implements AnswersInterface
      */
     public function removeAssignedPoints(): void
     {
-        $this->includedIds = ( $this->shuffled === false )
-            ? \array_keys( $this->includedIds )
-            : \array_values( $this->includedIds ); //todo: check WTF here
-
+        $this->includedIds = \array_keys( $this->includedIds );
         $this->excludedIds = \array_keys( $this->excludedIds );
     }
 
