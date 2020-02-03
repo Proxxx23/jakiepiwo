@@ -12,7 +12,8 @@ use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 
 final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
 {
-    private const DEFAULT_LIST_URI = 'https://www.polskikraft.pl/openapi/style/list';
+//    private const DEFAULT_LIST_URI = 'https://www.polskikraft.pl/openapi/style/list';
+    private const BEER_LIST_BU_STYLE_URL_PATTERN = 'https://www.polskikraft.pl/openapi/style/%d/examples';
     private const CACHE_KEY_PATTERN = '%s_POLSKIKRAFT';
 
     private Dictionary $dictionary;
@@ -55,10 +56,13 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
             return $cachedData;
         }
 
-        $url = 'https://www.polskikraft.pl/openapi/style/' . $translatedBeerId . '/examples';
-        $response = $this->httpClient->request( 'GET', $url );
+        $response = $this->httpClient->request(
+            'GET',
+            \sprintf( self::BEER_LIST_BU_STYLE_URL_PATTERN, $translatedBeerId )
+        );
+
         if ( $response->getStatusCode() !== 200 ) {
-            return null; //todo: any message
+            return null; //todo: any message or exception - this case should be covered
         }
 
         $data = \json_decode(
