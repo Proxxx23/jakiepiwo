@@ -17,23 +17,15 @@ final class OnTapService
     {
         $this->onTapRepository = $onTapRepository;
         $this->connectionNotRefused = $onTapRepository->connectionNotRefused();
+        // todo jak refused to nie pakować się w to dalej
         $this->geolocationRepository = $geolocationRepository;
-        $this->geolocationRepository->setCitiesList( $this->getAllCities() ); //todo bardzo nieładnie
+        $this->geolocationRepository->setCitiesList( $this->onTapRepository->fetchAllCities() ); //todo bardzo nieładnie
     }
 
     public function getTapsByBeerName( string $beerName ): ?array
     {
-        if ( $this->connectionNotRefused ) { //todo: DRY
+        if ( $this->connectionNotRefused ) {
             return $this->onTapRepository->fetchTapsByBeerName( $beerName );
-        }
-
-        return null;
-    }
-
-    public function getAllCities(): ?array
-    {
-        if ( $this->connectionNotRefused ) { //todo: DRY
-            return $this->onTapRepository->fetchAllCities();
         }
 
         return null;

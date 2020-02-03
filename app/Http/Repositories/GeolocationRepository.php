@@ -22,7 +22,9 @@ final class GeolocationRepository implements GeolocationRepositoryInterface
 
     public function setCitiesList( array $citiesList ): void
     {
-        $this->citiesList = \array_column( $citiesList, 'name' );
+        $this->citiesList = ( $citiesList !== [] )
+            ? \array_column( $citiesList, 'name' )
+            : [];
     }
 
     /**
@@ -32,6 +34,10 @@ final class GeolocationRepository implements GeolocationRepositoryInterface
      */
     public function fetchCityByCoordinates( Coordinates $coordinates ): ?string
     {
+        if ( $this->citiesList === [] ) {
+            return null; // todo: jakoś o tym informować
+        }
+
         $request = $this->httpClient->request(
             'GET',
             \sprintf( self::API_URL_PATTERN, $coordinates->getLatitude(), $coordinates->getLongitude() )
