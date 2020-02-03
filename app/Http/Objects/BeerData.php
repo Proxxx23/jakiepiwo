@@ -14,20 +14,42 @@ final class BeerData
     private ?string $username;
     private bool $mailSent = false;
     private ?array $cacheKeys = null;
+    private string $resultsHash;
 
-    public function __construct( array $data )
-    {
-        $this->answers = $data['answers'];
-        $this->avoidThis = $data['avoidThis'];
-        $this->barrelAged = $data['barrelAged'];
-        $this->buyThis = $data['buyThis'];
-        $this->mustAvoid = $data['mustAvoid'];
-        $this->mustTake = $data['mustTake'];
-        $this->username = $data['username'];
-        $this->completeCacheKeys( $data['buyThis'] ); //todo: unit test
+    public function __construct(
+        array $answers,
+        ?array $avoidThis,
+        bool $barrelAged,
+        ?array $buyThis,
+        bool $mustAvoid,
+        bool $mustTake,
+        ?string $username,
+        string $resultsHash
+    ) {
+        $this->answers = $answers;
+        $this->avoidThis = $avoidThis;
+        $this->barrelAged = $barrelAged;
+        $this->buyThis = $buyThis;
+        $this->mustAvoid = $mustAvoid;
+        $this->mustTake = $mustTake;
+        $this->username = $username;
+        $this->resultsHash = $resultsHash;
+        $this->completeCacheKeys( $buyThis ); //todo: unit test
     }
 
-    //todo: from Array named constructor
+    public static function fromArray( array $data ): self
+    {
+        return new self(
+            $data['answers'],
+            $data['avoidThis'],
+            $data['barrelAged'],
+            $data['buyThis'],
+            $data['mustAvoid'],
+            $data['mustTake'],
+            $data['username'],
+            $data['resultsHash']
+        );
+    }
 
     public function getBuyThis(): ?array
     {
@@ -37,6 +59,11 @@ final class BeerData
     public function getAvoidThis(): ?array
     {
         return $this->avoidThis;
+    }
+
+    public function getResultsHash(): string
+    {
+        return $this->resultsHash;
     }
 
     public function setMailSent( bool $mailSent ): void
@@ -56,12 +83,13 @@ final class BeerData
             'username' => $this->username,
             'mailSent' => $this->mailSent,
             'cacheKeys' => $this->cacheKeys,
+            'resultsHash' => $this->resultsHash,
         ];
     }
 
     private function completeCacheKeys( array $buyThis ): void
     {
-        foreach ($buyThis as $item) {
+        foreach ( $buyThis as $item ) {
             if ( $item['cacheKey'] !== null ) {
                 $this->cacheKeys[] = $item['cacheKey'];
                 continue;

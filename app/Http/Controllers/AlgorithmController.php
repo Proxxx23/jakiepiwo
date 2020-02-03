@@ -83,12 +83,11 @@ final class AlgorithmController
 
         //todo: one service/repo - strategy?
         try {
-            ( new AnswersLoggerService( new UserAnswersRepository() ) )->logAnswers( $formData, $answers, $beerData->toArray() );
-        } catch ( Exception $e ) {
-            ( new ErrorsLogger( new ErrorLogsRepository() ) )->logError( $e->getMessage() );
+            ( new AnswersLoggerService( new UserAnswersRepository() ) )->logAnswers( $formData, $answers, $beerData );
+        } catch ( Exception $ex ) {
+            ( new ErrorsLogger( new ErrorLogsRepository() ) )->logError( $ex->getMessage() );
         }
 
-        //todo: results_hash to be returned in response
         return \response()
             ->json( $beerData->toArray(), JsonResponse::HTTP_OK, [], JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE );
     }

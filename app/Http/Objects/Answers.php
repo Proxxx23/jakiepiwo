@@ -8,7 +8,7 @@ final class Answers implements AnswersInterface
     private const POINT_PERCENT_GAP_WITH_PREVIOUS = 0.90;
     private const POINT_PERCENT_GAP_WITH_FIRST = 0.80;
     private const MARGIN_INCLUDED_EXCLUDED = 1.25;
-    private const MARGIN_FOR_OPTIONAL_TO_SHOW = 90;
+    private const MARGIN_PERCENT_FOR_OPTIONAL_TO_SHOW = 90;
 
     private array $includedIds = [];
     private array $excludedIds = [];
@@ -110,7 +110,7 @@ final class Answers implements AnswersInterface
      * @param array $idsToMultiply
      * @param float $multiplier
      */
-    public function buildPositiveSynergy( array $idsToMultiply, float $multiplier ): void
+    public function applyPositiveSynergy( array $idsToMultiply, float $multiplier ): void
     {
         foreach ( $idsToMultiply as $id ) {
             if ( !isset( $this->includedIds[$id] ) ) {
@@ -127,7 +127,7 @@ final class Answers implements AnswersInterface
      * @param array $idsToDivide
      * @param float $divider
      */
-    public function buildNegativeSynergy( array $idsToDivide, float $divider ): void
+    public function applyNegativeSynergy( array $idsToDivide, float $divider ): void
     {
         foreach ( $idsToDivide as $id ) {
             if ( !isset( $this->excludedIds[$id] ) ) {
@@ -198,7 +198,7 @@ final class Answers implements AnswersInterface
                 continue;
             }
 
-            if ( $toTakeChunk[0] >= ( $thirdStyleToTake[0] / 100 * self::MARGIN_FOR_OPTIONAL_TO_SHOW ) ) {
+            if ( $toTakeChunk[0] >= ( $thirdStyleToTake[0] / 100 * self::MARGIN_PERCENT_FOR_OPTIONAL_TO_SHOW ) ) {
                 $this->countStylesToTake++;
             }
 
@@ -207,7 +207,7 @@ final class Answers implements AnswersInterface
                 continue;
             }
 
-            if ( $toAvoidChunk[0] >= ( $thirdStyleToAvoid[0] / 100 * self::MARGIN_FOR_OPTIONAL_TO_SHOW ) ) {
+            if ( $toAvoidChunk[0] >= ( $thirdStyleToAvoid[0] / 100 * self::MARGIN_PERCENT_FOR_OPTIONAL_TO_SHOW ) ) {
                 $this->countStylesToAvoid++;
             }
         }

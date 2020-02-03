@@ -59,29 +59,29 @@ final class AlgorithmService
         if ( $answerValue[4] === 'coś lekkiego' &&
             $answerValue[12] === 'tak' &&
             $answerValue[13] === 'chętnie' ) {
-            $userOptions->buildPositiveSynergy( [ 40, 56 ], 2 );
-            $userOptions->buildPositiveSynergy( [ 51 ], 1.5 );
+            $userOptions->applyPositiveSynergy( [ 40, 56 ], 2 );
+            $userOptions->applyPositiveSynergy( [ 51 ], 1.5 );
         }
 
         // nowe smaki LUB szokujące + złożone + jasne
         if ( $answerValue[4] === 'coś złożonego' &&
             $answerValue[4] === 'jasne' &&
             ( $answerValue[2] === 'tak' || $answerValue[3] === 'tak' ) ) {
-            $userOptions->buildPositiveSynergy( [ 7, 15, 16, 23, 39, 42, 50, 60, 73 ], 2 );
+            $userOptions->applyPositiveSynergy( [ 7, 15, 16, 23, 39, 42, 50, 60, 73 ], 2 );
         }
 
         // nowe smaki LUB szokujące + złożone + ciemne
         if ( $answerValue[4] === 'coś złożonego' &&
             $answerValue[4] === 'ciemne' &&
             ( $answerValue[2] === 'tak' || $answerValue[3] === 'tak' ) ) {
-            $userOptions->buildPositiveSynergy( [ 36, 37, 59 ], 2 );
+            $userOptions->applyPositiveSynergy( [ 36, 37, 59 ], 2 );
         }
 
         // złożone + ciemne + nieowocowe
         if ( $answerValue[4] === 'coś złożonego' &&
             $answerValue[6] === 'ciemne' &&
             $answerValue[12] === 'nie' ) {
-            $userOptions->buildPositiveSynergy( [ 3, 24, 35, 36, 37, 48, 59, 75 ], 1.5 );
+            $userOptions->applyPositiveSynergy( [ 3, 24, 35, 36, 37, 48, 59, 75 ], 1.5 );
         }
 
         // złożone + ciemne + nieowocowe + kawowe
@@ -89,7 +89,7 @@ final class AlgorithmService
             $answerValue[6] === 'ciemne' &&
             $answerValue[10] === 'tak' &&
             $answerValue[12] === 'nie' ) {
-            $userOptions->buildPositiveSynergy( [ 74 ], 2.5 );
+            $userOptions->applyPositiveSynergy( [ 74 ], 2.5 );
         }
 
         // Lekkie + ciemne + słodkie + goryczka (ledwie || lekka || wyczuwalna)
@@ -97,14 +97,14 @@ final class AlgorithmService
             $answerValue[6] === 'ciemne' &&
             $answerValue[7] === 'słodsze' &&
             !\in_array( $answerValue[5], [ 'zdecydowanie wyczuwalną', 'jestem hopheadem' ], true ) ) {
-            $userOptions->buildPositiveSynergy( [ 12, 29, 30, 34, 64 ], 2 );
-            $userOptions->buildNegativeSynergy( [ 36, 37 ], 3 );
+            $userOptions->applyPositiveSynergy( [ 12, 29, 30, 34, 64 ], 2 );
+            $userOptions->applyNegativeSynergy( [ 36, 37 ], 3 );
         }
 
         // jasne + nieczekoladowe
         if ( $answerValue[6] === 'jasne' &&
             $answerValue[9] === 'nie' ) {
-            $userOptions->buildNegativeSynergy(
+            $userOptions->applyNegativeSynergy(
                 [ 12, 21, 24, 29, 33, 34, 35, 36, 37, 59, 71, 74, 75 ], 2
             );
         }
@@ -113,7 +113,7 @@ final class AlgorithmService
         if ( $answerValue[6] === 'ciemne' &&
             $answerValue[9] === 'tak' &&
             $answerValue[8] !== 'mocne i gęste' ) {
-            $userOptions->buildPositiveSynergy( [ 12, 31, 33, 34, 35, 59, 71 ], 2.5 );
+            $userOptions->applyPositiveSynergy( [ 12, 31, 33, 34, 35, 59, 71 ], 2.5 );
         }
 
 
@@ -122,8 +122,8 @@ final class AlgorithmService
             $answerValue[9] === 'nie' &&
             $answerValue[8] !== 'mocne i gęste' &&
             \in_array( $answerValue[5], ['ledwie wyczuwalną', 'lekką'], true ) ) {
-            $userOptions->buildPositiveSynergy( [ 20, 25, 40, 44, 45, 47, 51, 52, 53, 68, 73 ], 2 );
-            $userOptions->buildNegativeSynergy( [ 3, 24, 35, 36, 37, 59, 71, 75 ], 2 );
+            $userOptions->applyPositiveSynergy( [ 20, 25, 40, 44, 45, 47, 51, 52, 53, 68, 73 ], 2 );
+            $userOptions->applyNegativeSynergy( [ 3, 24, 35, 36, 37, 59, 71, 75 ], 2 );
         }
 
         // jasne + lekkie + wodniste + wędzone = grodziskie
@@ -131,28 +131,28 @@ final class AlgorithmService
             $answerValue[6] === 'jasne' &&
             $answerValue[8] === 'wodniste' &&
             $answerValue[14] === 'tak' ) {
-            $userOptions->buildPositiveSynergy( [ 52 ], 3 );
-            $userOptions->buildNegativeSynergy( [ 3, 22, 23, 24, 35, 36, 37, 50, 59, 71, 75 ], 2 );
+            $userOptions->applyPositiveSynergy( [ 52 ], 3 );
+            $userOptions->applyNegativeSynergy( [ 3, 22, 23, 24, 35, 36, 37, 50, 59, 71, 75 ], 2 );
         }
 
         // duża/hophead goryczka + jasne
         if ( $answerValue[6] === 'jasne' &&
             \in_array( $answerValue[5], [ 'zdecydowanie wyczuwalną', 'jestem hopheadem' ], true ) ) {
-            $userOptions->buildPositiveSynergy( [ 1, 2, 5, 6, 7, 8, 28, 61 ], 1.75 );
-            $userOptions->buildPositiveSynergy( [ 65, 69, 70, 72 ], 1.5 );
-            $userOptions->buildNegativeSynergy( [ 14, 25, 45, 47 ], 1.75 );
+            $userOptions->applyPositiveSynergy( [ 1, 2, 5, 6, 7, 8, 28, 61 ], 1.75 );
+            $userOptions->applyPositiveSynergy( [ 65, 69, 70, 72 ], 1.5 );
+            $userOptions->applyNegativeSynergy( [ 14, 25, 45, 47 ], 1.75 );
         }
 
         // duża/hophead goryczka + ciemne
         if ( $answerValue[6] === 'ciemne' &&
             \in_array( $answerValue[5], [ 'zdecydowanie wyczuwalną', 'jestem hopheadem' ], true ) ) {
-            $userOptions->buildPositiveSynergy( [ 3, 36, 37, 75 ], 1.75 );
+            $userOptions->applyPositiveSynergy( [ 3, 36, 37, 75 ], 1.75 );
         }
 
         // goryczka ledwo || lekka
         if ( $answerValue[5] === 'ledwie wyczuwalną' || $answerValue[5] === 'lekką' ) {
-            $userOptions->buildNegativeSynergy( [ 1, 2, 3, 5, 7, 8, 28, 61 ], 2 );
-            $userOptions->buildNegativeSynergy( [ 6, 60, 65, 69, 71, 72 ], 1.5 );
+            $userOptions->applyNegativeSynergy( [ 1, 2, 3, 5, 7, 8, 28, 61 ], 2 );
+            $userOptions->applyNegativeSynergy( [ 6, 60, 65, 69, 71, 72 ], 1.5 );
         }
     }
 
@@ -243,7 +243,7 @@ final class AlgorithmService
             $this->errorsLogger->logError( $e->getMessage() );
         }
 
-        return new BeerData(
+        return BeerData::fromArray(
             [
                 'buyThis' => $stylesToTakeCollection !== null ? $stylesToTakeCollection->toArray() : null,
                 'avoidThis' => $stylesToAvoidCollection !== null ? $stylesToAvoidCollection->toArray() : null,
@@ -252,8 +252,16 @@ final class AlgorithmService
                 'username' => $user->getUsername(),
                 'barrelAged' => $answers->isBarrelAged(),
                 'answers' => $this->answers,
+                'resultsHash' => $this->makeResultsHash( $this->answers ),
             ]
         );
+    }
+
+    private function makeResultsHash( array $answers ): string
+    {
+        $hashKey = \str_replace( ' ', '', \implode( '', $answers ) ) . \now();
+
+        return \hash('ripemd128', $hashKey);
     }
 
     /**

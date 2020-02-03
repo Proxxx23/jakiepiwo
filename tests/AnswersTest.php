@@ -47,7 +47,7 @@ class AnswersTest extends TestCase
     {
         $answers = new Answers();
         $answers->addToIncluded( 1, 2 );
-        $answers->buildPositiveSynergy( [ 1 ], 3.0 );
+        $answers->applyPositiveSynergy( [ 1 ], 3.0 );
 
         self::assertSame( $answers->getIncludedIds()[1], 6.0 );
     }
@@ -55,7 +55,7 @@ class AnswersTest extends TestCase
     public function testBuildsPositiveSynergyProperlyForIdNotInIncluded(): void
     {
         $answers = new Answers();
-        $answers->buildPositiveSynergy( [ 1 ], 3.0 );
+        $answers->applyPositiveSynergy( [ 1 ], 3.0 );
 
         self::assertSame( $answers->getIncludedIds()[1], 3.0 );
     }
@@ -64,7 +64,7 @@ class AnswersTest extends TestCase
     {
         $answers = new Answers();
         $answers->addToExcluded( 1, 6 );
-        $answers->buildNegativeSynergy( [ 1 ], 2.0 );
+        $answers->applyNegativeSynergy( [ 1 ], 2.0 );
 
         self::assertSame( $answers->getExcludedIds()[1], 3.0 );
     }
@@ -72,7 +72,7 @@ class AnswersTest extends TestCase
     public function testDoNothingForBuildingNegativeSynergyIfIdIsNotInExcluded(): void
     {
         $answers = new Answers();
-        $answers->buildNegativeSynergy( [ 1 ], 2.0 );
+        $answers->applyNegativeSynergy( [ 1 ], 2.0 );
 
         self::assertSame( [], $answers->getExcludedIds() );
     }
