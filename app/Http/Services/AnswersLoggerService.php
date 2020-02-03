@@ -16,9 +16,9 @@ final class AnswersLoggerService
         $this->userAnswersRepository = $userAnswersRepository;
     }
 
-    public function logAnswers( FormData $formInput, array $answers ): void
+    public function logAnswers( FormData $formInput, array $answers, array $results ): void
     {
-        $this->userAnswersRepository->addAnswers( $formInput, $answers );
+        $this->userAnswersRepository->addAnswers( $formInput, $answers, $results );
     }
 
 }

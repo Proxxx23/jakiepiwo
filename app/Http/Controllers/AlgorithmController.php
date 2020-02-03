@@ -55,13 +55,6 @@ final class AlgorithmController
         $formData = new FormData( new Answers(), $requestData );
         $answers = ( new QuestionsService( new QuestionsRepository() ) )->validateInput( $requestData );
 
-        //todo: one service/repo - strategy?
-        try {
-            ( new AnswersLoggerService( new UserAnswersRepository() ) )->logAnswers( $formData, $answers );
-        } catch ( Exception $e ) {
-            ( new ErrorsLogger( new ErrorLogsRepository() ) )->logError( $e->getMessage() );
-        }
-
         $httpClient = new Client();
 
         $beerData = ( new AlgorithmService(
@@ -88,6 +81,14 @@ final class AlgorithmController
             $newsletterService->addToNewsletterList( $formData->getEmail() );
         }
 
+        //todo: one service/repo - strategy?
+        try {
+            ( new AnswersLoggerService( new UserAnswersRepository() ) )->logAnswers( $formData, $answers, $beerData->toArray() );
+        } catch ( Exception $e ) {
+            ( new ErrorsLogger( new ErrorLogsRepository() ) )->logError( $e->getMessage() );
+        }
+
+        //todo: results_hash to be returned in response
         return \response()
             ->json( $beerData->toArray(), JsonResponse::HTTP_OK, [], JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE );
     }

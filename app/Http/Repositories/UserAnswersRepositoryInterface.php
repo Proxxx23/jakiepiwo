@@ -7,5 +7,5 @@ use App\Http\Objects\FormData;
 
 interface UserAnswersRepositoryInterface
 {
-    public function addAnswers( FormData $formInput, array $answers ): void;
+    public function addAnswers( FormData $formInput, array $answers, array $results ): void;
 }
