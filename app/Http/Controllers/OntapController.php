@@ -19,22 +19,13 @@ final class OntapController
 
     /**
      * @param Request $request
-     *
-     * @return JsonResponse
+     * @return Response
      * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \Psr\Cache\InvalidArgumentException
      */
     public function handle( Request $request ): Response
     {
         $payload = $request->input();
-        $coordinates = new Coordinates( $payload['userLocation']['latitude'], $payload['userLocation']['longitude'] );
-        if ( !$coordinates->isValid() ) {
-            return \response()->json(
-                [
-                    'message' => 'Invalid coordinates format.',
-                ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR
-            );
-        }
 
         $cacheKeys = $payload['cacheKeys'];
         if ( empty( $cacheKeys ) ) {
@@ -45,10 +36,19 @@ final class OntapController
             );
         }
 
+        $coordinates = new Coordinates( $payload['userLocation']['latitude'], $payload['userLocation']['longitude'] );
+        if ( !$coordinates->isValid() ) {
+            return \response()->json(
+                [
+                    'message' => 'Invalid coordinates format.',
+                ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+
         $cache = new FilesystemAdapter( '', self::DEFAULT_CACHE_TIME );
         $httpClient = new Client();
         $ontapService = new OnTapService(
-            new OnTapRepository( $httpClient, $cache, null ),
+            new OnTapRepository( $httpClient, $cache ), //todo: httpClient wpuszczać raz
             new GeolocationRepository( $httpClient )
         );
 
@@ -60,6 +60,8 @@ final class OntapController
                 ], JsonResponse::HTTP_NO_CONTENT
             );
         }
+
+        $ontapService->setOnTapCityName( $cityName );
 
         $styles = null;
         foreach ( $cacheKeys as $key ) {

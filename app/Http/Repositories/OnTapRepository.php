@@ -18,40 +18,36 @@ final class OnTapRepository implements OnTapRepositoryInterface
     private const CACHE_KEY_TAPS_PATTERN = '%s_TAPS_ONTAP';
     private const CACHE_KEY_CITIES = 'CITIES_ONTAP';
 
+    private const DEFAULT_TTL = 900;
+
     private ClientInterface $httpClient;
     private FilesystemAdapter $cache;
     private ?string $cityId = null;
-    private ?array $places = [];
-    private bool $connectionError = false;
-    private int $reqCount = 0;
+    private bool $connectionError;
+    private string $cityName;
 
     /**
      * @param ClientInterface $httpClient
      * @param FilesystemAdapter $cache
-     * @param string $cityName
      *
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function __construct( ClientInterface $httpClient, FilesystemAdapter $cache, ?string $cityName )
+    public function __construct( ClientInterface $httpClient, FilesystemAdapter $cache )
     {
         $this->cache = $cache;
         $this->httpClient = $httpClient; //todo: set headers globally
+        $this->connectionError = $this->checkIsConnectionRefused();
 
-        if ( $cityName !== null ) {
-            $this->cityId = $this->fetchCityIdByName( $cityName );
-            $this->connectionError = ( $this->cityId === null );
-            $this->places = $this->fetchPlacesByCityId( $this->cityId ); //todo rozplątać, niech to działa na czymś innym
-        }
     }
 
-    public function connected(): bool
+    public function setCityName( string $cityName ): void
+    {
+        $this->cityName = $cityName;
+    }
+
+    public function connectionNotRefused(): bool
     {
         return !$this->connectionError;
-    }
-
-    public function placesFound(): bool
-    {
-        return $this->places !== [];
     }
 
     /**
@@ -62,7 +58,7 @@ final class OnTapRepository implements OnTapRepositoryInterface
      */
     public function fetchTapsByBeerName( string $beerName ): ?array
     {
-        if ( empty( $beerName ) ) {
+        if ( $beerName === '' ) {
             return null;
         }
 
@@ -74,9 +70,11 @@ final class OnTapRepository implements OnTapRepositoryInterface
             return $item;
         }
 
+        $places = $this->fetchPlacesByCityId();
+
         //fetch all the taps in given places and find beer
-        $tapsData = [];
-        foreach ( $this->places as $place ) {
+        $tapsData = null;
+        foreach ( $places as $place ) {
             $taps = $this->fetchTapsByPlaceId( $place['id'] );
             if ( empty( $taps ) ) {
                 continue;
@@ -88,29 +86,13 @@ final class OnTapRepository implements OnTapRepositoryInterface
             }
         }
 
-        if ( $tapsData === [] ) {
+        if ( $tapsData === null ) {
             return null;
         }
 
         $this->setToCache( $cacheKey, $tapsData );
 
         return $tapsData;
-    }
-
-    /**
-     * @param string $cityName
-     *
-     * @return string|null
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     */
-    private function fetchCityIdByName( string $cityName ): ?string
-    {
-        $cities = $this->fetchAllCities();
-        $cityId = \array_search( $cityName, \array_column( $cities, 'name' ), true );
-
-        return \is_int( $cityId )
-            ? $cities[$cityId]['id']
-            : null;
     }
 
     /**
@@ -134,25 +116,52 @@ final class OnTapRepository implements OnTapRepositoryInterface
         ]
         );
 
-        $this->reqCount++;
-
-        $data = \json_decode(
-            $response->getBody()
-                ->getContents(), true, 512, JSON_THROW_ON_ERROR
-        );
+        $data = \json_decode( $response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR );
         $this->setToCache( self::CACHE_KEY_CITIES, $data );
 
         return $data;
     }
 
     /**
-     * @param string|null $cityId
-     *
+     * @return string|null
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    private function fetchCityIdByName(): ?string
+    {
+        $cities = $this->fetchAllCities();
+        $cityId = \array_search( $this->cityName, \array_column( $cities, 'name' ), true );
+
+        return \is_int( $cityId )
+            ? $cities[$cityId]['id']
+            : null;
+    }
+
+    /**
+     * @return bool
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    private function checkIsConnectionRefused(): bool
+    {
+        $response = $this->httpClient->request(
+            'GET', self::CITIES_LIST_URI, [
+                'headers' => [
+                    'Accept' => 'application/json',
+                    'Content-Type' => 'application/json',
+                    'Api-Key' => $_ENV['ONTAP_API_KEY'],
+                ],
+            ]
+        );
+
+        return empty( $response->getBody()->getContents() ) || $response->getStatusCode() !== 200;
+    }
+
+    /**
      * @return array
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    private function fetchPlacesByCityId( ?string $cityId ): array
+    private function fetchPlacesByCityId(): array
     {
+        $cityId = $this->fetchCityIdByName();
         $cacheKey = \sprintf( self::CACHE_KEY_PLACE_PATTERN, $cityId );
         $cachedData = $this->getFromCache( $cacheKey );
         if ( $cachedData !== null ) {
@@ -169,12 +178,7 @@ final class OnTapRepository implements OnTapRepositoryInterface
         ]
         );
 
-        $this->reqCount++;
-
-        $data = \json_decode(
-            $response->getBody()
-                ->getContents(), true, 512, JSON_THROW_ON_ERROR
-        );
+        $data = \json_decode( $response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR );
         $this->setToCache( $cacheKey, $data );
 
         return $data;
@@ -204,12 +208,7 @@ final class OnTapRepository implements OnTapRepositoryInterface
         ]
         );
 
-        $this->reqCount++;
-
-        $data = \json_decode(
-            $response->getBody()
-                ->getContents(), true, 512, JSON_THROW_ON_ERROR
-        );
+        $data = \json_decode( $response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR );
         $this->setToCache( $cacheKey, $data );
 
         return $data;
@@ -217,7 +216,7 @@ final class OnTapRepository implements OnTapRepositoryInterface
 
     private function hasBeer( string $beerName, array $tapBeerData ): bool
     {
-        foreach ( $tapBeerData as $tapBeer ) {
+        foreach ( $tapBeerData as &$tapBeer ) {
             if ( empty( $tapBeer['beer'] ) ) {
                 continue;
             }
@@ -225,19 +224,14 @@ final class OnTapRepository implements OnTapRepositoryInterface
                 return true;
             }
         }
+        unset( $tapBeer );
 
         return false;
     }
 
     // todo standalone class
 
-    /**
-     * @param string $cacheKey
-     *
-     * @return mixed|null
-     *
-     * todo: ale to jest kurwa złe, wynieść to w pizdu SRP
-     */
+    // todo: ale to jest kurwa złe, wynieść to w pizdu SRP
     private function getFromCache( string $cacheKey )
     {
         $item = null;
@@ -253,7 +247,8 @@ final class OnTapRepository implements OnTapRepositoryInterface
     }
 
     // todo: ale to jest kurwa złe, wynieść to w pizdu SRP
-    private function setToCache( string $cacheKey, $data ): void
+    // todo wyczaić jak ustawiać TTL przy save
+    private function setToCache( string $cacheKey, $data, $ttl = self::DEFAULT_TTL ): void
     {
         $dataCollection = null;
         try {

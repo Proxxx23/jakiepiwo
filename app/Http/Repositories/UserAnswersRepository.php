@@ -24,7 +24,7 @@ final class UserAnswersRepository implements UserAnswersRepositoryInterface
                     $formInput->getUsername(),
                     $formInput->getEmail(),
                     $formInput->addToNewsletterList(),
-                    \json_encode( $answers, JSON_UNESCAPED_UNICODE ),
+                    \json_encode( $answers, JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE, 512 ),
                     \now(),
                 ]
             );

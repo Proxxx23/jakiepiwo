@@ -2,6 +2,7 @@
 
 namespace Tests;
 
+use App\Http\Repositories\GeolocationRepository;
 use App\Http\Repositories\OnTapRepository;
 use App\Http\Services\OnTapService;
 use Prophecy\Prophet;
@@ -13,10 +14,10 @@ final class OnTapServiceTest extends FinalsBypassedTestCase
         $prophet = new Prophet();
         $prophecy = $prophet->prophesize( OnTapRepository::class );
         $prophecy->fetchTapsByBeerName( 'mockBeerName' )->shouldBeCalledOnce();
-        $prophecy->connected()->willReturn( true );
-        $prophecy->placesFound()->willReturn( true );
+        $prophecy->connectionNotRefused()->willReturn( true );
 
-        $service = new OnTapService( $prophecy->reveal() );
+        $geolocationRepository = $this->createMock( GeolocationRepository::class );
+        $service = new OnTapService( $prophecy->reveal(), $geolocationRepository );
 
         self::assertNotNull( $service->getTapsByBeerName( 'mockBeerName' ) );
         $prophecy->checkProphecyMethodsPredictions();
@@ -24,33 +25,12 @@ final class OnTapServiceTest extends FinalsBypassedTestCase
 
     public function testReturnsNullIfNotConnected(): void
     {
-        $repository = $this->createMock( OnTapRepository::class );
-        $repository->method( 'connected' )->willReturn( false );
-        $repository->method( 'placesFound' )->willReturn( true );
+        $onTapRepository = $this->createMock( OnTapRepository::class );
+        $onTapRepository->method( 'connectionNotRefused' )->willReturn( false );
 
-        $service = new OnTapService( $repository );
+        $geolocationRepository = $this->createMock( GeolocationRepository::class );
 
-        self::assertNull( $service->getTapsByBeerName( 'mockBeerName' ) );
-    }
-
-    public function testReturnsNullIfNoPlacesFound(): void
-    {
-        $repository = $this->createMock( OnTapRepository::class );
-        $repository->method( 'connected' )->willReturn( true );
-        $repository->method( 'placesFound' )->willReturn( false );
-
-        $service = new OnTapService( $repository );
-
-        self::assertNull( $service->getTapsByBeerName( 'mockBeerName' ) );
-    }
-
-    public function testReturnsNullIfNoPlacesFoundAndNotConnected(): void
-    {
-        $repository = $this->createMock( OnTapRepository::class );
-        $repository->method( 'connected' )->willReturn( false );
-        $repository->method( 'placesFound' )->willReturn( false );
-
-        $service = new OnTapService( $repository );
+        $service = new OnTapService( $onTapRepository, $geolocationRepository );
 
         self::assertNull( $service->getTapsByBeerName( 'mockBeerName' ) );
     }

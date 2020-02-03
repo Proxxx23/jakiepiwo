@@ -15,7 +15,7 @@ final class BeersRepository implements BeersRepositoryInterface
 
         try {
             return DB::select(
-                "SELECT `id`, 
+                'SELECT `id`, 
                     `name`, 
                     `name2`, 
                     `name_pl` 
@@ -23,7 +23,7 @@ final class BeersRepository implements BeersRepositoryInterface
                     beers 
                 WHERE 
                     id 
-                IN (" . \implode( ',', $ids ) . ')' . $randomizeOrder
+                IN (' . \implode( ',', $ids ) . ')' . $randomizeOrder
             );
         } catch ( \Exception $exception ) {
             return [];

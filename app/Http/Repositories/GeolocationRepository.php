@@ -13,7 +13,7 @@ final class GeolocationRepository implements GeolocationRepositoryInterface
     private ClientInterface $httpClient;
     private array $citiesList;
 
-    //todo idicator like in ontap - errorconnection
+    //todo indicator like in ontap - errorconnection
 
     public function __construct( ClientInterface $httpClient )
     {
@@ -25,6 +25,11 @@ final class GeolocationRepository implements GeolocationRepositoryInterface
         $this->citiesList = \array_column( $citiesList, 'name' );
     }
 
+    /**
+     * @param Coordinates $coordinates
+     * @return string|null
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
     public function fetchCityByCoordinates( Coordinates $coordinates ): ?string
     {
         $request = $this->httpClient->request(
@@ -36,10 +41,7 @@ final class GeolocationRepository implements GeolocationRepositoryInterface
             return null;
         }
 
-        $content = \json_decode(
-            $request->getBody()
-                ->getContents(), true
-        );
+        $content = \json_decode( $request->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR );
         $found = \preg_grep( '/^miasto.*$/', \array_column( $content['localityInfo']['administrative'], 'description' ) );
         if ( empty( $found ) ) {
             return null;
