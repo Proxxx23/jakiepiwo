@@ -6,6 +6,7 @@ namespace App\Http\Repositories;
 interface OnTapRepositoryInterface
 {
     public function fetchTapsByBeerName( string $beerName ): ?array;
+    public function fetchAllCities(): array;
     public function connected(): bool;
     public function placesFound(): bool;
 }

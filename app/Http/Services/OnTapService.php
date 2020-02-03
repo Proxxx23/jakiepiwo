@@ -5,7 +5,7 @@ namespace App\Http\Services;
 
 use App\Http\Repositories\OnTapRepositoryInterface;
 
-final class OntapService
+final class OnTapService
 {
     private OnTapRepositoryInterface $repository;
 
@@ -14,10 +14,19 @@ final class OntapService
         $this->repository = $onTapRepository;
     }
 
-    public function get( string $beerName ): ?array
+    public function getTapsByBeerName( string $beerName ): ?array
     {
         if ( $this->repository->connected() && $this->repository->placesFound() ) {
             return $this->repository->fetchTapsByBeerName( $beerName );
+        }
+
+        return null;
+    }
+
+    public function getAllCities(): ?array
+    {
+        if ( $this->repository->connected() && $this->repository->placesFound() ) {
+            return $this->repository->fetchAllCities();
         }
 
         return null;
