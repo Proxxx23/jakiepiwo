@@ -6,12 +6,12 @@ namespace App\Http\Objects;
 final class FormData
 {
     private bool $addToNewsletterList;
-    private AnswersInterface $answers;
+    private Answers $answers;
     private ?string $email;
     private bool $sendEmail;
     private ?string $username;
 
-    public function __construct( AnswersInterface $answers, array $requestData )
+    public function __construct( Answers $answers, array $requestData )
     {
         $this->addToNewsletterList = \is_bool( $requestData['newsletter'] ) ? $requestData['newsletter'] : false;
         $this->answers = $answers;
@@ -44,7 +44,7 @@ final class FormData
         return $this->sendEmail;
     }
 
-    public function getAnswers(): AnswersInterface
+    public function getAnswers(): Answers
     {
         return $this->answers;
     }

@@ -3,11 +3,12 @@ declare( strict_types=1 );
 
 namespace App\Http\Objects;
 
-final class Answers implements AnswersInterface
+final class Answers
 {
     private const POINT_PERCENT_GAP_WITH_PREVIOUS = 0.90;
     private const POINT_PERCENT_GAP_WITH_FIRST = 0.80;
     private const MARGIN_INCLUDED_EXCLUDED = 1.25;
+    private const MARGIN_STYLES_TO_DISTINGUISH = 1.25;
     private const MARGIN_PERCENT_FOR_OPTIONAL_TO_SHOW = 90;
 
     private array $includedIds = [];
@@ -211,7 +212,7 @@ final class Answers implements AnswersInterface
     }
 
     /**
-     * If 1st styles to take and avoid has more than/equal 150% points of 2nd or 3rd styles
+     * If 1st styles to take and avoid has more than/equal 125% points of 2nd or 3rd styles
      * Emphasize them!
      */
     private function fetchStylesToTakeAndAvoid(): void
@@ -229,8 +230,8 @@ final class Answers implements AnswersInterface
             return;
         }
 
-        if ( $secondStyleToTake[0] * 1.25 <= $firstStyleToTake[0] ||
-            $thirdStyleToTake[0] * 1.25 <= $firstStyleToTake[0] ) {
+        if ( $secondStyleToTake[0] * self::MARGIN_STYLES_TO_DISTINGUISH <= $firstStyleToTake[0] ||
+            $thirdStyleToTake[0] * self::MARGIN_STYLES_TO_DISTINGUISH <= $firstStyleToTake[0] ) {
             $this->mustTakeOpt = true;
         }
 
@@ -238,8 +239,8 @@ final class Answers implements AnswersInterface
             return;
         }
 
-        if ( $secondStyleToAvoid[0] * 1.25 <= $firstStyleToAvoid[0] ||
-            $thirdStyleToAvoid[0] * 1.25 <= $firstStyleToAvoid[0] ) {
+        if ( $secondStyleToAvoid[0] * self::MARGIN_STYLES_TO_DISTINGUISH <= $firstStyleToAvoid[0] ||
+            $thirdStyleToAvoid[0] * self::MARGIN_STYLES_TO_DISTINGUISH <= $firstStyleToAvoid[0] ) {
             $this->mustAvoidOpt = true;
         }
     }

@@ -3,17 +3,16 @@ declare( strict_types=1 );
 
 namespace Tests;
 
-use App\Http\Objects\AnswersInterface;
+use App\Http\Objects\Answers;
 use App\Http\Objects\FormData;
-use PHPUnit\Framework\TestCase;
 
-final class FormDataTest extends TestCase
+final class FormDataTest extends FinalsBypassedTestCase
 {
     public function testReturnsEmailForValidEmail(): void
     {
-        $mockAnswersInterface = $this->createMock( AnswersInterface::class );
+        $answers = $this->createMock( Answers::class );
         $formData = new FormData (
-            $mockAnswersInterface, [
+            $answers, [
             'newsletter' => false,
             'email' => 'valid@email.com',
             'sendEmail' => false,
@@ -26,9 +25,9 @@ final class FormDataTest extends TestCase
 
     public function testReturnsNullForInvalidEmail(): void
     {
-        $mockAnswersInterface = $this->createMock( AnswersInterface::class );
+        $answers = $this->createMock( Answers::class );
         $formData = new FormData (
-            $mockAnswersInterface, [
+            $answers, [
             'newsletter' => false,
             'email' => 'invali&@#',
             'sendEmail' => false,

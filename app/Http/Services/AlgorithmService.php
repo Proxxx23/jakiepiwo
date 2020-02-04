@@ -7,7 +7,6 @@ use App\Http\Objects\StyleInfo;
 use App\Http\Repositories\ScoringRepository;
 use Exception;
 use App\Http\Objects\Answers;
-use App\Http\Objects\AnswersInterface;
 use App\Http\Objects\BeerData;
 use App\Http\Objects\StylesToAvoid;
 use App\Http\Objects\StylesToAvoidCollection;
@@ -295,7 +294,7 @@ final class AlgorithmService
         return $idsToCalculate;
     }
 
-    private function createStylesToTakeCollection( AnswersInterface $answers, bool $isSmoked ): ?StylesToTakeCollection
+    private function createStylesToTakeCollection( Answers $answers, bool $isSmoked ): ?StylesToTakeCollection
     {
         if ( $answers->getIncludedIds() === [] ) {
             return null;
@@ -329,7 +328,7 @@ final class AlgorithmService
         return $stylesToTakeCollection;
     }
 
-    private function createStylesToAvoidCollection( AnswersInterface $answers ): ?StylesToAvoidCollection
+    private function createStylesToAvoidCollection( Answers $answers ): ?StylesToAvoidCollection
     {
         if ( $answers->getExcludedIds() === [] ) {
             return null;
