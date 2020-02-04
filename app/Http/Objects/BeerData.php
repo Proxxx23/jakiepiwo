@@ -34,7 +34,7 @@ final class BeerData
         $this->mustTake = $mustTake;
         $this->username = $username;
         $this->resultsHash = $resultsHash;
-        $this->completeCacheKeys( $buyThis ); //todo: unit test
+        $this->completeCacheKeys( $buyThis );
     }
 
     public static function fromArray( array $data ): self
@@ -64,6 +64,11 @@ final class BeerData
     public function getResultsHash(): string
     {
         return $this->resultsHash;
+    }
+
+    public function getCacheKeys(): ?array
+    {
+        return $this->cacheKeys;
     }
 
     public function setMailSent( bool $mailSent ): void
