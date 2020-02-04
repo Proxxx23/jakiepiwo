@@ -75,16 +75,17 @@ final class ResultsController
         ) )
             ->createBeerData( $answers, $formData );
 
-        if ( $formData->hasEmail() && $formData->sendEmail() ) {
-            ( new MailService() )->sendEmail( $beerData, $formData->getUsername(), $formData->getEmail() );
-            $beerData->setMailSent( true );
-        }
-
-        if ( $formData->addToNewsletterList() && $formData->getEmail() !== null ) {
-            $newsletterService = new NewsletterService(
-                new NewsletterRepository( new MailChimp( \config( 'mail.mailchimpApiKey' ) ) )
-            );
-            $newsletterService->addToNewsletterList( $formData->getEmail() );
+        if ( $formData->hasEmail() ) {
+            if ( $formData->sendEmail() ) {
+                ( new MailService() )->sendEmail( $beerData, $formData->getUsername(), $formData->getEmail() );
+                $beerData->setMailSent( true );
+            }
+            if ( $formData->addToNewsletterList() ) {
+                $newsletterService = new NewsletterService(
+                    new NewsletterRepository( new MailChimp( \config( 'mail.mailchimpApiKey' ) ) )
+                );
+                $newsletterService->addToNewsletterList( $formData->getEmail() );
+            }
         }
 
         //todo: one service/repo - strategy?
