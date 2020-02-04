@@ -30,7 +30,7 @@ use DrewM\MailChimp\MailChimp;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 
-final class AlgorithmController
+final class ResultsController
 {
     private const INVALID_CONTENT_TYPE_EXCEPTION_MESSAGE = 'Set Content Type header to application/json.';
     private const EMPTY_DATA_EXCEPTION_MESSAGE = 'No valid data provided.';
@@ -41,7 +41,7 @@ final class AlgorithmController
      * @return JsonResponse
      * @throws Exception
      */
-    public function handle( Request $request ): JsonResponse
+    public function resultsAction( Request $request ): JsonResponse
     {
         if ( \stripos( $request->header( 'Content-type' ), self::APPLICATION_JSON_HEADER ) === false ) {
             throw new InvalidContentTypeException( self::INVALID_CONTENT_TYPE_EXCEPTION_MESSAGE );
@@ -90,5 +90,10 @@ final class AlgorithmController
 
         return \response()
             ->json( $beerData->toArray(), JsonResponse::HTTP_OK, [], JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE );
+    }
+
+    public function resultsByResultsHashAction( Request $request, string $resultsHash )
+    {
+        return $resultsHash;
     }
 }

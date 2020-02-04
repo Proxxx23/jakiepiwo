@@ -9,5 +9,6 @@ Route::get('/', static function () {
 });
 
 Route::get( '/questions', 'QuestionsController@handle' );
-Route::post( '/results', 'AlgorithmController@handle' );
+Route::post( '/results', 'ResultsController@resultsAction' );
+Route::get( '/results/{resultsHash}', 'ResultsController@resultsByResultsHashAction' );
 Route::post( '/ontap', 'OntapController@handle' );
