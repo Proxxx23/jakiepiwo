@@ -3,8 +3,12 @@ declare( strict_types=1 );
 
 namespace App\Http\Controllers;
 
+use App\Http\Objects\BeerData;
+use App\Http\Repositories\ResultsRepository;
+use App\Http\Services\SimpleResultsService;
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
+use Symfony\Component\HttpFoundation\Response;
 use UnexpectedValueException;
 use Exception;
 use App\Exceptions\InvalidContentTypeException;
@@ -38,6 +42,7 @@ final class ResultsController
 
     /**
      * @param Request $request
+     *
      * @return JsonResponse
      * @throws Exception
      */
@@ -63,11 +68,12 @@ final class ResultsController
                 new Dictionary(),
                 new FilesystemAdapter( '', 1800 ),
                 $httpClient
-            ) ,
+            ),
             new StylesLogsRepository(),
             new BeersRepository(),
-            new ErrorsLogger( new ErrorLogsRepository() )))
-                ->createBeerData( $answers, $formData );
+            new ErrorsLogger( new ErrorLogsRepository() )
+        ) )
+            ->createBeerData( $answers, $formData );
 
         if ( $formData->hasEmail() && $formData->sendEmail() ) {
             ( new MailService() )->sendEmail( $beerData, $formData->getUsername(), $formData->getEmail() );
@@ -92,8 +98,11 @@ final class ResultsController
             ->json( $beerData->toArray(), JsonResponse::HTTP_OK, [], JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE );
     }
 
-    public function resultsByResultsHashAction( Request $request, string $resultsHash )
+    public function resultsByResultsHashAction( string $resultsHash ): Response
     {
-        return $resultsHash;
+        $service = new SimpleResultsService( new ResultsRepository() );
+        $resulsJson = $service->getResultsByResultsHash( $resultsHash );
+
+        return \response( $resulsJson )->header( 'Content-Type', 'application/json' );
     }
 }
