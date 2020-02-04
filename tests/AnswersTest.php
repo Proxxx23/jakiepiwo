@@ -7,7 +7,7 @@ namespace Tests;
 use App\Http\Objects\Answers;
 use PHPUnit\Framework\TestCase;
 
-class AnswersTest extends TestCase
+final class AnswersTest extends TestCase
 {
     public function testAddsToIncludedProperly(): void
     {
@@ -88,8 +88,8 @@ class AnswersTest extends TestCase
     public function testExcludesFromRecommendedProperlyIfPreviouslyInIncludes(): void
     {
         $answers = new Answers();
-        $answers->addToIncluded(1, 1);
-        $answers->addToIncluded(2, 2);
+        $answers->addToIncluded( 1, 1 );
+        $answers->addToIncluded( 2, 2 );
         $answers->excludeFromRecommended( [ 1, 2 ] );
 
         self::assertSame( 0, $answers->getIncludedIds()[1] );

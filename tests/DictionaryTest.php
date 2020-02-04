@@ -1,10 +1,12 @@
 <?php
 declare( strict_types=1 );
 
+namespace Tests;
+
 use App\Http\Utils\Dictionary;
 use PHPUnit\Framework\TestCase;
 
-class DictionaryTest extends TestCase
+final class DictionaryTest extends TestCase
 {
     public function testGetsTranslatedIdProperly(): void
     {
