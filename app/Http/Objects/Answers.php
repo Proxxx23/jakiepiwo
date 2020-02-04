@@ -69,11 +69,6 @@ final class Answers implements AnswersInterface
         $this->shuffled = $shuffled;
     }
 
-    public function isShuffled(): bool
-    {
-        return $this->shuffled;
-    }
-
     public function getCountStylesToTake(): int
     {
         return $this->countStylesToTake;
@@ -157,7 +152,9 @@ final class Answers implements AnswersInterface
      */
     public function removeAssignedPoints(): void
     {
-        $this->includedIds = \array_keys( $this->includedIds );
+        $this->includedIds = ( $this->shuffled === false )
+            ? \array_keys( $this->includedIds )
+            : \array_values( $this->includedIds );
         $this->excludedIds = \array_keys( $this->excludedIds );
     }
 

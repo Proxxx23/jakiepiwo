@@ -3,6 +3,7 @@ declare( strict_types=1 );
 
 namespace App\Http\Services;
 
+use App\Http\Objects\StyleInfo;
 use App\Http\Repositories\ScoringRepository;
 use Exception;
 use App\Http\Objects\Answers;
@@ -300,25 +301,28 @@ final class AlgorithmService
             return null;
         }
 
-        $idStylesToTake = [];
+        $idStylesToTake = null;
         for ( $i = 0; $i < $answers->getCountStylesToTake(); $i++ ) {
             $idStylesToTake[] = $answers->getIncludedIds()[$i];
         }
 
-        $buyThis = [];
+        $styleInfoCollection = null;
         if ( $idStylesToTake !== [] ) {
-            $buyThis = $this->beersRepository->fetchByIds( $idStylesToTake, $answers->isShuffled() );
-            //todo: czasami bierze 3, 4 albo 5 z bazy
+            $styleInfoCollection = $this->beersRepository->fetchByIds( $idStylesToTake );
         }
-        $stylesToTakeCollection = ( new StylesToTakeCollection() )->setIdStylesToTake( $idStylesToTake );
 
+        if ( $styleInfoCollection === null ) {
+            return null; // should never happen
+        }
+
+        $stylesToTakeCollection = ( new StylesToTakeCollection() )->setIdStylesToTake( $idStylesToTake );
         //todo to jest tak złe xDDDDD - rozplątać koniecznie w pizdu tę rzeźbę
-        foreach ( $buyThis as $styleInfo ) {
-            if ( $isSmoked && \in_array( (int) $styleInfo->id, ScoringRepository::POSSIBLE_SMOKED_DARK_BEERS, true ) ) {
-                $styleInfo->name = '(Smoked) ' . $styleInfo->name;
-                $styleInfo->name_pl = '(Wędzony) ' . $styleInfo->name_pl;
+        /** @var StyleInfo $styleInfo */
+        foreach ( $styleInfoCollection as $styleInfo ) {
+            if ( $isSmoked && \in_array( $styleInfo->getId(), ScoringRepository::POSSIBLE_SMOKED_DARK_BEERS, true ) ) {
+                $styleInfo->setSmokedNames();
             }
-            $polskiKraftBeerDataCollection = $this->polskiKraftRepository->fetchByBeerId( (int) $styleInfo->id );
+            $polskiKraftBeerDataCollection = $this->polskiKraftRepository->fetchByBeerId( $styleInfo->getId() );
             $stylesToTakeCollection->add( ( new StylesToTake( $styleInfo, $polskiKraftBeerDataCollection ) )->toArray() );
         }
 
@@ -331,20 +335,23 @@ final class AlgorithmService
             return null;
         }
 
-        $idStylesToAvoid = [];
+        $idStylesToAvoid = null;
         for ( $i = 0; $i < $answers->getCountStylesToAvoid(); $i++ ) {
             $idStylesToAvoid[] = $answers->getExcludedIds()[$i];
         }
 
-        $avoidThis = [];
+        $styleInfoCollection = null;
         if ( $idStylesToAvoid !== [] ) {
-            $avoidThis = $this->beersRepository->fetchByIds( $idStylesToAvoid );
+            $styleInfoCollection = $this->beersRepository->fetchByIds( $idStylesToAvoid );
         }
 
-        $stylesToAvoidCollection = ( new StylesToAvoidCollection() )
-            ->setIdStylesToAvoid( $idStylesToAvoid );
+        if ( $styleInfoCollection === null ) {
+            return null; // should never happen
+        }
 
-        foreach ( $avoidThis as $styleInfo ) {
+        $stylesToAvoidCollection = ( new StylesToAvoidCollection() )->setIdStylesToAvoid( $idStylesToAvoid );
+        /** @var StyleInfo $styleInfo */
+        foreach ( $styleInfoCollection as $styleInfo ) {
             $stylesToAvoidCollection->add( ( new StylesToAvoid( $styleInfo ) )->toArray() );
         }
 

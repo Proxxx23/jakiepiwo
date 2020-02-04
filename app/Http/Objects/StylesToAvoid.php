@@ -3,19 +3,16 @@ declare( strict_types=1 );
 
 namespace App\Http\Objects;
 
-final class StylesToAvoid
+final class StylesToAvoid extends AbstractStyles
 {
-    private int $id;
-    private string $name;
-    private ?string $otherName;
-    private ?string $polishName;
-
-    public function __construct( object $data )
+    public function __construct( StyleInfo $styleInfo )
     {
-        $this->id = (int) $data->id;
-        $this->name = $data->name;
-        $this->otherName = $data->name2;
-        $this->polishName = $data->name_pl;
+        $this->id = $styleInfo->getId();
+        $this->name = $styleInfo->getName();
+        $this->otherName = $styleInfo->getOtherName();
+        $this->polishName = $styleInfo->getPolishName();
+        $this->description = $styleInfo->getDescription();
+        $this->moreLink = $styleInfo->getMoreLink();
     }
 
     public function getId(): int
@@ -35,6 +32,8 @@ final class StylesToAvoid
             'name' => $this->name,
             'otherName' => $this->otherName,
             'polishName' => $this->polishName,
+            'description' => $this->description,
+            'moreLink' => $this->moreLink,
         ];
     }
 }
