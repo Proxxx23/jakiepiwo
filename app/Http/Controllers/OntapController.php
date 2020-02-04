@@ -53,6 +53,7 @@ final class OntapController
         );
 
         $cityName = $ontapService->getCityByCoordinates( $coordinates );
+        $cityName = 'Białystok';
         if ( $cityName === null ) {
             return \response()->json(
                 [
@@ -85,7 +86,7 @@ final class OntapController
             foreach ( $style as $item ) { //todo: one foreach
                 $ontapBeer = $ontapService->getTapsByBeerName( $item['title'] );
                 if ( $ontapBeer !== null ) {
-                    $data[][$item['title']] = $ontapBeer;
+                    $data[] = $ontapBeer;
                 }
             }
         }

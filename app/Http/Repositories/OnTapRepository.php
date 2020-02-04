@@ -79,9 +79,8 @@ final class OnTapRepository implements OnTapRepositoryInterface
             if ( empty( $taps ) ) {
                 continue;
             }
-
             if ( $this->hasBeer( $beerName, $taps ) ) {
-                $tapsData[$place['name']] = true;
+                $tapsData[$beerName][] = $place['name'];
                 continue;
             }
         }
