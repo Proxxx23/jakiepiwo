@@ -3,7 +3,6 @@ declare( strict_types=1 );
 
 namespace App\Http\Controllers;
 
-use App\Http\Objects\BeerData;
 use App\Http\Repositories\ResultsRepository;
 use App\Http\Services\SimpleResultsService;
 use Illuminate\Http\JsonResponse;
@@ -40,6 +39,8 @@ final class ResultsController
     private const EMPTY_DATA_EXCEPTION_MESSAGE = 'No valid data provided.';
     private const APPLICATION_JSON_HEADER = 'application/json';
 
+    private const DEFAULT_CACHE_TTL = 900;
+
     /**
      * @param Request $request
      *
@@ -66,7 +67,7 @@ final class ResultsController
             new ScoringRepository(),
             new PolskiKraftRepository(
                 new Dictionary(),
-                new FilesystemAdapter( '', 1800 ),
+                new FilesystemAdapter( '', self::DEFAULT_CACHE_TTL ),
                 $httpClient
             ),
             new StylesLogsRepository(),
@@ -102,7 +103,7 @@ final class ResultsController
     public function resultsByResultsHashAction( string $resultsHash ): Response
     {
         $service = new SimpleResultsService( new ResultsRepository() );
-        $resulsJson = $service->getResultsByResultsHash( $resultsHash );
+        $resulsJson = $service->getResultsByResultsHash( $resultsHash ); //todo: may be stored in cache for an hour?
 
         return \response( $resulsJson )->header( 'Content-Type', 'application/json' );
     }
