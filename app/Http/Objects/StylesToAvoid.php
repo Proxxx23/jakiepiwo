@@ -15,16 +15,6 @@ final class StylesToAvoid extends AbstractStyles
         $this->moreLink = $styleInfo->getMoreLink();
     }
 
-    public function getId(): int
-    {
-        return $this->id;
-    }
-
-    public function getName(): string
-    {
-        return $this->name;
-    }
-
     public function toArray(): array
     {
         return [

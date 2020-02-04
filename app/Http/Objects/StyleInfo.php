@@ -50,7 +50,6 @@ final class StyleInfo
         return $this->name;
     }
 
-    //todo test
     public function setSmokedNames(): void
     {
         $this->name = '(Smoked) ' . $this->name;
@@ -76,5 +75,4 @@ final class StyleInfo
     {
         return $this->moreLink;
     }
-
 }

@@ -50,8 +50,109 @@ final class AlgorithmService
         $this->errorsLogger = $errorsLogger;
     }
 
-    //todo otestować
-    public function applySynergy( array $answerValue, FormData $user ): void
+    public function createBeerData( array $answers, FormData $user ): BeerData
+    {
+        $this->answers = $answers;
+
+        /** @var Answers $userOptions */
+        $userOptions = $user->getAnswers();
+
+        $userOptions->setSmoked( $answers[13] === 'tak' );
+        $userOptions->setBarrelAged( $answers[14] === 'tak' );
+
+        $answers = \array_filter( $answers, fn($v) => $v !== 'nie wiem');
+
+        foreach ( $answers as $questionNumber => &$givenAnswer ) {
+
+            // we calculate nothing
+            if ( $givenAnswer === 'bez znaczenia' ) {
+                continue;
+            }
+
+            // Nie idź dalej przy BA bo nic nie liczymy na tej podstawie
+            if ( $questionNumber === 14 ) {
+                continue;
+            }
+
+            $scoringMap = $this->scoringRepository->fetchByQuestionNumber( $questionNumber );
+            foreach ( $scoringMap as $mappedAnswer => $ids ) {
+
+                if ( $givenAnswer === $mappedAnswer ) {
+                    $idsToCalculate = $this->buildStrength( $ids );
+                    if ( $idsToCalculate !== null ) {
+                        foreach ( $idsToCalculate as $styleId => $strength ) {
+                            if ( empty( $userOptions->getIncludedIds()[$styleId] ) ) {
+                                $userOptions->addToIncluded( $styleId, $strength );
+                            } else {
+                                $userOptions->addStrengthToIncluded( $styleId, $strength );
+                            }
+                        }
+                    }
+                }
+
+                //todo: wtf?
+//                if ( \in_array( $questionNumber, [ 3, 5, 9 ], true ) ) {
+//                    continue;
+//                }
+
+                if ( $givenAnswer !== $mappedAnswer ) {
+                    $idsToCalculate = $this->buildStrength( $ids );
+                    if ( $idsToCalculate !== null ) {
+                        foreach ( $idsToCalculate as $styleId => $strength ) {
+                            if ( empty( $userOptions->getExcludedIds()[$styleId] ) ) {
+                                $userOptions->addToExcluded( $styleId, $strength );
+                            } else {
+                                $userOptions->addStrengthToExcluded( $styleId, $strength );
+                            }
+                        }
+                    }
+                }
+
+            }
+        }
+        unset( $givenAnswer );
+
+        $this->excludeBatch( $answers, $userOptions );
+        $this->applySynergy( $answers, $user );
+
+        /** @var FormData $user */
+        $answers = $user->getAnswers();
+        $answers->fetchAll();
+        $answers->removeAssignedPoints();
+
+        $stylesToTakeCollection = $this->createStylesToTakeCollection( $answers, $userOptions->isSmoked() );
+        $stylesToAvoidCollection = $this->createStylesToAvoidCollection( $answers );
+
+        $idStylesToTake = ( $stylesToTakeCollection !== null )
+            ? $stylesToTakeCollection->getIdStylesToTake()
+            : null;
+
+        $idStylesToAvoid = ( $stylesToAvoidCollection !== null )
+            ? $stylesToAvoidCollection->getIdStylesToAvoid()
+            : null;
+
+        try {
+            $this->stylesLogsRepository->logStyles( $user, $idStylesToTake, $idStylesToAvoid );
+        } catch ( Exception $e ) {
+            $this->errorsLogger->logError( $e->getMessage() );
+        }
+
+        return BeerData::fromArray(
+            [
+                'buyThis' => $stylesToTakeCollection !== null ? $stylesToTakeCollection->toArray() : null,
+                'avoidThis' => $stylesToAvoidCollection !== null ? $stylesToAvoidCollection->toArray() : null,
+                'mustTake' => $answers->isMustTakeOpt(),
+                'mustAvoid' => $answers->isMustAvoidOpt(),
+                'username' => $user->getUsername(),
+                'barrelAged' => $answers->isBarrelAged(),
+                'answers' => $this->answers,
+                'resultsHash' => $this->makeResultsHash( $this->answers ),
+            ]
+        );
+    }
+
+    //todo osobna klasa
+    private function applySynergy( array $answerValue, FormData $user ): void
     {
         /** @var Answers $userOptions */
         $userOptions = $user->getAnswers();
@@ -155,107 +256,6 @@ final class AlgorithmService
             $userOptions->applyNegativeSynergy( [ 1, 2, 3, 5, 7, 8, 28, 61 ], 2 );
             $userOptions->applyNegativeSynergy( [ 6, 60, 65, 69, 71, 72 ], 1.5 );
         }
-    }
-
-    public function createBeerData( array $answers, FormData $user ): BeerData
-    {
-        $this->answers = $answers;
-
-        /** @var Answers $userOptions */
-        $userOptions = $user->getAnswers();
-
-        $userOptions->setSmoked( $answers[13] === 'tak' );
-        $userOptions->setBarrelAged( $answers[14] === 'tak' );
-
-        $answers = \array_filter( $answers, fn($v) => $v !== 'nie wiem');
-
-        foreach ( $answers as $questionNumber => &$givenAnswer ) {
-
-            // we calculate nothing
-            if ( $givenAnswer === 'bez znaczenia' ) {
-                continue;
-            }
-
-            // Nie idź dalej przy BA bo nic nie liczymy na tej podstawie
-            if ( $questionNumber === 14 ) {
-                continue;
-            }
-
-            $scoringMap = $this->scoringRepository->fetchByQuestionNumber( $questionNumber );
-            foreach ( $scoringMap as $mappedAnswer => $ids ) {
-
-                if ( $givenAnswer === $mappedAnswer ) {
-                    $idsToCalculate = $this->buildStrength( $ids );
-                    if ( $idsToCalculate !== null ) {
-                        foreach ( $idsToCalculate as $styleId => $strength ) {
-                            if ( empty( $userOptions->getIncludedIds()[$styleId] ) ) {
-                                $userOptions->addToIncluded( $styleId, $strength );
-                            } else {
-                                $userOptions->addStrengthToIncluded( $styleId, $strength );
-                            }
-                        }
-                    }
-                }
-
-                //todo: wtf?
-//                if ( \in_array( $questionNumber, [ 3, 5, 9 ], true ) ) {
-//                    continue;
-//                }
-
-                if ( $givenAnswer !== $mappedAnswer ) {
-                    $idsToCalculate = $this->buildStrength( $ids );
-                    if ( $idsToCalculate !== null ) {
-                        foreach ( $idsToCalculate as $styleId => $strength ) {
-                            if ( empty( $userOptions->getExcludedIds()[$styleId] ) ) {
-                                $userOptions->addToExcluded( $styleId, $strength );
-                            } else {
-                                $userOptions->addStrengthToExcluded( $styleId, $strength );
-                            }
-                        }
-                    }
-                }
-
-            }
-        }
-        unset( $givenAnswer );
-
-        $this->excludeBatch( $answers, $userOptions );
-        $this->applySynergy( $answers, $user );
-
-        /** @var FormData $user */
-        $answers = $user->getAnswers();
-        $answers->fetchAll();
-        $answers->removeAssignedPoints();
-
-        $stylesToTakeCollection = $this->createStylesToTakeCollection( $answers, $userOptions->isSmoked() );
-        $stylesToAvoidCollection = $this->createStylesToAvoidCollection( $answers );
-
-        $idStylesToTake = ( $stylesToTakeCollection !== null )
-            ? $stylesToTakeCollection->getIdStylesToTake()
-            : null;
-
-        $idStylesToAvoid = ( $stylesToAvoidCollection !== null )
-            ? $stylesToAvoidCollection->getIdStylesToAvoid()
-            : null;
-
-        try {
-            $this->stylesLogsRepository->logStyles( $user, $idStylesToTake, $idStylesToAvoid );
-        } catch ( Exception $e ) {
-            $this->errorsLogger->logError( $e->getMessage() );
-        }
-
-        return BeerData::fromArray(
-            [
-                'buyThis' => $stylesToTakeCollection !== null ? $stylesToTakeCollection->toArray() : null,
-                'avoidThis' => $stylesToAvoidCollection !== null ? $stylesToAvoidCollection->toArray() : null,
-                'mustTake' => $answers->isMustTakeOpt(),
-                'mustAvoid' => $answers->isMustAvoidOpt(),
-                'username' => $user->getUsername(),
-                'barrelAged' => $answers->isBarrelAged(),
-                'answers' => $this->answers,
-                'resultsHash' => $this->makeResultsHash( $this->answers ),
-            ]
-        );
     }
 
     private function makeResultsHash( array $answers ): string

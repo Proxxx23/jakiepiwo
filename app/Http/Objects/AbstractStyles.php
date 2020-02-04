@@ -11,4 +11,6 @@ abstract class AbstractStyles
     protected ?string $polishName;
     protected ?string $description;
     protected ?string $moreLink;
+
+    abstract protected function toArray(): array;
 }

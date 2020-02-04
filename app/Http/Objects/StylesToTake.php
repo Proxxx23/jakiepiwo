@@ -8,10 +8,8 @@ final class StylesToTake
     private ?PolskiKraftDataCollection $beerDataCollection;
     private ?string $cacheKey = null;
 
-    public function __construct(
-        StyleInfo $styleInfo,
-        ?PolskiKraftDataCollection $beerDataCollection
-    ) {
+    public function __construct( StyleInfo $styleInfo, ?PolskiKraftDataCollection $beerDataCollection )
+    {
         $this->beerDataCollection = $beerDataCollection;
         if ( $beerDataCollection !== null ) {
             $this->cacheKey = $beerDataCollection->getCacheKey();
