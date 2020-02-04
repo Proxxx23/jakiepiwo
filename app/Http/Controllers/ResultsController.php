@@ -89,7 +89,8 @@ final class ResultsController
             }
         }
 
-        //todo: one service/repo - strategy?
+        // todo: one service/repo - strategy?
+        // todo log only exception
         try {
             ( new AnswersLoggerService( new UserAnswersRepository() ) )->logAnswers( $formData, $answers, $beerData );
         } catch ( Exception $ex ) {

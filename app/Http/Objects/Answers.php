@@ -155,7 +155,7 @@ final class Answers
     {
         $this->includedIds = ( $this->shuffled === false )
             ? \array_keys( $this->includedIds )
-            : \array_values( $this->includedIds );
+            : \array_values( $this->includedIds ); //todo: wybadać, jak ma się to zachowywać!!!
         $this->excludedIds = \array_keys( $this->excludedIds );
     }
 
