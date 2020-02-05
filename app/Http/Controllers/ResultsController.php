@@ -6,11 +6,10 @@ namespace App\Http\Controllers;
 use App\Http\Repositories\ResultsRepository;
 use App\Http\Services\SimpleResultsService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Routing\Controller;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\HttpFoundation\Response;
-use UnexpectedValueException;
 use Exception;
-use App\Exceptions\InvalidContentTypeException;
 use App\Http\Objects\Answers;
 use App\Http\Objects\FormData;
 use App\Http\Repositories\BeersRepository;
@@ -33,10 +32,11 @@ use DrewM\MailChimp\MailChimp;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 
-final class ResultsController
+final class ResultsController extends Controller
 {
     private const INVALID_CONTENT_TYPE_EXCEPTION_MESSAGE = 'Set Content Type header to application/json.';
     private const EMPTY_DATA_EXCEPTION_MESSAGE = 'No valid data provided.';
+    private const INTERNAL_ERROR_MESSAGE = 'Internal error occured.';
     private const APPLICATION_JSON_HEADER = 'application/json';
 
     private const DEFAULT_CACHE_TTL = 900;
@@ -49,13 +49,24 @@ final class ResultsController
      */
     public function resultsAction( Request $request ): JsonResponse
     {
-        if ( \stripos( $request->header( 'Content-type' ), self::APPLICATION_JSON_HEADER ) === false ) {
-            throw new InvalidContentTypeException( self::INVALID_CONTENT_TYPE_EXCEPTION_MESSAGE );
+        $logger = ( new ErrorsLogger( new ErrorLogsRepository() ) );
+        if ( $request->header( 'Content-type' ) !== self::APPLICATION_JSON_HEADER ) {
+            $logger->logError( self::INVALID_CONTENT_TYPE_EXCEPTION_MESSAGE );
+            return \response()->json(
+                [
+                    'messsage' => self::INVALID_CONTENT_TYPE_EXCEPTION_MESSAGE,
+                ], JsonResponse::HTTP_BAD_REQUEST
+            );
         }
 
         $requestData = $request->input();
         if ( $requestData === null || empty( $requestData['answers'] ) ) {
-            throw new UnexpectedValueException( self::EMPTY_DATA_EXCEPTION_MESSAGE );
+            $logger->logError( self::EMPTY_DATA_EXCEPTION_MESSAGE );
+            return \response()->json(
+                [
+                    'messsage' => self::EMPTY_DATA_EXCEPTION_MESSAGE,
+                ], JsonResponse::HTTP_BAD_REQUEST
+            );
         }
 
         $formData = new FormData( new Answers(), $requestData );
@@ -63,18 +74,27 @@ final class ResultsController
 
         $httpClient = new Client();
 
-        $beerData = ( new AlgorithmService(
-            new ScoringRepository(),
-            new PolskiKraftRepository(
-                new Dictionary(),
-                new FilesystemAdapter( '', self::DEFAULT_CACHE_TTL ),
-                $httpClient
-            ),
-            new StylesLogsRepository(),
-            new BeersRepository(),
-            new ErrorsLogger( new ErrorLogsRepository() )
-        ) )
-            ->createBeerData( $answers, $formData );
+        try {
+            $beerData = ( new AlgorithmService(
+                new ScoringRepository(),
+                new PolskiKraftRepository(
+                    new Dictionary(),
+                    new FilesystemAdapter( '', self::DEFAULT_CACHE_TTL ),
+                    $httpClient
+                ),
+                new StylesLogsRepository(),
+                new BeersRepository(),
+                new ErrorsLogger( new ErrorLogsRepository() )
+            ) )
+                ->createBeerData( $answers, $formData );
+        } catch ( \Exception $ex ) {
+            $logger->logError( self::EMPTY_DATA_EXCEPTION_MESSAGE );
+            return \response()->json(
+                [
+                    'messsage' => self::INTERNAL_ERROR_MESSAGE,
+                ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
 
         if ( $formData->hasEmail() ) {
             if ( $formData->sendEmail() ) {
@@ -89,13 +109,7 @@ final class ResultsController
             }
         }
 
-        // todo: one service/repo - strategy?
-        // todo log only exception
-        try {
-            ( new AnswersLoggerService( new UserAnswersRepository() ) )->logAnswers( $formData, $answers, $beerData );
-        } catch ( Exception $ex ) {
-            ( new ErrorsLogger( new ErrorLogsRepository() ) )->logError( $ex->getMessage() );
-        }
+        ( new AnswersLoggerService( new UserAnswersRepository() ) )->logAnswers( $formData, $answers, $beerData );
 
         return \response()
             ->json( $beerData->toArray(), JsonResponse::HTTP_OK, [], JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE );
@@ -106,6 +120,6 @@ final class ResultsController
         $service = new SimpleResultsService( new ResultsRepository() );
         $resulsJson = $service->getResultsByResultsHash( $resultsHash ); //todo: may be stored in cache for an hour?
 
-        return \response( $resulsJson )->header( 'Content-Type', 'application/json' );
+        return \response()->json( $resulsJson );
     }
 }

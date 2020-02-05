@@ -53,7 +53,6 @@ final class OntapController
         );
 
         $cityName = $ontapService->getCityByCoordinates( $coordinates );
-        $cityName = 'Białystok';
         if ( $cityName === null ) {
             return \response()->json(
                 [

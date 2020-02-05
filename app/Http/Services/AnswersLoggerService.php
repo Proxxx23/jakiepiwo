@@ -21,5 +21,4 @@ final class AnswersLoggerService
     {
         $this->userAnswersRepository->addAnswers( $formInput, $answers, $results );
     }
-
 }
