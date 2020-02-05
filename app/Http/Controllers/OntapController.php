@@ -32,7 +32,7 @@ final class OntapController
             return \response()->json(
                 [
                     'message' => 'No cache keys provided.',
-                ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR
+                ], JsonResponse::HTTP_BAD_REQUEST
             );
         }
 
@@ -41,7 +41,7 @@ final class OntapController
             return \response()->json(
                 [
                     'message' => 'Invalid coordinates format.',
-                ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR
+                ], JsonResponse::HTTP_BAD_REQUEST
             );
         }
 
@@ -82,7 +82,7 @@ final class OntapController
 
         $data = null;
         foreach ( $styles as $style ) {
-            foreach ( $style as $item ) { //todo: one foreach
+            foreach ( $style as $item ) {
                 $ontapBeer = $ontapService->getTapsByBeerName( $item['title'] );
                 if ( $ontapBeer !== null ) {
                     $data[] = $ontapBeer;
