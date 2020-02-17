@@ -87,7 +87,7 @@ final class ResultsController extends Controller
             ) )
                 ->createBeerData( $answers, $formData );
         } catch ( \Exception $ex ) {
-            $logger->logError( self::EMPTY_DATA_EXCEPTION_MESSAGE );
+            $logger->logError( self::EMPTY_DATA_EXCEPTION_MESSAGE ); //todo: log exact file and line
             return \response()->json(
                 [
                     'messsage' => self::INTERNAL_ERROR_MESSAGE,

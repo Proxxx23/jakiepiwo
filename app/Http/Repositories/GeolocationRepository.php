@@ -8,7 +8,7 @@ use GuzzleHttp\ClientInterface;
 
 final class GeolocationRepository implements GeolocationRepositoryInterface
 {
-    private const API_URL_PATTERN = 'https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=%f&longitude=%f&localityLanguage=pl';
+    private const API_URL_PATTERN = 'https://nominatim.openstreetmap.org/reverse?lat=%f&lon=%f';
 
     private ClientInterface $httpClient;
     private array $citiesList;
@@ -47,18 +47,23 @@ final class GeolocationRepository implements GeolocationRepositoryInterface
             return null;
         }
 
-        $content = \json_decode( $request->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR );
-        $found = \preg_grep( '/^miasto.*$/', \array_column( $content['localityInfo']['administrative'], 'description' ) );
-        if ( empty( $found ) ) {
-            return null;
+        $xml = \simplexml_load_string($request->getBody()->getContents());
+        $json = \json_encode($xml, JSON_THROW_ON_ERROR, 512);
+        $content = \json_decode( $json, true, 512, JSON_THROW_ON_ERROR );
+
+        $partsToSearch = [
+            'city' => $content['addressparts']['city'] ?? null,
+            'county' => $content['addressparts']['county'] ?? null,
+            'suburb' => $content['addressparts']['suburb'] ?? null,
+            'neighbourhood' => $content['addressparts']['neighbourhood'] ?? null,
+        ];
+
+        foreach ( $partsToSearch as $locality ) {
+            if ( \in_array( $locality, $this->citiesList, true ) ) {
+                return $locality;
+            }
         }
 
-        $index = \array_keys( $found )[0];
-        $cityName = $content['localityInfo']['administrative'][$index]['name'];
-        if ( !\in_array( $cityName, $this->citiesList, true ) ) {
-            return null;
-        }
-
-        return $cityName;
+        return null;
     }
 }

@@ -440,7 +440,7 @@ final class BeersRepository implements BeersRepositoryInterface
 
     public function fetchByIds( array $ids ): ?StyleInfoCollection
     {
-        $styles = null;
+        $styleInfoCollection = null;
         if ( !empty( $ids ) ) {
             $styleInfoCollection = new StyleInfoCollection();
             foreach ( $ids as $id ) {

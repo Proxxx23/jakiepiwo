@@ -16,6 +16,8 @@ use Symfony\Component\HttpFoundation\Response;
 final class OntapController
 {
     private const DEFAULT_CACHE_TIME = 900;
+    private const DEFAULT_ONTAP_TIMEOUT = 10; // in seconds
+    private const DEFAULT_GEOLOCATION_TIMEOUT = 2; // in seconds
 
     /**
      * @param Request $request
@@ -46,10 +48,13 @@ final class OntapController
         }
 
         $cache = new FilesystemAdapter( '', self::DEFAULT_CACHE_TIME );
-        $httpClient = new Client();
+
+        $OntapConfig = ['timeout' => self::DEFAULT_ONTAP_TIMEOUT];
+        $GeolocationConfig = ['timeout' => self::DEFAULT_GEOLOCATION_TIMEOUT];
+
         $ontapService = new OnTapService(
-            new OnTapRepository( $httpClient, $cache ), //todo: httpClient wpuszczać raz
-            new GeolocationRepository( $httpClient )
+            new OnTapRepository( new Client( $OntapConfig ), $cache ), //todo: httpClient wpuszczać raz
+            new GeolocationRepository( new Client( $GeolocationConfig ) )
         );
 
         $cityName = $ontapService->getCityByCoordinates( $coordinates );

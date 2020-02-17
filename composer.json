@@ -8,6 +8,7 @@
         "php": ">=7.4",
         "ext-json": "*",
         "ext-pdo": "*",
+        "ext-simplexml": "*",
         "barryvdh/laravel-cors": "0.11.4",
         "fideloper/proxy": "^4.0",
         "guzzlehttp/guzzle": "^6.3",
