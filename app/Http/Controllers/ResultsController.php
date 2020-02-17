@@ -35,6 +35,7 @@ final class ResultsController extends Controller
 {
     private const INVALID_CONTENT_TYPE_EXCEPTION_MESSAGE = 'Set Content Type header to application/json.';
     private const EMPTY_DATA_EXCEPTION_MESSAGE = 'No valid data provided.';
+    private const EXCEPTION_OR_ERROR_PATTERN = 'Exception or error. Message: %s. File: %s. Line: %s';
     private const INTERNAL_ERROR_MESSAGE = 'Internal error occured.';
     private const APPLICATION_JSON_HEADER = 'application/json';
 
@@ -87,7 +88,13 @@ final class ResultsController extends Controller
             ) )
                 ->createBeerData( $answers, $formData );
         } catch ( \Exception $ex ) {
-            $logger->logError( self::EMPTY_DATA_EXCEPTION_MESSAGE ); //todo: log exact file and line
+            $errorMessage = \sprintf(
+                self::EXCEPTION_OR_ERROR_PATTERN,
+                $ex->getMessage(),
+                $ex->getFile(),
+                $ex->getLine()
+            );
+            $logger->logError( $errorMessage );
             return \response()->json(
                 [
                     'messsage' => self::INTERNAL_ERROR_MESSAGE,
