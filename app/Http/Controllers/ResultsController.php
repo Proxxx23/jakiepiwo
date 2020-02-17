@@ -21,7 +21,6 @@ use App\Http\Repositories\ScoringRepository;
 use App\Http\Repositories\StylesLogsRepository;
 use App\Http\Repositories\UserAnswersRepository;
 use App\Http\Services\AnswersLoggerService;
-use App\Http\Services\MailService;
 use App\Http\Services\NewsletterService;
 use App\Http\Services\QuestionsService;
 use App\Http\Services\AlgorithmService;
@@ -96,17 +95,11 @@ final class ResultsController extends Controller
             );
         }
 
-        if ( $formData->hasEmail() ) {
-            if ( $formData->sendEmail() ) {
-                ( new MailService() )->sendEmail( $beerData, $formData->getUsername(), $formData->getEmail() );
-                $beerData->setMailSent( true );
-            }
-            if ( $formData->addToNewsletterList() ) {
+        if ( $formData->addToNewsletterList() ) {
                 $newsletterService = new NewsletterService(
                     new NewsletterRepository( new MailChimp( \config( 'mail.mailchimpApiKey' ) ) )
                 );
                 $newsletterService->addToNewsletterList( $formData->getEmail() );
-            }
         }
 
         ( new AnswersLoggerService( new UserAnswersRepository() ) )->logAnswers( $formData, $answers, $beerData );

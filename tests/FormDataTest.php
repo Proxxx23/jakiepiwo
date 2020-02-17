@@ -15,7 +15,6 @@ final class FormDataTest extends FinalsBypassedTestCase
             $answers, [
             'newsletter' => false,
             'email' => 'valid@email.com',
-            'sendEmail' => false,
             'username' => 'mock',
         ]
         );
@@ -30,7 +29,6 @@ final class FormDataTest extends FinalsBypassedTestCase
             $answers, [
             'newsletter' => false,
             'email' => 'invali&@#',
-            'sendEmail' => false,
             'username' => 'mock',
         ]
         );

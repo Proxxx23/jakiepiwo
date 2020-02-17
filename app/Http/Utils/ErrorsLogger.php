@@ -7,7 +7,6 @@ use App\Http\Repositories\ErrorLogsRepositoryInterface;
 
 final class ErrorsLogger implements ErrorsLoggerInterface
 {
-    /** @var ErrorLogsRepositoryInterface */
     private ErrorLogsRepositoryInterface $errorLogsRepository;
 
     public function __construct( ErrorLogsRepositoryInterface $errorLogsRepository )

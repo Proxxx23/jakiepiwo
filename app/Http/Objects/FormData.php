@@ -8,7 +8,6 @@ final class FormData
     private bool $addToNewsletterList;
     private Answers $answers;
     private ?string $email;
-    private bool $sendEmail;
     private ?string $username;
 
     public function __construct( Answers $answers, array $requestData )
@@ -18,7 +17,6 @@ final class FormData
         $this->email = $this->emailIsValid( $requestData['email'] )
             ? $requestData['email']
             : null;
-        $this->sendEmail = \is_bool( $requestData['sendEmail'] ) ? $requestData['sendEmail'] : false;
         $this->username = \is_string( $requestData['username'] ) && $requestData['username'] !== ''
             ? $requestData['username']
             : null;
@@ -26,22 +24,12 @@ final class FormData
 
     public function addToNewsletterList(): bool
     {
-        return $this->addToNewsletterList;
+        return $this->addToNewsletterList && !empty( $this->email );
     }
 
     public function getEmail(): ?string
     {
         return $this->email;
-    }
-
-    public function hasEmail(): bool
-    {
-        return !empty( $this->email );
-    }
-
-    public function sendEmail(): bool
-    {
-        return $this->sendEmail;
     }
 
     public function getAnswers(): Answers
