@@ -112,6 +112,7 @@ final class AnswersTest extends TestCase
         self::assertSame( 6, $answers->getExcludedIds()[1] );
     }
 
+    // todo: on php 7.4 acts different than on 7.2 ;/
     public function testRemovesAssignedPointsProperlyIfShuffled(): void
     {
         $answers = new Answers();
