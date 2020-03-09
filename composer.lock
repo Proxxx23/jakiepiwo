@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "91664176a34c14222e38a03b06d70981",
+    "content-hash": "a85885e364395dd57604595451dc3d5e",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -4922,20 +4922,19 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "0.12.3",
+            "version": "0.12.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "c15a6ea55da71d8133399306f560cfe4d30301b7"
+                "reference": "ca5f2b7cf81c6d8fba74f9576970399c5817e03b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/c15a6ea55da71d8133399306f560cfe4d30301b7",
-                "reference": "c15a6ea55da71d8133399306f560cfe4d30301b7",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/ca5f2b7cf81c6d8fba74f9576970399c5817e03b",
+                "reference": "ca5f2b7cf81c6d8fba74f9576970399c5817e03b",
                 "shasum": ""
             },
             "require": {
-                "nikic/php-parser": "^4.3.0",
                 "php": "^7.1"
             },
             "bin": [
@@ -4958,7 +4957,7 @@
                 "MIT"
             ],
             "description": "PHPStan - PHP Static Analysis Tool",
-            "time": "2019-12-14T13:41:17+00:00"
+            "time": "2020-02-16T14:00:29+00:00"
         },
         {
             "name": "phpstan/phpstan-phpunit",
@@ -6805,9 +6804,10 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=7.4",
+        "php": ">=7.3.0",
         "ext-json": "*",
-        "ext-pdo": "*"
+        "ext-pdo": "*",
+        "ext-simplexml": "*"
     },
     "platform-dev": []
 }
