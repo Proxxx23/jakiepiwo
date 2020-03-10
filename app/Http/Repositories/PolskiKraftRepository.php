@@ -13,7 +13,7 @@ use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
 {
 //    private const DEFAULT_LIST_URI = 'https://www.polskikraft.pl/openapi/style/list';
-    private const BEER_LIST_BU_STYLE_URL_PATTERN = 'https://www.polskikraft.pl/openapi/style/%d/examples';
+    private const BEER_LIST_BY_STYLE_URL_PATTERN = 'https://www.polskikraft.pl/openapi/style/%d/examples';
     private const CACHE_KEY_PATTERN = '%s_POLSKIKRAFT';
 
     private Dictionary $dictionary;
@@ -31,22 +31,22 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
     }
 
     /**
-     * @param int $beerId
+     * @param int $styleId
      *
      * @return PolskiKraftDataCollection|null
      * @throws \Exception
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function fetchByBeerId( int $beerId ): ?PolskiKraftDataCollection
+    public function fetchByStyleId( int $styleId ): ?PolskiKraftDataCollection
     {
-        if ( !\array_key_exists( $beerId, $this->dictionary->get() ) ) {
+        if ( !\array_key_exists( $styleId, $this->dictionary->get() ) ) {
             return null;
         }
 
-        $translatedBeerId = $this->dictionary->getById( $beerId );
+        $translatedStyleId = $this->dictionary->getById( $styleId );
 
-        $cacheKey = $translatedBeerId !== null
-            ? \sprintf( self::CACHE_KEY_PATTERN, $translatedBeerId )
+        $cacheKey = $translatedStyleId !== null
+            ? \sprintf( self::CACHE_KEY_PATTERN, $translatedStyleId )
             : null;
 
         $cachedData = $this->getFromCache( $cacheKey );
@@ -58,7 +58,7 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
 
         $response = $this->httpClient->request(
             'GET',
-            \sprintf( self::BEER_LIST_BU_STYLE_URL_PATTERN, $translatedBeerId )
+            \sprintf( self::BEER_LIST_BY_STYLE_URL_PATTERN, $translatedStyleId )
         );
 
         if ( $response->getStatusCode() !== 200 ) {

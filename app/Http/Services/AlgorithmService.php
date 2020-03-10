@@ -321,7 +321,7 @@ final class AlgorithmService
             if ( $isSmoked && \in_array( $styleInfo->getId(), ScoringRepository::POSSIBLE_SMOKED_DARK_BEERS, true ) ) {
                 $styleInfo->setSmokedNames();
             }
-            $polskiKraftBeerDataCollection = $this->polskiKraftRepository->fetchByBeerId( $styleInfo->getId() );
+            $polskiKraftBeerDataCollection = $this->polskiKraftRepository->fetchByStyleId( $styleInfo->getId() );
             $stylesToTakeCollection->add( ( new StylesToTake( $styleInfo, $polskiKraftBeerDataCollection ) )->toArray() );
         }
 
