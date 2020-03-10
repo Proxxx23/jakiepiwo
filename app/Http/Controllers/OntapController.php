@@ -42,7 +42,7 @@ final class OntapController
         if ( !$coordinates->isValid() ) {
             return \response()->json(
                 [
-                    'message' => 'Invalid coordinates format.',
+                    'message' => 'Invalid coordinates format or empty coordinates.',
                 ], JsonResponse::HTTP_BAD_REQUEST
             );
         }
