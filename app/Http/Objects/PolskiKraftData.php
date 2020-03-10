@@ -18,9 +18,9 @@ final class PolskiKraftData
         $this->webUrl = $data['web_url'];
         $this->photoThumbnailUrl = $data['photo_thumbnail_url'];
         $this->photoUrl = $data['photo_url'];
-        $this->title = $data['title'];
-        $this->subtitle = $data['subtitle'];
-        $this->subtitleAlt = $data['subtitle_alt'];
+        $this->title = \trim( $data['title'] );
+        $this->subtitle = \trim( $data['subtitle'] );
+        $this->subtitleAlt = \trim( $data['subtitle_alt'] );
         $this->rating = $data['rating'];
     }
 
