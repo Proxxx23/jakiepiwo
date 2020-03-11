@@ -119,6 +119,6 @@ final class ResultsController extends Controller
         $service = new SimpleResultsService( new ResultsRepository() );
         $resulsJson = $service->getResultsByResultsHash( $resultsHash ); //todo: may be stored in cache for an hour?
 
-        return \response()->json( $resulsJson );
+        return \response( $resulsJson )->header( 'Content-Type', 'application/json' );
     }
 }
