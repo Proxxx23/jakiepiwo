@@ -9,7 +9,6 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Routing\Controller;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\HttpFoundation\Response;
-use Exception;
 use App\Http\Objects\Answers;
 use App\Http\Objects\FormData;
 use App\Http\Repositories\BeersRepository;
@@ -45,7 +44,7 @@ final class ResultsController extends Controller
      * @param Request $request
      *
      * @return JsonResponse
-     * @throws Exception
+     * @throws \Exception
      */
     public function resultsAction( Request $request ): JsonResponse
     {
@@ -102,7 +101,7 @@ final class ResultsController extends Controller
             );
         }
 
-        if ( $formData->addToNewsletterList() ) {
+        if ( $formData->addToNewsletterList() && $formData->getEmail() !== null ) {
                 $newsletterService = new NewsletterService(
                     new NewsletterRepository( new MailChimp( \config( 'mail.mailchimpApiKey' ) ) )
                 );

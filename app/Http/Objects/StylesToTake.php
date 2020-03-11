@@ -8,6 +8,13 @@ final class StylesToTake
     private ?PolskiKraftDataCollection $beerDataCollection;
     private ?string $cacheKey = null;
 
+    private int $id;
+    private string $name;
+    private ?string $otherName;
+    private ?string $polishName;
+    private ?string $description;
+    private ?string $moreLink;
+
     public function __construct( StyleInfo $styleInfo, ?PolskiKraftDataCollection $beerDataCollection )
     {
         $this->beerDataCollection = $beerDataCollection;

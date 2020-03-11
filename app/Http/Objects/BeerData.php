@@ -92,8 +92,12 @@ final class BeerData
         ];
     }
 
-    private function completeCacheKeys( array $buyThis ): void
+    private function completeCacheKeys( ?array $buyThis ): void
     {
+        if ( $buyThis === null ) {
+            return;
+        }
+
         foreach ( $buyThis as $item ) {
             if ( $item['cacheKey'] !== null ) {
                 $this->cacheKeys[] = $item['cacheKey'];

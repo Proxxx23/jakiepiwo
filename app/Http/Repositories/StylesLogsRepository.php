@@ -13,7 +13,13 @@ final class StylesLogsRepository implements StylesLogsRepositoryInterface
         $lastID = DB::select( 'SELECT MAX(id_answer) AS lastid FROM `styles_logs` LIMIT 1' );
         $nextID = (int) $lastID[0]->lastid + 1;
 
-        $insertsCount = $styleToTake !== null ? \count( $styleToTake ) : \count( $styleToAvoid );
+        $insertsCount = null;
+        if ( $styleToTake !== null ) {
+            $insertsCount = \count( $styleToTake );
+        } elseif ( $styleToAvoid !== null ) {
+            $insertsCount = \count( $styleToAvoid );
+        }
+
         if ( $insertsCount === null || $insertsCount === 0 ) {
             return;
         }

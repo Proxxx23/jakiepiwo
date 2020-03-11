@@ -7,16 +7,16 @@ use Illuminate\Support\Collection;
 
 final class StylesToAvoidCollection extends Collection
 {
-    private array $idStylesToAvoid;
+    private ?array $idStylesToAvoid;
 
-    public function setIdStylesToAvoid( array $idStylesToAvoid ): StylesToAvoidCollection
+    public function setIdStylesToAvoid( ?array $idStylesToAvoid ): StylesToAvoidCollection
     {
         $this->idStylesToAvoid = $idStylesToAvoid;
 
         return $this;
     }
 
-    public function getIdStylesToAvoid(): array
+    public function getIdStylesToAvoid(): ?array
     {
         return $this->idStylesToAvoid;
     }

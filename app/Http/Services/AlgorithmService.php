@@ -63,6 +63,8 @@ final class AlgorithmService
 
         foreach ( $answers as $questionNumber => &$givenAnswer ) {
 
+            $questionNumber = (int) $questionNumber;
+
             // we calculate nothing
             if ( $givenAnswer === 'bez znaczenia' ) {
                 continue;
@@ -306,7 +308,7 @@ final class AlgorithmService
         }
 
         $styleInfoCollection = null;
-        if ( $idStylesToTake !== [] ) {
+        if ( $idStylesToTake !== [] && $idStylesToTake !== null ) {
             $styleInfoCollection = $this->beersRepository->fetchByIds( $idStylesToTake );
         }
 
@@ -340,7 +342,7 @@ final class AlgorithmService
         }
 
         $styleInfoCollection = null;
-        if ( $idStylesToAvoid !== [] ) {
+        if ( $idStylesToAvoid !== [] && $idStylesToAvoid !== null ) {
             $styleInfoCollection = $this->beersRepository->fetchByIds( $idStylesToAvoid );
         }
 

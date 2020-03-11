@@ -8,6 +8,8 @@
         "php": ">=7.4",
         "ext-json": "*",
         "ext-pdo": "*",
+        "ext-mbstring": "*",
+        "ext-curl": "*",
         "ext-simplexml": "*",
         "barryvdh/laravel-cors": "0.11.4",
         "fideloper/proxy": "^4.0",
@@ -48,16 +50,11 @@
         }
     },
     "scripts": {
-        "post-create-project-cmd": [
-            "@php artisan key:generate"
-        ],
         "post-autoload-dump": [
-            "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
-            "@php artisan package:discover"
+            "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump"
         ],
         "post-install-cmd": [
-            "@php -r \"file_exists('.env') || copy('.env.example', '.env');\"",
-            "@php artisan migrate"
+            "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
         ]
     },
     "config": {

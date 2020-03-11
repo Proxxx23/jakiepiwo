@@ -230,7 +230,11 @@ final class OnTapRepository implements OnTapRepositoryInterface
 
     // todo standalone class
 
-    // todo: ale to jest kurwa złe, wynieść to w pizdu SRP
+    /**
+     * todo: ale to jest kurwa złe, wynieść to w pizdu SRP
+     * @param string $cacheKey
+     * @return mixed|null
+     */
     private function getFromCache( string $cacheKey )
     {
         $item = null;
@@ -245,9 +249,14 @@ final class OnTapRepository implements OnTapRepositoryInterface
             : null;
     }
 
-    // todo: ale to jest kurwa złe, wynieść to w pizdu SRP
-    // todo wyczaić jak ustawiać TTL przy save
-    private function setToCache( string $cacheKey, $data, $ttl = self::DEFAULT_TTL ): void
+
+    /**
+     * todo: ale to jest kurwa złe, wynieść to w pizdu SRP
+     * todo: wyczaić jak ustawiać TTL przy save
+     * @param string $cacheKey
+     * @param mixed $data
+     */
+    private function setToCache( string $cacheKey, $data ): void
     {
         $dataCollection = null;
         try {

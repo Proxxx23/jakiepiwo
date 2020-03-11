@@ -84,8 +84,10 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
             $polskiKraftCollection->add( $polskiKraft->toArray() );
         }
 
-        $this->setToCache( $cacheKey, $polskiKraftCollection );
-        $polskiKraftCollection->setCacheKey( $cacheKey );
+        if ( $cacheKey !== null ) {
+            $this->setToCache( $cacheKey, $polskiKraftCollection );
+            $polskiKraftCollection->setCacheKey( $cacheKey );
+        }
 
         return $polskiKraftCollection;
     }
@@ -97,8 +99,12 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
      *
      * todo: ale to jest kurwa złe, wynieść to w pizdu SRP
      */
-    private function getFromCache( string $cacheKey )
+    private function getFromCache( ?string $cacheKey )
     {
+        if ( $cacheKey === null ) {
+            return null;
+        }
+
         $item = null;
         try {
             $item = $this->cache->getItem( $cacheKey );
@@ -111,7 +117,11 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
             : null;
     }
 
-    // todo: ale to jest kurwa złe, wynieść to w pizdu SRP
+    /**
+     * todo: ale to jest kurwa złe, wynieść to w pizdu SRP
+     * @param string $cacheKey
+     * @param mixed $data
+     */
     private function setToCache( string $cacheKey, $data ): void
     {
         $dataCollection = null;

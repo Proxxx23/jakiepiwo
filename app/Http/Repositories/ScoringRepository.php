@@ -91,13 +91,13 @@ final class ScoringRepository implements ScoringRepositoryInterface
 
     public const POSSIBLE_SMOKED_DARK_BEERS = [ 36, 37, 59 ];
 
-    public function fetchByQuestionNumber( ?int $questionNumber ): ?array
+    public function fetchByQuestionNumber( ?int $questionNumber ): array
     {
         if ( $questionNumber === null ) {
             return self::SCORE;
         }
 
-        return self::SCORE[$questionNumber];
+        return self::SCORE[(int) $questionNumber];
     }
 
 }

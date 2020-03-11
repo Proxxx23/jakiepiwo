@@ -22,9 +22,9 @@ final class StyleInfo
     ) {
         $this->id = $id;
         $this->name = $name;
-        $this->otherName = \trim( $secondName );
-        $this->polishName = \trim( $polishName );
-        $this->description = \trim( $description );
+        $this->otherName = \is_string( $secondName ) ? \trim( $secondName ) : null;
+        $this->polishName = \is_string( $polishName ) ? \trim( $polishName ) : null;
+        $this->description = \is_string( $description ) ? \trim( $description ) : null;
         $this->moreLink = $moreLink;
     }
 

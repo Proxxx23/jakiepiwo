@@ -7,17 +7,16 @@ use Illuminate\Support\Collection;
 
 final class StylesToTakeCollection extends Collection
 {
-    /** @var array */
-    private array $idStylesToTake;
+    private ?array $idStylesToTake;
 
-    public function setIdStylesToTake( array $idStylesToTake ): StylesToTakeCollection
+    public function setIdStylesToTake( ?array $idStylesToTake ): StylesToTakeCollection
     {
         $this->idStylesToTake = $idStylesToTake;
 
         return $this;
     }
 
-    public function getIdStylesToTake(): array
+    public function getIdStylesToTake(): ?array
     {
         return $this->idStylesToTake;
     }
