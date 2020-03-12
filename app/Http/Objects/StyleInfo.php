@@ -53,7 +53,12 @@ final class StyleInfo
     public function setSmokedNames(): void
     {
         $this->name = '(Smoked) ' . $this->name;
-        $this->polishName = '(Wędzone) ' . $this->polishName;
+
+        $smoking = \strpos($this->polishName, 'porter') !== false
+            ? '(Wędzony) '
+            : '(Wędzone) ';
+
+        $this->polishName = $smoking . $this->polishName;
     }
 
     public function getOtherName(): ?string
