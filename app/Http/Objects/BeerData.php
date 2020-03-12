@@ -14,7 +14,6 @@ final class BeerData
     private ?string $username;
     private bool $mailSent = false;
     private ?array $cacheKeys = null;
-    private string $resultsHash;
 
     public function __construct(
         array $answers,
@@ -23,8 +22,7 @@ final class BeerData
         ?array $buyThis,
         bool $mustAvoid,
         bool $mustTake,
-        ?string $username,
-        string $resultsHash
+        ?string $username
     ) {
         $this->answers = $answers;
         $this->avoidThis = $avoidThis;
@@ -33,7 +31,6 @@ final class BeerData
         $this->mustAvoid = $mustAvoid;
         $this->mustTake = $mustTake;
         $this->username = $username;
-        $this->resultsHash = $resultsHash;
         $this->completeCacheKeys( $buyThis );
     }
 
@@ -46,8 +43,7 @@ final class BeerData
             $data['buyThis'],
             $data['mustAvoid'],
             $data['mustTake'],
-            $data['username'],
-            $data['resultsHash']
+            $data['username']
         );
     }
 
@@ -59,11 +55,6 @@ final class BeerData
     public function getAvoidThis(): ?array
     {
         return $this->avoidThis;
-    }
-
-    public function getResultsHash(): string
-    {
-        return $this->resultsHash;
     }
 
     public function getCacheKeys(): ?array
@@ -88,7 +79,6 @@ final class BeerData
             'username' => $this->username,
             'mailSent' => $this->mailSent,
             'cacheKeys' => $this->cacheKeys,
-            'resultsHash' => $this->resultsHash,
         ];
     }
 

@@ -28,7 +28,6 @@ final class BeerDataTest extends FinalsBypassedTestCase
                 'username' => null,
                 'barrelAged' => true,
                 'answers' => [],
-                'resultsHash' => 'hash',
             ]
         );
 

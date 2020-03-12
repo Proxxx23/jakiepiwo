@@ -9,6 +9,7 @@ final class FormData
     private Answers $answers;
     private ?string $email;
     private ?string $username;
+    private ?string $resultsHash;
 
     public function __construct( Answers $answers, array $requestData )
     {
@@ -19,6 +20,9 @@ final class FormData
             : null;
         $this->username = \is_string( $requestData['username'] ) && $requestData['username'] !== ''
             ? $requestData['username']
+            : null;
+        $this->resultsHash = \is_string( $requestData['resultsHash'] ) && $requestData['resultsHash'] !== ''
+            ? $requestData['resultsHash']
             : null;
     }
 
@@ -40,6 +44,11 @@ final class FormData
     public function getUsername(): ?string
     {
         return $this->username;
+    }
+
+    public function getResultsHash(): ?string
+    {
+        return $this->resultsHash;
     }
 
     private function emailIsValid( ?string $email ): bool

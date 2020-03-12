@@ -147,7 +147,6 @@ final class AlgorithmService
                 'username' => $user->getUsername(),
                 'barrelAged' => $answers->isBarrelAged(),
                 'answers' => $this->answers,
-                'resultsHash' => $this->makeResultsHash( $this->answers ),
             ]
         );
     }
@@ -257,13 +256,6 @@ final class AlgorithmService
             $userOptions->applyNegativeSynergy( [ 1, 2, 3, 5, 7, 8, 28, 61 ], 2 );
             $userOptions->applyNegativeSynergy( [ 6, 60, 65, 69, 71, 72 ], 1.5 );
         }
-    }
-
-    private function makeResultsHash( array $answers ): string
-    {
-        $hashKey = \str_replace( ' ', '', \implode( '', $answers ) ) . \now();
-
-        return \hash('ripemd128', $hashKey);
     }
 
     /**

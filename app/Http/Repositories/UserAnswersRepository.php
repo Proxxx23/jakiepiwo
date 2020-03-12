@@ -29,7 +29,7 @@ final class UserAnswersRepository implements UserAnswersRepositoryInterface
                     $formInput->addToNewsletterList(),
                     \json_encode( $answers, JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE, 512 ),
                     \json_encode( $results->toArray(), JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE, 512 ),
-                    $results->getResultsHash(),
+                    $formInput->getResultsHash(),
                     \now(),
                 ]
             );
