@@ -176,14 +176,14 @@ final class AlgorithmService
         if ( $answerValue[4] === 'coś złożonego' &&
             $answerValue[4] === 'ciemne' &&
             ( $answerValue[2] === 'tak' || $answerValue[3] === 'tak' ) ) {
-            $userOptions->applyPositiveSynergy( [ 36, 37, 59 ], 2 );
+            $userOptions->applyPositiveSynergy( [ 36, 37 ], 2 );
         }
 
         // złożone + ciemne + nieowocowe
         if ( $answerValue[4] === 'coś złożonego' &&
             $answerValue[6] === 'ciemne' &&
             $answerValue[12] === 'nie' ) {
-            $userOptions->applyPositiveSynergy( [ 3, 24, 35, 36, 37, 48, 59 ], 1.5 );
+            $userOptions->applyPositiveSynergy( [ 3, 24, 35, 36, 37, 48 ], 1.5 );
         }
 
         // złożone + ciemne + nieowocowe + kawowe
@@ -207,7 +207,7 @@ final class AlgorithmService
         if ( $answerValue[6] === 'jasne' &&
             $answerValue[9] === 'nie' ) {
             $userOptions->applyNegativeSynergy(
-                [ 12, 21, 24, 29, 33, 34, 35, 36, 37, 59, 71, 74 ], 2
+                [ 12, 21, 24, 29, 33, 34, 35, 36, 37, 71, 74 ], 2
             );
         }
 
@@ -215,7 +215,7 @@ final class AlgorithmService
         if ( $answerValue[6] === 'ciemne' &&
             $answerValue[9] === 'tak' &&
             $answerValue[8] !== 'mocne i gęste' ) {
-            $userOptions->applyPositiveSynergy( [ 12, 31, 33, 34, 35, 59, 71 ], 2.5 );
+            $userOptions->applyPositiveSynergy( [ 12, 33, 34, 35, 71 ], 2.5 );
         }
 
 
@@ -225,7 +225,7 @@ final class AlgorithmService
             $answerValue[8] !== 'mocne i gęste' &&
             \in_array( $answerValue[5], ['ledwie wyczuwalną', 'lekką'], true ) ) {
             $userOptions->applyPositiveSynergy( [ 20, 25, 40, 44, 45, 47, 51, 52, 53, 68, 73 ], 2 );
-            $userOptions->applyNegativeSynergy( [ 3, 24, 35, 36, 37, 59, 71 ], 2 );
+            $userOptions->applyNegativeSynergy( [ 3, 24, 35, 36, 37, 71 ], 2 );
         }
 
         // jasne + lekkie + wodniste + wędzone = grodziskie
@@ -234,7 +234,7 @@ final class AlgorithmService
             $answerValue[8] === 'wodniste' &&
             $answerValue[14] === 'tak' ) {
             $userOptions->applyPositiveSynergy( [ 52 ], 3 );
-            $userOptions->applyNegativeSynergy( [ 3, 22, 24, 35, 36, 37, 50, 59, 71 ], 2 );
+            $userOptions->applyNegativeSynergy( [ 3, 22, 24, 35, 36, 37, 50, 71 ], 2 );
         }
 
         // duża/hophead goryczka + jasne

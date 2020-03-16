@@ -345,13 +345,6 @@ final class BeersRepository implements BeersRepositoryInterface
             'description' => '',
             'moreLink' => '',
         ],
-        65 => [
-            'name' => 'Lite American Pale Ale',
-            'otherName' => '',
-            'polishName' => '',
-            'description' => '',
-            'moreLink' => '',
-        ],
         67 => [
             'name' => 'Belgian Strong Ale',
             'otherName' => '',
