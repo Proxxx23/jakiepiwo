@@ -58,7 +58,6 @@ final class Dictionary
             // 55 => '', //Wild Ale
             56 => 57, // Sour Ale
             57 => 135, // Smoked Ale
-            //59 => '', // Stout
             60 => 136, // NE IPA
             61 => 3, // APA
             64 => 66, // Brown Ale

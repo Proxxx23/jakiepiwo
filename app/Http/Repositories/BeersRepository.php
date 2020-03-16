@@ -185,7 +185,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'moreLink' => '',
         ],
         33 => [
-            'name' => 'Dry Stout',
+            'name' => '(Dry) Stout',
             'otherName' => '',
             'polishName' => '',
             'description' => '',
@@ -328,13 +328,6 @@ final class BeersRepository implements BeersRepositoryInterface
             'name' => 'Smoked Ale',
             'otherName' => '',
             'polishName' => 'Wędzone ale',
-            'description' => '',
-            'moreLink' => '',
-        ],
-        59 => [
-            'name' => 'Stout',
-            'otherName' => '',
-            'polishName' => '',
             'description' => '',
             'moreLink' => '',
         ],
