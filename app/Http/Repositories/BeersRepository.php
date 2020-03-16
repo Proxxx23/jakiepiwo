@@ -374,7 +374,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'moreLink' => '',
         ],
         71 => [
-            'name' => 'Oatmeal Stout', // todo: połączyć ze stoutem
+            'name' => 'Oatmeal Stout',
             'otherName' => '',
             'polishName' => '',
             'description' => '',
