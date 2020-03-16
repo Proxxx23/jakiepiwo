@@ -54,7 +54,7 @@ final class StyleInfo
     {
         $this->name = '(Smoked) ' . $this->name;
 
-        $smoking = \strpos($this->polishName, 'porter') !== false
+        $smoking = \strpos( $this->polishName, 'porter' ) !== false
             ? '(Wędzony) '
             : '(Wędzone) ';
 
