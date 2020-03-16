@@ -183,7 +183,7 @@ final class AlgorithmService
         if ( $answerValue[4] === 'coś złożonego' &&
             $answerValue[6] === 'ciemne' &&
             $answerValue[12] === 'nie' ) {
-            $userOptions->applyPositiveSynergy( [ 3, 24, 35, 36, 37, 48, 59, 75 ], 1.5 );
+            $userOptions->applyPositiveSynergy( [ 3, 24, 35, 36, 37, 48, 59 ], 1.5 );
         }
 
         // złożone + ciemne + nieowocowe + kawowe
@@ -207,7 +207,7 @@ final class AlgorithmService
         if ( $answerValue[6] === 'jasne' &&
             $answerValue[9] === 'nie' ) {
             $userOptions->applyNegativeSynergy(
-                [ 12, 21, 24, 29, 33, 34, 35, 36, 37, 59, 71, 74, 75 ], 2
+                [ 12, 21, 24, 29, 33, 34, 35, 36, 37, 59, 71, 74 ], 2
             );
         }
 
@@ -225,7 +225,7 @@ final class AlgorithmService
             $answerValue[8] !== 'mocne i gęste' &&
             \in_array( $answerValue[5], ['ledwie wyczuwalną', 'lekką'], true ) ) {
             $userOptions->applyPositiveSynergy( [ 20, 25, 40, 44, 45, 47, 51, 52, 53, 68, 73 ], 2 );
-            $userOptions->applyNegativeSynergy( [ 3, 24, 35, 36, 37, 59, 71, 75 ], 2 );
+            $userOptions->applyNegativeSynergy( [ 3, 24, 35, 36, 37, 59, 71 ], 2 );
         }
 
         // jasne + lekkie + wodniste + wędzone = grodziskie
@@ -234,7 +234,7 @@ final class AlgorithmService
             $answerValue[8] === 'wodniste' &&
             $answerValue[14] === 'tak' ) {
             $userOptions->applyPositiveSynergy( [ 52 ], 3 );
-            $userOptions->applyNegativeSynergy( [ 3, 22, 23, 24, 35, 36, 37, 50, 59, 71, 75 ], 2 );
+            $userOptions->applyNegativeSynergy( [ 3, 22, 23, 24, 35, 36, 37, 50, 59, 71 ], 2 );
         }
 
         // duża/hophead goryczka + jasne
@@ -248,7 +248,7 @@ final class AlgorithmService
         // duża/hophead goryczka + ciemne
         if ( $answerValue[6] === 'ciemne' &&
             \in_array( $answerValue[5], [ 'zdecydowanie wyczuwalną', 'jestem hopheadem' ], true ) ) {
-            $userOptions->applyPositiveSynergy( [ 3, 36, 37, 75 ], 1.75 );
+            $userOptions->applyPositiveSynergy( [ 3, 36, 37 ], 1.75 );
         }
 
         // goryczka ledwo || lekka

@@ -415,13 +415,6 @@ final class BeersRepository implements BeersRepositoryInterface
             'description' => '',
             'moreLink' => '',
         ],
-        75 => [
-            'name' => 'Rye Porter',
-            'otherName' => '',
-            'polishName' => 'Porter żytni',
-            'description' => '',
-            'moreLink' => '',
-        ],
         76 => [
             'name' => 'Bock',
             'otherName' => '',

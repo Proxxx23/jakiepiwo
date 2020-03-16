@@ -70,7 +70,6 @@ final class Dictionary
             72 => 49, // Pale ALe
             //73 => '', // Milkshake IPA
             //74 => '', // Coffee Stout
-            //75 => '', // Rye Porter
             76 => 110, // Bock
         ];
     }
