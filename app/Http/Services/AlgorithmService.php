@@ -169,7 +169,7 @@ final class AlgorithmService
         if ( $answerValue[4] === 'coś złożonego' &&
             $answerValue[4] === 'jasne' &&
             ( $answerValue[2] === 'tak' || $answerValue[3] === 'tak' ) ) {
-            $userOptions->applyPositiveSynergy( [ 7, 15, 16, 23, 39, 42, 50, 60, 73 ], 2 );
+            $userOptions->applyPositiveSynergy( [ 7, 15, 16, 22, 39, 42, 50, 60, 73 ], 2 );
         }
 
         // nowe smaki LUB szokujące + złożone + ciemne
@@ -234,7 +234,7 @@ final class AlgorithmService
             $answerValue[8] === 'wodniste' &&
             $answerValue[14] === 'tak' ) {
             $userOptions->applyPositiveSynergy( [ 52 ], 3 );
-            $userOptions->applyNegativeSynergy( [ 3, 22, 23, 24, 35, 36, 37, 50, 59, 71 ], 2 );
+            $userOptions->applyNegativeSynergy( [ 3, 22, 24, 35, 36, 37, 50, 59, 71 ], 2 );
         }
 
         // duża/hophead goryczka + jasne

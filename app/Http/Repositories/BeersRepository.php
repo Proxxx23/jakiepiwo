@@ -136,18 +136,11 @@ final class BeersRepository implements BeersRepositoryInterface
             'moreLink' => '',
         ],
         22 => [
-            'name' => 'Doppelbock',
+            'name' => 'Doppelbock / Eisbock',
             'otherName' => '',
-            'polishName' => 'Koźlak podwójny',
+            'polishName' => 'Koźlak podwójny / lodowy',
             'description' => '',
             'moreLink' => '',
-        ],
-        23 => [
-            'name' => 'Eisbock',
-            'otherName' => '',
-            'polishName' => 'Koźlak lodowy',
-            'description' => '',
-            'moreLink' => '', //todo: połączyć z tym wyżej
         ],
         25 => [
             'name' => 'Weizen',
