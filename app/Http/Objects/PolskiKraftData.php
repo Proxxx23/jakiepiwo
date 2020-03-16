@@ -24,11 +24,6 @@ final class PolskiKraftData
         $this->rating = $data['rating'];
     }
 
-    public function getTitle(): string
-    {
-        return $this->title;
-    }
-
     public function toArray(): array
     {
         return [

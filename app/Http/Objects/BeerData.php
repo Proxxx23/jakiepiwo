@@ -46,16 +46,6 @@ final class BeerData
         );
     }
 
-    public function getBuyThis(): ?array
-    {
-        return $this->buyThis;
-    }
-
-    public function getAvoidThis(): ?array
-    {
-        return $this->avoidThis;
-    }
-
     public function getCacheKeys(): ?array
     {
         return $this->cacheKeys;
