@@ -34,6 +34,7 @@ final class ResultsController extends Controller
 {
     private const INVALID_CONTENT_TYPE_EXCEPTION_MESSAGE = 'Set Content Type header to application/json.';
     private const EMPTY_DATA_EXCEPTION_MESSAGE = 'No valid data provided.';
+    private const INVALID_RESULTS_HASH_EXCEPTION_MESSAGE = 'Invalid results hash.';
     private const EXCEPTION_OR_ERROR_PATTERN = 'Exception or error. Message: %s. File: %s. Line: %s';
     private const INTERNAL_ERROR_MESSAGE = 'Internal error occured.';
     private const APPLICATION_JSON_HEADER = 'application/json';
@@ -68,7 +69,16 @@ final class ResultsController extends Controller
             );
         }
 
-        $formData = new FormData( new Answers(), $requestData );
+        try {
+            $formData = new FormData( new Answers(), $requestData );
+        } catch ( \InvalidArgumentException $ex ) {
+            $logger->logError( self::INVALID_RESULTS_HASH_EXCEPTION_MESSAGE );
+            return \response()->json(
+                [
+                    'messsage' => self::INVALID_RESULTS_HASH_EXCEPTION_MESSAGE,
+                ], JsonResponse::HTTP_BAD_REQUEST
+            );
+        }
         $answers = ( new QuestionsService( new QuestionsRepository() ) )->validateInput( $requestData );
 
         $httpClient = new Client();

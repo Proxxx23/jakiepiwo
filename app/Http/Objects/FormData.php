@@ -9,7 +9,7 @@ final class FormData
     private Answers $answers;
     private ?string $email;
     private ?string $username;
-    private ?string $resultsHash;
+    private string $resultsHash;
 
     public function __construct( Answers $answers, array $requestData )
     {
@@ -21,9 +21,11 @@ final class FormData
         $this->username = \is_string( $requestData['username'] ) && $requestData['username'] !== ''
             ? $requestData['username']
             : null;
-        $this->resultsHash = \is_string( $requestData['resultsHash'] ) && $requestData['resultsHash'] !== ''
-            ? $requestData['resultsHash']
-            : null;
+
+        if ( !$this->resultsHashIsValid( $requestData['resultsHash'] ) ) {
+            throw new \InvalidArgumentException( 'Invalid results hash.' );
+        }
+        $this->resultsHash = $requestData['resultsHash'];
     }
 
     public function addToNewsletterList(): bool
@@ -46,7 +48,7 @@ final class FormData
         return $this->username;
     }
 
-    public function getResultsHash(): ?string
+    public function getResultsHash(): string
     {
         return $this->resultsHash;
     }
@@ -66,5 +68,12 @@ final class FormData
             '/^(?!(?:(?:\x22?\x5C[\x00-\x7E]\x22?)|(?:\x22?[^\x5C\x22]\x22?)){255,})(?!(?:(?:\x22?\x5C[\x00-\x7E]\x22?)|(?:\x22?[^\x5C\x22]\x22?)){65,}@)(?:(?:[\x21\x23-\x27\x2A\x2B\x2D\x2F-\x39\x3D\x3F\x5E-\x7E]+)|(?:\x22(?:[\x01-\x08\x0B\x0C\x0E-\x1F\x21\x23-\x5B\x5D-\x7F]|(?:\x5C[\x00-\x7F]))*\x22))(?:\.(?:(?:[\x21\x23-\x27\x2A\x2B\x2D\x2F-\x39\x3D\x3F\x5E-\x7E]+)|(?:\x22(?:[\x01-\x08\x0B\x0C\x0E-\x1F\x21\x23-\x5B\x5D-\x7F]|(?:\x5C[\x00-\x7F]))*\x22)))*@(?:(?:(?!.*[^.]{64,})(?:(?:(?:xn--)?[a-z0-9]+(?:-[a-z0-9]+)*\.){1,126}){1,}(?:(?:[a-z][a-z0-9]*)|(?:(?:xn--)[a-z0-9]+))(?:-[a-z0-9]+)*)|(?:\[(?:(?:IPv6:(?:(?:[a-f0-9]{1,4}(?::[a-f0-9]{1,4}){7})|(?:(?!(?:.*[a-f0-9][:\]]){7,})(?:[a-f0-9]{1,4}(?::[a-f0-9]{1,4}){0,5})?::(?:[a-f0-9]{1,4}(?::[a-f0-9]{1,4}){0,5})?)))|(?:(?:IPv6:(?:(?:[a-f0-9]{1,4}(?::[a-f0-9]{1,4}){5}:)|(?:(?!(?:.*[a-f0-9]:){5,})(?:[a-f0-9]{1,4}(?::[a-f0-9]{1,4}){0,3})?::(?:[a-f0-9]{1,4}(?::[a-f0-9]{1,4}){0,3}:)?)))?(?:(?:25[0-5])|(?:2[0-4]\d)|(?:1\d{2})|(?:[1-9]?\d))(?:\.(?:(?:25[0-5])|(?:2[0-4]\d)|(?:1\d{2})|(?:[1-9]?\d))){3}))\]))$/iD',
             $email
         );
+    }
+
+    private function resultsHashIsValid( ?string $resultsHash ): bool
+    {
+        return \is_string( $resultsHash )
+            && $resultsHash !== ''
+            && \strlen( $resultsHash ) === 32;
     }
 }
