@@ -60,7 +60,6 @@ final class Dictionary
             60 => 136, // NE IPA
             61 => 3, // APA
             64 => 66, // Brown Ale
-            //65 => '', // Lite APA
             67 => 155, // Belgian Strong Ale -> Belgian Ale
             68 => 34, // Blonde
             69 => 28, // American WHeat

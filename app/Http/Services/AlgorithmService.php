@@ -241,7 +241,7 @@ final class AlgorithmService
         if ( $answerValue[6] === 'jasne' &&
             \in_array( $answerValue[5], [ 'zdecydowanie wyczuwalną', 'jestem hopheadem' ], true ) ) {
             $userOptions->applyPositiveSynergy( [ 1, 2, 5, 6, 7, 8, 28, 61 ], 1.75 );
-            $userOptions->applyPositiveSynergy( [ 65, 69, 70, 72 ], 1.5 );
+            $userOptions->applyPositiveSynergy( [ 69, 70, 72 ], 1.5 );
             $userOptions->applyNegativeSynergy( [ 14, 25, 45, 47 ], 1.75 );
         }
 
@@ -254,7 +254,7 @@ final class AlgorithmService
         // goryczka ledwo || lekka
         if ( $answerValue[5] === 'ledwie wyczuwalną' || $answerValue[5] === 'lekką' ) {
             $userOptions->applyNegativeSynergy( [ 1, 2, 3, 5, 7, 8, 28, 61 ], 2 );
-            $userOptions->applyNegativeSynergy( [ 6, 60, 65, 69, 71, 72 ], 1.5 );
+            $userOptions->applyNegativeSynergy( [ 6, 60, 69, 71, 72 ], 1.5 );
         }
     }
 
