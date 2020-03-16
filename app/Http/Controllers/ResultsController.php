@@ -37,6 +37,7 @@ final class ResultsController extends Controller
     private const INVALID_RESULTS_HASH_EXCEPTION_MESSAGE = 'Invalid results hash.';
     private const EXCEPTION_OR_ERROR_PATTERN = 'Exception or error. Message: %s. File: %s. Line: %s';
     private const INTERNAL_ERROR_MESSAGE = 'Internal error occured.';
+    private const NO_RESULTS_FOR_HASH_ERROR_MESSAGE = 'Could not get results for provided hash.';
     private const APPLICATION_JSON_HEADER = 'application/json';
 
     private const DEFAULT_CACHE_TTL = 900;
@@ -128,6 +129,14 @@ final class ResultsController extends Controller
     {
         $service = new SimpleResultsService( new ResultsRepository() );
         $resulsJson = $service->getResultsByResultsHash( $resultsHash ); //todo: may be stored in cache for an hour?
+
+        if ( $resulsJson === null ) {
+            return \response()->json(
+                [
+                    'messsage' => self::NO_RESULTS_FOR_HASH_ERROR_MESSAGE,
+                ], JsonResponse::HTTP_BAD_REQUEST
+            );
+        }
 
         return \response( $resulsJson )->header( 'Content-Type', 'application/json' );
     }

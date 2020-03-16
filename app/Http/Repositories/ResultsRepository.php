@@ -7,9 +7,12 @@ use Illuminate\Support\Facades\DB;
 
 final class ResultsRepository implements ResultsRepositoryInterface
 {
-    public function fetchByResultsHash( string $resultsHash ): string
+    public function fetchByResultsHash( string $resultsHash ): ?string
     {
         $results = DB::select( "SELECT results FROM user_answers WHERE results_hash = '" . $resultsHash . "'" );
+        if ( $results === [] ) {
+            return null;
+        }
 
         return $results[0]->results;
     }

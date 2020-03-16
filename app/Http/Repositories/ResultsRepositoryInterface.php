@@ -5,5 +5,5 @@ namespace App\Http\Repositories;
 
 interface ResultsRepositoryInterface
 {
-    public function fetchByResultsHash( string $resultsHash ): string;
+    public function fetchByResultsHash( string $resultsHash ): ?string;
 }

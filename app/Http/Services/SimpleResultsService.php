@@ -14,7 +14,7 @@ final class SimpleResultsService
         $this->repository = $repository;
     }
 
-    public function getResultsByResultsHash( string $resultsHash ): string
+    public function getResultsByResultsHash( string $resultsHash ): ?string
     {
         return $this->repository->fetchByResultsHash( $resultsHash );
     }
