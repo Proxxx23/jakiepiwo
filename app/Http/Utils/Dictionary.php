@@ -23,7 +23,7 @@ final class Dictionary
             //11 => '', // Polotmave
             12 => 11, // Tmave -> Schwarzbier
             13 => 50, // German Pils -> Pils
-            14 => 151, // Marzen -> Rauch Weizen Bock
+            14 => 151, // Marzen -> Rauch Weizen Bock (co z tym fantem - jest pusto)
             15 => 67, // Rauchbock
             16 => 135, // Rauchmarzen -> Rauchbier
             19 => 69, // Dunkelweizen
@@ -54,7 +54,7 @@ final class Dictionary
             51 => 39, // Gose
             52 => 4, // Grodziskie
             53 => 7, // Roggenbier
-            // 55 => '', // Wild Ale
+            55 => 170, // Wild Ale
             56 => 57, // Sour Ale
             57 => 135, // Smoked Ale
             60 => 136, // NE IPA
@@ -62,7 +62,7 @@ final class Dictionary
             64 => 66, // Brown Ale
             67 => 155, // Belgian Strong Ale -> Belgian Ale
             68 => 34, // Blonde
-            69 => 28, // American WHeat
+            69 => 28, // American Wheat
             70 => 26, // American Lager
             71 => 12, // Oatmeal Stout
             72 => 49, // Pale ALe
