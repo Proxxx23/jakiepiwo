@@ -58,7 +58,7 @@ final class FormData
         }
 
         $email = \filter_var( \trim( $email ), \FILTER_SANITIZE_EMAIL );
-        if ( \is_bool( $email ) ) {
+        if ( $email === false) {
             return false;
         }
 
