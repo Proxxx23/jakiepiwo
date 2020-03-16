@@ -7,5 +7,6 @@ use App\Http\Objects\ValueObject\Coordinates;
 
 interface GeolocationRepositoryInterface
 {
+    public function setCitiesList( array $citiesList ): void;
     public function fetchCityByCoordinates( Coordinates $coordinates ): ?string;
 }

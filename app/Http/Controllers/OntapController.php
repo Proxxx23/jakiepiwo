@@ -22,8 +22,7 @@ final class OntapController
     /**
      * @param Request $request
      * @return Response
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \GuzzleHttp\Exception\GuzzleException|\Psr\Cache\InvalidArgumentException
      */
     public function handle( Request $request ): Response
     {
