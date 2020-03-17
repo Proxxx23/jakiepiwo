@@ -7,20 +7,80 @@ use App\Http\Objects\StyleInfo;
 
 final class StyleInfoTest extends FinalsBypassedTestCase
 {
-    public function testSetsSmokedNamesProperly(): void
+    public function testSetsSmokedPorterProperly(): void
     {
         $styleInfo = StyleInfo::fromArray(
             [
-                'name' => 'Mock',
+                'name' => 'Porter',
                 'otherName' => '',
-                'polishName' => 'Mock',
+                'polishName' => 'Porter',
                 'description' => '',
                 'moreLink' => '',
             ], 5
         );
         $styleInfo->setSmokedNames();
 
-        self::assertSame( '(Smoked) Mock', $styleInfo->getName() );
-        self::assertSame( '(Wędzone) Mock', $styleInfo->getPolishName() );
+        self::assertSame( '(Smoked) Porter', $styleInfo->getName() );
+        self::assertSame( '(Wędzony) Porter', $styleInfo->getPolishName() );
+    }
+
+    public function testSetsSmokedStoutProperly(): void
+    {
+        $styleInfo = StyleInfo::fromArray(
+            [
+                'name' => 'Stout',
+                'otherName' => '',
+                'polishName' => 'Stout',
+                'description' => '',
+                'moreLink' => '',
+            ], 5
+        );
+        $styleInfo->setSmokedNames();
+
+        self::assertSame( '(Smoked) Stout', $styleInfo->getName() );
+        self::assertSame( '(Wędzony) Stout', $styleInfo->getPolishName() );
+    }
+
+    public function testSetsSmokedBockProperly(): void
+    {
+        $styleInfo = StyleInfo::fromArray(
+            [
+                'name' => 'Bock',
+                'otherName' => '',
+                'polishName' => 'Koźlak',
+                'description' => '',
+                'moreLink' => '',
+            ], 5
+        );
+        $styleInfo->setSmokedNames();
+
+        self::assertSame( '(Smoked) Bock', $styleInfo->getName() );
+        self::assertSame( '(Wędzony) Koźlak', $styleInfo->getPolishName() );
+    }
+
+    public function providerBeerStyles(): array
+    {
+        return [
+            ['Stout'],
+            ['Porter'],
+            ['Koźlak'],
+        ];
+    }
+
+    public function testSetsSmokedOthersProperly(): void
+    {
+        $styleInfo = StyleInfo::fromArray(
+            [
+                'name' => 'Barleywine',
+                'otherName' => '',
+                'polishName' => 'Barleywine',
+                'description' => '',
+                'moreLink' => '',
+            ], 5
+        );
+        $styleInfo->setSmokedNames();
+
+        self::assertSame( '(Smoked) Barleywine', $styleInfo->getName() );
+        self::assertSame( '(Wędzone) Barleywine', $styleInfo->getPolishName() );
     }
 }

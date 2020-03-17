@@ -54,7 +54,10 @@ final class StyleInfo
     {
         $this->name = '(Smoked) ' . $this->name;
 
-        $smoking = $this->polishName !== null && \strpos( $this->polishName, 'porter' ) !== false
+        $smoking = ( $this->polishName !== null &&
+            ( \stripos( $this->polishName, 'porter' ) !== false ||
+                \stripos( $this->polishName, 'stout' ) !== false ||
+                \stripos( $this->polishName, 'koźlak' ) !== false ) )
             ? '(Wędzony) '
             : '(Wędzone) ';
 
