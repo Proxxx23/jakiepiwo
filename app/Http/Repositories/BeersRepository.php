@@ -159,7 +159,7 @@ final class BeersRepository implements BeersRepositoryInterface
         28 => [
             'name' => 'English IPA',
             'otherName' => '',
-            'polishName' => 'Anguelskie IPA',
+            'polishName' => 'Angielskie IPA',
             'description' => '',
             'moreLink' => '',
         ],
