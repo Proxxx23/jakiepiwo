@@ -13,7 +13,7 @@ final class StylesToTake
     private ?string $otherName;
     private ?string $polishName;
     private ?string $description;
-    private ?string $moreLink;
+    private bool $highlighted = false;
 
     public function __construct( StyleInfo $styleInfo, ?PolskiKraftDataCollection $beerDataCollection )
     {
@@ -26,7 +26,11 @@ final class StylesToTake
         $this->otherName = $styleInfo->getOtherName();
         $this->polishName = $styleInfo->getPolishName();
         $this->description = $styleInfo->getDescription();
-        $this->moreLink = $styleInfo->getMoreLink();
+    }
+
+    public function setHighlighted( bool $highlighted ): void
+    {
+        $this->highlighted = $highlighted;
     }
 
     public function toArray(): array
@@ -39,7 +43,7 @@ final class StylesToTake
             'otherName' => $this->otherName,
             'polishName' => $this->polishName,
             'description' => $this->description,
-            'moreLink' => $this->moreLink,
+            'highlighted' => $this->highlighted,
         ];
     }
 }

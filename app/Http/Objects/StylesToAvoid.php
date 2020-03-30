@@ -12,7 +12,6 @@ final class StylesToAvoid extends AbstractStyles
         $this->otherName = $styleInfo->getOtherName();
         $this->polishName = $styleInfo->getPolishName();
         $this->description = $styleInfo->getDescription();
-        $this->moreLink = $styleInfo->getMoreLink();
     }
 
     public function toArray(): array
@@ -23,7 +22,6 @@ final class StylesToAvoid extends AbstractStyles
             'otherName' => $this->otherName,
             'polishName' => $this->polishName,
             'description' => $this->description,
-            'moreLink' => $this->moreLink,
         ];
     }
 }

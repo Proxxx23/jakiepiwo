@@ -13,13 +13,12 @@ final class Answers
 
     private array $includedIds = [];
     private array $excludedIds = [];
-    private bool $mustTakeOpt = false;
-    private bool $mustAvoidOpt = false;
     private bool $barrelAged = false;
     private bool $smoked = false;
     private bool $shuffled = false;
     private int $countStylesToTake = 3;
     private int $countStylesToAvoid = 3;
+    private ?array $highlightedIds = null;
 
     public function getIncludedIds(): array
     {
@@ -29,16 +28,6 @@ final class Answers
     public function getExcludedIds(): array
     {
         return $this->excludedIds;
-    }
-
-    public function isMustTakeOpt(): bool
-    {
-        return $this->mustTakeOpt;
-    }
-
-    public function isMustAvoidOpt(): bool
-    {
-        return $this->mustAvoidOpt;
     }
 
     public function isBarrelAged(): bool
@@ -78,6 +67,11 @@ final class Answers
     public function getCountStylesToAvoid(): int
     {
         return $this->countStylesToAvoid;
+    }
+
+    public function getHighlightedIds(): ?array
+    {
+        return $this->highlightedIds;
     }
 
     public function addToIncluded( int $styleId, float $strength ): void
@@ -166,7 +160,7 @@ final class Answers
         $this->fetchOptionalStyles();
         $this->removeDuplicates();
         $this->checkMarginBetweenBeerStyles();
-        $this->fetchStylesToTakeAndAvoid();
+        $this->fetchStylesToTake();
         $this->shuffleIncludedStyles();
     }
 
@@ -212,36 +206,43 @@ final class Answers
     }
 
     /**
-     * If 1st styles to take and avoid has more than/equal 125% points of 2nd or 3rd styles
-     * Emphasize them!
+     * Check if consecutive style has more or less than 75% of previous style and emphasize it
+     * It works like this:
+     * - check if 1st style has 125% of points of 2nd style. If yes - 1st style is distinguish
+     * - if not - distinguish 1st and 2nd and check 3rd with 2nd etc etc.
      */
-    private function fetchStylesToTakeAndAvoid(): void
+    private function fetchStylesToTake(): void
     {
         $firstStyleToTake = \array_values( \array_slice( $this->includedIds, 0, 1, true ) );
-        $firstStyleToAvoid = \array_values( \array_slice( $this->excludedIds, 0, 1, true ) );
-
         $secondStyleToTake = \array_values( \array_slice( $this->includedIds, 1, 1, true ) );
-        $secondStyleToAvoid = \array_values( \array_slice( $this->excludedIds, 1, 1, true ) );
-
         $thirdStyleToTake = \array_values( \array_slice( $this->includedIds, 2, 1, true ) );
-        $thirdStyleToAvoid = \array_values( \array_slice( $this->excludedIds, 2, 1, true ) );
+        $fourthStyleToTake = \array_values( \array_slice( $this->includedIds, 3, 1, true ) );
 
-        if ( empty( $firstStyleToTake ) || empty( $secondStyleToTake ) || empty( $thirdStyleToTake ) ) {
+        if ( empty( $firstStyleToTake ) ||
+            empty( $secondStyleToTake ) ||
+            empty( $thirdStyleToTake ) ||
+            empty( $fourthStyleToTake ) ) {
             return;
         }
 
-        if ( $secondStyleToTake[0] * self::MARGIN_STYLES_TO_DISTINGUISH <= $firstStyleToTake[0] ||
-            $thirdStyleToTake[0] * self::MARGIN_STYLES_TO_DISTINGUISH <= $firstStyleToTake[0] ) {
-            $this->mustTakeOpt = true;
+        $includedBeerIds = \array_keys( $this->includedIds );
+
+        if ( $secondStyleToTake[0] * self::MARGIN_STYLES_TO_DISTINGUISH <= $firstStyleToTake[0] ) {
+            $this->highlightedIds = [ $includedBeerIds[0] ];
+        } else {
+            $this->highlightedIds = [ $includedBeerIds[0], $includedBeerIds[1] ];
         }
 
-        if ( empty( $firstStyleToAvoid ) || empty( $secondStyleToAvoid ) || empty( $thirdStyleToAvoid ) ) {
-            return;
+        if ( $thirdStyleToTake[0] * self::MARGIN_STYLES_TO_DISTINGUISH <= $secondStyleToTake[0] ) {
+            $this->highlightedIds = [ $includedBeerIds[0], $includedBeerIds[1] ];
+        } else {
+            $this->highlightedIds = [ $includedBeerIds[0], $includedBeerIds[1], $includedBeerIds[2] ];
         }
 
-        if ( $secondStyleToAvoid[0] * self::MARGIN_STYLES_TO_DISTINGUISH <= $firstStyleToAvoid[0] ||
-            $thirdStyleToAvoid[0] * self::MARGIN_STYLES_TO_DISTINGUISH <= $firstStyleToAvoid[0] ) {
-            $this->mustAvoidOpt = true;
+        if ( $fourthStyleToTake[0] * self::MARGIN_STYLES_TO_DISTINGUISH <= $thirdStyleToTake[0] ) {
+            $this->highlightedIds = [ $includedBeerIds[0], $this->includedIds[1], $includedBeerIds[2] ];
+        } else {
+            $this->highlightedIds = null;
         }
     }
 

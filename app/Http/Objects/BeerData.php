@@ -9,8 +9,6 @@ final class BeerData
     private ?array $avoidThis;
     private bool $barrelAged;
     private ?array $buyThis;
-    private bool $mustAvoid;
-    private bool $mustTake;
     private ?string $username;
     private ?array $cacheKeys = null;
 
@@ -19,16 +17,12 @@ final class BeerData
         ?array $avoidThis,
         bool $barrelAged,
         ?array $buyThis,
-        bool $mustAvoid,
-        bool $mustTake,
         ?string $username
     ) {
         $this->answers = $answers;
         $this->avoidThis = $avoidThis;
         $this->barrelAged = $barrelAged;
         $this->buyThis = $buyThis;
-        $this->mustAvoid = $mustAvoid;
-        $this->mustTake = $mustTake;
         $this->username = $username;
         $this->completeCacheKeys( $buyThis );
     }
@@ -40,8 +34,6 @@ final class BeerData
             $data['avoidThis'],
             $data['barrelAged'],
             $data['buyThis'],
-            $data['mustAvoid'],
-            $data['mustTake'],
             $data['username']
         );
     }
@@ -58,8 +50,6 @@ final class BeerData
             'avoidThis' => $this->avoidThis,
             'barrelAged' => $this->barrelAged,
             'buyThis' => $this->buyThis,
-            'mustAvoid' => $this->mustAvoid,
-            'mustTake' => $this->mustTake,
             'username' => $this->username,
             'cacheKeys' => $this->cacheKeys,
         ];

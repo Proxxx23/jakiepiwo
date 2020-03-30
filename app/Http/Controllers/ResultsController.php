@@ -104,6 +104,7 @@ final class ResultsController extends Controller
                 $ex->getFile(),
                 $ex->getLine()
             );
+            var_dump($errorMessage);die();
             $logger->logError( $errorMessage );
             return \response()->json(
                 [

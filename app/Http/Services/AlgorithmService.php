@@ -142,8 +142,6 @@ final class AlgorithmService
             [
                 'buyThis' => $stylesToTakeCollection !== null ? $stylesToTakeCollection->toArray() : null,
                 'avoidThis' => $stylesToAvoidCollection !== null ? $stylesToAvoidCollection->toArray() : null,
-                'mustTake' => $answers->isMustTakeOpt(),
-                'mustAvoid' => $answers->isMustAvoidOpt(),
                 'username' => $user->getUsername(),
                 'barrelAged' => $answers->isBarrelAged(),
                 'answers' => $this->answers,
@@ -312,11 +310,20 @@ final class AlgorithmService
         //todo to jest tak złe xDDDDD - rozplątać koniecznie w pizdu tę rzeźbę
         /** @var StyleInfo $styleInfo */
         foreach ( $styleInfoCollection as $styleInfo ) {
+
             if ( $isSmoked && \in_array( $styleInfo->getId(), ScoringRepository::POSSIBLE_SMOKED_DARK_BEERS, true ) ) {
                 $styleInfo->setSmokedNames();
             }
+
             $polskiKraftBeerDataCollection = $this->polskiKraftRepository->fetchByStyleId( $styleInfo->getId() );
-            $stylesToTakeCollection->add( ( new StylesToTake( $styleInfo, $polskiKraftBeerDataCollection ) )->toArray() );
+            $stylesToTake = new StylesToTake( $styleInfo, $polskiKraftBeerDataCollection );
+
+            if ( \is_array( $answers->getHighlightedIds() )
+                && \in_array( $styleInfo->getId(), $answers->getHighlightedIds(), true ) ) {
+                $stylesToTake->setHighlighted( true );
+            }
+
+            $stylesToTakeCollection->add( $stylesToTake->toArray() );
         }
 
         return $stylesToTakeCollection;

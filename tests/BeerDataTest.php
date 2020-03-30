@@ -23,8 +23,6 @@ final class BeerDataTest extends FinalsBypassedTestCase
                     ],
                 ],
                 'avoidThis' => null,
-                'mustTake' => true,
-                'mustAvoid' => true,
                 'username' => null,
                 'barrelAged' => true,
                 'answers' => [],
