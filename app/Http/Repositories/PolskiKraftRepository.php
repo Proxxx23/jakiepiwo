@@ -12,9 +12,10 @@ use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 
 final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
 {
-//    private const DEFAULT_LIST_URI = 'https://www.polskikraft.pl/openapi/style/list';
+    //    private const DEFAULT_LIST_URI = 'https://www.polskikraft.pl/openapi/style/list';
     private const BEER_LIST_BY_STYLE_URL_PATTERN = 'https://www.polskikraft.pl/openapi/style/%d/examples';
-    private const CACHE_KEY_PATTERN = '%s_POLSKIKRAFT';
+    private const CACHE_KEY_SIMPLE_PATTERN = '%s_POLSKIKRAFT';
+    private const CACHE_KEY_MULTIPLE_PATTERN = '%s_%s_POLSKIKRAFT';
 
     private Dictionary $dictionary;
     private FilesystemAdapter $cache;
@@ -44,10 +45,24 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
         }
 
         $translatedStyleId = $this->dictionary->getById( $styleId );
+        if ( $translatedStyleId === null ) {
+            return null;
+        }
 
-        $cacheKey = $translatedStyleId !== null
-            ? \sprintf( self::CACHE_KEY_PATTERN, $translatedStyleId )
-            : null;
+        return \is_int( $translatedStyleId )
+            ? $this->fetchOne( $translatedStyleId )
+            : $this->fetchMultiple( $translatedStyleId );
+    }
+
+    /**
+     * @param int $translatedStyleId
+     *
+     * @return PolskiKraftDataCollection|null
+     * @throws \GuzzleHttp\Exception\GuzzleException | \Exception
+     */
+    private function fetchOne( int $translatedStyleId ): ?PolskiKraftDataCollection
+    {
+        $cacheKey = \sprintf( self::CACHE_KEY_SIMPLE_PATTERN, $translatedStyleId );
 
         $cachedData = $this->getFromCache( $cacheKey );
         if ( $cachedData !== null ) {
@@ -74,8 +89,65 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
         }
 
         while ( \count( $data ) > 3 ) {
-            $randomIdToDelete = \random_int( 0, \count( $data ) - 1 );
-            unset( $data[$randomIdToDelete] );
+            unset( $data[\array_rand( $data )] );
+        }
+
+        $polskiKraftCollection = new PolskiKraftDataCollection();
+        foreach ( $data as $item ) {
+            $polskiKraft = new PolskiKraftData( $item );
+            $polskiKraftCollection->add( $polskiKraft->toArray() );
+        }
+
+        if ( $cacheKey !== null ) {
+            $this->setToCache( $cacheKey, $polskiKraftCollection );
+            $polskiKraftCollection->setCacheKey( $cacheKey );
+        }
+
+        return $polskiKraftCollection;
+    }
+
+    /**
+     * @param array $translatedStyleIds
+     *
+     * @return PolskiKraftDataCollection|null
+     * @throws \GuzzleHttp\Exception\GuzzleException | \Exception
+     */
+    private function fetchMultiple( array $translatedStyleIds ): ?PolskiKraftDataCollection
+    {
+        [ $firstId, $secondId ] = $translatedStyleIds;
+        $cacheKey = \sprintf( self::CACHE_KEY_MULTIPLE_PATTERN, $firstId, $secondId );
+
+        $cachedData = $this->getFromCache( $cacheKey );
+        if ( $cachedData !== null ) {
+            $cachedData->setCacheKey( $cacheKey );
+
+            return $cachedData;
+        }
+
+        $data = [];
+        foreach ( $translatedStyleIds as $styleId ) {
+            $response = $this->httpClient->request(
+                'GET',
+                \sprintf( self::BEER_LIST_BY_STYLE_URL_PATTERN, $styleId )
+            );
+
+            $results = \json_decode(
+                $response->getBody()
+                    ->getContents(), true, 512, JSON_THROW_ON_ERROR
+            );
+
+            foreach ( $results as $result ) {
+                $data[] = $result; // meh... -.-
+            }
+
+        }
+
+        if ( $data === [] ) {
+            return null;
+        }
+
+        while ( \count( $data ) > 3 ) {
+            unset( $data[\array_rand( $data )] );
         }
 
         $polskiKraftCollection = new PolskiKraftDataCollection();
@@ -119,6 +191,7 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
 
     /**
      * todo: ale to jest kurwa złe, wynieść to w pizdu SRP
+     *
      * @param string $cacheKey
      * @param mixed $data
      */

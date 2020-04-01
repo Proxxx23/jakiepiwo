@@ -20,7 +20,6 @@ final class Dictionary
             8 => 52, // ABW
             9 => 14, // Pale Lager
             10 => 53, // Czech Pils -> Bohemian Pils
-            //11 => '', // Polotmave
             12 => 11, // Tmave -> Schwarzbier
             13 => 50, // German Pils -> Pils
             14 => 151, // Marzen -> Rauch Weizen Bock (co z tym fantem - jest pusto)
@@ -44,7 +43,7 @@ final class Dictionary
             38 => 100, // Old Ale
             39 => 52, // English Barleywine
             40 => 56, // Berliner Weisse
-            42 => 72, // Flanders / Oud Bruin
+            42 => [ 72, 158 ], // Flanders -> Flanders / Oud Bruin
             44 => 16, // Lambic / Gueuze
             45 => 17,// Witbier
             47 => 18, // Saison
@@ -57,8 +56,8 @@ final class Dictionary
             55 => 170, // Wild Ale
             56 => 57, // Sour Ale
             57 => 135, // Smoked Ale
-            60 => 136, // NE IPA
-            61 => 3, // APA
+            60 => [ 136, 154 ], // NE IPA -> NE IPA / Vermont IPA
+            61 => [ 3, 54 ], // APA -> APA/White APA
             64 => 66, // Brown Ale
             67 => 155, // Belgian Strong Ale -> Belgian Ale
             68 => 34, // Blonde
@@ -66,13 +65,16 @@ final class Dictionary
             70 => 26, // American Lager
             71 => 12, // Oatmeal Stout
             72 => 49, // Pale ALe
-            //73 => '', // Milkshake IPA
-            //74 => '', // Coffee Stout
             76 => 110, // Bock
         ];
     }
 
-    public function getById( int $id ): ?int
+    /**
+     * @param int $id
+     *
+     * @return array|int|null
+     */
+    public function getById( int $id )
     {
         return $this->get()[$id] ?? null;
     }
