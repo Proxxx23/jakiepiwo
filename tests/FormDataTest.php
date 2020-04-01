@@ -13,10 +13,12 @@ final class FormDataTest extends FinalsBypassedTestCase
         $answers = $this->createMock( Answers::class );
         $formData = new FormData (
             $answers, [
-            'newsletter' => false,
-            'email' => 'valid@email.com',
-            'username' => 'mock',
-        ]
+                'newsletter' => false,
+                'resultsHash' => 'abcabc',
+                'admin' => true,
+                'email' => 'valid@email.com',
+                'username' => 'mock',
+            ]
         );
 
         self::assertNotNull( $formData->getEmail() );
@@ -27,10 +29,12 @@ final class FormDataTest extends FinalsBypassedTestCase
         $answers = $this->createMock( Answers::class );
         $formData = new FormData (
             $answers, [
-            'newsletter' => false,
-            'email' => 'invali&@#',
-            'username' => 'mock',
-        ]
+                'newsletter' => false,
+                'email' => 'invali&@#',
+                'resultsHash' => 'abcabc',
+                'admin' => true,
+                'username' => 'mock',
+            ]
         );
 
         self::assertNull( $formData->getEmail() );
