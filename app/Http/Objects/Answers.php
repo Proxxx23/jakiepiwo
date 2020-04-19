@@ -11,14 +11,14 @@ final class Answers
     private const MARGIN_STYLES_TO_DISTINGUISH = 1.25;
     private const MARGIN_PERCENT_FOR_OPTIONAL_TO_SHOW = 90;
 
-    private array $includedIds = [];
-    private array $excludedIds = [];
     private bool $barrelAged = false;
-    private bool $smoked = false;
-    private bool $shuffled = false;
     private int $countStylesToTake = 3;
     private int $countStylesToAvoid = 3;
+    private array $excludedIds = [];
     private ?array $highlightedIds = null;
+    private array $includedIds = [];
+    private bool $smoked = false;
+    private bool $shuffled = false;
 
     public function getIncludedIds(): array
     {
@@ -153,24 +153,19 @@ final class Answers
         $this->excludedIds = \array_keys( $this->excludedIds );
     }
 
-    public function fetchAll(): void
+    public function prepareAll(): void
     {
-        $this->sortIncludedIds();
-        $this->sortExcludedIds();
-        $this->fetchOptionalStyles();
-        $this->removeDuplicates();
-        $this->checkMarginBetweenBeerStyles();
-        $this->fetchStylesToTake();
+        $this->sortPickedUp();
+        $this->retrieveOptionalStyles();
+        $this->removeDuplicated();
+        $this->checkMarginBetweenStyles();
+        $this->retrieveStylesToTake();
         $this->shuffleIncludedStyles();
     }
 
-    private function sortIncludedIds(): void
+    private function sortPickedUp(): void
     {
         \arsort( $this->includedIds );
-    }
-
-    private function sortExcludedIds(): void
-    {
         \arsort( $this->excludedIds );
     }
 
@@ -178,7 +173,7 @@ final class Answers
      * If there's an 4th and 5rd style with a little 'margin" to 3rd style
      * Takes 4th or 5th style as an extra styles to take or avoid
      */
-    private function fetchOptionalStyles(): void
+    private function retrieveOptionalStyles(): void
     {
         $thirdStyleToTake = \array_values( \array_slice( $this->includedIds, 0, 3, true ) );
         $thirdStyleToAvoid = \array_values( \array_slice( $this->excludedIds, 0, 3, true ) );
@@ -211,7 +206,7 @@ final class Answers
      * - check if 1st style has 125% of points of 2nd style. If yes - 1st style is distinguish
      * - if not - distinguish 1st and 2nd and check 3rd with 2nd etc etc.
      */
-    private function fetchStylesToTake(): void
+    private function retrieveStylesToTake(): void
     {
         $firstStyleToTake = \array_values( \array_slice( $this->includedIds, 0, 1, true ) );
         $secondStyleToTake = \array_values( \array_slice( $this->includedIds, 1, 1, true ) );
@@ -249,7 +244,7 @@ final class Answers
     /**
      * Prevents beers to be both included and excluded
      */
-    private function removeDuplicates(): void
+    private function removeDuplicated(): void
     {
         $included = \array_slice( $this->includedIds, 0, $this->countStylesToTake, true );
         $excluded = \array_slice( $this->excludedIds, 0, $this->countStylesToAvoid, true );
@@ -266,7 +261,7 @@ final class Answers
      * included > excluded
      * If not - remove from excluded
      */
-    private function checkMarginBetweenBeerStyles(): void
+    private function checkMarginBetweenStyles(): void
     {
         foreach ( $this->includedIds as $id => $points ) {
             if ( \array_key_exists( $id, $this->excludedIds ) ) {
@@ -311,7 +306,7 @@ final class Answers
         if ( $toShuffle > 4 ) {
             $this->includedIds = \array_keys( \array_slice( $this->includedIds, 0, $toShuffle, true ) );
             \shuffle( $this->includedIds );
-            $this->shuffled = true;
+            $this->setShuffled( true );
         }
     }
 }

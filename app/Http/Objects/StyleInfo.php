@@ -5,34 +5,34 @@ namespace App\Http\Objects;
 
 final class StyleInfo
 {
+    private ?string $description;
     private int $id;
     private string $name;
-    private ?string $otherName;
     private ?string $polishName;
-    private ?string $description;
+    private ?string $otherName;
 
     private function __construct(
+        ?string $description,
         int $id,
         string $name,
-        ?string $secondName,
         ?string $polishName,
-        ?string $description
+        ?string $otherName
     ) {
+        $this->description = \is_string( $description ) ? \trim( $description ) : null;
         $this->id = $id;
         $this->name = $name;
-        $this->otherName = \is_string( $secondName ) ? \trim( $secondName ) : null;
         $this->polishName = \is_string( $polishName ) ? \trim( $polishName ) : null;
-        $this->description = \is_string( $description ) ? \trim( $description ) : null;
+        $this->otherName = \is_string( $otherName ) ? \trim( $otherName ) : null;
     }
 
     public static function fromArray( array $data, int $id ): self
     {
         return new self(
+            $data['description'],
             $id,
             $data['name'],
-            $data['otherName'],
             $data['polishName'],
-            $data['description']
+            $data['otherName'],
         );
     }
 
@@ -50,10 +50,7 @@ final class StyleInfo
     {
         $this->name = '(Smoked) ' . $this->name;
 
-        $smoking = ( $this->polishName !== null &&
-            ( \stripos( $this->polishName, 'porter' ) !== false ||
-                \stripos( $this->polishName, 'stout' ) !== false ||
-                \stripos( $this->polishName, 'koźlak' ) !== false ) )
+        $smoking = $this->polishName !== null && \preg_match('/porter|stout|koźlak/ui', $this->polishName)
             ? '(Wędzony) '
             : '(Wędzone) ';
 

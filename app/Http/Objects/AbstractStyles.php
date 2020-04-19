@@ -5,11 +5,12 @@ namespace App\Http\Objects;
 
 abstract class AbstractStyles
 {
+    protected ?string $description;
     protected int $id;
     protected string $name;
     protected ?string $otherName;
     protected ?string $polishName;
-    protected ?string $description;
+
 
     abstract protected function toArray(): array;
 }

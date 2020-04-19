@@ -21,8 +21,6 @@ use App\Http\Utils\ErrorsLoggerInterface;
 
 final class AlgorithmService
 {
-    /** @var array */
-    private array $answers = [];
     /** @var ScoringRepositoryInterface */
     private ScoringRepositoryInterface $scoringRepository;
     /** @var PolskiKraftRepositoryInterface */
@@ -51,9 +49,6 @@ final class AlgorithmService
 
     public function createBeerData( array $answers, FormData $user ): BeerData
     {
-        $this->answers = $answers;
-
-        /** @var Answers $userOptions */
         $userOptions = $user->getAnswers();
 
         $userOptions->setSmoked( $answers[13] === 'tak' );
@@ -61,7 +56,7 @@ final class AlgorithmService
 
         $answers = \array_filter( $answers, fn($v) => $v !== 'nie wiem');
 
-        foreach ( $answers as $questionNumber => &$givenAnswer ) {
+        foreach ( $answers as $questionNumber => $givenAnswer ) {
 
             $questionNumber = (int) $questionNumber;
 
@@ -111,14 +106,12 @@ final class AlgorithmService
 
             }
         }
-        unset( $givenAnswer );
 
         $this->excludeBatch( $answers, $userOptions );
         $this->applySynergy( $answers, $user );
 
-        /** @var FormData $user */
         $answers = $user->getAnswers();
-        $answers->fetchAll();
+        $answers->prepareAll();
         $answers->removeAssignedPoints();
 
         $stylesToTakeCollection = $this->createStylesToTakeCollection( $answers, $userOptions->isSmoked() );
@@ -144,7 +137,7 @@ final class AlgorithmService
                 'avoidThis' => $stylesToAvoidCollection !== null ? $stylesToAvoidCollection->toArray() : null,
                 'username' => $user->getUsername(),
                 'barrelAged' => $answers->isBarrelAged(),
-                'answers' => $this->answers,
+                'answers' => $answers,
             ]
         );
     }
@@ -152,7 +145,6 @@ final class AlgorithmService
     //todo osobna klasa
     private function applySynergy( array $answerValue, FormData $user ): void
     {
-        /** @var Answers $userOptions */
         $userOptions = $user->getAnswers();
 
         // Lekkie + owocowe + Kwaśne
