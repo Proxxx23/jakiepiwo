@@ -5,9 +5,6 @@ namespace App\Http\Utils;
 
 final class Dictionary
 {
-    /**
-     * @return array
-     */
     public function get(): array
     {
         return [
