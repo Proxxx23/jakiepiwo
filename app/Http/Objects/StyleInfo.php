@@ -7,22 +7,26 @@ final class StyleInfo
 {
     private ?string $description;
     private int $id;
+    private string $moreUrl;
     private string $name;
-    private ?string $polishName;
     private ?string $otherName;
+    private ?string $polishName;
 
     private function __construct(
         ?string $description,
         int $id,
+        string $moreUrl,
         string $name,
-        ?string $polishName,
-        ?string $otherName
+        ?string $otherName,
+        ?string $polishName
     ) {
         $this->description = \is_string( $description ) ? \trim( $description ) : null;
         $this->id = $id;
+        $this->moreUrl = $moreUrl;
         $this->name = $name;
-        $this->polishName = \is_string( $polishName ) ? \trim( $polishName ) : null;
         $this->otherName = \is_string( $otherName ) ? \trim( $otherName ) : null;
+        $this->polishName = \is_string( $polishName ) ? \trim( $polishName ) : null;
+
     }
 
     public static function fromArray( array $data, int $id ): self
@@ -30,9 +34,10 @@ final class StyleInfo
         return new self(
             $data['description'],
             $id,
+            $data['moreUrl'],
             $data['name'],
-            $data['polishName'],
             $data['otherName'],
+            $data['polishName'],
         );
     }
 

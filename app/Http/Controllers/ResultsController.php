@@ -80,7 +80,7 @@ final class ResultsController extends Controller
                 ], JsonResponse::HTTP_BAD_REQUEST
             );
         }
-        $answers = ( new QuestionsService( new QuestionsRepository() ) )->validateInput( $requestData );
+        $inputAnswers = ( new QuestionsService( new QuestionsRepository() ) )->validateInput( $requestData );
 
         $httpClient = new Client();
 
@@ -96,7 +96,7 @@ final class ResultsController extends Controller
                 new BeersRepository(),
                 new ErrorsLogger( new ErrorLogsRepository() )
             ) )
-                ->createBeerData( $answers, $formData );
+                ->createBeerData( $inputAnswers, $formData );
         } catch ( \Exception $ex ) {
             $errorMessage = \sprintf(
                 self::EXCEPTION_OR_ERROR_PATTERN,
@@ -104,7 +104,6 @@ final class ResultsController extends Controller
                 $ex->getFile(),
                 $ex->getLine()
             );
-            var_dump($errorMessage);die();
             $logger->logError( $errorMessage );
             return \response()->json(
                 [
@@ -120,7 +119,7 @@ final class ResultsController extends Controller
                 $newsletterService->addToNewsletterList( $formData->getEmail() );
         }
 
-        ( new AnswersLoggerService( new UserAnswersRepository() ) )->logAnswers( $formData, $answers, $beerData );
+        ( new AnswersLoggerService( new UserAnswersRepository() ) )->logAnswers( $formData, $inputAnswers, $beerData );
 
         return \response()
             ->json( $beerData->toArray(), JsonResponse::HTTP_OK, [], JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE );

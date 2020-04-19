@@ -47,16 +47,16 @@ final class AlgorithmService
         $this->errorsLogger = $errorsLogger;
     }
 
-    public function createBeerData( array $answers, FormData $user ): BeerData
+    public function createBeerData( array $inputAnswers, FormData $user ): BeerData
     {
-        $userOptions = $user->getAnswers();
+        $userAnswers = $user->getAnswers();
 
-        $userOptions->setSmoked( $answers[13] === 'tak' );
-        $userOptions->setBarrelAged( $answers[14] === 'tak' );
+        $userAnswers->setSmoked( $inputAnswers[13] === 'tak' );
+        $userAnswers->setBarrelAged( $inputAnswers[14] === 'tak' );
 
-        $answers = \array_filter( $answers, fn($v) => $v !== 'nie wiem');
+        $inputAnswers = \array_filter( $inputAnswers, fn($v) => $v !== 'nie wiem');
 
-        foreach ( $answers as $questionNumber => $givenAnswer ) {
+        foreach ($inputAnswers as $questionNumber => $givenAnswer ) {
 
             $questionNumber = (int) $questionNumber;
 
@@ -77,10 +77,10 @@ final class AlgorithmService
                     $idsToCalculate = $this->buildStrength( $ids );
                     if ( $idsToCalculate !== null ) {
                         foreach ( $idsToCalculate as $styleId => $strength ) {
-                            if ( empty( $userOptions->getIncludedIds()[$styleId] ) ) {
-                                $userOptions->addToIncluded( $styleId, $strength );
+                            if ( empty( $userAnswers->getIncludedIds()[$styleId] ) ) {
+                                $userAnswers->addToIncluded( $styleId, $strength );
                             } else {
-                                $userOptions->addStrengthToIncluded( $styleId, $strength );
+                                $userAnswers->addStrengthToIncluded( $styleId, $strength );
                             }
                         }
                     }
@@ -95,10 +95,10 @@ final class AlgorithmService
                     $idsToCalculate = $this->buildStrength( $ids );
                     if ( $idsToCalculate !== null ) {
                         foreach ( $idsToCalculate as $styleId => $strength ) {
-                            if ( empty( $userOptions->getExcludedIds()[$styleId] ) ) {
-                                $userOptions->addToExcluded( $styleId, $strength );
+                            if ( empty( $userAnswers->getExcludedIds()[$styleId] ) ) {
+                                $userAnswers->addToExcluded( $styleId, $strength );
                             } else {
-                                $userOptions->addStrengthToExcluded( $styleId, $strength );
+                                $userAnswers->addStrengthToExcluded( $styleId, $strength );
                             }
                         }
                     }
@@ -107,15 +107,14 @@ final class AlgorithmService
             }
         }
 
-        $this->excludeBatch( $answers, $userOptions );
-        $this->applySynergy( $answers, $user );
+        $this->excludeBatch( $inputAnswers, $userAnswers );
+        $this->applySynergy( $inputAnswers, $user );
 
-        $answers = $user->getAnswers();
-        $answers->prepareAll();
-        $answers->removeAssignedPoints();
+        $userAnswers->prepareAll();
+        $userAnswers->removeAssignedPoints();
 
-        $stylesToTakeCollection = $this->createStylesToTakeCollection( $answers, $userOptions->isSmoked() );
-        $stylesToAvoidCollection = $this->createStylesToAvoidCollection( $answers );
+        $stylesToTakeCollection = $this->createStylesToTakeCollection( $userAnswers, $userAnswers->isSmoked() );
+        $stylesToAvoidCollection = $this->createStylesToAvoidCollection( $userAnswers );
 
         $idStylesToTake = ( $stylesToTakeCollection !== null )
             ? $stylesToTakeCollection->getIdStylesToTake()
@@ -136,8 +135,8 @@ final class AlgorithmService
                 'buyThis' => $stylesToTakeCollection !== null ? $stylesToTakeCollection->toArray() : null,
                 'avoidThis' => $stylesToAvoidCollection !== null ? $stylesToAvoidCollection->toArray() : null,
                 'username' => $user->getUsername(),
-                'barrelAged' => $answers->isBarrelAged(),
-                'answers' => $answers,
+                'barrelAged' => $userAnswers->isBarrelAged(),
+                'answers' => $inputAnswers,
             ]
         );
     }
