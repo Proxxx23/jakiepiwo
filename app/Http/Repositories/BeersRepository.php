@@ -14,53 +14,63 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => 'Amerykańskie IPA',
             'description' => '',
+            'moreUrl' => '',
         ],
         2 => [
             'name' => 'Belgian IPA (India Pale Ale)',
             'otherName' => '',
             'polishName' => 'Belgijskie IPA',
             'description' => '',
+            'moreUrl' => '',
         ],
         3 => [
             'name' => 'Black IPA (India Pale Ale)',
             'otherName' => 'Cascadian Dark Ale',
-            'polishName' => 'Czarne IPA',
+            'polishName' => '',
             'description' => '',
+            'moreUrl' => '',
         ],
         5 => [
             'name' => 'Rye IPA (India Pale Ale)',
             'otherName' => '',
             'polishName' => 'Żytnie IPA',
             'description' => '',
+            'moreUrl' => '',
         ],
         6 => [
             'name' => 'White IPA (India Pale Ale)',
             'otherName' => '',
             'polishName' => 'Białe IPA',
             'description' => '',
+            'moreUrl' => '',
         ],
         7 => [
             'name' => 'Double IPA',
             'otherName' => 'Imperial IPA',
             'polishName' => 'Imperialne IPA',
             'description' => '',
+            'moreUrl' => '',
         ],
         8 => [
             'name' => 'American Barleywine',
             'otherName' => '',
             'polishName' => 'Amerykańskie barleywine',
             'description' => '',
+            'moreUrl' => '',
         ],
         9 => [
             'name' => 'Pale lager',
             'otherName' => '',
             'polishName' => 'Jasny lager',
-            'description' => '',],
+            'description' => '',
+            'moreUrl' => '',
+        ],
         10 => [
             'name' => 'Czech Pils',
             'otherName' => '',
             'polishName' => 'Czeski pils',
             'description' => '',
+            'moreUrl' => '',
 
         ],
         11 => [
@@ -68,6 +78,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => 'Czeskie półciemne',
             'description' => '',
+            'moreUrl' => '',
 
         ],
         12 => [
@@ -75,6 +86,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => 'Czeski ciemny lager',
             'description' => '',
+            'moreUrl' => '',
 
         ],
         13 => [
@@ -82,6 +94,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => 'Niemiecki pils',
             'description' => '',
+            'moreUrl' => '',
 
         ],
         14 => [
@@ -89,6 +102,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => 'Marcowe',
             'description' => '',
+            'moreUrl' => '',
 
         ],
         15 => [
@@ -96,6 +110,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => 'Koźlak wędzony',
             'description' => '',
+            'moreUrl' => '',
 
         ],
         16 => [
@@ -103,6 +118,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => 'Marcowe wędzone',
             'description' => '',
+            'moreUrl' => '',
 
         ],
         19 => [
@@ -110,6 +126,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => 'Pszeniczne ciemne',
             'description' => '',
+            'moreUrl' => '',
 
         ],
         20 => [
@@ -117,6 +134,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => 'Koźlak pszeniczny',
             'description' => '',
+            'moreUrl' => '',
 
         ],
         21 => [
@@ -124,6 +142,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => 'Ciemny lager',
             'description' => '',
+            'moreUrl' => '',
 
         ],
         22 => [
@@ -131,6 +150,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => 'Koźlak podwójny / lodowy',
             'description' => '',
+            'moreUrl' => '',
 
         ],
         25 => [
@@ -138,6 +158,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => 'Hefeweizen',
             'polishName' => 'Pszeniczne',
             'description' => '',
+            'moreUrl' => '',
 
         ],
         27 => [
@@ -145,6 +166,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => 'Extra Special Bitter',
             'polishName' => '',
             'description' => '',
+            'moreUrl' => '',
 
         ],
         28 => [
@@ -152,6 +174,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => 'Angielskie IPA',
             'description' => '',
+            'moreUrl' => '',
 
         ],
         30 => [
@@ -159,6 +182,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => '',
             'description' => '',
+            'moreUrl' => '',
 
         ],
         32 => [
@@ -166,6 +190,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => 'Irlandzkie czerwone ale',
             'description' => '',
+            'moreUrl' => '',
 
         ],
         33 => [
@@ -173,6 +198,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => '',
             'description' => '',
+            'moreUrl' => '',
 
         ],
         34 => [
@@ -180,6 +206,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => 'Stout mleczny',
             'description' => '',
+            'moreUrl' => '',
 
         ],
         35 => [
@@ -187,6 +214,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => 'FES',
             'polishName' => '',
             'description' => '',
+            'moreUrl' => '',
 
         ],
         36 => [
@@ -194,6 +222,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => 'RIS',
             'polishName' => 'Stout imperialny',
             'description' => '',
+            'moreUrl' => '',
 
         ],
         37 => [
@@ -201,6 +230,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => '(Imperialny) Porter Bałtycki',
             'description' => '',
+            'moreUrl' => '',
 
         ],
         38 => [
@@ -208,6 +238,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => '',
             'description' => '',
+            'moreUrl' => '',
 
         ],
         39 => [
@@ -215,6 +246,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => 'Angielskie barleywine',
             'description' => '',
+            'moreUrl' => '',
 
         ],
         40 => [
@@ -222,6 +254,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => '',
             'description' => '',
+            'moreUrl' => '',
 
         ],
         42 => [
@@ -229,6 +262,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => '',
             'description' => '',
+            'moreUrl' => '',
 
         ],
         44 => [
@@ -236,6 +270,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => '',
             'description' => '',
+            'moreUrl' => '',
 
         ],
         45 => [
@@ -243,6 +278,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => 'Białe pszeniczne',
             'description' => '',
+            'moreUrl' => '',
 
         ],
         47 => [
@@ -250,6 +286,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => '',
             'description' => '',
+            'moreUrl' => '',
 
         ],
         48 => [
@@ -257,6 +294,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => '',
             'description' => '',
+            'moreUrl' => '',
 
         ],
         49 => [
@@ -264,6 +302,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => '',
             'description' => '',
+            'moreUrl' => '',
 
         ],
         50 => [
@@ -271,6 +310,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => 'Belgian dark strong ale',
             'polishName' => '',
             'description' => '',
+            'moreUrl' => '',
 
         ],
         51 => [
@@ -278,6 +318,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => '',
             'description' => '',
+            'moreUrl' => '',
 
         ],
         52 => [
@@ -285,6 +326,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => '',
             'description' => '',
+            'moreUrl' => '',
 
         ],
         53 => [
@@ -292,6 +334,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => 'Piwo żytnie',
             'description' => '',
+            'moreUrl' => '',
 
         ],
         55 => [
@@ -299,6 +342,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => 'Dzikie ale',
             'description' => '',
+            'moreUrl' => '',
 
         ],
         56 => [
@@ -306,6 +350,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => 'Kwaśne ale',
             'description' => '',
+            'moreUrl' => '',
 
         ],
         57 => [
@@ -313,6 +358,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => 'Wędzone ale',
             'description' => '',
+            'moreUrl' => '',
 
         ],
         60 => [
@@ -320,6 +366,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => '',
             'description' => '',
+            'moreUrl' => '',
 
         ],
         61 => [
@@ -327,6 +374,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => 'APA',
             'polishName' => '',
             'description' => '',
+            'moreUrl' => '',
 
         ],
         64 => [
@@ -334,6 +382,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => '',
             'description' => '',
+            'moreUrl' => '',
 
         ],
         67 => [
@@ -341,6 +390,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => 'Belgijskie mocne ale',
             'description' => '',
+            'moreUrl' => '',
 
         ],
         68 => [
@@ -348,6 +398,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => 'Belgijskie jasne',
             'description' => '',
+            'moreUrl' => '',
 
         ],
         69 => [
@@ -355,6 +406,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => 'Amerykańskie pszeniczne',
             'description' => '',
+            'moreUrl' => '',
 
         ],
         70 => [
@@ -362,13 +414,15 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => '',
             'description' => '',
+            'moreUrl' => '',
 
         ],
         71 => [
             'name' => 'Oatmeal Stout',
             'otherName' => '',
-            'polishName' => '',
+            'polishName' => 'Stout owsiany',
             'description' => '',
+            'moreUrl' => '',
 
         ],
         72 => [
@@ -376,6 +430,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => 'Jasne ale',
             'description' => '',
+            'moreUrl' => '',
 
         ],
         73 => [
@@ -383,6 +438,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => '',
             'description' => '',
+            'moreUrl' => '',
 
         ],
         74 => [
@@ -390,6 +446,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => 'Stout kawowy',
             'description' => '',
+            'moreUrl' => '',
 
         ],
         76 => [
@@ -397,6 +454,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => 'Koźlak',
             'description' => '',
+            'moreUrl' => '',
 
         ],
     ];

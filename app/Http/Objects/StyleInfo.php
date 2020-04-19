@@ -71,4 +71,9 @@ final class StyleInfo
     {
         return $this->description;
     }
+
+    public function getMoreUrl(): ?string
+    {
+        return $this->moreUrl;
+    }
 }

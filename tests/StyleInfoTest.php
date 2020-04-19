@@ -15,6 +15,7 @@ final class StyleInfoTest extends FinalsBypassedTestCase
                 'otherName' => '',
                 'polishName' => 'Porter',
                 'description' => '',
+                'moreUrl' => '',
             ], 5
         );
         $styleInfo->setSmokedNames();
@@ -31,6 +32,7 @@ final class StyleInfoTest extends FinalsBypassedTestCase
                 'otherName' => '',
                 'polishName' => 'Stout',
                 'description' => '',
+                'moreUrl' => '',
             ], 5
         );
         $styleInfo->setSmokedNames();
@@ -47,6 +49,7 @@ final class StyleInfoTest extends FinalsBypassedTestCase
                 'otherName' => '',
                 'polishName' => 'Koźlak',
                 'description' => '',
+                'moreUrl' => '',
             ], 5
         );
         $styleInfo->setSmokedNames();
@@ -72,6 +75,7 @@ final class StyleInfoTest extends FinalsBypassedTestCase
                 'otherName' => '',
                 'polishName' => 'Barleywine',
                 'description' => '',
+                'moreUrl' => '',
             ], 5
         );
         $styleInfo->setSmokedNames();
