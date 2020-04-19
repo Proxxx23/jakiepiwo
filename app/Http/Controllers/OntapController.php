@@ -48,12 +48,12 @@ final class OntapController
 
         $cache = new FilesystemAdapter( '', self::DEFAULT_CACHE_TIME );
 
-        $OntapConfig = ['timeout' => self::DEFAULT_ONTAP_TIMEOUT];
-        $GeolocationConfig = ['timeout' => self::DEFAULT_GEOLOCATION_TIMEOUT];
+        $onTapConfig = ['timeout' => self::DEFAULT_ONTAP_TIMEOUT];
+        $geolocationConfig = ['timeout' => self::DEFAULT_GEOLOCATION_TIMEOUT];
 
         $ontapService = new OnTapService(
-            new OnTapRepository( new Client( $OntapConfig ), $cache ), //todo: httpClient wpuszczać raz
-            new GeolocationRepository( new Client( $GeolocationConfig ) )
+            new OnTapRepository( new Client( $onTapConfig ), $cache ),
+            new GeolocationRepository( new Client( $geolocationConfig ) )
         );
 
         if ( $ontapService->connectionRefused() ) {

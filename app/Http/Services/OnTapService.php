@@ -11,14 +11,14 @@ final class OnTapService
 {
     private OnTapRepositoryInterface $onTapRepository;
     private GeolocationRepositoryInterface $geolocationRepository;
-    private bool $connectionNotRefused;
+    private bool $connectionRefused;
 
     public function __construct(
         OnTapRepositoryInterface $onTapRepository,
         GeolocationRepositoryInterface $geolocationRepository
     ) {
         $this->onTapRepository = $onTapRepository;
-        $this->connectionNotRefused = $onTapRepository->connectionNotRefused();
+        $this->connectionRefused = $onTapRepository->connectionRefused();
         if ( $onTapRepository->connectionRefused() ) {
             return; // we don't want to go further if connection refused
         }
@@ -28,16 +28,12 @@ final class OnTapService
 
     public function connectionRefused(): bool
     {
-        return !$this->connectionNotRefused;
+        return $this->connectionRefused;
     }
 
     public function getTapsByBeerName( string $beerName ): ?array
     {
-        if ( $this->connectionNotRefused ) {
-            return $this->onTapRepository->fetchTapsByBeerName( $beerName );
-        }
-
-        return null;
+        return $this->onTapRepository->fetchTapsByBeerName( $beerName );
     }
 
     //todo tests

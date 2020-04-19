@@ -48,16 +48,11 @@ final class OnTapRepository implements OnTapRepositoryInterface
         return $this->connectionError;
     }
 
-    public function connectionNotRefused(): bool
-    {
-        return !$this->connectionError;
-    }
-
     /**
      * @param string $beerName
      *
      * @return array|null
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \GuzzleHttp\Exception\GuzzleException | \JsonException
      */
     public function fetchTapsByBeerName( string $beerName ): ?array
     {
@@ -218,7 +213,7 @@ final class OnTapRepository implements OnTapRepositoryInterface
 
     private function hasBeer( string $beerName, array $tapBeerData ): bool
     {
-        foreach ( $tapBeerData as &$tapBeer ) {
+        foreach ( $tapBeerData as $tapBeer ) {
             if ( empty( $tapBeer['beer'] ) ) {
                 continue;
             }
@@ -226,7 +221,6 @@ final class OnTapRepository implements OnTapRepositoryInterface
                 return true;
             }
         }
-        unset( $tapBeer );
 
         return false;
     }
