@@ -13,13 +13,22 @@ final class OnTapService
     private GeolocationRepositoryInterface $geolocationRepository;
     private bool $connectionNotRefused;
 
-    public function __construct( OnTapRepositoryInterface $onTapRepository, GeolocationRepositoryInterface $geolocationRepository )
-    {
+    public function __construct(
+        OnTapRepositoryInterface $onTapRepository,
+        GeolocationRepositoryInterface $geolocationRepository
+    ) {
         $this->onTapRepository = $onTapRepository;
         $this->connectionNotRefused = $onTapRepository->connectionNotRefused();
-        // todo jak refused to nie pakować się w to dalej
+        if ( $onTapRepository->connectionRefused() ) {
+            return; // we don't want to go further if connection refused
+        }
         $this->geolocationRepository = $geolocationRepository;
         $this->geolocationRepository->setCitiesList( $this->onTapRepository->fetchAllCities() ); //todo bardzo nieładnie
+    }
+
+    public function connectionRefused(): bool
+    {
+        return !$this->connectionNotRefused;
     }
 
     public function getTapsByBeerName( string $beerName ): ?array

@@ -43,6 +43,11 @@ final class OnTapRepository implements OnTapRepositoryInterface
         $this->cityName = $cityName;
     }
 
+    public function connectionRefused(): bool
+    {
+        return $this->connectionError;
+    }
+
     public function connectionNotRefused(): bool
     {
         return !$this->connectionError;

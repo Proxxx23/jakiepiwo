@@ -56,6 +56,13 @@ final class OntapController
             new GeolocationRepository( new Client( $GeolocationConfig ) )
         );
 
+        if ( $ontapService->connectionRefused() ) {
+            \response()->json(
+                [
+                    'message' => 'Could not connect to OnTap API - connection refused.',
+                ], JsonResponse::HTTP_SERVICE_UNAVAILABLE );
+        }
+
         $cityName = $ontapService->getCityByCoordinates( $coordinates );
         if ( $cityName === null ) {
             return \response()->json(
