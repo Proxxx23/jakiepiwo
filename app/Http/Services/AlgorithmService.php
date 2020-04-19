@@ -58,19 +58,17 @@ final class AlgorithmService
 
         foreach ($inputAnswers as $questionNumber => $givenAnswer ) {
 
-            $questionNumber = (int) $questionNumber;
-
-            // we calculate nothing
+            // Jeśli bez znaczenia, to nic nie robimy
             if ( $givenAnswer === 'bez znaczenia' ) {
                 continue;
             }
 
-            // Nie idź dalej przy BA bo nic nie liczymy na tej podstawie
-            if ( $questionNumber === 14 ) {
+            // Nie idź dalej przy BA, bo nic nie liczymy na tej podstawie
+            if ( (int) $questionNumber === 14 ) {
                 continue;
             }
 
-            $scoringMap = $this->scoringRepository->fetchByQuestionNumber( $questionNumber );
+            $scoringMap = $this->scoringRepository->fetchByQuestionNumber( (int) $questionNumber );
             foreach ( $scoringMap as $mappedAnswer => $ids ) {
 
                 if ( $givenAnswer === $mappedAnswer ) {

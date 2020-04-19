@@ -18,8 +18,6 @@ final class OnTapRepository implements OnTapRepositoryInterface
     private const CACHE_KEY_TAPS_PATTERN = '%s_TAPS_ONTAP';
     private const CACHE_KEY_CITIES = 'CITIES_ONTAP';
 
-    private const DEFAULT_TTL = 900;
-
     private ClientInterface $httpClient;
     private FilesystemAdapter $cache;
     private ?string $cityId = null;
@@ -96,7 +94,7 @@ final class OnTapRepository implements OnTapRepositoryInterface
 
     /**
      * @return array
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \GuzzleHttp\Exception\GuzzleException | \JsonException
      */
     public function fetchAllCities(): array
     {
@@ -123,7 +121,7 @@ final class OnTapRepository implements OnTapRepositoryInterface
 
     /**
      * @return string|null
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \GuzzleHttp\Exception\GuzzleException | \JsonException
      */
     private function fetchCityIdByName(): ?string
     {
@@ -156,7 +154,7 @@ final class OnTapRepository implements OnTapRepositoryInterface
 
     /**
      * @return array
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \GuzzleHttp\Exception\GuzzleException | \JsonException
      */
     private function fetchPlacesByCityId(): array
     {
@@ -187,7 +185,7 @@ final class OnTapRepository implements OnTapRepositoryInterface
      * @param string $placeId
      *
      * @return array|null
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \GuzzleHttp\Exception\GuzzleException | \JsonException
      */
     private function fetchTapsByPlaceId( string $placeId ): ?array
     {

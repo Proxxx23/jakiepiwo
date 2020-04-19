@@ -9,8 +9,8 @@ final class BeerData
     private ?array $avoidThis;
     private bool $barrelAged;
     private ?array $buyThis;
-    private ?string $username;
     private ?array $cacheKeys = null;
+    private ?string $username;
 
     public function __construct(
         array $answers,

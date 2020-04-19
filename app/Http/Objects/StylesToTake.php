@@ -6,7 +6,7 @@ namespace App\Http\Objects;
 final class StylesToTake extends AbstractStyles
 {
     private ?PolskiKraftDataCollection $beerDataCollection;
-    private ?string $cacheKey = null;
+    private string $cacheKey = '';
     private bool $highlighted = false;
     private ?string $moreUrl;
 
@@ -18,10 +18,10 @@ final class StylesToTake extends AbstractStyles
         }
         $this->description = $styleInfo->getDescription();
         $this->id = $styleInfo->getId();
+        $this->moreUrl = $styleInfo->getMoreUrl();
         $this->name = $styleInfo->getName();
         $this->otherName = $styleInfo->getOtherName();
         $this->polishName = $styleInfo->getPolishName();
-        $this->moreUrl = $styleInfo->getMoreUrl();
     }
 
     public function setHighlighted( bool $highlighted ): void
@@ -37,10 +37,10 @@ final class StylesToTake extends AbstractStyles
             'description' => $this->description,
             'highlighted' => $this->highlighted,
             'id' => $this->id,
+            'moreUrl' => $this->moreUrl,
             'name' => $this->name,
             'otherName' => $this->otherName,
             'polishName' => $this->polishName,
-            'moreUrl' => $this->moreUrl,
         ];
     }
 }

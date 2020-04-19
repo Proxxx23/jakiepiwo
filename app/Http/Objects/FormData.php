@@ -8,8 +8,8 @@ final class FormData
     private bool $addToNewsletterList;
     private Answers $answers;
     private ?string $email;
-    private ?string $username;
     private string $resultsHash;
+    private ?string $username;
 
     public function __construct( Answers $answers, array $requestData )
     {
@@ -18,6 +18,7 @@ final class FormData
         $this->email = $this->emailIsValid( $requestData['email'] )
             ? $requestData['email']
             : null;
+        $this->resultsHash = $requestData['resultsHash'];
         $this->username = \is_string( $requestData['username'] ) && $requestData['username'] !== ''
             ? $requestData['username']
             : null;
@@ -25,7 +26,6 @@ final class FormData
         if ( !isset( $requestData['admin'] ) && !$this->resultsHashIsValid( $requestData['resultsHash'] ) ) {
             throw new \InvalidArgumentException( 'Invalid results hash.' );
         }
-        $this->resultsHash = $requestData['resultsHash'];
     }
 
     public function addToNewsletterList(): bool
@@ -43,14 +43,14 @@ final class FormData
         return $this->answers;
     }
 
-    public function getUsername(): ?string
-    {
-        return $this->username;
-    }
-
     public function getResultsHash(): string
     {
         return $this->resultsHash;
+    }
+
+    public function getUsername(): ?string
+    {
+        return $this->username;
     }
 
     private function emailIsValid( ?string $email ): bool

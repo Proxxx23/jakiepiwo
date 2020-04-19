@@ -5,5 +5,5 @@ namespace App\Http\Repositories;
 
 interface ScoringRepositoryInterface
 {
-    public function fetchByQuestionNumber( ?int $questionNumber ): array;
+    public function fetchByQuestionNumber( int $questionNumber ): array;
 }

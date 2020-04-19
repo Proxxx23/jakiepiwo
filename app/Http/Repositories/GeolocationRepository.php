@@ -30,7 +30,7 @@ final class GeolocationRepository implements GeolocationRepositoryInterface
     /**
      * @param Coordinates $coordinates
      * @return string|null
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \GuzzleHttp\Exception\GuzzleException | \JsonException
      */
     public function fetchCityByCoordinates( Coordinates $coordinates ): ?string
     {
