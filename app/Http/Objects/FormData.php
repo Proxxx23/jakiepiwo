@@ -22,7 +22,7 @@ final class FormData
             ? $requestData['username']
             : null;
 
-        if ( !$this->resultsHashIsValid( $requestData['resultsHash'] ) && !isset( $requestData['admin'] ) ) {
+        if ( !isset( $requestData['admin'] ) && !$this->resultsHashIsValid( $requestData['resultsHash'] ) ) {
             throw new \InvalidArgumentException( 'Invalid results hash.' );
         }
         $this->resultsHash = $requestData['resultsHash'];
