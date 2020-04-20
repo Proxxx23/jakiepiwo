@@ -4,10 +4,6 @@ declare( strict_types=1 );
 namespace App\Http\Controllers;
 
 use App\Http\Objects\ValueObject\Coordinates;
-use App\Http\Repositories\GeolocationRepository;
-use App\Http\Repositories\OnTapRepository;
-use App\Http\Services\OnTapService;
-use GuzzleHttp\Client;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
@@ -15,16 +11,15 @@ use Symfony\Component\HttpFoundation\Response;
 
 final class OntapController
 {
-    private const DEFAULT_CACHE_TIME = 900;
-    private const DEFAULT_ONTAP_TIMEOUT = 10; // in seconds
-    private const DEFAULT_GEOLOCATION_TIMEOUT = 2; // in seconds
 
     /**
      * @param Request $request
+     * @param FilesystemAdapter $cache
      * @return Response
-     * @throws \GuzzleHttp\Exception\GuzzleException|\Psr\Cache\InvalidArgumentException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Psr\Cache\InvalidArgumentException
      */
-    public function handle( Request $request ): Response
+    public function handle( Request $request, FilesystemAdapter $cache ): Response
     {
         $payload = $request->input();
 
@@ -37,7 +32,10 @@ final class OntapController
             );
         }
 
-        $coordinates = new Coordinates( $payload['userLocation']['latitude'], $payload['userLocation']['longitude'] );
+        $coordinates = new Coordinates(
+            $payload['userLocation']['latitude'],
+            $payload['userLocation']['longitude']
+        );
         if ( !$coordinates->isValid() ) {
             return \response()->json(
                 [
@@ -46,15 +44,7 @@ final class OntapController
             );
         }
 
-        $cache = new FilesystemAdapter( '', self::DEFAULT_CACHE_TIME );
-
-        $onTapConfig = ['timeout' => self::DEFAULT_ONTAP_TIMEOUT];
-        $geolocationConfig = ['timeout' => self::DEFAULT_GEOLOCATION_TIMEOUT];
-
-        $ontapService = new OnTapService(
-            new OnTapRepository( new Client( $onTapConfig ), $cache ),
-            new GeolocationRepository( new Client( $geolocationConfig ) )
-        );
+        $ontapService = \resolve('OnTapService');
 
         if ( $ontapService->connectionRefused() ) {
             \response()->json(
