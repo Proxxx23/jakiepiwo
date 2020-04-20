@@ -14,87 +14,87 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => 'Amerykańskie IPA',
             'description' => '',
-            'moreUrl' => '',
+            'moreUrlQuery' => 'american%20india%20pale%ale',
         ],
         2 => [
             'name' => 'Belgian IPA (India Pale Ale)',
             'otherName' => '',
             'polishName' => 'Belgijskie IPA',
             'description' => '<a href="https://piwolucja.pl/piwa-polecane/deep-love-alebrowar-nogne-o/">Recenzja piwa w tym stylu >>></a>',
-            'moreUrl' => '',
+            'moreUrlQuery' => 'belgian%ipa',
         ],
         3 => [
             'name' => 'Black IPA (India Pale Ale)',
             'otherName' => 'Cascadian Dark Ale',
             'polishName' => '',
             'description' => '<a href="https://piwolucja.pl/piwa-polecane/bojan-black-ipa-za-piataka/">Recenzja piwa w tym stylu >>></a>',
-            'moreUrl' => '',
+            'moreUrlQuery' => 'black%20ipa',
         ],
         5 => [
             'name' => 'Rye IPA (India Pale Ale)',
             'otherName' => '',
             'polishName' => 'Żytnie IPA',
             'description' => '',
-            'moreUrl' => '',
+            'moreUrlQuery' => 'rye%20ipa',
         ],
         6 => [
             'name' => 'White IPA (India Pale Ale)',
             'otherName' => '',
             'polishName' => 'Białe IPA',
             'description' => '<a href="https://piwolucja.pl/piwa-polecane/grodziska-white-ipa-fresh-market-za-piataka/">Recenzja piwa w tym stylu >>></a>',
-            'moreUrl' => '',
+            'moreUrlQuery' => 'white%ipa',
         ],
         7 => [
             'name' => 'Double IPA',
             'otherName' => 'Imperial IPA',
             'polishName' => 'Imperialne IPA',
             'description' => '<a href="https://piwolucja.pl/piwa-polecane/pliny-the-elder-russian-river-brewing/">Recenzja piwa w tym stylu >>></a>',
-            'moreUrl' => '',
+            'moreUrlQuery' => 'double%20ipa',
         ],
         8 => [
             'name' => 'American Barleywine',
             'otherName' => '',
             'polishName' => 'Amerykańskie barleywine',
             'description' => '',
-            'moreUrl' => '',
+            'moreUrlQuery' => '',
         ],
         9 => [
             'name' => 'Pale lager',
             'otherName' => '',
             'polishName' => 'Jasny lager',
             'description' => '',
-            'moreUrl' => '',
+            'moreUrlQuery' => 'lager',
         ],
         10 => [
             'name' => 'Czech Pils',
-            'otherName' => '',
+            'otherName' => 'Bohemian Pilsner',
             'polishName' => 'Czeski pils',
             'description' => '<a href="https://piwolucja.pl/felietony/niepasteryzowany-pilsner-urquell-z-tanka/">Recenzja piwa w tym stylu >>></a>',
-            'moreUrl' => '',
+            'moreUrlQuery' => 'bohemian%20pilsner',
 
         ],
         11 => [
-            'name' => 'Polotmave',
+            'name' => 'Polotmave', //Może nie być przykładów
             'otherName' => '',
             'polishName' => 'Czeskie półciemne',
             'description' => '',
-            'moreUrl' => '',
+            'moreUrlQuery' => '',
 
         ],
         12 => [
-            'name' => 'Tmave',
+            'name' => 'Tmave', //Może nie być przykładów
             'otherName' => '',
             'polishName' => 'Czeski ciemny lager',
             'description' => '',
-            'moreUrl' => '',
+            'moreUrlQuery' => '',
 
         ],
         13 => [
-            'name' => 'German Pils',
+            'name' => 'Pils', //dawniej German Pils
             'otherName' => '',
-            'polishName' => 'Niemiecki pils',
+            'polishName' => 'pils',
             'description' => '',
-            'moreUrl' => '',
+            'moreUrlQuery' => 'pils',
 
         ],
         14 => [
@@ -102,7 +102,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => 'Marcowe',
             'description' => '',
-            'moreUrl' => '',
+            'moreUrlQuery' => 'marcowe',
 
         ],
         15 => [
@@ -110,7 +110,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => 'Koźlak wędzony',
             'description' => '<a href="https://piwolucja.pl/piwa-polecane/aecht-schlenkerla-rauchbock-urbock/">Recenzja piwa w tym stylu >>></a>a',
-            'moreUrl' => '',
+            'moreUrlQuery' => 'rauchbock',
 
         ],
         16 => [
@@ -118,7 +118,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => 'Marcowe wędzone',
             'description' => '',
-            'moreUrl' => '',
+            'moreUrlQuery' => 'rauchmarzen',
 
         ],
         19 => [
@@ -126,7 +126,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => 'Pszeniczne ciemne',
             'description' => '',
-            'moreUrl' => '',
+            'moreUrlQuery' => 'dunkelweizen',
 
         ],
         20 => [
@@ -134,7 +134,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => 'Koźlak pszeniczny',
             'description' => '<a href="https://piwolucja.pl/piwa-polecane/sledze-losy-podroznika-pana-kormorana/">Recenzja piwa w tym stylu >>></a>',
-            'moreUrl' => '',
+            'moreUrlQuery' => 'weizenbock',
 
         ],
         21 => [
@@ -142,7 +142,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => 'Ciemny lager',
             'description' => '',
-            'moreUrl' => '',
+            'moreUrlQuery' => 'dark%20lager',
 
         ],
         22 => [
@@ -150,7 +150,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => 'Koźlak podwójny / lodowy',
             'description' => '<a href="https://piwolucja.pl/piwa-polecane/aventinus-eisbock-pradziadek-wszystkich-wymrazanek-piwna-klasyka/">Recenzja piwa w tym stylu >>></a>',
-            'moreUrl' => '',
+            'moreUrlQuery' => 'doppelbock',
 
         ],
         25 => [
@@ -158,7 +158,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => 'Hefeweizen',
             'polishName' => 'Pszeniczne',
             'description' => '<a href="https://piwolucja.pl/felietony/erdinger-vs-schofferhofer-pojedynek-klasykow-strefa-kibica-auchan/">Recenzja piw w tym stylu >>></a>',
-            'moreUrl' => '',
+            'moreUrlQuery' => 'pszeniczne',
 
         ],
         27 => [
@@ -166,7 +166,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => 'Extra Special Bitter',
             'polishName' => '',
             'description' => '',
-            'moreUrl' => '',
+            'moreUrlQuery' => 'bitter',
 
         ],
         28 => [
@@ -174,7 +174,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => 'Angielskie IPA',
             'description' => '',
-            'moreUrl' => '',
+            'moreUrlQuery' => 'english%20ipa',
 
         ],
         30 => [
@@ -182,7 +182,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => '',
             'description' => '<a href="https://piwolucja.pl/piwa-polecane/grodziski-porter-za-piataka/">Recenzja piwa w tym stylu >>></a>',
-            'moreUrl' => '',
+            'moreUrlQuery' => 'brown%20porter',
 
         ],
         32 => [
@@ -190,7 +190,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => 'Irlandzkie czerwone ale',
             'description' => '',
-            'moreUrl' => '',
+            'moreUrlQuery' => 'irish%20red%20ale',
 
         ],
         33 => [
@@ -198,7 +198,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => '',
             'description' => '<a href="https://piwolucja.pl/piwa-polecane/piwo-guinness-stout/">Recenzja piwa w tym stylu >>></a>',
-            'moreUrl' => '',
+            'moreUrlQuery' => 'dry%20stout',
 
         ],
         34 => [
@@ -206,7 +206,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => 'Stout mleczny',
             'description' => '<a href="https://piwolucja.pl/piwa-polecane/amber-cherry-milk-stout/">Recenzja piwa w tym stylu >>></a>',
-            'moreUrl' => '',
+            'moreUrlQuery' => 'milk%20stout',
 
         ],
         35 => [
@@ -214,7 +214,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => 'FES',
             'polishName' => '',
             'description' => '<a href="https://piwolucja.pl/piwa-polecane/oharas-leann-follain-stout/">Recenzja piwa w tym stylu >>></a>',
-            'moreUrl' => '',
+            'moreUrlQuery' => 'foreign%20extra%20stout',
 
         ],
         36 => [
@@ -222,7 +222,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => 'RIS',
             'polishName' => 'Stout imperialny',
             'description' => '<a href="https://piwolucja.pl/piwa-polecane/lodz-i-mlyn-piwoteka-de-molen/">Recenzja piwa w tym stylu >>></a>',
-            'moreUrl' => '',
+            'moreUrlQuery' => 'imperial%20stout',
 
         ],
         37 => [
@@ -230,7 +230,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => '(Imperialny) Porter Bałtycki',
             'description' => '',
-            'moreUrl' => '',
+            'moreUrlQuery' => 'porter%20baltycki',
 
         ],
         38 => [
@@ -238,15 +238,15 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => '',
             'description' => '',
-            'moreUrl' => '',
+            'moreUrlQuery' => 'old%20ale',
 
         ],
         39 => [
-            'name' => 'English Barleywine',
+            'name' => 'Barley Wine',
             'otherName' => '',
             'polishName' => 'Angielskie barleywine',
             'description' => '<a href="https://piwolucja.pl/piwa-polecane/warto-zainteresowac-sie-barley-wine/">Recenzja piwa w tym stylu >>></a>',
-            'moreUrl' => '',
+            'moreUrlQuery' => 'barley%20wine',
 
         ],
         40 => [
@@ -254,7 +254,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => '',
             'description' => '<a href="https://piwolucja.pl/piwa-polecane/art9-oatmeal-hoptart-recenzja/">Recenzja piwa w tym stylu >>></a>',
-            'moreUrl' => '',
+            'moreUrlQuery' => 'breliner',
 
         ],
         42 => [
@@ -262,7 +262,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => '',
             'description' => '<a href="https://piwolucja.pl/piwa-polecane/duchesse-de-bourgogne/">Recenzja piwa w tyl stylu >>></a>',
-            'moreUrl' => '',
+            'moreUrlQuery' => 'flanders',
 
         ],
         44 => [
@@ -270,7 +270,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => '',
             'description' => '<a href="https://piwolucja.pl/piwa-polecane/oude-geuze-boon-kwasne-piwo/">Recenzja piwa w tym stylu >>></a>',
-            'moreUrl' => '',
+            'moreUrlQuery' => 'lambic',
 
         ],
         45 => [
@@ -278,7 +278,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => 'Białe pszeniczne',
             'description' => 'Delikatne, lekkie i orzeźwiające. Z niską goryczką, pachnące kolendrą i skórką pomarańczy. <a href="https://piwolucja.pl/piwa-polecane/witbier-browar-kormoran/">Recenzja piwa w stym stylu >>></a>',
-            'moreUrl' => '',
+            'moreUrlQuery' => 'witbier',
 
         ],
         47 => [
@@ -286,7 +286,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => '',
             'description' => '<a href="https://piwolucja.pl/piwa-polecane/po-godzinach-saison-madagaskar-za-piataka/">Recenzja piwa w tym stylu >>></a>',
-            'moreUrl' => '',
+            'moreUrlQuery' => 'saison',
 
         ],
         48 => [
@@ -294,7 +294,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => '',
             'description' => '<a href="https://piwolucja.pl/felietony/grand-champion-birofilia-dubbel/">Recenzja piw w tym stylu >>></a>',
-            'moreUrl' => '',
+            'moreUrlQuery' => 'dubbel',
 
         ],
         49 => [
@@ -302,7 +302,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => '',
             'description' => '<a href="https://piwolucja.pl/felietony/chimay-test-belgijskiej-klasyki/">Recenzja piwa w tym stylu >>></a>',
-            'moreUrl' => '',
+            'moreUrlQuery' => 'tripel',
 
         ],
         50 => [
@@ -310,7 +310,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => 'Belgian dark strong ale',
             'polishName' => '',
             'description' => 'Ciężkie i mocne piwo, naładowane karmelem, przyprawani i nutami ciemnych owoców. Degustacyjne. <a href="https://piwolucja.pl/piwa-polecane/struise-pannepot-grand-reserva-2011-nudna-belgia/">Recenzja piwa w tym stylu >>></a>',
-            'moreUrl' => '',
+            'moreUrlQuery' => 'quadrupel',
 
         ],
         51 => [
@@ -318,7 +318,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => '',
             'description' => 'Lekkie, orzeźwiające i delikatnie słone piwo. Bardzo często łączone z owocami dodanymi do konkretnego piwa. <a href="https://piwolucja.pl/piwa-polecane/zacny-zalcman/">Recenzja piwa w tym stylu >>></a>',
-            'moreUrl' => '',
+            'moreUrlQuery' => 'gose',
 
         ],
         52 => [
@@ -326,7 +326,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => '',
             'description' => 'Jedyny w 100% polski styl piwny. Bardzo lekkie, mocno gazowane, pachnące dymem lub wędzonką. <a href="https://piwolucja.pl/felietony/mamy-rodzimy-styl-piwny-a-prawie-nikt-o-tym-nie-wie/">Więcej o tym stylu >>></a>',
-            'moreUrl' => '',
+            'moreUrlQuery' => 'grodziskie',
 
         ],
         53 => [
@@ -334,7 +334,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => 'Piwo żytnie',
             'description' => '',
-            'moreUrl' => '',
+            'moreUrlQuery' => 'roggen',
 
         ],
         55 => [
@@ -342,7 +342,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => 'Dzikie ale',
             'description' => '',
-            'moreUrl' => '',
+            'moreUrlQuery' => 'wild%20ale',
 
         ],
         56 => [
@@ -350,7 +350,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => 'Kwaśne ale',
             'description' => 'Kwaśne, przeważnie lekkie w odbiorze, praktycznie bez goryczki. W konkretnym piwie często łączone z owocami.',
-            'moreUrl' => '',
+            'moreUrlQuery' => 'sour%20ale',
 
         ],
         57 => [
@@ -358,7 +358,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => 'Wędzone ale',
             'description' => '',
-            'moreUrl' => '',
+            'moreUrlQuery' => 'smoked%20ale',
 
         ],
         60 => [
@@ -366,7 +366,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => '',
             'description' => 'Mętne i bardzo owocowe z racji użytych odmian chmielu. Niska goryczka oraz multum smaków i aromatów kojarzących się z cytrusami, owocami tropikalnymi czy winogronem daje odczucie picia "soku". <a href="https://piwolucja.pl/felietony/new-england-ipa-test-polskich-piw/">Więcej o tym stylu >>></a>',
-            'moreUrl' => '',
+            'moreUrlQuery' => 'ne%20ipa',
 
         ],
         61 => [
@@ -374,7 +374,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => 'APA',
             'polishName' => '',
             'description' => '<a href="https://piwolucja.pl/piwa-polecane/cornelius-apa/">Recenzja piwa w tym stylu >>></a>',
-            'moreUrl' => '',
+            'moreUrlQuery' => 'american%20pale%20ale',
 
         ],
         64 => [
@@ -382,7 +382,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => '',
             'description' => '',
-            'moreUrl' => '',
+            'moreUrlQuery' => 'brown%ale',
 
         ],
         67 => [
@@ -390,7 +390,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => 'Belgijskie mocne ale',
             'description' => '<a href="https://piwolucja.pl/piwa-polecane/delirium-tremens-nocturnum-red-strefa-kibica-auchan/">Recenzja piwa w tym stylu >>></a>',
-            'moreUrl' => '',
+            'moreUrlQuery' => 'belgian%20strong%20ale',
 
         ],
         68 => [
@@ -398,7 +398,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => 'Belgijskie jasne',
             'description' => '',
-            'moreUrl' => '',
+            'moreUrlQuery' => 'blonde',
 
         ],
         69 => [
@@ -406,7 +406,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => 'Amerykańskie pszeniczne',
             'description' => '',
-            'moreUrl' => '',
+            'moreUrlQuery' => 'american%20wheat',
 
         ],
         70 => [
@@ -414,7 +414,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => '',
             'description' => '',
-            'moreUrl' => '',
+            'moreUrlQuery' => 'american%20lager',
 
         ],
         71 => [
@@ -422,7 +422,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => 'Stout owsiany',
             'description' => '',
-            'moreUrl' => '',
+            'moreUrlQuery' => 'oatmeal%20stout',
 
         ],
         72 => [
@@ -430,7 +430,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => 'Jasne ale',
             'description' => '',
-            'moreUrl' => '',
+            'moreUrlQuery' => 'pale%20ale',
 
         ],
         73 => [
@@ -438,7 +438,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => '',
             'description' => 'Mocno nachmielone, z dodatkiem laktozy. Niska goryczka, w połączeniu z owocowymi nutami od chmielu i dodatkiem cukru mlecznego powoduje, że piwo przypomina szejk mleczny lub jogurt pitny. Często z dodatkami owocoów lub pulpy.',
-            'moreUrl' => '',
+            'moreUrlQuery' => 'milkshake',
 
         ],
         74 => [
@@ -446,7 +446,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => 'Stout kawowy',
             'description' => '',
-            'moreUrl' => '',
+            'moreUrlQuery' => 'coffee%20stout',
 
         ],
         76 => [
@@ -454,7 +454,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => 'Koźlak',
             'description' => '',
-            'moreUrl' => '',
+            'moreUrlQuery' => 'bock',
 
         ],
     ];
