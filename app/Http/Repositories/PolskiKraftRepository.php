@@ -6,16 +6,19 @@ namespace App\Http\Repositories;
 use App\Http\Objects\PolskiKraftData;
 use App\Http\Objects\PolskiKraftDataCollection;
 use App\Http\Utils\Dictionary;
+use Carbon\Carbon;
 use GuzzleHttp\ClientInterface;
 use Psr\Cache\InvalidArgumentException;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 
 final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
 {
-    //    private const DEFAULT_LIST_URI = 'https://www.polskikraft.pl/openapi/style/list';
+    // private const DEFAULT_LIST_URI = 'https://www.polskikraft.pl/openapi/style/list';
     private const BEER_LIST_BY_STYLE_URL_PATTERN = 'https://www.polskikraft.pl/openapi/style/%d/examples';
     private const CACHE_KEY_SIMPLE_PATTERN = '%s_POLSKIKRAFT';
     private const CACHE_KEY_MULTIPLE_PATTERN = '%s_%s_POLSKIKRAFT';
+    private const LAST_UPDATED_MAX_DAYS = 31;
+    private const BEERS_COUNT_TO_SHOW = 5;
 
     private Dictionary $dictionary;
     private FilesystemAdapter $cache;
@@ -88,22 +91,7 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
             return null;
         }
 
-        while ( \count( $data ) > 3 ) {
-            unset( $data[\array_rand( $data )] );
-        }
-
-        $polskiKraftCollection = new PolskiKraftDataCollection();
-        foreach ( $data as $item ) {
-            $polskiKraft = new PolskiKraftData( $item );
-            $polskiKraftCollection->add( $polskiKraft->toArray() );
-        }
-
-        if ( $cacheKey !== null ) {
-            $this->setToCache( $cacheKey, $polskiKraftCollection );
-            $polskiKraftCollection->setCacheKey( $cacheKey );
-        }
-
-        return $polskiKraftCollection;
+        return $this->createPolskiKraftCollection( $data, $cacheKey );
     }
 
     /**
@@ -146,27 +134,11 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
             return null;
         }
 
-        while ( \count( $data ) > 3 ) {
-            unset( $data[\array_rand( $data )] );
-        }
-
-        $polskiKraftCollection = new PolskiKraftDataCollection();
-        foreach ( $data as $item ) {
-            $polskiKraft = new PolskiKraftData( $item );
-            $polskiKraftCollection->add( $polskiKraft->toArray() );
-        }
-
-        if ( $cacheKey !== null ) {
-            $this->setToCache( $cacheKey, $polskiKraftCollection );
-            $polskiKraftCollection->setCacheKey( $cacheKey );
-        }
-
-        return $polskiKraftCollection;
+        return $this->createPolskiKraftCollection( $data, $cacheKey );
     }
 
     /**
      * @param string $cacheKey
-     *
      * @return mixed|null
      *
      * todo: ale to jest kurwa złe, wynieść to w pizdu SRP
@@ -208,5 +180,66 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
             $dataCollection->set( $data );
             $this->cache->save( $dataCollection );
         }
+    }
+
+    private function createPolskiKraftCollection( array $data, string $cacheKey ): PolskiKraftDataCollection
+    {
+        $beers = $this->retrieveBestBeers( $data );
+
+        $polskiKraftCollection = new PolskiKraftDataCollection();
+        foreach ( $beers as $item ) {
+            $polskiKraft = new PolskiKraftData( $item );
+            $polskiKraftCollection->add( $polskiKraft->toArray() );
+        }
+
+        if ( $cacheKey !== null ) {
+            $this->setToCache( $cacheKey, $polskiKraftCollection );
+            $polskiKraftCollection->setCacheKey( $cacheKey );
+        }
+
+        return $polskiKraftCollection;
+    }
+
+    /**
+     * It takes 5 best scored beers from last 31 days (updated_at)
+     * If not fount, try to append older beers to an array that returns beer
+     *
+     * Example:
+     * - we have 3 out of 5 slots occupied by beers < 31 days old
+     * - we have 7 beers that are older
+     * - we take first 2 beers and add to first 3, having 5 of 5 slots full
+     *
+     * @param array $data
+     * @return array|null
+     */
+    private function retrieveBestBeers( array $data ): ?array
+    {
+        $toShow = $notToShow = [];
+        foreach ( $data as $item ) {
+            $daysToLastUpdated = Carbon::now()
+                ->diffInDays( Carbon::createFromTimestamp( $item['updated_at'] ) );
+            if ( $daysToLastUpdated < self::LAST_UPDATED_MAX_DAYS ) {
+                $toShow[] = $item;
+            } else {
+                $notToShow[] = $item;
+            }
+
+            if ( \count( $toShow ) === self::BEERS_COUNT_TO_SHOW ) {
+                return $toShow;
+            }
+
+        }
+
+        $toShowCount = \count( $toShow );
+
+        if ( $toShowCount < self::BEERS_COUNT_TO_SHOW && \count( $data ) >= 5 ) {
+            $remaining = self::BEERS_COUNT_TO_SHOW - $toShowCount;
+            $toAdd = \array_slice( $notToShow, 0, $remaining );
+            foreach ( $toAdd as $item ) {
+                $toShow[] = $item;
+            }
+        }
+
+        return $toShow;
     }
 }

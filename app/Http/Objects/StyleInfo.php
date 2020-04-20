@@ -7,7 +7,7 @@ final class StyleInfo
 {
     private ?string $description;
     private int $id;
-    private string $moreUrl;
+    private string $moreUrlQuery;
     private string $name;
     private ?string $otherName;
     private ?string $polishName;
@@ -15,14 +15,14 @@ final class StyleInfo
     private function __construct(
         ?string $description,
         int $id,
-        string $moreUrl,
+        string $moreUrlQuery,
         string $name,
         ?string $otherName,
         ?string $polishName
     ) {
         $this->description = \is_string( $description ) ? \trim( $description ) : null;
         $this->id = $id;
-        $this->moreUrl = $moreUrl;
+        $this->moreUrlQuery = $moreUrlQuery;
         $this->name = $name;
         $this->otherName = \is_string( $otherName ) ? \trim( $otherName ) : null;
         $this->polishName = \is_string( $polishName ) ? \trim( $polishName ) : null;
@@ -34,7 +34,7 @@ final class StyleInfo
         return new self(
             $data['description'],
             $id,
-            $data['moreUrl'],
+            $data['moreUrlQuery'],
             $data['name'],
             $data['otherName'],
             $data['polishName'],
@@ -77,8 +77,8 @@ final class StyleInfo
         return $this->description;
     }
 
-    public function getMoreUrl(): ?string
+    public function getMoreUrlQuery(): ?string
     {
-        return $this->moreUrl;
+        return $this->moreUrlQuery;
     }
 }

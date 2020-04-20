@@ -8,7 +8,7 @@ final class StylesToTake extends AbstractStyles
     private ?PolskiKraftDataCollection $beerDataCollection;
     private string $cacheKey = '';
     private bool $highlighted = false;
-    private ?string $moreUrl;
+    private ?string $moreUrlQuery;
 
     public function __construct( StyleInfo $styleInfo, ?PolskiKraftDataCollection $beerDataCollection )
     {
@@ -18,7 +18,7 @@ final class StylesToTake extends AbstractStyles
         }
         $this->description = $styleInfo->getDescription();
         $this->id = $styleInfo->getId();
-        $this->moreUrl = $styleInfo->getMoreUrl();
+        $this->moreUrlQuery = $styleInfo->getMoreUrlQuery();
         $this->name = $styleInfo->getName();
         $this->otherName = $styleInfo->getOtherName();
         $this->polishName = $styleInfo->getPolishName();
@@ -37,7 +37,7 @@ final class StylesToTake extends AbstractStyles
             'description' => $this->description,
             'highlighted' => $this->highlighted,
             'id' => $this->id,
-            'moreUrl' => $this->moreUrl,
+            'moreUrlQuery' => $this->moreUrlQuery,
             'name' => $this->name,
             'otherName' => $this->otherName,
             'polishName' => $this->polishName,
