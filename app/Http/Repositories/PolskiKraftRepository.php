@@ -18,7 +18,7 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
     private const CACHE_KEY_SIMPLE_PATTERN = '%s_POLSKIKRAFT';
     private const CACHE_KEY_MULTIPLE_PATTERN = '%s_%s_POLSKIKRAFT';
     private const LAST_UPDATED_MAX_DAYS = 31;
-    private const BEERS_COUNT_TO_SHOW = 5;
+    private const BEERS_COUNT_TO_SHOW = 3;
 
     private Dictionary $dictionary;
     private FilesystemAdapter $cache;
