@@ -3,8 +3,6 @@ declare( strict_types=1 );
 
 use Illuminate\Support\Facades\Route;
 
-header('Access-Control-Allow-Origin: *');
-
 Route::get('/', static function () {
     return 'API version 2.0';
     // doc
