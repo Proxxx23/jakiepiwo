@@ -33,8 +33,8 @@ final class BeersRepository implements BeersRepositoryInterface
         ],
         3 => [
             'name' => 'Black IPA (India Pale Ale)',
-            'otherName' => 'Cascadian Dark Ale',
-            'polishName' => '',
+            'otherName' => '',
+            'polishName' => 'Czarne IPA',
             'description' => [
                 'text' => null,
                 'url' => 'https://piwolucja.pl/piwa-polecane/bojan-black-ipa-za-piataka/',
@@ -221,7 +221,7 @@ final class BeersRepository implements BeersRepositoryInterface
         25 => [
             'name' => 'Weizen',
             'otherName' => 'Hefeweizen',
-            'polishName' => 'Pszeniczne',
+            'polishName' => 'Pszeniczne jasne',
             'description' => [
                 'text' => null,
                 'url' => 'https://piwolucja.pl/felietony/erdinger-vs-schofferhofer-pojedynek-klasykow-strefa-kibica-auchan/',
