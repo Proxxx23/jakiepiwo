@@ -5,7 +5,7 @@ namespace App\Http\Objects;
 
 abstract class AbstractStyles
 {
-    protected ?string $description;
+    protected array $description;
     protected int $id;
     protected string $name;
     protected ?string $otherName;

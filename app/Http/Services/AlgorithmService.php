@@ -298,21 +298,21 @@ final class AlgorithmService
         $stylesToTakeCollection = ( new StylesToTakeCollection() )->setIdStylesToTake( $idStylesToTake );
         //todo to jest tak złe xDDDDD - rozplątać koniecznie w pizdu tę rzeźbę
         /** @var StyleInfo $styleInfo */
-        foreach ( $styleInfoCollection as $styleInfo ) {
+        foreach ($styleInfoCollection as $styleInfo) {
 
-            if ( $isSmoked && \in_array( $styleInfo->getId(), ScoringRepository::POSSIBLE_SMOKED_DARK_BEERS, true ) ) {
+            if ($isSmoked && \in_array($styleInfo->getId(), ScoringRepository::POSSIBLE_SMOKED_DARK_BEERS, true)) {
                 $styleInfo->setSmokedNames();
             }
 
-            $polskiKraftBeerDataCollection = $this->polskiKraftRepository->fetchByStyleId( $styleInfo->getId() );
-            $stylesToTake = new StylesToTake( $styleInfo, $polskiKraftBeerDataCollection );
+            $polskiKraftBeerDataCollection = $this->polskiKraftRepository->fetchByStyleId($styleInfo->getId());
+            $stylesToTake = new StylesToTake($styleInfo, $polskiKraftBeerDataCollection);
 
-            if ( \is_array( $answers->getHighlightedIds() )
-                && \in_array( $styleInfo->getId(), $answers->getHighlightedIds(), true ) ) {
-                $stylesToTake->setHighlighted( true );
+            if (\is_array($answers->getHighlightedIds())
+                && \in_array($styleInfo->getId(), $answers->getHighlightedIds(), true)) {
+                $stylesToTake->setHighlighted(true);
             }
 
-            $stylesToTakeCollection->add( $stylesToTake->toArray() );
+            $stylesToTakeCollection->add($stylesToTake->toArray());
         }
 
         return $stylesToTakeCollection;
