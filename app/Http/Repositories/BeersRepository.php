@@ -251,17 +251,6 @@ final class BeersRepository implements BeersRepositoryInterface
             ],
             'moreUrlQuery' => 'brown%20porter',
         ],
-        32 => [
-            'name' => 'Irish Red Ale',
-            'otherName' => '',
-            'polishName' => 'Irlandzkie czerwone ale',
-            'description' => [
-                'text' => 'Tutaj znajdzie się skrócony opis stylu.',
-                'url' => null,
-                'urlText' => null,
-            ],
-            'moreUrlQuery' => 'irish%20red%20ale',
-        ],
         33 => [
             'name' => '(Dry) Stout',
             'otherName' => '',

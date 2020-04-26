@@ -30,7 +30,6 @@ final class Dictionary
             25 => 75, // Weizen
             27 => 99, // Bitter/ESB
             30 => 59, // Brown Porter
-            32 => 9, // IRA
             33 => 44, // Dry Stout
             34 => 83, // Milk Stout
             35 => 51, // FES
