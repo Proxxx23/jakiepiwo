@@ -11,10 +11,10 @@ final class BeersRepository implements BeersRepositoryInterface
     private const BEER_STYLE = [
         1 => [
             'name' => 'American IPA (India Pale Ale)',
-            'otherName' => '',
+            'otherName' => 'AIPA',
             'polishName' => 'Amerykańskie IPA',
             'description' => [
-                'text' => 'Mocno nachmielone, z wysoką goryczką. Pachnie cytrusami, owocami tropikalnymi, kwiatami czy żywicą.',
+                'text' => 'Mocno nachmielone, z wysoką goryczką. Pachnie cytrusami, owocami tropikalnymi, kwiatami czy żywicą. Ikona stylów "nowofalowych" - bardzo aromatyczne i intensywne w smaku.',
                 'url' => null,
                 'urlText' => null,
             ],
@@ -25,7 +25,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => 'Belgijskie IPA',
             'description' => [
-                'text' => 'Tutaj znajdzie się skrócony opis stylu',
+                'text' => 'Mocno nachmielone, z dośc wysoką goryczką. To mieszanka nowofalowego India Pale Ale z piwem w stylu belgijskim. Miks tych dwóch podejść daje w efekcie piwo pachnące cytrusami, owocami tropikalnymi, kwiatami czy żywicą. Użycie drożdży do trunków w stylach belgijskich wprowadza dodatkowe nuty przyprawowe (na przykład biał pieprz czy goździki) oraz korzenne.',
                 'url' => 'https://piwolucja.pl/piwa-polecane/deep-love-alebrowar-nogne-o/',
                 'urlText' => 'Recenzja piwa w tym stylu >>>',
             ],
@@ -36,7 +36,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => 'Czarne IPA',
             'description' => [
-                'text' => 'Ciemne i mocno goryczkowe. Przeważają nuty palone, czekoladowe, żywiczne czy owocowe.',
+                'text' => 'Ciemne i mocno goryczkowe. Przeważają nuty palone, czekoladowe, żywiczne, prażonego słonecznika i owocowe.',
                 'url' => 'https://piwolucja.pl/piwa-polecane/bojan-black-ipa-za-piataka/',
                 'urlText' => 'Recenzja piwa w tym stylu >>>',
             ],
@@ -47,7 +47,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => 'Żytnie IPA',
             'description' => [
-                'text' => 'Tutaj znajdzie się skrócony opis stylu',
+                'text' => 'Mocno nachmielone, z wysoką goryczką. Bardzo aromatyczne i intensywne w smaku. Pachnie cytrusami, owocami tropikalnymi, kwiatami czy żywicą. Dodatek żyta sprawia, że piwo jest gęste, nieco zawiesiste i delikatnie pikantne lub przyprawowe.',
                 'url' => null,
                 'urlText' => null,
             ],
@@ -58,18 +58,18 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => 'Białe IPA',
             'description' => [
-                'text' => 'Tutaj znajdzie się skrócony opis stylu',
+                'text' => 'Tutaj znajdzie się skrócony opis stylu.',
                 'url' => 'https://piwolucja.pl/piwa-polecane/grodziska-white-ipa-fresh-market-za-piataka/',
                 'urlText' => 'Recenzja piwa w tym stylu >>>',
             ],
             'moreUrlQuery' => 'white%ipa',
         ],
         7 => [
-            'name' => 'Double IPA',
-            'otherName' => 'Imperial IPA',
+            'name' => 'Double / Imperial IPA',
+            'otherName' => 'DIPA',
             'polishName' => 'Imperialne IPA',
             'description' => [
-                'text' => 'Tutaj znajdzie się skrócony opis stylu',
+                'text' => 'Tęższa wersja piwa w stylu India Pale Ale. Gęste, mocne, potężnie nachmielone i wyraźnie gorzkie. Przeważają w nim nuty owocowe, żywiczne czy kwiatowe. W smaku przeważnie słodkawe, nieco karmelowe i wyraźnie chmielowe.',
                 'url' => 'https://piwolucja.pl/piwa-polecane/pliny-the-elder-russian-river-brewing/',
                 'urlText' => 'Recenzja piwa w tym stylu >>>',
             ],
@@ -80,18 +80,18 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => 'Amerykańskie barleywine',
             'description' => [
-                'text' => 'Gęste i degustacyjne. Tutaj znajdzie się skrócony opis stylu.',
+                'text' => 'Tutaj znajdzie się skrócony opis stylu.',
                 'url' => null,
                 'urlText' => null,
             ],
             'moreUrlQuery' => null,
         ],
         9 => [
-            'name' => 'Pale lager',
+            'name' => 'Pale Lager',
             'otherName' => '',
             'polishName' => 'Jasny lager',
             'description' => [
-                'text' => 'Tutaj znajdzie się skrócony opis stylu',
+                'text' => 'Jasne piwo codzienne, każdemu dobrze znane. Nieskomplikowane, dobrze gaszące pragnienie, z niską ziołową goryczką.',
                 'url' => null,
                 'urlText' => null,
             ],
@@ -102,7 +102,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => 'Bohemian Pilsner',
             'polishName' => 'Czeski pils',
             'description' => [
-                'text' => 'Tutaj znajdzie się skrócony opis stylu',
+                'text' => 'Jasne i orzeźwiające. Pachnie ziołami, nierzadko też cytrusami. Cechą charakterystyczną są nutki maślane. Nieskomplikowane, doskonale gasi pragnienie. Dobrze kojarzoną ikoną stylu jest Pilsner Urquell.',
                 'url' => 'https://piwolucja.pl/felietony/niepasteryzowany-pilsner-urquell-z-tanka/',
                 'urlText' => 'Recenzja piwa w tym stylu >>>',
             ],
@@ -113,7 +113,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => 'Czeskie półciemne',
             'description' => [
-                'text' => 'Tutaj znajdzie się skrócony opis stylu',
+                'text' => 'Tutaj znajdzie się skrócony opis stylu.',
                 'url' => null,
                 'urlText' => null,
             ],
@@ -124,20 +124,20 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => 'Czeski ciemny lager',
             'description' => [
-                'text' => 'Tutaj znajdzie się skrócony opis stylu',
+                'text' => 'Tutaj znajdzie się skrócony opis stylu.',
                 'url' => null,
                 'urlText' => null,
             ],
             'moreUrlQuery' => null,
         ],
         13 => [
-            'name' => 'Pils', //dawniej German Pils
-            'otherName' => '',
+            'name' => 'Pilsner', //dawniej German Pils
+            'otherName' => 'Pils',
             'polishName' => 'pils',
             'description' => [
-                'text' => 'Tutaj znajdzie się skrócony opis stylu',
-                'url' => null,
-                'urlText' => null,
+                'text' => 'Tutaj znajdzie się skrócony opis stylu.',
+                'url' => 'https://piwolucja.pl/piwa-polecane/pilsner-urquell-piwna-klasyka/',
+                'urlText' => 'Recenzja piwa w tym stylu >>>',
             ],
             'moreUrlQuery' => 'pils',
         ],
@@ -146,7 +146,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => 'Marcowe',
             'description' => [
-                'text' => 'Przeważają smaki słodowe, a więc herbatników czy chleba. Niska goryczka i niewiele nit chmielowych powodują, że piwo wydaje się czasami ciężkawe czy nieco mulące.',
+                'text' => 'Przeważają w nim smaki słodowe, a więc herbatników czy chleba. Niska goryczka i niewielka ilość nut chmielowych powodują, że piwo wydaje się czasami ciężkawe czy nieco mulące.',
                 'url' => null,
                 'urlText' => null,
             ],
@@ -157,7 +157,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => 'Koźlak wędzony',
             'description' => [
-                'text' => 'Tutaj znajdzie się skrócony opis stylu',
+                'text' => 'Tutaj znajdzie się skrócony opis stylu.',
                 'url' => 'https://piwolucja.pl/piwa-polecane/aecht-schlenkerla-rauchbock-urbock/',
                 'urlText' => 'Recenzja piwa w tym stylu >>>',
             ],
@@ -168,7 +168,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => 'Marcowe wędzone',
             'description' => [
-                'text' => 'Tutaj znajdzie się skrócony opis stylu',
+                'text' => 'Tutaj znajdzie się skrócony opis stylu.',
                 'url' => null,
                 'urlText' => null,
             ],
@@ -179,7 +179,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => 'Pszeniczne ciemne',
             'description' => [
-                'text' => 'Tutaj znajdzie się skrócony opis stylu',
+                'text' => 'Tutaj znajdzie się skrócony opis stylu.',
                 'url' => null,
                 'urlText' => null,
             ],
@@ -190,18 +190,18 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => 'Koźlak pszeniczny',
             'description' => [
-                'text' => 'Tutaj znajdzie się skrócony opis stylu',
+                'text' => 'Tutaj znajdzie się skrócony opis stylu.',
                 'url' => 'https://piwolucja.pl/piwa-polecane/sledze-losy-podroznika-pana-kormorana/',
                 'urlText' => 'Recenzja piwa w tym stylu >>>',
             ],
             'moreUrlQuery' => 'weizenbock',
         ],
         21 => [
-            'name' => 'Dark lager',
+            'name' => 'Dark Lager',
             'otherName' => '',
             'polishName' => 'Ciemny lager',
             'description' => [
-                'text' => 'Tutaj znajdzie się skrócony opis stylu',
+                'text' => 'Ciemna wersja popularnego jasnego lagera. Piwo lekkie w odbiorze, z niewysoką goryczką. Przeważają w nim nuty przypiekane, karmelowe i czekoladowe.',
                 'url' => null,
                 'urlText' => null,
             ],
@@ -223,7 +223,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => 'Hefeweizen',
             'polishName' => 'Pszeniczne jasne',
             'description' => [
-                'text' => 'Tutaj znajdzie się skrócony opis stylu',
+                'text' => 'Treściwe, mocno gazowane i orzeźwiające. Wyróżnikiem piw pszenicznych są aromaty bananowe, przyprawowe (przeważnie goździkowe), gumy balonowej, czasami też drożdżowe.',
                 'url' => 'https://piwolucja.pl/felietony/erdinger-vs-schofferhofer-pojedynek-klasykow-strefa-kibica-auchan/',
                 'urlText' => 'Recenzja piwa w tym stylu >>>',
             ],
@@ -234,7 +234,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => 'Extra Special Bitter',
             'polishName' => '',
             'description' => [
-                'text' => 'Styl najbardziej znany na Wyspach Brytyjskich. Nisko nagazowane, orzeźwiające, do picia w większej ilości. Z przyjemną ziołową goryczką i nutami słodowymi w aromacie.',
+                'text' => 'Styl najbardziej rozpowszechniony na Wyspach Brytyjskich. Nisko nagazowane, orzeźwiające, do picia w większej ilości. Z przyjemną ziołową goryczką i nutami słodowymi w aromacie.',
                 'url' => null,
                 'urlText' => null,
             ],
@@ -245,18 +245,18 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => 'Angielskie IPA',
             'description' => [
-                'text' => 'Tutaj znajdzie się skrócony opis stylu',
+                'text' => 'Tutaj znajdzie się skrócony opis stylu.',
                 'url' => null,
                 'urlText' => null,
             ],
             'moreUrlQuery' => 'english%20ipa',
         ],
         30 => [
-            'name' => 'Brown Porter',
-            'otherName' => '',
+            'name' => 'English Porter',
+            'otherName' => 'Brown Porter',
             'polishName' => '',
             'description' => [
-                'text' => 'Tutaj znajdzie się skrócony opis stylu',
+                'text' => 'Ciemne i średnio mocne, z niewysoką goryczką. Dominują w nim nuty przypiekane, czekoladowe, karmelowe i orzechowe, czasami też kawowe lub lukrecjowe. W odróżnieniu od porterów bałtyckich, porter angielski jest piwem o wiele lżejszym (do 5,4% alkoholu) i sesyjnym.',
                 'url' => 'https://piwolucja.pl/piwa-polecane/grodziski-porter-za-piataka/',
                 'urlText' => 'Recenzja piwa w tym stylu >>>',
             ],
@@ -267,7 +267,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => 'Irlandzkie czerwone ale',
             'description' => [
-                'text' => 'Tutaj znajdzie się skrócony opis stylu',
+                'text' => 'Tutaj znajdzie się skrócony opis stylu.',
                 'url' => null,
                 'urlText' => null,
             ],
@@ -278,7 +278,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => '',
             'description' => [
-                'text' => 'Najbatrdziej znanym reprezentantem tego stylu jest Guinness. Lekkie, ciemne, palone, z wyraźnymi nutami kawowymi i czekoladowymi. Do picia w większej ilości.',
+                'text' => 'Najbatrdziej znanym reprezentantem tego stylu jest Guinness. Lekkie, ciemne, palone, czasami nieco cierpkie, z wyraźnymi czekoladowymi, rzadziej kawowymi. Gładkie na języku, do picia w większej ilości.',
                 'url' => 'https://piwolucja.pl/piwa-polecane/piwo-guinness-stout/',
                 'urlText' => 'Recenzja piwa w tym stylu >>>',
             ],
@@ -289,7 +289,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => 'Stout mleczny',
             'description' => [
-                'text' => 'Ciemne lekkie piwo z dodatkiem laktozy. Nuty czekoladowe, kawowe, palone i mleczne. Przeważnie przypomina czekoladę z niewielką ilości mleka.',
+                'text' => 'Ciemne lekkie piwo z dodatkiem laktozy. Nuty czekoladowe, palone, mleczne, czasami również kawowe. Przeważnie przypomina czekoladę z niewielką ilości mleka i zazwyczaj jest bardziej słodkie, niż cierpkie czy palone.',
                 'url' => 'https://piwolucja.pl/piwa-polecane/amber-cherry-milk-stout/',
                 'urlText' => 'Recenzja piwa w tym stylu >>>',
             ],
@@ -300,7 +300,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => 'FES',
             'polishName' => '',
             'description' => [
-                'text' => 'Tutaj znajdzie się skrócony opis stylu',
+                'text' => 'Mocna wersja klasycznego stoutu. Piwo ciemne, gęste, tęgie. Wyraźnie palone, czekoladowe, czasami nieco karmelowe i cierpkie. Goryczka w tym stylu jest dośc mocno wyczuwalna, choć nie zbliża się nawet do ekstremum.',
                 'url' => 'https://piwolucja.pl/piwa-polecane/oharas-leann-follain-stout/',
                 'urlText' => 'Recenzja piwa w tym stylu >>>',
             ],
@@ -311,7 +311,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => 'RIS',
             'polishName' => 'Stout imperialny',
             'description' => [
-                'text' => 'Tutaj znajdzie się skrócony opis stylu',
+                'text' => 'Najmocniejszy wariant piwa w stylu stout. Gęste, bardzo mocne, intensywne. Bogate i kompleksowe tak w aromacie, jak i w smaku. Nuty od czekoladowych, kakao, palonych przez prażone, po kawowe i palone. "RIS-y" wzbogacane są często przeróżnymi dodatkami i leżakowane w beczkach po alkoholach szlachetnych - najczęściej bourbonie lub whisky. Nadaje im to dodatkowych nut drewnianych, wanilinowych czy kokosowych. Piwo likierowe, do picia w spokoju.',
                 'url' => 'https://piwolucja.pl/piwa-polecane/lodz-i-mlyn-piwoteka-de-molen/',
                 'urlText' => 'Recenzja piwa w tym stylu >>>',
             ],
@@ -322,9 +322,9 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => '(Imperialny) Porter Bałtycki',
             'description' => [
-                'text' => 'Tutaj znajdzie się skrócony opis stylu',
-                'url' => null,
-                'urlText' => null,
+                'text' => 'Tutaj znajdzie się skrócony opis stylu.',
+                'url' => 'https://piwolucja.pl/szybki-lyk/imperialny-porter-baltycki-z-bursztynem-prost/',
+                'urlText' => 'Recenzja piwa w tym stylu >>>',
             ],
             'moreUrlQuery' => 'porter%20baltycki',
         ],
@@ -333,7 +333,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => '',
             'description' => [
-                'text' => 'Tutaj znajdzie się skrócony opis stylu',
+                'text' => 'Tutaj znajdzie się skrócony opis stylu.',
                 'url' => null,
                 'urlText' => null,
             ],
@@ -344,7 +344,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => 'Angielskie barleywine',
             'description' => [
-                'text' => 'Tutaj znajdzie się skrócony opis stylu',
+                'text' => 'Bardzo gęste, mocne i oleiste. Wypełnione nutami przypieczonej skórki od chleba, tostów, karmelu, daktyli czy suszonych owoców. Nuty chmielowe są również wyczuwalne, jednak goryczka w tym stylu jest raczej stonowana; nacisk kładzie się na pełnię i smaki wnoszone przez słody.',
                 'url' => 'https://piwolucja.pl/piwa-polecane/warto-zainteresowac-sie-barley-wine/',
                 'urlText' => 'Recenzja piwa w tym stylu >>>',
             ],
@@ -366,7 +366,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => '',
             'description' => [
-                'text' => 'W zasadzie są to dwa odrębne, choć bardzo zbliżone style. Flanders przypomina kwaśne, wytrawne, cierpkie, gazowane czerwone wino. Nierzadko bywa nieco octowe, ze słodkim finiszem. Oud Bruin jest bardziej słodowe i mniej kwaśne, z nutami fig czy daktyli.',
+                'text' => 'W zasadzie są to dwa odrębne, choć bardzo zbliżone style. Flanders Red Ale przypomina kwaśne, wytrawne, cierpkie, gazowane czerwone wino. Nierzadko bywa nieco octowe, ze słodkim finiszem. Oud Bruin styl bardziej słodowy i mniej kwaśny, z nutami ciemnych lub suszonych owoców.',
                 'url' => 'https://piwolucja.pl/piwa-polecane/duchesse-de-bourgogne/',
                 'urlText' => 'Recenzja piwa w tym stylu >>>',
             ],
@@ -377,7 +377,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => '',
             'description' => [
-                'text' => 'Kwaśne, jasne, przeważnie mocno gazowane. Fermentowane mikroflorą obecną w powietrzu, zamiast drożdżami piwowarskimi. Pachnie "kwaśno", z nutami końskiej derki czy siana.',
+                'text' => 'Kwaśne, jasne, przeważnie mocno gazowane. Fermentowane mikroflorą obecną w powietrzu, zamiast drożdżami piwowarskimi. Pachnie "kwaśno", czasami nieco octowo, z nutami końskiej derki czy siana.',
                 'url' => 'https://piwolucja.pl/piwa-polecane/oude-geuze-boon-kwasne-piwo/',
                 'urlText' => 'Recenzja piwa w tym stylu >>>',
             ],
@@ -388,7 +388,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => 'Białe pszeniczne',
             'description' => [
-                'text' => 'Delikatne, lekkie i orzeźwiające. Z niską goryczką, pachnące kolendrą i skórką pomarańczy.',
+                'text' => 'Delikatne, gładkie i orzeźwiające, mimo sporej treściwości. Ma bardzo niską goryczkę, pachnie kolendrą i skórką pomarańczy. Nieco kwaskowe i raczej wytrawne na finiszu.',
                 'url' => 'https://piwolucja.pl/piwa-polecane/witbier-browar-kormoran/',
                 'urlText' => 'Recenzja piwa w tym stylu >>>',
             ],
@@ -399,7 +399,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => '',
             'description' => [
-                'text' => 'Tutaj znajdzie się skrócony opis stylu',
+                'text' => 'Tutaj znajdzie się skrócony opis stylu.',
                 'url' => 'https://piwolucja.pl/piwa-polecane/po-godzinach-saison-madagaskar-za-piataka/',
                 'urlText' => 'Recenzja piwa w tym stylu >>>',
             ],
@@ -410,7 +410,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => '',
             'description' => [
-                'text' => 'Tutaj znajdzie się skrócony opis stylu',
+                'text' => 'Tutaj znajdzie się skrócony opis stylu.',
                 'url' => 'https://piwolucja.pl/felietony/grand-champion-birofilia-dubbel/',
                 'urlText' => 'Recenzja piwa w tym stylu >>>',
             ],
@@ -421,7 +421,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => '',
             'description' => [
-                'text' => 'Tutaj znajdzie się skrócony opis stylu',
+                'text' => 'Tutaj znajdzie się skrócony opis stylu.',
                 'url' => 'https://piwolucja.pl/felietony/chimay-test-belgijskiej-klasyki/',
                 'urlText' => 'Recenzja piwa w tym stylu >>>',
             ],
@@ -432,7 +432,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => 'Belgian dark strong ale',
             'polishName' => '',
             'description' => [
-                'text' => 'Ciężkie i mocne piwo, naładowane karmelem, przyprawani i nutami ciemnych owoców. Degustacyjne.',
+                'text' => 'Ciężkie i mocne piwo w stylu belgijskim. Naładowane karmelem, nutami opiekanymi (tosty czy skórka od chleba) przyprawami i akcentami ciemnych owoców. Degustacyjne.',
                 'url' => 'https://piwolucja.pl/piwa-polecane/struise-pannepot-grand-reserva-2011-nudna-belgia/',
                 'urlText' => 'Recenzja piwa w tym stylu >>>',
             ],
@@ -443,7 +443,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => '',
             'description' => [
-                'text' => 'Lekkie, orzeźwiające i delikatnie słone. Praktycznie bez goryczki. Bardzo często łączone z owocami dodanymi do konkretnego piwa.',
+                'text' => 'Lekkie, orzeźwiające, musujące i delikatnie słone. Praktycznie bez goryczki. Bardzo często łączone z owocami dodanymi do konkretnego piwa.',
                 'url' => 'https://piwolucja.pl/piwa-polecane/zacny-zalcman/',
                 'urlText' => 'Recenzja piwa w tym stylu >>>',
             ],
@@ -465,9 +465,9 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => 'Piwo żytnie',
             'description' => [
-                'text' => 'Treściwe i nieco zawiesiste. Zbliżone do piwa pszenicznego, jednak ciemniejsze od niego (pomarańczowe czy miedziano-brązowe). Z niską goryczką, nastawione na smaki słodowe - chlebowe, pumperniklowe czy ciasteczkowe. Przeważnie nieco przyprawowe lub pikantne.',
-                'url' => null,
-                'urlText' => null,
+                'text' => 'Treściwe i nieco zawiesiste. Zbliżone do piwa pszenicznego, jednak ciemniejsze od niego (pomarańczowe lub miedziano-brązowe). Z niską goryczką, nastawione na smaki słodowe - chlebowe, pumperniklowe czy ciasteczkowe. Przeważnie nieco przyprawowe lub pikantne.',
+                'url' => 'https://piwolucja.pl/piwa-polecane/apetyt-na-zycie-warto-kupic/',
+                'urlText' => 'Recenzja piwa w tym stylu >>>',
             ],
             'moreUrlQuery' => 'roggen',
         ],
@@ -476,7 +476,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => 'Dzikie ale',
             'description' => [
-                'text' => 'Tutaj znajdzie się skrócony opis stylu',
+                'text' => 'Tutaj znajdzie się skrócony opis stylu.',
                 'url' => null,
                 'urlText' => null,
             ],
@@ -498,7 +498,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => 'Wędzone ale',
             'description' => [
-                'text' => 'Tutaj znajdzie się skrócony opis stylu',
+                'text' => 'Smoked Ale to nie konkretny styl piwa, a pewna kategoria. Zaliczają się do niej piwa górnej fermentacji, do których warzenia użyto słodu wędzonego dymem. Są przez to dymione w aromacie i smaku, nierzadko też wędzone czy "szynkowe".',
                 'url' => null,
                 'urlText' => null,
             ],
@@ -506,7 +506,7 @@ final class BeersRepository implements BeersRepositoryInterface
         ],
         60 => [
             'name' => 'New England / Vermont IPA',
-            'otherName' => '',
+            'otherName' => 'NEIPA',
             'polishName' => '',
             'description' => [
                 'text' => 'Mętne i bardzo owocowe z racji użytych odmian chmielu. Niska goryczka oraz spektrum smaków i aromatów kojarzących się z cytrusami, owocami tropikalnymi czy winogronem daje odczucie picia "soku".',
@@ -520,7 +520,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => 'APA',
             'polishName' => '',
             'description' => [
-                'text' => 'Tutaj znajdzie się skrócony opis stylu',
+                'text' => 'Tutaj znajdzie się skrócony opis stylu.',
                 'url' => 'https://piwolucja.pl/piwa-polecane/cornelius-apa/',
                 'urlText' => 'Recenzja piwa w tym stylu >>>',
             ],
@@ -531,7 +531,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => '',
             'description' => [
-                'text' => 'Tutaj znajdzie się skrócony opis stylu',
+                'text' => 'Tutaj znajdzie się skrócony opis stylu.',
                 'url' => null,
                 'urlText' => null,
             ],
@@ -542,7 +542,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => 'Belgijskie mocne ale',
             'description' => [
-                'text' => 'Tutaj znajdzie się skrócony opis stylu',
+                'text' => 'Tutaj znajdzie się skrócony opis stylu.',
                 'url' => 'https://piwolucja.pl/piwa-polecane/delirium-tremens-nocturnum-red-strefa-kibica-auchan/',
                 'urlText' => 'Recenzja piwa w tym stylu >>>',
             ],
@@ -553,7 +553,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => 'Belgijskie jasne',
             'description' => [
-                'text' => 'Tutaj znajdzie się skrócony opis stylu',
+                'text' => 'Tutaj znajdzie się skrócony opis stylu.',
                 'url' => null,
                 'urlText' => null,
             ],
@@ -564,15 +564,15 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => 'Amerykańskie pszeniczne',
             'description' => [
-                'text' => 'Tutaj znajdzie się skrócony opis stylu',
+                'text' => 'Tutaj znajdzie się skrócony opis stylu.',
                 'url' => null,
                 'urlText' => null,
             ],
             'moreUrlQuery' => 'american%20wheat',
         ],
         70 => [
-            'name' => 'American Lager',
-            'otherName' => 'American Pilsner',
+            'name' => 'American Pilsner / Lager',
+            'otherName' => '',
             'polishName' => '',
             'description' => [
                 'text' => 'Jasny lager, chmielony odmianami chmielu wprowadzającymi do piwa wysoką goryczkę oraz smaki/aromaty cytrusowe, tropikalne, gronowe, kwiatowe, ziołowe czy żywiczne. Piwa w tym stylu są raczej proste, z wyeksponowaną chmielowością i mocną goryczką.',
@@ -586,7 +586,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => 'Stout owsiany',
             'description' => [
-                'text' => 'Tutaj znajdzie się skrócony opis stylu',
+                'text' => 'Lekkie, ciemne, palone, z wyraźnymi nutami czekoladowymi, czasami również kawowymi. Dodatek płatków owsianych (oatmeal) sprawia, że piwo jest gładkie i aksamitne.',
                 'url' => null,
                 'urlText' => null,
             ],
@@ -597,9 +597,9 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => 'Jasne ale',
             'description' => [
-                'text' => 'Tutaj znajdzie się skrócony opis stylu',
-                'url' => null,
-                'urlText' => null,
+                'text' => 'Jasne piwo górnej fermentacji, odpowiednik jasnego lagera (fermentacja dolna). „Ejle” — w zestawieniu z podobnymi piwami dolnej fermentacji — są bardziej złożone, przeważnie szczodrzej nachmielone. Samo pale ale nie występuje raczej jako samoistny styl piwny i prawie zawsze dostaje odpowiedni przedrostek.',
+                'url' => 'https://piwolucja.pl/felietony/apa-ipa-aipa-dipa-iipa-tipa-czym-sie-rozni/',
+                'urlText' => 'Przeczytaj o przedrostkach i wariacjach tego stylu >>>',
             ],
             'moreUrlQuery' => 'pale%20ale',
         ],
@@ -619,7 +619,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => 'Stout kawowy',
             'description' => [
-                'text' => 'Tutaj znajdzie się skrócony opis stylu',
+                'text' => 'Ciemne piwo z dodatkiem kawy w postaci ziaren, zaparzonego naparu lub cold brew. Dominują w nim smaki palone, czekoladowe czy palone, wspierane przez nuty wnoszone przez kawę. Goryczka jest przeważnie wyczuwalna, w typie ziołowym. W zależności od użytych odmian kawy, piwo może zostać wzbogacone przez akcenty typowe dla konkretnych ziaren - kwiatowe, miodowe, owocowe czy orzechowe.',
                 'url' => null,
                 'urlText' => null,
             ],
@@ -630,7 +630,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => 'Koźlak',
             'description' => [
-                'text' => 'Tutaj znajdzie się skrócony opis stylu',
+                'text' => 'Mocny lager o miedzianej barwie. W smaku przeważają nuty przypieczonej skórki chleba czy karmelowe. Goryczka niska. Piwo nie wydaje się tęgie, nie powinno być taż odczuwalnie alkoholowe. Bardziej złożone od typowego lagera.',
                 'url' => null,
                 'urlText' => null,
             ],
