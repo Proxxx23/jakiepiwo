@@ -240,17 +240,6 @@ final class BeersRepository implements BeersRepositoryInterface
             ],
             'moreUrlQuery' => 'bitter',
         ],
-        28 => [
-            'name' => 'English IPA',
-            'otherName' => '',
-            'polishName' => 'Angielskie IPA',
-            'description' => [
-                'text' => 'Tutaj znajdzie się skrócony opis stylu.',
-                'url' => null,
-                'urlText' => null,
-            ],
-            'moreUrlQuery' => 'english%20ipa',
-        ],
         30 => [
             'name' => 'English Porter',
             'otherName' => 'Brown Porter',

@@ -29,7 +29,6 @@ final class Dictionary
             24 => 58, // Baltic Porter
             25 => 75, // Weizen
             27 => 99, // Bitter/ESB
-            28 => 1, // English IPA
             30 => 59, // Brown Porter
             32 => 9, // IRA
             33 => 44, // Dry Stout
