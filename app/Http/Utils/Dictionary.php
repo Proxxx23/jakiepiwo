@@ -18,7 +18,7 @@ final class Dictionary
             9 => 14, // Pale Lager
             10 => 53, // Czech Pils -> Bohemian Pils
             12 => 11, // Tmave -> Schwarzbier
-            13 => 50, // German Pils -> Pils
+            13 => 50, // German Pils -> Pils (ogólnie)
             14 => 151, // Marzen -> Rauch Weizen Bock (co z tym fantem - jest pusto)
             15 => 67, // Rauchbock
             16 => 135, // Rauchmarzen -> Rauchbier
