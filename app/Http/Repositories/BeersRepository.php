@@ -29,7 +29,7 @@ final class BeersRepository implements BeersRepositoryInterface
                 'url' => 'https://piwolucja.pl/piwa-polecane/deep-love-alebrowar-nogne-o/',
                 'urlText' => 'Recenzja piwa w tym stylu >>>',
             ],
-            'moreUrlQuery' => 'belgian%ipa',
+            'moreUrlQuery' => 'belgian%20ipa',
         ],
         3 => [
             'name' => 'Black IPA (India Pale Ale)',
@@ -62,7 +62,7 @@ final class BeersRepository implements BeersRepositoryInterface
                 'url' => 'https://piwolucja.pl/piwa-polecane/grodziska-white-ipa-fresh-market-za-piataka/',
                 'urlText' => 'Recenzja piwa w tym stylu >>>',
             ],
-            'moreUrlQuery' => 'white%ipa',
+            'moreUrlQuery' => 'white%20ipa',
         ],
         7 => [
             'name' => 'Double / Imperial IPA',
@@ -513,7 +513,7 @@ final class BeersRepository implements BeersRepositoryInterface
                 'url' => null,
                 'urlText' => null,
             ],
-            'moreUrlQuery' => 'brown%ale',
+            'moreUrlQuery' => 'brown%20ale',
         ],
         67 => [
             'name' => 'Belgian Strong Ale',
