@@ -109,15 +109,15 @@ final class BeersRepository implements BeersRepositoryInterface
             'moreUrlQuery' => 'bohemian%20pilsner',
         ],
         11 => [
-            'name' => 'Polotmave', //Może nie być przykładów
+            'name' => 'Desitka', //Może nie być przykładów
             'otherName' => '',
-            'polishName' => 'Czeskie półciemne',
+            'polishName' => 'Czeski lekki pils',
             'description' => [
-                'text' => 'Ten styl nie ma jeszcze opisu.',
+                'text' => 'Styl dobrze znany w Czechach. Piwo bardzo lekkie, ale nie wodniste, o niskiej zawartości alkoholu. Raczej słodowe, wytrawne, pachnące ziołowym chmielem, z nie za wysoką goryczką.',
                 'url' => null,
                 'urlText' => null,
             ],
-            'moreUrlQuery' => null,
+            'moreUrlQuery' => 'desitka',
         ],
         12 => [
             'name' => 'Tmave', //Może nie być przykładów
@@ -128,7 +128,7 @@ final class BeersRepository implements BeersRepositoryInterface
                 'url' => null,
                 'urlText' => null,
             ],
-            'moreUrlQuery' => null,
+            'moreUrlQuery' => 'tmave',
         ],
         13 => [
             'name' => 'Pilsner', //dawniej German Pils
