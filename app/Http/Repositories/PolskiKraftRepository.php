@@ -234,7 +234,7 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
 
         $toShowCount = \count( $toShow );
 
-        if ( $toShowCount < self::BEERS_COUNT_TO_SHOW && \count( $data ) >= 5 ) {
+        if ( $toShowCount < self::BEERS_COUNT_TO_SHOW && \count( $data ) >= 3 ) {
             $remaining = self::BEERS_COUNT_TO_SHOW - $toShowCount;
             $toAdd = \array_slice( $notToShow, 0, $remaining );
             foreach ( $toAdd as $item ) {
