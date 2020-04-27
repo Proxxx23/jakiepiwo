@@ -51,6 +51,10 @@ final class AlgorithmService
     {
         $userAnswers = $user->getAnswers();
 
+        //todo: batch
+        $userAnswers->setChocolate( $inputAnswers[8] === 'tak' );
+        $userAnswers->setCoffee( $inputAnswers[9] === 'tak' );
+        $userAnswers->setSour( $inputAnswers[12] === 'tak' );
         $userAnswers->setSmoked( $inputAnswers[13] === 'tak' );
         $userAnswers->setBarrelAged( $inputAnswers[14] === 'tak' );
 
@@ -294,6 +298,8 @@ final class AlgorithmService
         if ( $styleInfoCollection === null ) {
             return null; // should never happen
         }
+
+        $this->polskiKraftRepository->setUserAnswers( $answers );
 
         $stylesToTakeCollection = ( new StylesToTakeCollection() )->setIdStylesToTake( $idStylesToTake );
         //todo to jest tak złe xDDDDD - rozplątać koniecznie w pizdu tę rzeźbę

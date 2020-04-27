@@ -18,6 +18,9 @@ final class Answers
     private ?array $highlightedIds = null;
     private array $includedIds = [];
     private bool $smoked = false;
+    private bool $sour = false;
+    private bool $coffee = false;
+    private bool $chocolate = false;
     private bool $shuffled = false;
 
     public function getIncludedIds(): array
@@ -50,6 +53,42 @@ final class Answers
     public function setSmoked( bool $smoked ): Answers
     {
         $this->smoked = $smoked;
+
+        return $this;
+    }
+
+    public function isSour(): bool
+    {
+        return $this->sour;
+    }
+
+    public function setSour( bool $sour ): Answers
+    {
+        $this->sour = $sour;
+
+        return $this;
+    }
+
+    public function isCoffee(): bool
+    {
+        return $this->coffee;
+    }
+
+    public function setCoffee( bool $coffee ): Answers
+    {
+        $this->coffee = $coffee;
+
+        return $this;
+    }
+
+    public function isChocolate(): bool
+    {
+        return $this->chocolate;
+    }
+
+    public function setChocolate( bool $chocolate ): Answers
+    {
+        $this->chocolate = $chocolate;
 
         return $this;
     }

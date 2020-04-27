@@ -9,9 +9,8 @@ use Illuminate\Http\Request;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\HttpFoundation\Response;
 
-final class OntapController
+final class OnTapController
 {
-
     /**
      * @param Request $request
      * @param FilesystemAdapter $cache

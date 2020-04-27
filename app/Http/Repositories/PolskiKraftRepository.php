@@ -3,6 +3,7 @@ declare( strict_types=1 );
 
 namespace App\Http\Repositories;
 
+use App\Http\Objects\Answers;
 use App\Http\Objects\PolskiKraftData;
 use App\Http\Objects\PolskiKraftDataCollection;
 use App\Http\Utils\Dictionary;
@@ -11,17 +12,27 @@ use GuzzleHttp\ClientInterface;
 use Psr\Cache\InvalidArgumentException;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 
+//todo: right now this is a service - change to service
 final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
 {
     // private const DEFAULT_LIST_URI = 'https://www.polskikraft.pl/openapi/style/list';
     private const BEER_LIST_BY_STYLE_URL_PATTERN = 'https://www.polskikraft.pl/openapi/style/%d/examples';
     private const CACHE_KEY_SIMPLE_PATTERN = '%s_POLSKIKRAFT';
     private const CACHE_KEY_MULTIPLE_PATTERN = '%s_%s_POLSKIKRAFT';
-    private const LAST_UPDATED_MAX_DAYS = 60;
+    private const LAST_UPDATED_DAYS_LIMIT = 60;
+    private const LAST_UPDATED_MAX_DAYS = 180; // maximum limit if no beers found for last LAST_UPDATED_DAYS_LIMIT days
     private const BEERS_COUNT_TO_SHOW = 3;
 
-    private Dictionary $dictionary;
+    private const FILTER = [
+        'smoked' => ['wędz', 'smoke', 'wedz', 'dym', 'szynk',],
+        'sour' => ['kwaś', 'kwas',],
+        'coffee' => ['kawa', 'kawow', 'coffee', 'cafe', 'espresso', 'latte', 'cappucino', 'kawą'],
+        'chocolate' => ['choco', 'cacao', 'cocoa', 'kakao', 'czekolad',],
+    ];
+
+    private Answers $answers;
     private FilesystemAdapter $cache;
+    private Dictionary $dictionary;
     private ClientInterface $httpClient;
 
     public function __construct(
@@ -29,9 +40,16 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
         FilesystemAdapter $cache,
         ClientInterface $httpClient
     ) {
-        $this->dictionary = $dictionary;
         $this->cache = $cache;
+        $this->dictionary = $dictionary;
         $this->httpClient = $httpClient;
+    }
+
+    public function setUserAnswers( Answers $answers ): self
+    {
+        $this->answers = $answers;
+
+        return $this;
     }
 
     /**
@@ -87,6 +105,7 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
             $response->getBody()
                 ->getContents(), true, 512, JSON_THROW_ON_ERROR
         );
+
         if ( empty( $data ) ) {
             return null;
         }
@@ -202,22 +221,25 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
     }
 
     /**
-     * It takes 5 best scored beers from last 31 days (updated_at)
-     * If not fount, try to append older beers to an array that returns beer
+     * It takes 3 best scored beers from last LAST_UPDATED_DAYS_LIMIT days (updated_at)
+     * If not found, try to append older beers to an array that returns beer
+     * Max beer age (updated_at) is LAST_UPDATED_MAX_DAYS
      *
      * Example:
-     * - we have 3 out of 5 slots occupied by beers < 31 days old
+     * - we have 1 out of 3 slots occupied by beers < LAST_UPDATED_DAYS_LIMIT days old
      * - we have 7 beers that are older
-     * - we take first 2 beers and add to first 3, having 5 of 5 slots full
+     * - we take first 2 beers and add to first 3, having 3 of 3 slots full
      *
      * @param array $data
      *
-     * @return array|null
+     * @return array
      */
-    private function retrieveBestBeers( array $data ): ?array
+    private function retrieveBestBeers( array $data ): array
     {
+        $this->filterData( $data );
+
         \usort(
-            $data, function ( $a, $b ) {
+            $data, static function ( $a, $b ) {
             return $b['rating'] <=> $a['rating'];
         }
         );
@@ -226,9 +248,9 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
         foreach ( $data as $item ) {
             $daysToLastUpdated = Carbon::now()
                 ->diffInDays( Carbon::createFromTimestamp( $item['updated_at'] ) );
-            if ( $daysToLastUpdated < self::LAST_UPDATED_MAX_DAYS ) {
+            if ( $daysToLastUpdated < self::LAST_UPDATED_DAYS_LIMIT ) {
                 $toShow[] = $item;
-            } else {
+            } elseif ( $daysToLastUpdated > self::LAST_UPDATED_DAYS_LIMIT && $daysToLastUpdated < self::LAST_UPDATED_MAX_DAYS ) {
                 $notToShow[] = $item;
             }
 
@@ -249,5 +271,64 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
         }
 
         return $toShow;
+    }
+
+    /**
+     * TODO: Standalone service
+     * TODO 2: WTF is with this foreach in foreach?
+     *
+     * Filters beers basing on answers, for example removes all beers with smoked tags from beer list
+     * @param array $data
+     *
+     * @return void
+     */
+    private function filterData( array &$data ): void
+    {
+        $patterns = $this->getPregMatchPatterns();
+        if ( $patterns === null ) {
+            return;
+        }
+
+        foreach ( $data as $index => &$beer ) {
+            foreach ( $beer['keywords'] as $keywordItem ) {
+                foreach ( $patterns as $pattern ) {
+                    if ( preg_match( $pattern, $keywordItem['keyword'] ) ) {
+                        unset( $beer[$index] );
+                    }
+                }
+            }
+        }
+
+    }
+
+    private function getPregMatchPatterns(): ?array
+    {
+        $filters = null;
+        if ( $this->answers->isSmoked( )) {
+            $filters[] = 'smoked';
+        }
+
+        if ( $this->answers->isChocolate() ) {
+            $filters[] = 'chocolate';
+        }
+
+        if ( $this->answers->isCoffee() ) {
+            $filters[] = 'coffee';
+        }
+
+        if ( $this->answers->isSour() ) {
+            $filters[] = 'sour';
+        }
+
+        if ( $filters === null ) {
+            return null;
+        }
+
+        $patterns = null;
+        foreach ( $filters as $filter ) {
+            $patterns[] = '/.*' . implode( '|', self::FILTER[$filter] ) . '.*/';
+        }
+
+        return $patterns;
     }
 }
