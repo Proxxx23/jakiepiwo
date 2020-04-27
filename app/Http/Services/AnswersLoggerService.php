@@ -9,7 +9,6 @@ use App\Http\Repositories\UserAnswersRepositoryInterface;
 
 final class AnswersLoggerService
 {
-    /** @var UserAnswersRepositoryInterface */
     private UserAnswersRepositoryInterface $userAnswersRepository;
 
     public function __construct( UserAnswersRepositoryInterface $userAnswersRepository )

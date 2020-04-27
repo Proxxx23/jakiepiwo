@@ -34,77 +34,100 @@ class AppServiceProvider extends ServiceProvider
 
     /**
      * Bootstrap any application services.
-     *
-     * @return void
      */
-    public function boot()
+    public function boot(): void
     {
 
     }
 
     /**
      * Register any application services.
-     *
-     * @return void
      */
-    public function register()
+    public function register(): void
     {
-        $this->app->bind(ErrorsLogger::class, static function () {
+        $this->app->bind(
+            ErrorsLogger::class, static function () {
             return new ErrorsLogger( new ErrorLogsRepository() );
-        });
-        $this->app->singleton('ScoringRepository', static function () {
+        }
+        );
+        $this->app->singleton(
+            'ScoringRepository', static function () {
             return new ScoringRepository();
-        });
-        $this->app->singleton('StylesLogsRepository', static function () {
+        }
+        );
+        $this->app->singleton(
+            'StylesLogsRepository', static function () {
             return new StylesLogsRepository();
-        });
-        $this->app->singleton('BeersRepository', static function () {
+        }
+        );
+        $this->app->singleton(
+            'BeersRepository', static function () {
             return new BeersRepository();
-        });
-        $this->app->singleton('FilesystemAdapter', static function () {
+        }
+        );
+        $this->app->singleton(
+            'FilesystemAdapter', static function () {
             return new FilesystemAdapter( '', self::DEFAULT_CACHE_TTL );
-        });
-        $this->app->singleton('HttpClient', static function () {
+        }
+        );
+        $this->app->singleton(
+            'HttpClient', static function () {
             return new Client();
-        });
-        $this->app->singleton('PolskiKraftRepository', static function () {
+        }
+        );
+        $this->app->singleton(
+            'PolskiKraftRepository', static function () {
             return new PolskiKraftRepository(
                 new Dictionary(),
-                \resolve('FilesystemAdapter'),
-                \resolve('HttpClient'));
-        });
-        $this->app->singleton('AlgorithmService', static function () {
-            return new AlgorithmService(
-                \resolve('ScoringRepository'),
-                \resolve('PolskiKraftRepository'),
-                \resolve('StylesLogsRepository'),
-                \resolve('BeersRepository'),
-                \resolve(ErrorsLogger::class)
+                \resolve( 'FilesystemAdapter' ),
+                \resolve( 'HttpClient' )
             );
-        });
-        $this->app->singleton('NewsletterService', static function () {
+        }
+        );
+        $this->app->singleton(
+            'AlgorithmService', static function () {
+            return new AlgorithmService(
+                \resolve( 'ScoringRepository' ),
+                \resolve( 'PolskiKraftRepository' ),
+                \resolve( 'StylesLogsRepository' ),
+                \resolve( 'BeersRepository' ),
+                \resolve( ErrorsLogger::class )
+            );
+        }
+        );
+        $this->app->singleton(
+            'NewsletterService', static function () {
             return new NewsletterService(
                 new NewsletterRepository( new MailChimp( \config( 'mail.mailchimpApiKey' ) ) )
             );
-        });
-        $this->app->singleton('AnswersLoggerService', static function () {
+        }
+        );
+        $this->app->singleton(
+            'AnswersLoggerService', static function () {
             return new AnswersLoggerService( new UserAnswersRepository() );
-        });
-        $this->app->singleton('SimpleResultsService', static function () {
+        }
+        );
+        $this->app->singleton(
+            'SimpleResultsService', static function () {
             return new SimpleResultsService( new ResultsRepository() );
-        });
-        $this->app->singleton('QuestionsService', static function () {
+        }
+        );
+        $this->app->singleton(
+            'QuestionsService', static function () {
             return new QuestionsService( new QuestionsRepository() );
-        });
-        $this->app->singleton('OnTapService', static function () {
+        }
+        );
+        $this->app->singleton(
+            'OnTapService', static function () {
 
-            $onTapConfig = ['timeout' => self::DEFAULT_ONTAP_TIMEOUT];
-            $geolocationConfig = ['timeout' => self::DEFAULT_GEOLOCATION_TIMEOUT];
+            $onTapConfig = [ 'timeout' => self::DEFAULT_ONTAP_TIMEOUT ];
+            $geolocationConfig = [ 'timeout' => self::DEFAULT_GEOLOCATION_TIMEOUT ];
 
             return new OnTapService(
-                new OnTapRepository( new Client( $onTapConfig ), \resolve('FilesystemAdapter') ),
+                new OnTapRepository( new Client( $onTapConfig ), \resolve( 'FilesystemAdapter' ) ),
                 new GeolocationRepository( new Client( $geolocationConfig ) )
             );
-        });
+        }
+        );
     }
 }

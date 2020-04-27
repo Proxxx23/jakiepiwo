@@ -29,6 +29,7 @@ final class GeolocationRepository implements GeolocationRepositoryInterface
 
     /**
      * @param Coordinates $coordinates
+     *
      * @return string|null
      * @throws \GuzzleHttp\Exception\GuzzleException | \JsonException
      */
@@ -47,8 +48,11 @@ final class GeolocationRepository implements GeolocationRepositoryInterface
             return null;
         }
 
-        $xml = \simplexml_load_string($request->getBody()->getContents());
-        $json = \json_encode($xml, JSON_THROW_ON_ERROR, 512);
+        $xml = \simplexml_load_string(
+            $request->getBody()
+                ->getContents()
+        );
+        $json = \json_encode( $xml, JSON_THROW_ON_ERROR, 512 );
         $content = \json_decode( $json, true, 512, JSON_THROW_ON_ERROR );
 
         $partsToSearch = [

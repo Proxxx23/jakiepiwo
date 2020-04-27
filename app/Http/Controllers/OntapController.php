@@ -15,8 +15,8 @@ final class OntapController
     /**
      * @param Request $request
      * @param FilesystemAdapter $cache
+     *
      * @return Response
-     * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \Psr\Cache\InvalidArgumentException
      */
     public function handle( Request $request, FilesystemAdapter $cache ): Response
@@ -44,13 +44,14 @@ final class OntapController
             );
         }
 
-        $ontapService = \resolve('OnTapService');
+        $ontapService = \resolve( 'OnTapService' );
 
         if ( $ontapService->connectionRefused() ) {
             \response()->json(
                 [
                     'message' => 'Could not connect to OnTap API - connection refused.',
-                ], JsonResponse::HTTP_SERVICE_UNAVAILABLE );
+                ], JsonResponse::HTTP_SERVICE_UNAVAILABLE
+            );
         }
 
         $cityName = $ontapService->getCityByCoordinates( $coordinates );

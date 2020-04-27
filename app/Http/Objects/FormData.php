@@ -5,7 +5,7 @@ namespace App\Http\Objects;
 
 final class FormData
 {
-    private bool $addToNewsletterList;
+    private bool $subscribeNewsletter;
     private Answers $answers;
     private ?string $email;
     private string $resultsHash;
@@ -13,7 +13,7 @@ final class FormData
 
     public function __construct( Answers $answers, array $requestData )
     {
-        $this->addToNewsletterList = \is_bool( $requestData['newsletter'] ) ? $requestData['newsletter'] : false;
+        $this->subscribeNewsletter = \is_bool( $requestData['newsletter'] ) ? $requestData['newsletter'] : false;
         $this->answers = $answers;
         $this->email = $this->emailIsValid( $requestData['email'] )
             ? $requestData['email']
@@ -30,7 +30,7 @@ final class FormData
 
     public function addToNewsletterList(): bool
     {
-        return $this->addToNewsletterList && !empty( $this->email );
+        return $this->subscribeNewsletter && !empty( $this->email );
     }
 
     public function getEmail(): ?string

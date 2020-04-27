@@ -55,7 +55,7 @@ final class StyleInfo
     {
         $this->name = '(Smoked) ' . $this->name;
 
-        $smoking = $this->polishName !== null && \preg_match('/porter|stout|koźlak/ui', $this->polishName)
+        $smoking = $this->polishName !== null && \preg_match( '/porter|stout|koźlak/ui', $this->polishName )
             ? '(Wędzony) '
             : '(Wędzone) ';
 

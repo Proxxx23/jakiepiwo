@@ -26,6 +26,7 @@ final class ResultsController extends Controller
      * @param Request $request
      *
      * @param ErrorsLogger $logger
+     *
      * @return JsonResponse
      */
     public function resultsAction( Request $request, ErrorsLogger $logger ): JsonResponse
@@ -59,10 +60,10 @@ final class ResultsController extends Controller
                 ], JsonResponse::HTTP_BAD_REQUEST
             );
         }
-        $inputAnswers = \resolve('QuestionsService')->validateInput( $requestData );
+        $inputAnswers = \resolve( 'QuestionsService' )->validateInput( $requestData );
 
         try {
-            $beerData = (\resolve('AlgorithmService'))
+            $beerData = ( \resolve( 'AlgorithmService' ) )
                 ->createBeerData( $inputAnswers, $formData );
         } catch ( \Exception $ex ) {
             $errorMessage = \sprintf(
@@ -80,10 +81,10 @@ final class ResultsController extends Controller
         }
 
         if ( $formData->addToNewsletterList() && $formData->getEmail() !== null ) {
-            \resolve('NewsletterService')->addToNewsletterList( $formData->getEmail() );
+            \resolve( 'NewsletterService' )->addToNewsletterList( $formData->getEmail() );
         }
 
-        \resolve('AnswersLoggerService')->logAnswers( $formData, $inputAnswers, $beerData );
+        \resolve( 'AnswersLoggerService' )->logAnswers( $formData, $inputAnswers, $beerData );
 
         return \response()
             ->json( $beerData->toArray(), JsonResponse::HTTP_OK, [], JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE );
@@ -91,7 +92,7 @@ final class ResultsController extends Controller
 
     public function resultsByResultsHashAction( string $resultsHash ): Response
     {
-        $resulsJson = \resolve('SimpleResultsService')
+        $resulsJson = \resolve( 'SimpleResultsService' )
             ->getResultsByResultsHash( $resultsHash ); //todo: may be stored in cache for an hour?
 
         if ( $resulsJson === null ) {

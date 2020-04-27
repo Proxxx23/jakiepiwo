@@ -139,6 +139,7 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
 
     /**
      * @param string $cacheKey
+     *
      * @return mixed|null
      *
      * todo: ale to jest kurwa złe, wynieść to w pizdu SRP
@@ -210,6 +211,7 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
      * - we take first 2 beers and add to first 3, having 5 of 5 slots full
      *
      * @param array $data
+     *
      * @return array|null
      */
     private function retrieveBestBeers( array $data ): ?array

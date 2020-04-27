@@ -54,9 +54,9 @@ final class AlgorithmService
         $userAnswers->setSmoked( $inputAnswers[13] === 'tak' );
         $userAnswers->setBarrelAged( $inputAnswers[14] === 'tak' );
 
-        $inputAnswers = \array_filter( $inputAnswers, fn($v) => $v !== 'nie wiem');
+        $inputAnswers = \array_filter( $inputAnswers, fn( $v ) => $v !== 'nie wiem' );
 
-        foreach ($inputAnswers as $questionNumber => $givenAnswer ) {
+        foreach ( $inputAnswers as $questionNumber => $givenAnswer ) {
 
             // Jeśli bez znaczenia, to nic nie robimy
             if ( $givenAnswer === 'bez znaczenia' ) {
@@ -85,9 +85,9 @@ final class AlgorithmService
                 }
 
                 //todo: wtf?
-//                if ( \in_array( $questionNumber, [ 3, 5, 9 ], true ) ) {
-//                    continue;
-//                }
+                //                if ( \in_array( $questionNumber, [ 3, 5, 9 ], true ) ) {
+                //                    continue;
+                //                }
 
                 if ( $givenAnswer !== $mappedAnswer ) {
                     $idsToCalculate = $this->buildStrength( $ids );
@@ -210,7 +210,7 @@ final class AlgorithmService
         if ( $answerValue[6] === 'jasne' &&
             $answerValue[9] === 'nie' &&
             $answerValue[8] !== 'mocne i gęste' &&
-            \in_array( $answerValue[5], ['ledwie wyczuwalną', 'lekką'], true ) ) {
+            \in_array( $answerValue[5], [ 'ledwie wyczuwalną', 'lekką' ], true ) ) {
             $userOptions->applyPositiveSynergy( [ 20, 25, 40, 44, 45, 47, 51, 52, 53, 68, 73 ], 2 );
             $userOptions->applyNegativeSynergy( [ 3, 24, 35, 36, 37, 71 ], 2 );
         }
@@ -298,21 +298,21 @@ final class AlgorithmService
         $stylesToTakeCollection = ( new StylesToTakeCollection() )->setIdStylesToTake( $idStylesToTake );
         //todo to jest tak złe xDDDDD - rozplątać koniecznie w pizdu tę rzeźbę
         /** @var StyleInfo $styleInfo */
-        foreach ($styleInfoCollection as $styleInfo) {
+        foreach ( $styleInfoCollection as $styleInfo ) {
 
-            if ($isSmoked && \in_array($styleInfo->getId(), ScoringRepository::POSSIBLE_SMOKED_DARK_BEERS, true)) {
+            if ( $isSmoked && \in_array( $styleInfo->getId(), ScoringRepository::POSSIBLE_SMOKED_DARK_BEERS, true ) ) {
                 $styleInfo->setSmokedNames();
             }
 
-            $polskiKraftBeerDataCollection = $this->polskiKraftRepository->fetchByStyleId($styleInfo->getId());
-            $stylesToTake = new StylesToTake($styleInfo, $polskiKraftBeerDataCollection);
+            $polskiKraftBeerDataCollection = $this->polskiKraftRepository->fetchByStyleId( $styleInfo->getId() );
+            $stylesToTake = new StylesToTake( $styleInfo, $polskiKraftBeerDataCollection );
 
-            if (\is_array($answers->getHighlightedIds())
-                && \in_array($styleInfo->getId(), $answers->getHighlightedIds(), true)) {
-                $stylesToTake->setHighlighted(true);
+            if ( \is_array( $answers->getHighlightedIds() )
+                && \in_array( $styleInfo->getId(), $answers->getHighlightedIds(), true ) ) {
+                $stylesToTake->setHighlighted( true );
             }
 
-            $stylesToTakeCollection->add($stylesToTake->toArray());
+            $stylesToTakeCollection->add( $stylesToTake->toArray() );
         }
 
         return $stylesToTakeCollection;

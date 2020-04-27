@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare( strict_types=1 );
 
 namespace App\Http\Repositories;
 
@@ -616,15 +616,15 @@ final class BeersRepository implements BeersRepositoryInterface
         ],
     ];
 
-    public function fetchByIds(array $ids): ?StyleInfoCollection
+    public function fetchByIds( array $ids ): ?StyleInfoCollection
     {
-        if (empty($ids)) {
+        if ( empty( $ids ) ) {
             return null;
         }
 
         $styleInfoCollection = new StyleInfoCollection();
-        foreach ($ids as $id) {
-            $styleInfoCollection->add(StyleInfo::fromArray(self::BEER_STYLE[$id], $id));
+        foreach ( $ids as $id ) {
+            $styleInfoCollection->add( StyleInfo::fromArray( self::BEER_STYLE[$id], $id ) );
         }
 
         return $styleInfoCollection;
