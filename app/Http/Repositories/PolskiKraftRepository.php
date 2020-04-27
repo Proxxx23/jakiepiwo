@@ -216,6 +216,12 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
      */
     private function retrieveBestBeers( array $data ): ?array
     {
+        \usort(
+            $data, function ( $a, $b ) {
+            return $b['rating'] <=> $a['rating'];
+        }
+        );
+
         $toShow = $notToShow = [];
         foreach ( $data as $item ) {
             $daysToLastUpdated = Carbon::now()
