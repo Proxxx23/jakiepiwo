@@ -15,7 +15,7 @@ final class Dictionary
             6 => 47, // White IPA
             7 => 38, // Double IPA
             8 => 52, // ABW
-            9 => [14, 29], // Pale Lager
+            9 => [ 14, 29 ], // Pale Lager
             10 => 53, // Czech Pils -> Bohemian Pils
             11 => 145, // Desitka
             12 => 11, // Tmave -> Schwarzbier
@@ -25,7 +25,7 @@ final class Dictionary
             16 => 135, // Rauchmarzen -> Rauchbier
             19 => 69, // Dunkelweizen
             20 => 48,// Weizenbock
-            21 => [11, 31], // Dark Lager -> Inyernational Dark Lager
+            21 => [ 11, 31 ], // Dark Lager -> Inyernational Dark Lager
             22 => 110, // Doppelbock / Eisbock
             24 => 58, // Baltic Porter
             25 => 75, // Weizen
@@ -37,7 +37,7 @@ final class Dictionary
             36 => 32, // RIS
             37 => 58, // Imperial Porter
             38 => 100, // Old Ale
-            39 => 52, // English Barleywine -> Barleywine
+            39 => [ 52, 142 ], // English Barleywine -> Barleywine
             40 => 56, // Berliner Weisse
             42 => [ 72, 158 ], // Flanders -> Flanders / Oud Bruin
             44 => 16, // Lambic / Gueuze -> Lambic
