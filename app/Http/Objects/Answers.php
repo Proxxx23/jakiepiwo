@@ -138,7 +138,22 @@ final class Answers
             if ( !isset( $this->includedIds[$id] ) ) {
                 continue;
             }
-            $this->includedIds[$id] = 0; //shouldn't be null?
+            $this->includedIds[$id] = 0; //todo: shouldn't be null?
+        }
+    }
+
+    /**
+     * Excludes sour/smoked beers from not recommended styles if user says YES
+     *
+     * @param array $idsToExclude
+     */
+    public function excludeFromNotRecommended( array $idsToExclude ): void
+    {
+        foreach ( $idsToExclude as $id ) {
+            if ( !isset( $this->excludedIds[$id] ) ) {
+                continue;
+            }
+            $this->excludedIds[$id] = 0; //todo: shouldn't be null?
         }
     }
 
