@@ -17,7 +17,7 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
     private const BEER_LIST_BY_STYLE_URL_PATTERN = 'https://www.polskikraft.pl/openapi/style/%d/examples';
     private const CACHE_KEY_SIMPLE_PATTERN = '%s_POLSKIKRAFT';
     private const CACHE_KEY_MULTIPLE_PATTERN = '%s_%s_POLSKIKRAFT';
-    private const LAST_UPDATED_MAX_DAYS = 31;
+    private const LAST_UPDATED_MAX_DAYS = 60;
     private const BEERS_COUNT_TO_SHOW = 3;
 
     private Dictionary $dictionary;
