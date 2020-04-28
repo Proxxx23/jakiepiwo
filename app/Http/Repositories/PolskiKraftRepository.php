@@ -7,10 +7,10 @@ use App\Http\Objects\Answers;
 use App\Http\Objects\PolskiKraftData;
 use App\Http\Objects\PolskiKraftDataCollection;
 use App\Http\Utils\Dictionary;
+use App\Http\Utils\Filters;
+use App\Http\Utils\SharedCache;
 use Carbon\Carbon;
 use GuzzleHttp\ClientInterface;
-use Psr\Cache\InvalidArgumentException;
-use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 
 //todo: right now this is a service - change to service
 final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
@@ -24,26 +24,21 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
     private const BEERS_TO_SHOW_LIMIT = 3;
     private const MINIMAL_RATING = 3.0;
 
-    private const FILTER = [
-        'smoked' => ['wędz', 'smoke', 'wedz', 'dym', 'szynk', 'torf', 'islay', 'laphroaig', 'ardbeg'],
-        'sour' => ['kwaś', 'kwas',],
-        'coffee' => ['kawa', 'kawow', 'coffee', 'cafe', 'espresso', 'latte', 'cappucino', 'kawą',],
-        'chocolate' => ['choco', 'cacao', 'cocoa', 'kakao', 'czekolad',],
-        'barrelaged' => ['barrel-aged', 'barrel aged', 'whisky', 'bourbon', 'burbon', 'rum', 'jack daniels', 'jd', 'whiskey'],
-    ];
-
     private Answers $answers;
-    private FilesystemAdapter $cache;
+    private SharedCache $cache;
+    private Filters $filters;
     private Dictionary $dictionary;
     private ClientInterface $httpClient;
 
     public function __construct(
         Dictionary $dictionary,
-        FilesystemAdapter $cache,
+        SharedCache $cache,
+        Filters $filters,
         ClientInterface $httpClient
     ) {
         $this->cache = $cache;
         $this->dictionary = $dictionary;
+        $this->filters = $filters;
         $this->httpClient = $httpClient;
     }
 
@@ -87,7 +82,7 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
     {
         $cacheKey = \sprintf( self::CACHE_KEY_SIMPLE_PATTERN, $translatedStyleId );
 
-        $cachedData = $this->getFromCache( $cacheKey );
+        $cachedData = $this->cache->get( $cacheKey );
         if ( $cachedData !== null ) {
             $cachedData->setCacheKey( $cacheKey );
 
@@ -126,7 +121,7 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
         [ $firstId, $secondId ] = $translatedStyleIds;
         $cacheKey = \sprintf( self::CACHE_KEY_MULTIPLE_PATTERN, $firstId, $secondId );
 
-        $cachedData = $this->getFromCache( $cacheKey );
+        $cachedData = $this->cache->get( $cacheKey );
         if ( $cachedData !== null ) {
             $cachedData->setCacheKey( $cacheKey );
 
@@ -158,52 +153,6 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
         return $this->createPolskiKraftCollection( $data, $cacheKey );
     }
 
-    /**
-     * @param string $cacheKey
-     *
-     * @return mixed|null
-     *
-     * todo: ale to jest kurwa złe, wynieść to w pizdu SRP
-     */
-    private function getFromCache( ?string $cacheKey )
-    {
-        if ( $cacheKey === null ) {
-            return null;
-        }
-
-        $item = null;
-        try {
-            $item = $this->cache->getItem( $cacheKey );
-        } catch ( InvalidArgumentException $e ) {
-
-        }
-
-        return $item !== null && $item->isHit()
-            ? $item->get()
-            : null;
-    }
-
-    /**
-     * todo: ale to jest kurwa złe, wynieść to w pizdu SRP
-     *
-     * @param string $cacheKey
-     * @param mixed $data
-     */
-    private function setToCache( string $cacheKey, $data ): void
-    {
-        $dataCollection = null;
-        try {
-            $dataCollection = $this->cache->getItem( $cacheKey );
-        } catch ( InvalidArgumentException $e ) {
-
-        }
-
-        if ( $dataCollection !== null ) {
-            $dataCollection->set( $data );
-            $this->cache->save( $dataCollection );
-        }
-    }
-
     private function createPolskiKraftCollection( array $data, string $cacheKey ): PolskiKraftDataCollection
     {
         $beers = $this->retrieveBestBeers( $data );
@@ -215,7 +164,7 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
         }
 
         if ( $cacheKey !== null ) {
-            $this->setToCache( $cacheKey, $polskiKraftCollection );
+            $this->cache->set( $cacheKey, $polskiKraftCollection );
             $polskiKraftCollection->setCacheKey( $cacheKey );
         }
 
@@ -238,7 +187,7 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
      */
     private function retrieveBestBeers( array $beers ): array
     {
-        $this->filterData( $beers );
+        $this->filters->filter( $this->answers, $beers );
 
         \usort(
             $beers, static function ( $a, $b ) {
@@ -278,67 +227,6 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
         return $beersToShow;
     }
 
-    /**
-     * TODO: Standalone service
-     * TODO 2: WTF is with this foreach in foreach?
-     *
-     * Filters beers basing on answers, for example removes all beers with smoked tags from beer list
-     * @param array $beers
-     *
-     * @return void
-     */
-    private function filterData( array &$beers ): void
-    {
-        $patterns = $this->getPregMatchPatterns();
-        if ( $patterns === null ) {
-            return;
-        }
-
-        foreach ( $beers as $index => &$beer ) {
-            $beerKeywords = \array_column( $beer['keywords'], 'keyword' );
-            foreach ( $patterns as $pattern ) {
-                if ( \preg_match( $pattern, \implode(',', $beerKeywords ) ) ) {
-                    unset( $beer[$index] );
-                }
-            }
-        }
-    }
-
-    private function getPregMatchPatterns(): ?array
-    {
-        $filters = null;
-        if ( $this->answers->isSmoked( )) {
-            $filters[] = 'smoked';
-        }
-
-        if ( $this->answers->isChocolate() ) {
-            $filters[] = 'chocolate';
-        }
-
-        if ( $this->answers->isCoffee() ) {
-            $filters[] = 'coffee';
-        }
-
-        if ( $this->answers->isSour() ) {
-            $filters[] = 'sour';
-        }
-
-        if ( $this->answers->isBarrelAged() ) {
-            $filters[] = 'barrelaged';
-        }
-
-        if ( $filters === null ) {
-            return null;
-        }
-
-        $patterns = null;
-        foreach ( $filters as $filter ) {
-            $patterns[] = '/.*' . implode( '|', self::FILTER[$filter] ) . '.*/';
-        }
-
-        return $patterns;
-    }
-
     private function isRatedInLastMonthsAndHasProperRating( int $daysToLastUpdated, float $beerRating ): bool
     {
         return $daysToLastUpdated < self::LAST_UPDATED_DAYS_LIMIT
@@ -351,9 +239,9 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
             && $daysToLastUpdated < self::LAST_UPDATED_MAX_DAYS && $beerRating >= self::MINIMAL_RATING;
     }
 
-    private function getDaysToLastUpdate( $item ): int
+    private function getDaysToLastUpdate( int $updatedAt ): int
     {
         return Carbon::now()
-            ->diffInDays( Carbon::createFromTimestamp( $item ) );
+            ->diffInDays( Carbon::createFromTimestamp( $updatedAt ) );
     }
 }

@@ -21,6 +21,8 @@ use App\Http\Services\QuestionsService;
 use App\Http\Services\SimpleResultsService;
 use App\Http\Utils\Dictionary;
 use App\Http\Utils\ErrorsLogger;
+use App\Http\Utils\Filters;
+use App\Http\Utils\SharedCache;
 use DrewM\MailChimp\MailChimp;
 use GuzzleHttp\Client;
 use Illuminate\Support\ServiceProvider;
@@ -71,6 +73,11 @@ class AppServiceProvider extends ServiceProvider
         }
         );
         $this->app->singleton(
+            'SharedCache', static function () {
+            return new SharedCache( \resolve( 'FilesystemAdapter' ) );
+        }
+        );
+        $this->app->singleton(
             'HttpClient', static function () {
             return new Client();
         }
@@ -79,7 +86,8 @@ class AppServiceProvider extends ServiceProvider
             'PolskiKraftRepository', static function () {
             return new PolskiKraftRepository(
                 new Dictionary(),
-                \resolve( 'FilesystemAdapter' ),
+                \resolve( 'SharedCache' ),
+                new Filters(),
                 \resolve( 'HttpClient' )
             );
         }
@@ -124,7 +132,7 @@ class AppServiceProvider extends ServiceProvider
             $geolocationConfig = [ 'timeout' => self::DEFAULT_GEOLOCATION_TIMEOUT ];
 
             return new OnTapService(
-                new OnTapRepository( new Client( $onTapConfig ), \resolve( 'FilesystemAdapter' ) ),
+                new OnTapRepository( new Client( $onTapConfig ), \resolve( 'SharedCache' ) ),
                 new GeolocationRepository( new Client( $geolocationConfig ) )
             );
         }

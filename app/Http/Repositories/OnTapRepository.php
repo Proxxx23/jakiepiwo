@@ -3,9 +3,8 @@ declare( strict_types=1 );
 
 namespace App\Http\Repositories;
 
+use App\Http\Utils\SharedCache;
 use GuzzleHttp\ClientInterface;
-use Psr\Cache\InvalidArgumentException;
-use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 
 final class OnTapRepository implements OnTapRepositoryInterface
 {
@@ -19,18 +18,18 @@ final class OnTapRepository implements OnTapRepositoryInterface
     private const CACHE_KEY_CITIES = 'CITIES_ONTAP';
 
     private ClientInterface $httpClient;
-    private FilesystemAdapter $cache;
+    private SharedCache $cache;
     private ?string $cityId = null;
     private bool $connectionError;
     private string $cityName;
 
     /**
      * @param ClientInterface $httpClient
-     * @param FilesystemAdapter $cache
+     * @param SharedCache $cache
      *
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function __construct( ClientInterface $httpClient, FilesystemAdapter $cache )
+    public function __construct( ClientInterface $httpClient, SharedCache $cache )
     {
         $this->cache = $cache;
         $this->httpClient = $httpClient; //todo: set headers globally
@@ -63,7 +62,7 @@ final class OnTapRepository implements OnTapRepositoryInterface
         //todo: strategy?
         $toHash = $this->cityId . '_' . $beerName;
         $cacheKey = \sprintf( self::CACHE_KEY_BEER_PATTERN, \md5( $toHash ) );
-        $item = $this->getFromCache( $cacheKey );
+        $item = $this->cache->get( $cacheKey );
         if ( $item !== null ) {
             return $item;
         }
@@ -87,7 +86,7 @@ final class OnTapRepository implements OnTapRepositoryInterface
             return null;
         }
 
-        $this->setToCache( $cacheKey, $tapsData );
+        $this->cache->set( $cacheKey, $tapsData );
 
         return $tapsData;
     }
@@ -98,7 +97,7 @@ final class OnTapRepository implements OnTapRepositoryInterface
      */
     public function fetchAllCities(): array
     {
-        $cachedData = $this->getFromCache( self::CACHE_KEY_CITIES );
+        $cachedData = $this->cache->get( self::CACHE_KEY_CITIES );
         if ( $cachedData !== null ) {
             return $cachedData;
         }
@@ -117,7 +116,7 @@ final class OnTapRepository implements OnTapRepositoryInterface
             $response->getBody()
                 ->getContents(), true, 512, JSON_THROW_ON_ERROR
         );
-        $this->setToCache( self::CACHE_KEY_CITIES, $data );
+        $this->cache->set( self::CACHE_KEY_CITIES, $data );
 
         return $data;
     }
@@ -166,7 +165,7 @@ final class OnTapRepository implements OnTapRepositoryInterface
     {
         $cityId = $this->fetchCityIdByName();
         $cacheKey = \sprintf( self::CACHE_KEY_PLACE_PATTERN, $cityId );
-        $cachedData = $this->getFromCache( $cacheKey );
+        $cachedData = $this->cache->get( $cacheKey );
         if ( $cachedData !== null ) {
             return $cachedData;
         }
@@ -185,7 +184,7 @@ final class OnTapRepository implements OnTapRepositoryInterface
             $response->getBody()
                 ->getContents(), true, 512, JSON_THROW_ON_ERROR
         );
-        $this->setToCache( $cacheKey, $data );
+        $this->cache->set( $cacheKey, $data );
 
         return $data;
     }
@@ -199,7 +198,7 @@ final class OnTapRepository implements OnTapRepositoryInterface
     private function fetchTapsByPlaceId( string $placeId ): ?array
     {
         $cacheKey = \sprintf( self::CACHE_KEY_TAPS_PATTERN, $placeId );
-        $cachedData = $this->getFromCache( $cacheKey );
+        $cachedData = $this->cache->get( $cacheKey );
         if ( $cachedData !== null ) {
             return $cachedData;
         }
@@ -218,7 +217,7 @@ final class OnTapRepository implements OnTapRepositoryInterface
             $response->getBody()
                 ->getContents(), true, 512, JSON_THROW_ON_ERROR
         );
-        $this->setToCache( $cacheKey, $data );
+        $this->cache->set( $cacheKey, $data );
 
         return $data;
     }
@@ -235,51 +234,5 @@ final class OnTapRepository implements OnTapRepositoryInterface
         }
 
         return false;
-    }
-
-    // todo standalone class
-
-    /**
-     * todo: ale to jest kurwa złe, wynieść to w pizdu SRP
-     *
-     * @param string $cacheKey
-     *
-     * @return mixed|null
-     */
-    private function getFromCache( string $cacheKey )
-    {
-        $item = null;
-        try {
-            $item = $this->cache->getItem( $cacheKey );
-        } catch ( InvalidArgumentException $e ) {
-
-        }
-
-        return $item !== null && $item->isHit()
-            ? $item->get()
-            : null;
-    }
-
-
-    /**
-     * todo: ale to jest kurwa złe, wynieść to w pizdu SRP
-     * todo: wyczaić jak ustawiać TTL przy save
-     *
-     * @param string $cacheKey
-     * @param mixed $data
-     */
-    private function setToCache( string $cacheKey, $data ): void
-    {
-        $dataCollection = null;
-        try {
-            $dataCollection = $this->cache->getItem( $cacheKey );
-        } catch ( InvalidArgumentException $e ) {
-
-        }
-
-        if ( $dataCollection !== null ) {
-            $dataCollection->set( $data );
-            $this->cache->save( $dataCollection );
-        }
     }
 }
