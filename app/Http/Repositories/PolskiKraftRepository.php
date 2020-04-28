@@ -24,7 +24,7 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
     private const BEERS_COUNT_TO_SHOW = 3;
 
     private const FILTER = [
-        'smoked' => ['wędz', 'smoke', 'wedz', 'dym', 'szynk',],
+        'smoked' => ['wędz', 'smoke', 'wedz', 'dym', 'szynk', 'torf', 'islay'],
         'sour' => ['kwaś', 'kwas',],
         'coffee' => ['kawa', 'kawow', 'coffee', 'cafe', 'espresso', 'latte', 'cappucino', 'kawą'],
         'chocolate' => ['choco', 'cacao', 'cocoa', 'kakao', 'czekolad',],
