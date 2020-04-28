@@ -29,7 +29,7 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
         'sour' => ['kwaś', 'kwas',],
         'coffee' => ['kawa', 'kawow', 'coffee', 'cafe', 'espresso', 'latte', 'cappucino', 'kawą',],
         'chocolate' => ['choco', 'cacao', 'cocoa', 'kakao', 'czekolad',],
-        'barrelaged' => ['barrel-aged', 'barrel aged', 'whisky', 'bourbon', 'rum',],
+        'barrelaged' => ['barrel-aged', 'barrel aged', 'whisky', 'bourbon', 'burbon', 'rum', 'jack daniels', 'jd', 'whiskey'],
     ];
 
     private Answers $answers;
@@ -295,15 +295,13 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
         }
 
         foreach ( $beers as $index => &$beer ) {
-            foreach ( $beer['keywords'] as $keywordItem ) {
-                foreach ( $patterns as $pattern ) {
-                    if ( preg_match( $pattern, $keywordItem['keyword'] ) ) {
-                        unset( $beer[$index] );
-                    }
+            $beerKeywords = \array_column( $beer['keywords'], 'keyword' );
+            foreach ( $patterns as $pattern ) {
+                if ( \preg_match( $pattern, \implode(',', $beerKeywords ) ) ) {
+                    unset( $beer[$index] );
                 }
             }
         }
-
     }
 
     private function getPregMatchPatterns(): ?array
