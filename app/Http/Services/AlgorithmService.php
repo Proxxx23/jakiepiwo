@@ -357,21 +357,21 @@ final class AlgorithmService
     {
         // wykluczenia dla piw kwaśnych
         if ( isset( $answers[12] ) && $answers[12] === 'nie ma mowy' ) {
-            $userOptions->excludeFromRecommended( [ 40, 42, 44, 51, 56 ] );
+            $userOptions->excludeFromRecommended( [ 40, 42, 44, 51, 56, ] );
         } elseif ( isset( $answers[12] ) && $answers[12] === 'chętnie' ) {
-            $userOptions->excludeFromNotRecommended( [ 40, 42, 44, 51, 56 ] );
+            $userOptions->excludeFromNotRecommended( [ 40, 42, 44, 51, 56, ] );
         }
 
         // wykluczenia dla wędzonek
         if ( isset( $answers[13] ) && $answers[13] === 'nie' ) {
-            $userOptions->excludeFromRecommended( [ 15, 16, 52, 57 ] );
+            $userOptions->excludeFromRecommended( [ 15, 16, 52, 57, ] );
         } elseif ( isset( $answers[13] ) && $answers[13] === 'tak' ) {
-            $userOptions->excludeFromNotRecommended( [ 15, 16, 52, 57 ] );
+            $userOptions->excludeFromNotRecommended( [ 15, 16, 52, 57, ] );
         }
 
         // wykluczenia dla piw lekkich
         if ( isset( $answers[3] ) && $answers[3] === 'coś lekkiego' ) {
-            $userOptions->excludeFromRecommended( [ 50, 36, 8, 22, 37, ] );
+            $userOptions->excludeFromRecommended( [ 7, 8, 22, 24, 36, 37, 39, 50, ] );
         }
     }
 }
