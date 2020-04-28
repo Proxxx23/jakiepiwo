@@ -21,7 +21,8 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
     private const CACHE_KEY_MULTIPLE_PATTERN = '%s_%s_POLSKIKRAFT';
     private const LAST_UPDATED_DAYS_LIMIT = 60;
     private const LAST_UPDATED_MAX_DAYS = 180; // maximum limit if no beers found for last LAST_UPDATED_DAYS_LIMIT days
-    private const BEERS_COUNT_TO_SHOW = 3;
+    private const BEERS_TO_SHOW_LIMIT = 3;
+    private const MINIMAL_RATING = 3.0;
 
     private const FILTER = [
         'smoked' => ['wędz', 'smoke', 'wedz', 'dym', 'szynk', 'torf', 'islay'],
@@ -230,47 +231,50 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
      * - we have 7 beers that are older
      * - we take first 2 beers and add to first 3, having 3 of 3 slots full
      *
-     * @param array $data
+     * @param array $beers
      *
      * @return array
      */
-    private function retrieveBestBeers( array $data ): array
+    private function retrieveBestBeers( array $beers ): array
     {
-        $this->filterData( $data );
+        $this->filterData( $beers );
 
         \usort(
-            $data, static function ( $a, $b ) {
+            $beers, static function ( $a, $b ) {
             return $b['rating'] <=> $a['rating'];
         }
         );
 
-        $toShow = $notToShow = [];
-        foreach ( $data as $item ) {
-            $daysToLastUpdated = Carbon::now()
-                ->diffInDays( Carbon::createFromTimestamp( $item['updated_at'] ) );
-            if ( $daysToLastUpdated < self::LAST_UPDATED_DAYS_LIMIT ) {
-                $toShow[] = $item;
-            } elseif ( $daysToLastUpdated > self::LAST_UPDATED_DAYS_LIMIT && $daysToLastUpdated < self::LAST_UPDATED_MAX_DAYS ) {
-                $notToShow[] = $item;
+        $beersToShow = $beersNotToShow = [];
+        foreach ( $beers as $beer ) {
+
+            $beerRating = (float) $beer['rating'];
+
+            $daysToLastUpdated = $this->getDaysToLastUpdate( $beer['updated_at'] );
+
+            if ( $this->isRatedInLastMonthsAndHasProperRating( $daysToLastUpdated, $beerRating ) ) {
+                $beersToShow[] = $beer;
+            } elseif ( $this->isRatedMaxHalfYearAgoAndHasProperRating( $daysToLastUpdated, $beerRating ) ) {
+                $beersNotToShow[] = $beer;
             }
 
-            if ( \count( $toShow ) === self::BEERS_COUNT_TO_SHOW ) {
-                return $toShow;
+            if ( \count( $beersToShow ) === self::BEERS_TO_SHOW_LIMIT ) {
+                return $beersToShow;
             }
 
         }
 
-        $toShowCount = \count( $toShow );
+        $beersToShowCount = \count( $beersToShow );
 
-        if ( $toShowCount < self::BEERS_COUNT_TO_SHOW && \count( $data ) >= 3 ) {
-            $remaining = self::BEERS_COUNT_TO_SHOW - $toShowCount;
-            $toAdd = \array_slice( $notToShow, 0, $remaining );
-            foreach ( $toAdd as $item ) {
-                $toShow[] = $item;
+        if ( $beersToShowCount < self::BEERS_TO_SHOW_LIMIT && \count( $beers ) >= 3 ) {
+            $remaining = self::BEERS_TO_SHOW_LIMIT - $beersToShowCount;
+            $beersToAppend = \array_slice( $beersNotToShow, 0, $remaining );
+            foreach ( $beersToAppend as $beer ) {
+                $beersToShow[] = $beer;
             }
         }
 
-        return $toShow;
+        return $beersToShow;
     }
 
     /**
@@ -278,18 +282,18 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
      * TODO 2: WTF is with this foreach in foreach?
      *
      * Filters beers basing on answers, for example removes all beers with smoked tags from beer list
-     * @param array $data
+     * @param array $beers
      *
      * @return void
      */
-    private function filterData( array &$data ): void
+    private function filterData( array &$beers ): void
     {
         $patterns = $this->getPregMatchPatterns();
         if ( $patterns === null ) {
             return;
         }
 
-        foreach ( $data as $index => &$beer ) {
+        foreach ( $beers as $index => &$beer ) {
             foreach ( $beer['keywords'] as $keywordItem ) {
                 foreach ( $patterns as $pattern ) {
                     if ( preg_match( $pattern, $keywordItem['keyword'] ) ) {
@@ -330,5 +334,23 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
         }
 
         return $patterns;
+    }
+
+    private function isRatedInLastMonthsAndHasProperRating( int $daysToLastUpdated, float $beerRating ): bool
+    {
+        return $daysToLastUpdated < self::LAST_UPDATED_DAYS_LIMIT
+            && $beerRating >= self::MINIMAL_RATING;
+    }
+
+    private function isRatedMaxHalfYearAgoAndHasProperRating( int $daysToLastUpdated, float $beerRating ): bool
+    {
+        return $daysToLastUpdated > self::LAST_UPDATED_DAYS_LIMIT
+            && $daysToLastUpdated < self::LAST_UPDATED_MAX_DAYS && $beerRating >= self::MINIMAL_RATING;
+    }
+
+    private function getDaysToLastUpdate( $item ): int
+    {
+        return Carbon::now()
+            ->diffInDays( Carbon::createFromTimestamp( $item ) );
     }
 }
