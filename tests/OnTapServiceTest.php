@@ -18,8 +18,8 @@ final class OnTapServiceTest extends FinalsBypassedTestCase
             ->shouldBeCalledOnce();
         $prophecy->fetchAllCities()
             ->willReturn( [] );
-        $prophecy->connectionNotRefused()
-            ->willReturn( true );
+        $prophecy->connectionRefused()
+            ->willReturn( false );
 
         $geolocationRepository = $this->createMock( GeolocationRepository::class );
         $service = new OnTapService( $prophecy->reveal(), $geolocationRepository );
@@ -31,8 +31,8 @@ final class OnTapServiceTest extends FinalsBypassedTestCase
     public function testReturnsNullIfNotConnected(): void
     {
         $onTapRepository = $this->createMock( OnTapRepository::class );
-        $onTapRepository->method( 'connectionNotRefused' )
-            ->willReturn( false );
+        $onTapRepository->method( 'connectionRefused' )
+            ->willReturn( true );
         $onTapRepository->method( 'fetchAllCities' )
             ->willReturn( [] );
 

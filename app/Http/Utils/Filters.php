@@ -29,10 +29,12 @@ final class Filters
         }
 
         foreach ( $beers as $index => &$beer ) {
+            $beerName = $beer['title'];
             $beerKeywords = \array_column( $beer['keywords'], 'keyword' );
             foreach ( $patterns as $pattern ) {
-                if ( \preg_match( $pattern, \implode(',', $beerKeywords ) ) ) {
-                    unset( $beer[$index] );
+                if ( \preg_match( $pattern, $beerName ) ||
+                    \preg_match( $pattern, \implode(',', $beerKeywords ) ) ) {
+                    unset( $beers[$index] );
                 }
             }
         }

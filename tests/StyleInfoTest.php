@@ -14,7 +14,7 @@ final class StyleInfoTest extends FinalsBypassedTestCase
                 'name' => 'Porter',
                 'otherName' => '',
                 'polishName' => 'Porter',
-                'description' => '',
+                'description' => [],
                 'moreUrlQuery' => '',
             ], 5
         );
@@ -31,7 +31,7 @@ final class StyleInfoTest extends FinalsBypassedTestCase
                 'name' => 'Stout',
                 'otherName' => '',
                 'polishName' => 'Stout',
-                'description' => '',
+                'description' => [],
                 'moreUrlQuery' => '',
             ], 5
         );
@@ -48,7 +48,7 @@ final class StyleInfoTest extends FinalsBypassedTestCase
                 'name' => 'Bock',
                 'otherName' => '',
                 'polishName' => 'Koźlak',
-                'description' => '',
+                'description' => [],
                 'moreUrlQuery' => '',
             ], 5
         );
@@ -74,7 +74,7 @@ final class StyleInfoTest extends FinalsBypassedTestCase
                 'name' => 'Barleywine',
                 'otherName' => '',
                 'polishName' => 'Barleywine',
-                'description' => '',
+                'description' => [],
                 'moreUrlQuery' => '',
             ], 5
         );
