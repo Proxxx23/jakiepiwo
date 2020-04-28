@@ -25,10 +25,11 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
     private const MINIMAL_RATING = 3.0;
 
     private const FILTER = [
-        'smoked' => ['wędz', 'smoke', 'wedz', 'dym', 'szynk', 'torf', 'islay'],
+        'smoked' => ['wędz', 'smoke', 'wedz', 'dym', 'szynk', 'torf', 'islay', 'laphroaig', 'ardbeg'],
         'sour' => ['kwaś', 'kwas',],
-        'coffee' => ['kawa', 'kawow', 'coffee', 'cafe', 'espresso', 'latte', 'cappucino', 'kawą'],
+        'coffee' => ['kawa', 'kawow', 'coffee', 'cafe', 'espresso', 'latte', 'cappucino', 'kawą',],
         'chocolate' => ['choco', 'cacao', 'cocoa', 'kakao', 'czekolad',],
+        'barrelaged' => ['barrel-aged', 'barrel aged', 'whisky', 'bourbon', 'rum',],
     ];
 
     private Answers $answers;
@@ -322,6 +323,10 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
 
         if ( $this->answers->isSour() ) {
             $filters[] = 'sour';
+        }
+
+        if ( $this->answers->isBarrelAged() ) {
+            $filters[] = 'barrelaged';
         }
 
         if ( $filters === null ) {
