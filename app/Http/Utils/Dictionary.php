@@ -20,7 +20,7 @@ final class Dictionary
             11 => 145, // Desitka
             12 => 11, // Tmave -> Schwarzbier
             13 => 50, // German Pils -> Pils (ogólnie)
-            14 => 13, // Marzen -> Oktoberfest
+            14 => [ 36, 13 ], // Marzen -> Oktoberfest
             15 => 67, // Rauchbock
             16 => 135, // Rauchmarzen -> Rauchbier
             19 => 69, // Dunkelweizen
