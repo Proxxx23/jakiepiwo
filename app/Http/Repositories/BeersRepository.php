@@ -36,7 +36,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => 'Czarne IPA',
             'description' => [
-                'text' => 'Ciemne i mocno goryczkowe. Przeważają nuty palone, czekoladowe, żywiczne, prażonego słonecznika i owocowe.',
+                'text' => 'Ciemne i mocno goryczkowe. Przeważają nuty palone, czekoladowe, żywiczne, prażonego słonecznika i owocowe. Niektóre piwa w tym stylu mogą nie wykazywać prawie żadnych smaków czy aromatów "ciemnych". W takich reprezentantach stylu, jedynie barwa będzie ciemnobrązowa lub czarna.',
                 'url' => 'https://piwolucja.pl/piwa-polecane/bojan-black-ipa-za-piataka/',
                 'urlText' => 'Recenzja piwa w tym stylu >>>',
             ],
@@ -58,7 +58,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => 'Białe IPA',
             'description' => [
-                'text' => 'Ten styl nie ma jeszcze opisu.',
+                'text' => 'Hybryda stylów India Pale Ale i belgijskiego Witbiera. Łączy w sobie ogrom chmielowych aromatów cytrusowych, tropikalnych i kwiatowych, z nutami znanymi z beligijskich piw pszenicznych - drożdżowymi i nieco przyprawowymi. Goryczka średnia, a samo piwo przeważnie nieco zmętnione i jasne.',
                 'url' => 'https://piwolucja.pl/piwa-polecane/grodziska-white-ipa-fresh-market-za-piataka/',
                 'urlText' => 'Recenzja piwa w tym stylu >>>',
             ],
@@ -91,7 +91,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => 'Jasny Lager',
             'description' => [
-                'text' => 'Jasne piwo codzienne, każdemu dobrze znane. Nieskomplikowane, dobrze gaszące pragnienie, z niską ziołową goryczką.',
+                'text' => 'Jasne piwo codzienne, znane doskonale każdemu. Nieskomplikowane, świetnie gaszące pragnienie, z niską (preważnie) prostą ziołową goryczką.',
                 'url' => 'https://kompendiumpiwa.pl/jasny-lager/',
                 'urlText' => 'Więcej o stylu Jasny Lager >>>',
             ],
@@ -124,7 +124,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => 'Czeski Ciemny Lager',
             'description' => [
-                'text' => 'Ten styl nie ma jeszcze opisu.',
+                'text' => 'Lekkie piwo w stylu wywodzącym się z Czech. Orzeźwiające, bardzo pijalne, raczej z niską ziołową goryczką. Wyczuwalne są w nim nuty przede wszystkim karmelu, toffi czy skórki z ciemnego pieczywa.',
                 'url' => 'https://kompendiumpiwa.pl/ciemne-lekkie-tmave-vycepni/',
                 'urlText' => 'Więcej o stylu Tmavé >>>',
             ],
@@ -135,7 +135,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => 'Pils',
             'polishName' => '',
             'description' => [
-                'text' => 'Ten styl nie ma jeszcze opisu.',
+                'text' => 'Jasne i orzeźwiające, przypominające klasycznego jasnego lagera. Jest od niego jednak bardziej gorzkie i wyczuwalnie mocniej nachmielone. W zależności od użytych odmian chmielu może pachnieć ziołowo lub nieco cytrusowo. Nieskomplikowane, świetnie gasi pragnienie.',
                 'url' => 'https://piwolucja.pl/piwa-polecane/pilsner-urquell-piwna-klasyka/',
                 'urlText' => 'Recenzja piwa w tym stylu >>>',
             ],
@@ -256,7 +256,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => '',
             'description' => [
-                'text' => 'Najbatrdziej znanym reprezentantem tego stylu jest Guinness. Lekkie, ciemne, palone, czasami nieco cierpkie, z wyraźnymi czekoladowymi, rzadziej kawowymi. Gładkie na języku, do picia w większej ilości.',
+                'text' => 'Najbardziej znanym reprezentantem tego stylu jest Guinness. Lekkie, ciemne, palone, czasami nieco cierpkie, z wyraźnymi czekoladowymi, rzadziej kawowymi. Gładkie na języku, do picia w większej ilości.',
                 'url' => 'https://piwolucja.pl/piwa-polecane/piwo-guinness-stout/',
                 'urlText' => 'Recenzja piwa w tym stylu >>>',
             ],
@@ -300,7 +300,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => '(Imperialny) Porter Bałtycki',
             'description' => [
-                'text' => 'Ten styl nie ma jeszcze opisu.',
+                'text' => 'Mocny, skomplikowany i ciemny tak w barwie, jak również w aromacie i smaku. Kombinacja nut palonych, karmelowych, kawowych czy popiołowych. Wyczuwalne alkoholowe rozgrzewanie, czasami w klimacie nut znanych z alkoholi szlachetnych. Innymi często obecnymi aromatami w porterach są: czerwone owoce, owoce suszone, zioła, melasa, palony karmel, pumpernikel czy orzechy. Piwo degustacyjne, wielowymiarowe i agresywne.',
                 'url' => 'https://piwolucja.pl/szybki-lyk/imperialny-porter-baltycki-z-bursztynem-prost/',
                 'urlText' => 'Recenzja piwa w tym stylu >>>',
             ],
@@ -388,7 +388,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => '',
             'description' => [
-                'text' => 'Ten styl nie ma jeszcze opisu.',
+                'text' => 'Mocne, treściwe, wielowymiarowe z niską goryczką. Mariaż nut owocowych (ciemne owoce), karmelowych, chebowych/ciastowych, czekoladowych i przyprawowych. Jest raczej mocne (6-8%), nieco rozgrzewające, czasami perfumowe.',
                 'url' => 'http://kompendiumpiwa.pl/belgian-dubbel/',
                 'urlText' => 'Więcej o stylu Dubbel >>>',
             ],
@@ -399,7 +399,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => '',
             'description' => [
-                'text' => 'Ten styl nie ma jeszcze opisu.',
+                'text' => 'Jasne, mocne piwo z niewysoką goryczką. Pachnie kwiatowo, perfumowo i nieco owocowo (pomarańcze, cytryny, gruszki, morele). W aromacie i smaku obecne są zawsze nuty przyprawowe, z białym pieprzem jako często przywoływanym wyróżnikiem. Mimo swojej mocy, alkohol jest przeważnie dobrze ukryty, przez co piwa w tym stylu pije się szybciej, niż wskazywałby na to woltaż.',
                 'url' => 'https://piwolucja.pl/felietony/chimay-test-belgijskiej-klasyki/',
                 'urlText' => 'Recenzja piwa w tym stylu >>>',
             ],
@@ -465,7 +465,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => 'Kwaśne Ale',
             'description' => [
-                'text' => 'Kwaśne, przeważnie lekkie w odbiorze, praktycznie bez goryczki. W konkretnym piwie często łączone z owocami. Orzeźwiające.',
+                'text' => 'Kwaśne, przeważnie lekkie w odbiorze, praktycznie bez goryczki. W konkretnym piwie często łączone z owocami. Orzeźwiające, bez wyraźnych nut chmielowych.',
                 'url' => null,
                 'urlText' => null,
             ],
@@ -509,7 +509,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => '',
             'description' => [
-                'text' => 'Ten styl nie ma jeszcze opisu.',
+                'text' => 'Słodowe, ciemne, z wyczuwalną goryczką. W smaku dominują karmel, toffi, orzechy, czekolada czy cukier trzcinowy. Bywa czasami nieco palone lub popiołowe. Goryczka zdecydowanie wyczuwalna, ziołowa, tytoniowa lub korzenna. Średnio mocne.',
                 'url' => 'https://kompendiumpiwa.pl/american-brown-ale/',
                 'urlText' => 'Więcej o stylu (American) Brown Ale >>>',
             ],
@@ -520,7 +520,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => 'Belgijskie Mocne Ale',
             'description' => [
-                'text' => 'Ten styl nie ma jeszcze opisu.',
+                'text' => 'Bardzo mocne, jasne piwo belgijskie. Wyróżnia je intensywny aromat estrowy, a więc owocowy (przeważnie są to morele, gruszki lub brzoskwinie). Zapach rzypominać może białe wino. Dochodzą do tego nuty przyprawowe - pieprzne, gałki muszkatołowej czy kolendry. Nie powinno pachnieć alkoholem, ani też tak smakować; alkohol powinien być zgrabnie wkomponowany w bazę słodową.',
                 'url' => 'https://piwolucja.pl/piwa-polecane/delirium-tremens-nocturnum-red-strefa-kibica-auchan/',
                 'urlText' => 'Recenzja piwa w tym stylu >>>',
             ],
@@ -531,7 +531,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => 'Belgijskie Jasne',
             'description' => [
-                'text' => 'Ten styl nie ma jeszcze opisu.',
+                'text' => 'Dość tęgie, z bardzo niską goryczką. Pachnie owocami (morele, agrest, gruszki, brzoskwinie) i przyprawami. Nieco słodkawe, czasami także kwiatowe lub perfumowe.',
                 'url' => 'https://kompendiumpiwa.pl/belgian-blond-ale/',
                 'urlText' => 'Więcej o stylu Blonde >>>',
             ],
@@ -554,8 +554,8 @@ final class BeersRepository implements BeersRepositoryInterface
             'polishName' => '',
             'description' => [
                 'text' => 'Jasny lager, chmielony odmianami chmielu wprowadzającymi do piwa wysoką goryczkę oraz smaki/aromaty cytrusowe, tropikalne, gronowe, kwiatowe, ziołowe czy żywiczne. Piwa w tym stylu są raczej proste, z wyeksponowaną chmielowością i mocną goryczką.',
-                'url' => null,
-                'urlText' => null,
+                'url' => 'Więcej o nowofalowych Pilsach >>>',
+                'urlText' => 'http://kompendiumpiwa.pl/nowofalowy-pils/',
             ],
             'moreUrlQuery' => 'american%20lager',
         ],
