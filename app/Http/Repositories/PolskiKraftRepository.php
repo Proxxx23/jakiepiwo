@@ -82,8 +82,7 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
     {
         $cacheKey = \sprintf( self::CACHE_KEY_SIMPLE_PATTERN, $translatedStyleId );
 
-//        $cachedData = $this->cache->get( $cacheKey );
-        $cachedData = null;
+        $cachedData = $this->cache->get( $cacheKey );
         if ( $cachedData !== null ) {
             $cachedData->setCacheKey( $cacheKey );
 
@@ -108,7 +107,7 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
             return null;
         }
 
-        return $this->createPolskiKraftCollection( $data, $cacheKey );
+        return $this->createPolskiKraftDataCollection( $data, $cacheKey );
     }
 
     /**
@@ -122,8 +121,7 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
         [ $firstId, $secondId ] = $translatedStyleIds;
         $cacheKey = \sprintf( self::CACHE_KEY_MULTIPLE_PATTERN, $firstId, $secondId );
 
-//        $cachedData = $this->cache->get( $cacheKey );
-        $cachedData = null;
+        $cachedData = $this->cache->get( $cacheKey );
         if ( $cachedData !== null ) {
             $cachedData->setCacheKey( $cacheKey );
 
@@ -149,25 +147,25 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
             return null;
         }
 
-        return $this->createPolskiKraftCollection( $data[0], $cacheKey );
+        return $this->createPolskiKraftDataCollection( $data[0], $cacheKey );
     }
 
-    private function createPolskiKraftCollection( array $data, string $cacheKey ): PolskiKraftDataCollection
+    private function createPolskiKraftDataCollection( array $data, string $cacheKey ): PolskiKraftDataCollection
     {
         $beers = $this->retrieveBestBeers( $data );
 
-        $polskiKraftCollection = new PolskiKraftDataCollection();
-        foreach ( $beers as $item ) {
-            $polskiKraft = new PolskiKraftData( $item );
-            $polskiKraftCollection->add( $polskiKraft->toArray() );
+        $polskiKraftDataCollection = new PolskiKraftDataCollection();
+        foreach ( $beers as $beer ) {
+            $polskiKraftData = new PolskiKraftData( $beer );
+            $polskiKraftDataCollection->add( $polskiKraftData->toArray() );
         }
 
         if ( $cacheKey !== null ) {
-            $this->cache->set( $cacheKey, $polskiKraftCollection );
-            $polskiKraftCollection->setCacheKey( $cacheKey );
+            $this->cache->set( $cacheKey, $polskiKraftDataCollection );
+            $polskiKraftDataCollection->setCacheKey( $cacheKey );
         }
 
-        return $polskiKraftCollection;
+        return $polskiKraftDataCollection;
     }
 
     /**
@@ -242,8 +240,8 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
     private function sortByRating( array &$beers ): void
     {
         \usort(
-            $beers, static function ( $a, $b ) {
-            return \round( $b['rating'] ) <=> \round( $a['rating'] );
+            $beers, static function ( array $a, array $b ) {
+            return ( $b['rating'] <=> $a['rating'] );
         }
         );
     }
