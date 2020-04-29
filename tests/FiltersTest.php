@@ -14,7 +14,7 @@ final class FiltersTest extends TestCase
     {
         $filters = new Filters();
         $answers = new Answers();
-        $answers->setSmoked( true );
+        $answers->setSmoked( false );
 
         $beers = [
             [
@@ -47,7 +47,7 @@ final class FiltersTest extends TestCase
     {
         $filters = new Filters();
         $answers = new Answers();
-        $answers->setBarrelAged( true );
+        $answers->setBarrelAged( false );
 
         $beers = [
             [
@@ -96,14 +96,28 @@ final class FiltersTest extends TestCase
     {
         $filters = new Filters();
         $answers = new Answers();
-        $answers->setBarrelAged( true );
+        $answers->setBarrelAged( false );
 
         $beers = [
             [
                 'title' => $title,
                 'keywords' => [
                     [
-                        'keyword' => 'non ba keyword',
+                        'keyword' => 'keyword',
+                    ],
+                    [
+                        'keyword' => 'other keyword',
+                    ],
+                    [
+                        'keyword' => 'something',
+                    ],
+                ],
+            ],
+            [
+                'title' => 'Other Beer Title',
+                'keywords' => [
+                    [
+                        'keyword' => 'pszenica',
                     ],
                     [
                         'keyword' => 'other keyword',
@@ -117,7 +131,8 @@ final class FiltersTest extends TestCase
 
         $filters->filter( $answers, $beers );
 
-        self::assertEmpty( $beers );
+        self::assertCount( 1, $beers );
+        self::assertEquals( 'Other Beer Title', $beers[0]['title'] );
     }
 
     public function providerBarrelAgedTitles(): array
@@ -134,7 +149,7 @@ final class FiltersTest extends TestCase
     {
         $filters = new Filters();
         $answers = new Answers();
-        $answers->setSour( true );
+        $answers->setSour( false );
 
         $beers = [
             [
@@ -162,7 +177,7 @@ final class FiltersTest extends TestCase
     {
         $filters = new Filters();
         $answers = new Answers();
-        $answers->setChocolate( true );
+        $answers->setChocolate( false );
 
         $beers = [
             [
@@ -190,7 +205,7 @@ final class FiltersTest extends TestCase
     {
         $filters = new Filters();
         $answers = new Answers();
-        $answers->setCoffee( true );
+        $answers->setCoffee( false );
 
         $beers = [
             [

@@ -14,6 +14,9 @@ final class Filters
         'chocolate' => [ 'choco', 'cacao', 'cocoa', 'kakao', 'czekolad', ],
         'barrelaged' => [
             'barrel-aged',
+            'double BA',
+            'triple BA',
+            'B.A.',
             'barrel aged',
             'whisky',
             'bourbon',
@@ -57,28 +60,30 @@ final class Filters
             }
         }
         unset( $beer );
+
+        $beers = \array_values( $beers ); //reindex
     }
 
     private function getPregMatchPatterns( Answers $answers ): ?array
     {
         $filters = null;
-        if ( $answers->isSmoked() ) {
+        if ( !$answers->isSmoked() ) {
             $filters[] = 'smoked';
         }
 
-        if ( $answers->isChocolate() ) {
+        if ( !$answers->isChocolate() ) {
             $filters[] = 'chocolate';
         }
 
-        if ( $answers->isCoffee() ) {
+        if ( !$answers->isCoffee() ) {
             $filters[] = 'coffee';
         }
 
-        if ( $answers->isSour() ) {
+        if ( !$answers->isSour() ) {
             $filters[] = 'sour';
         }
 
-        if ( $answers->isBarrelAged() ) {
+        if ( !$answers->isBarrelAged() ) {
             $filters[] = 'barrelaged';
         }
 
