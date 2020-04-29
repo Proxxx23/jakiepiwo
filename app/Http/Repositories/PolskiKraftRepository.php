@@ -82,6 +82,7 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
     {
         $cacheKey = \sprintf( self::CACHE_KEY_SIMPLE_PATTERN, $translatedStyleId );
 
+//        $cachedData = $this->cache->get( $cacheKey );
         $cachedData = null;
         if ( $cachedData !== null ) {
             $cachedData->setCacheKey( $cacheKey );
@@ -121,6 +122,7 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
         [ $firstId, $secondId ] = $translatedStyleIds;
         $cacheKey = \sprintf( self::CACHE_KEY_MULTIPLE_PATTERN, $firstId, $secondId );
 
+//        $cachedData = $this->cache->get( $cacheKey );
         $cachedData = null;
         if ( $cachedData !== null ) {
             $cachedData->setCacheKey( $cacheKey );
@@ -185,12 +187,7 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
     private function retrieveBestBeers( array $beers ): array
     {
         $this->filters->filter( $this->answers, $beers );
-
-        \usort(
-            $beers, static function ( $a, $b ) {
-            return $b['rating'] <=> $a['rating'];
-        }
-        );
+        $this->sortByRating( $beers );
 
         $beersToShow = $beersNotToShow = [];
         foreach ( $beers as $beer ) {
@@ -240,5 +237,14 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
     {
         return Carbon::now()
             ->diffInDays( Carbon::createFromTimestamp( $updatedAt ) );
+    }
+
+    private function sortByRating( array &$beers ): void
+    {
+        \usort(
+            $beers, static function ( $a, $b ) {
+            return \round( $b['rating'] ) <=> \round( $a['rating'] );
+        }
+        );
     }
 }
