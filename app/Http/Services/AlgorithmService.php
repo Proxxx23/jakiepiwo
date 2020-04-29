@@ -115,7 +115,7 @@ final class AlgorithmService
         $userAnswers->prepareAll();
         $userAnswers->removeAssignedPoints();
 
-        $stylesToTakeCollection = $this->createStylesToTakeCollection( $userAnswers, $userAnswers->isSmoked() );
+        $stylesToTakeCollection = $this->createStylesToTakeCollection( $userAnswers );
         $stylesToAvoidCollection = $this->createStylesToAvoidCollection( $userAnswers );
 
         $idStylesToTake = ( $stylesToTakeCollection !== null )
@@ -279,7 +279,7 @@ final class AlgorithmService
         return $idsToCalculate;
     }
 
-    private function createStylesToTakeCollection( Answers $answers, bool $isSmoked ): ?StylesToTakeCollection
+    private function createStylesToTakeCollection( Answers $answers ): ?StylesToTakeCollection
     {
         if ( $answers->getIncludedIds() === [] ) {
             return null;
@@ -305,8 +305,7 @@ final class AlgorithmService
         //todo to jest tak złe xDDDDD - rozplątać koniecznie w pizdu tę rzeźbę
         /** @var StyleInfo $styleInfo */
         foreach ( $styleInfoCollection as $styleInfo ) {
-
-            if ( $isSmoked && \in_array( $styleInfo->getId(), ScoringRepository::POSSIBLE_SMOKED_DARK_BEERS, true ) ) {
+            if ( $answers->isSmoked() && \in_array( $styleInfo->getId(), ScoringRepository::POSSIBLE_SMOKED_DARK_BEERS, true ) ) {
                 $styleInfo->setSmokedNames();
             }
 

@@ -189,7 +189,6 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
 
         $beersToShow = $beersNotToShow = [];
         foreach ( $beers as $beer ) {
-
             $beerRating = (float) $beer['rating'];
 
             $daysToLastUpdated = $this->getDaysToLastUpdate( $beer['updated_at'] );
@@ -203,7 +202,6 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
             if ( \count( $beersToShow ) === self::BEERS_TO_SHOW_LIMIT ) {
                 return $beersToShow;
             }
-
         }
 
         $beersToShowCount = \count( $beersToShow );
@@ -215,6 +213,8 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
                 $beersToShow[] = $beer;
             }
         }
+
+        $this->sortByRating( $beersToShow );
 
         return $beersToShow;
     }
