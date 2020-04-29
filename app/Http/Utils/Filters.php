@@ -1,4 +1,5 @@
 <?php
+declare( strict_types=1 );
 
 namespace App\Http\Utils;
 
@@ -7,15 +8,32 @@ use App\Http\Objects\Answers;
 final class Filters
 {
     private const FILTER = [
-        'smoked' => ['wędz', 'smoke', 'wedz', 'dym', 'szynk', 'torf', 'islay', 'laphroaig', 'ardbeg'],
-        'sour' => ['kwaś', 'kwas',],
-        'coffee' => ['kawa', 'kawow', 'coffee', 'cafe', 'espresso', 'latte', 'cappucino', 'kawą',],
-        'chocolate' => ['choco', 'cacao', 'cocoa', 'kakao', 'czekolad',],
-        'barrelaged' => ['barrel-aged', 'barrel aged', 'whisky', 'bourbon', 'burbon', 'rum', 'jack daniels', 'jd', 'whiskey'],
+        'smoked' => [ 'wędz', 'smoke', 'wedz', 'dym', 'szynk', 'torf', 'islay', 'laphroaig', 'ardbeg' ],
+        'sour' => [ 'kwaś', 'kwas', ],
+        'coffee' => [ 'kawa', 'kawow', 'coffee', 'cafe', 'espresso', 'latte', 'cappucino', 'kawą', ],
+        'chocolate' => [ 'choco', 'cacao', 'cocoa', 'kakao', 'czekolad', ],
+        'barrelaged' => [
+            'barrel-aged',
+            'barrel aged',
+            'whisky',
+            'bourbon',
+            'islay',
+            'burbon',
+            'rum',
+            'jack daniels',
+            'jd',
+            'whiskey',
+            'laphroaig',
+            'ardbeg',
+            'cognac',
+            'brandy',
+            'woodford',
+        ],
     ];
 
     /**
      * Filters beers basing on answers, for example removes all beers with smoked tags from beer list
+     *
      * @param Answers $answers
      * @param array $beers
      *
@@ -33,17 +51,18 @@ final class Filters
             $beerKeywords = \array_column( $beer['keywords'], 'keyword' );
             foreach ( $patterns as $pattern ) {
                 if ( \preg_match( $pattern, $beerName ) ||
-                    \preg_match( $pattern, \implode(',', $beerKeywords ) ) ) {
+                    \preg_match( $pattern, \implode( ',', $beerKeywords ) ) ) {
                     unset( $beers[$index] );
                 }
             }
         }
+        unset( $beer );
     }
 
     private function getPregMatchPatterns( Answers $answers ): ?array
     {
         $filters = null;
-        if ( $answers->isSmoked( )) {
+        if ( $answers->isSmoked() ) {
             $filters[] = 'smoked';
         }
 
@@ -69,7 +88,7 @@ final class Filters
 
         $patterns = null;
         foreach ( $filters as $filter ) {
-            $patterns[] = '/.*' . implode( '|', self::FILTER[$filter] ) . '.*/';
+            $patterns[] = '/.*' . \implode( '|', self::FILTER[$filter] ) . '.*/i';
         }
 
         return $patterns;

@@ -140,17 +140,14 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
                     ->getContents(), true, 512, JSON_THROW_ON_ERROR
             );
 
-            foreach ( $results as $result ) {
-                $data[] = $result; // meh... -.-
-            }
-
+            $data[] = $results;
         }
 
-        if ( $data === [] ) {
+        if ( $data[0] === [] ) {
             return null;
         }
 
-        return $this->createPolskiKraftCollection( $data, $cacheKey );
+        return $this->createPolskiKraftCollection( $data[0], $cacheKey );
     }
 
     private function createPolskiKraftCollection( array $data, string $cacheKey ): PolskiKraftDataCollection
