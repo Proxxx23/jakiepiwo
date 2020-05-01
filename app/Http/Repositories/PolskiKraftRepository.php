@@ -17,8 +17,7 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
 {
     // private const DEFAULT_LIST_URI = 'https://www.polskikraft.pl/openapi/style/list';
     private const BEER_LIST_BY_STYLE_URL_PATTERN = 'https://www.polskikraft.pl/openapi/style/%d/examples';
-    private const CACHE_KEY_SIMPLE_PATTERN = '%s_POLSKIKRAFT';
-    private const CACHE_KEY_MULTIPLE_PATTERN = '%s_%s_POLSKIKRAFT';
+    private const CACHE_KEY_SUFFIX = 'POLSKIKRAFT';
     private const LAST_UPDATED_DAYS_LIMIT = 60;
     private const LAST_UPDATED_MAX_DAYS = 180; // maximum limit if no beers found for last LAST_UPDATED_DAYS_LIMIT days
     private const BEERS_TO_SHOW_LIMIT = 3;
@@ -26,19 +25,16 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
 
     private Answers $answers;
     private SharedCache $cache;
-    private Filters $filters;
     private Dictionary $dictionary;
     private ClientInterface $httpClient;
 
     public function __construct(
         Dictionary $dictionary,
         SharedCache $cache,
-        Filters $filters,
         ClientInterface $httpClient
     ) {
         $this->cache = $cache;
         $this->dictionary = $dictionary;
-        $this->filters = $filters;
         $this->httpClient = $httpClient;
     }
 
@@ -80,7 +76,7 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
      */
     private function fetchOne( int $translatedStyleId ): ?PolskiKraftDataCollection
     {
-        $cacheKey = \sprintf( self::CACHE_KEY_SIMPLE_PATTERN, $translatedStyleId );
+        $cacheKey = $this->buildCacheKey( $translatedStyleId );
 
         $cachedData = $this->cache->get( $cacheKey );
         if ( $cachedData !== null ) {
@@ -118,8 +114,7 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
      */
     private function fetchMultiple( array $translatedStyleIds ): ?PolskiKraftDataCollection
     {
-        [ $firstId, $secondId ] = $translatedStyleIds;
-        $cacheKey = \sprintf( self::CACHE_KEY_MULTIPLE_PATTERN, $firstId, $secondId );
+        $cacheKey = $this->buildCacheKey( $translatedStyleIds );
 
         $cachedData = $this->cache->get( $cacheKey );
         if ( $cachedData !== null ) {
@@ -148,6 +143,25 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
         }
 
         return $this->createPolskiKraftDataCollection( $data[0], $cacheKey );
+    }
+
+    /**
+     * @param int|array $translatedStyleIds
+     * @return string
+     */
+    private function buildCacheKey( $translatedStyleIds ): string
+    {
+        if ( \is_int( $translatedStyleIds ) ) {
+            return $translatedStyleIds . '_' . self::CACHE_KEY_SUFFIX;
+        }
+
+        $prefix = '';
+        foreach ( $translatedStyleIds as $translatedId ) {
+            $prefix .= $translatedId . '_';
+        }
+
+        return $prefix . self::CACHE_KEY_SUFFIX;
+
     }
 
     private function createPolskiKraftDataCollection( array $data, string $cacheKey ): PolskiKraftDataCollection
@@ -184,7 +198,7 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
      */
     private function retrieveBestBeers( array $beers ): array
     {
-        $this->filters->filter( $this->answers, $beers );
+        Filters::filter( $this->answers, $beers );
         $this->sortByRating( $beers );
 
         $beersToShow = $beersNotToShow = [];

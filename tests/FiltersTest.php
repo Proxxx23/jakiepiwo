@@ -12,7 +12,6 @@ final class FiltersTest extends TestCase
 {
     public function testFiltersSmokedBeersByKeywordsProperly(): void
     {
-        $filters = new Filters();
         $answers = new Answers();
         $answers->setSmoked( false );
 
@@ -33,7 +32,7 @@ final class FiltersTest extends TestCase
             ],
         ];
 
-        $filters->filter( $answers, $beers );
+        Filters::filter( $answers, $beers );
 
         self::assertEmpty( $beers );
     }
@@ -45,7 +44,6 @@ final class FiltersTest extends TestCase
      */
     public function testFiltersBarrelAgedBeersByKeywordsProperly( string $ba ): void
     {
-        $filters = new Filters();
         $answers = new Answers();
         $answers->setBarrelAged( false );
 
@@ -66,7 +64,7 @@ final class FiltersTest extends TestCase
             ],
         ];
 
-        $filters->filter( $answers, $beers );
+        Filters::filter( $answers, $beers );
 
         self::assertEmpty( $beers );
     }
@@ -94,7 +92,6 @@ final class FiltersTest extends TestCase
      */
     public function testFiltersBarrelAgedBeersByTitleProperly( string $title ): void
     {
-        $filters = new Filters();
         $answers = new Answers();
         $answers->setBarrelAged( false );
 
@@ -129,7 +126,7 @@ final class FiltersTest extends TestCase
             ],
         ];
 
-        $filters->filter( $answers, $beers );
+        Filters::filter( $answers, $beers );
 
         self::assertCount( 1, $beers );
         self::assertEquals( 'Other Beer Title', $beers[0]['title'] );
@@ -147,7 +144,6 @@ final class FiltersTest extends TestCase
 
     public function testFiltersSourBeersByKeywordsProperly(): void
     {
-        $filters = new Filters();
         $answers = new Answers();
         $answers->setSour( false );
 
@@ -168,14 +164,13 @@ final class FiltersTest extends TestCase
             ],
         ];
 
-        $filters->filter( $answers, $beers );
+        Filters::filter( $answers, $beers );
 
         self::assertEmpty( $beers );
     }
 
     public function testFiltersChocolateBeersByKeywordsProperly(): void
     {
-        $filters = new Filters();
         $answers = new Answers();
         $answers->setChocolate( false );
 
@@ -196,14 +191,13 @@ final class FiltersTest extends TestCase
             ],
         ];
 
-        $filters->filter( $answers, $beers );
+        Filters::filter( $answers, $beers );
 
         self::assertEmpty( $beers );
     }
 
     public function testFiltersCoffeeBeersByKeywordsProperly(): void
     {
-        $filters = new Filters();
         $answers = new Answers();
         $answers->setCoffee( false );
 
@@ -224,7 +218,228 @@ final class FiltersTest extends TestCase
             ],
         ];
 
-        $filters->filter( $answers, $beers );
+        Filters::filter( $answers, $beers );
+
+        self::assertEmpty( $beers );
+    }
+
+    public function testFiltersCoffeeStoutsByKeywordsProperly(): void
+    {
+        $answers = new Answers();
+        $answers->setIncludedIds( 74 );
+        $answers->setCoffee( true );
+
+        $beers = [
+            [
+                'title' => 'Should stay title',
+                'keywords' => [
+                    [
+                        'keyword' => 'kawowy',
+                    ],
+                    [
+                        'keyword' => 'other keyword',
+                    ],
+                    [
+                        'keyword' => 'something',
+                    ],
+                ],
+            ],
+            [
+                'title' => 'Should be removed title',
+                'keywords' => [
+                    [
+                        'keyword' => 'catharina',
+                    ],
+                    [
+                        'keyword' => 'other keyword',
+                    ],
+                    [
+                        'keyword' => 'something',
+                    ],
+                ],
+            ],
+        ];
+
+        Filters::filter( $answers, $beers );
+
+        self::assertNotEmpty( $beers );
+        self::assertCount( 1, $beers );
+        self::assertSame( 'Should stay title', $beers[0]['title'] );
+    }
+
+    public function testFiltersCoffeeStoutsByTitleProperly(): void
+    {
+        $answers = new Answers();
+        $answers->setIncludedIds( 74 );
+        $answers->setCoffee( true );
+
+        $beers = [
+            [
+                'title' => 'Coffee vanilla stout',
+                'keywords' => [
+                    [
+                        'keyword' => 'keyword',
+                    ],
+                    [
+                        'keyword' => 'other keyword',
+                    ],
+                    [
+                        'keyword' => 'something',
+                    ],
+                ],
+            ],
+            [
+                'title' => 'Should be removed title',
+                'keywords' => [
+                    [
+                        'keyword' => 'catharina',
+                    ],
+                    [
+                        'keyword' => 'other keyword',
+                    ],
+                    [
+                        'keyword' => 'something',
+                    ],
+                ],
+            ],
+        ];
+
+        Filters::filter( $answers, $beers );
+
+        self::assertNotEmpty( $beers );
+        self::assertCount( 1, $beers );
+        self::assertSame( 'Coffee vanilla stout', $beers[0]['title'] );
+    }
+
+    public function testFiltersMilkshakesByKeywordsProperly(): void
+    {
+        $answers = new Answers();
+        $answers->setIncludedIds( 73 );
+        $answers->setCoffee( true );
+
+        $beers = [
+            [
+                'title' => 'Should stay title',
+                'keywords' => [
+                    [
+                        'keyword' => 'milkshake',
+                    ],
+                    [
+                        'keyword' => 'other keyword',
+                    ],
+                    [
+                        'keyword' => 'something',
+                    ],
+                ],
+            ],
+            [
+                'title' => 'Should be removed title',
+                'keywords' => [
+                    [
+                        'keyword' => 'catharina',
+                    ],
+                    [
+                        'keyword' => 'other keyword',
+                    ],
+                    [
+                        'keyword' => 'something',
+                    ],
+                ],
+            ],
+        ];
+
+        Filters::filter( $answers, $beers );
+
+        self::assertNotEmpty( $beers );
+        self::assertCount( 1, $beers );
+        self::assertSame( 'Should stay title', $beers[0]['title'] );
+    }
+
+    public function testFiltersMilkshakesByTitleProperly(): void
+    {
+        $answers = new Answers();
+        $answers->setIncludedIds( 73 );
+        $answers->setCoffee( true );
+
+        $beers = [
+            [
+                'title' => 'Milkshake IPA',
+                'keywords' => [
+                    [
+                        'keyword' => 'keyword',
+                    ],
+                    [
+                        'keyword' => 'other keyword',
+                    ],
+                    [
+                        'keyword' => 'something',
+                    ],
+                ],
+            ],
+            [
+                'title' => 'Should be removed title',
+                'keywords' => [
+                    [
+                        'keyword' => 'catharina',
+                    ],
+                    [
+                        'keyword' => 'other keyword',
+                    ],
+                    [
+                        'keyword' => 'something',
+                    ],
+                ],
+            ],
+        ];
+
+        Filters::filter( $answers, $beers );
+
+        self::assertNotEmpty( $beers );
+        self::assertCount( 1, $beers );
+        self::assertSame( 'Milkshake IPA', $beers[0]['title'] );
+    }
+
+    /**
+     * Shoudl remove both
+     */
+    public function testNoCoffeeButCoffeeStoutIncluded(): void
+    {
+        $answers = new Answers();
+        $answers->setIncludedIds( 74 );
+        $answers->setCoffee( false );
+
+        $beers = [
+            [
+                'title' => 'Coffee Vanilla Stout',
+                'keywords' => [
+                    [
+                        'keyword' => 'kawa',
+                    ],
+                    [
+                        'keyword' => 'other keyword',
+                    ],
+                    [
+                        'keyword' => 'something',
+                    ],
+                ],
+            ],
+            [
+                'title' => 'Should not be removed title',
+                'keywords' => [
+                    [
+                        'keyword' => 'catharina',
+                    ],
+                    [
+                        'keyword' => 'other keyword',
+                    ],
+                    [
+                        'keyword' => 'something',
+                    ],
+                ],
+            ],
+        ];
+
+        Filters::filter( $answers, $beers );
 
         self::assertEmpty( $beers );
     }

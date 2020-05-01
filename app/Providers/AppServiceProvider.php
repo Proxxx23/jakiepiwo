@@ -21,7 +21,6 @@ use App\Http\Services\QuestionsService;
 use App\Http\Services\SimpleResultsService;
 use App\Http\Utils\Dictionary;
 use App\Http\Utils\ErrorsLogger;
-use App\Http\Utils\Filters;
 use App\Http\Utils\SharedCache;
 use DrewM\MailChimp\MailChimp;
 use GuzzleHttp\Client;
@@ -87,7 +86,6 @@ class AppServiceProvider extends ServiceProvider
             return new PolskiKraftRepository(
                 new Dictionary(),
                 \resolve( 'SharedCache' ),
-                new Filters(),
                 \resolve( 'HttpClient' )
             );
         }

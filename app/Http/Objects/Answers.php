@@ -28,6 +28,11 @@ final class Answers
         return $this->includedIds;
     }
 
+    public function setIncludedIds( int $id ): void
+    {
+        $this->includedIds[] = $id;
+    }
+
     public function getExcludedIds(): array
     {
         return $this->excludedIds;

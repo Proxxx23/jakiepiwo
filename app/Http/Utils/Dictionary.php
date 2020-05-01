@@ -15,21 +15,21 @@ final class Dictionary
             6 => 47, // White IPA
             7 => 38, // Double IPA
             8 => 52, // ABW
-            9 => [ 14, 29 ], // Pale Lager + International Pale Lager
+            9 => [ 14, 29, ], // Pale Lager + International Pale Lager
             10 => 53, // Czech Pils -> Bohemian Pils
             11 => 145, // Desitka
             12 => 11, // Tmave -> Schwarzbier
             13 => 50, // German Pils -> Pils (ogólnie)
-            14 => [ 36, 13 ], // Marzen -> Marzen + Oktoberfest
+            14 => [ 36, 13, ], // Marzen -> Marzen + Oktoberfest
             15 => 67, // Rauchbock
             16 => 135, // Rauchmarzen -> Rauchbier
             19 => 69, // Dunkelweizen
             20 => 48,// Weizenbock
-            21 => [ 11, 31 ], // Dark Lager -> Schwarzbier + Inyernational Dark Lager
+            21 => [ 11, 31, ], // Dark Lager -> Schwarzbier + International Dark Lager
             22 => 110, // Doppelbock / Eisbock
             24 => 58, // Baltic Porter
             25 => 75, // Weizen
-            27 => [ 6, 99 ], // Bitter/ESB
+            27 => [ 6, 99, ], // Bitter/ESB
             30 => 59, // Brown Porter
             33 => 44, // Dry Stout
             34 => 83, // Milk Stout
@@ -37,9 +37,9 @@ final class Dictionary
             36 => 32, // RIS
             37 => 58, // Imperial Porter
             38 => 100, // Old Ale
-            39 => [ 52, 142 ], // English Barleywine -> Barleywine + Wheat Wine
+            39 => [ 52, 142, ], // English Barleywine -> Barleywine + Wheat Wine
             40 => 56, // Berliner Weisse
-            42 => [ 72, 158 ], // Flanders -> Flanders + Oud Bruin
+            42 => [ 72, 158, ], // Flanders -> Flanders + Oud Bruin
             44 => 16, // Lambic / Gueuze -> Lambic
             45 => 17,// Witbier
             47 => 18, // Saison
@@ -52,8 +52,8 @@ final class Dictionary
             55 => 170, // Wild Ale -> Brett Ale
             56 => 57, // Sour Ale -> Sour
             57 => 135, // Smoked Ale -> Rauchbier
-            60 => [ 136, 154 ], // NE IPA -> NE IPA + Vermont IPA
-            61 => [ 3, 54 ], // APA -> APA + White APA
+            60 => [ 136, 154, ], // NE IPA -> NE IPA + Vermont IPA
+            61 => [ 3, 54, ], // APA -> APA + White APA
             64 => 66, // Brown Ale
             67 => 155, // Belgian Strong Ale -> Belgian Ale
             68 => 34, // Blonde
@@ -61,7 +61,9 @@ final class Dictionary
             70 => 26, // American Lager
             71 => 12, // Oatmeal Stout
             72 => 49, // Pale Ale
-            76 => [ 79, 110, 107 ], // Bock -> Bock + Koźlak + Lentebock
+            73 => [ 8, 41, 47, 38, 136, 154, 3, 54, 28, 49, ], // Milkshake -> wszystkie IPA/APA (see Filters)
+            74 => [ 44, 83, 51, 12, ], // Coffee Stout -> stouty bez RISA (see Filters)
+            76 => [ 79, 110, 107, ], // Bock -> Bock + Koźlak + Lentebock
         ];
     }
 
