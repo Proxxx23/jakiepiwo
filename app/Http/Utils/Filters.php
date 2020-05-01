@@ -34,6 +34,7 @@ final class Filters
         ],
     ];
 
+    private const SPECIAL_BEER_STYLE_IDS = [73, 74,];
     private const SPECIAL_BEERS_FILTERS = [
         'milkshake' => ['shake', 'milk', 'szejk', 'laktoz', 'lactose'],
         'coffeestout' => ['coffee', 'beans', 'mocha', 'espresso', 'kaw', 'cafe', 'caffe', 'speciality'],
@@ -60,19 +61,19 @@ final class Filters
             return;
         }
 
-        foreach ( $beers as $index => &$beer ) {
-            $beerName = $beer['title'];
-            $beerKeywords = \array_column( $beer['keywords'], 'keyword' );
-            foreach ( $patterns as $pattern ) {
-                if ( \preg_match( $pattern, $beerName ) ||
-                    \preg_match( $pattern, \implode( ',', $beerKeywords ) ) ) {
-                    unset( $beers[$index] );
+        foreach ( $beers as $styleId => &$style ) {
+            foreach ( $style as $beer ) {
+                $beerName = $beer['title'];
+                $beerKeywords = \array_column( $beer['keywords'], 'keyword' );
+                foreach ( $patterns as $pattern ) {
+                    if (\preg_match( $pattern, $beerName ) ||
+                        \preg_match( $pattern, \implode( ',', $beerKeywords) ) ) {
+                        unset( $beers[$styleId] );
+                    }
                 }
             }
         }
-        unset( $beer );
-
-        $beers = \array_values( $beers ); //reindex
+        unset( $style );
     }
 
     /**
@@ -89,19 +90,22 @@ final class Filters
             return;
         }
 
-        foreach ( $beers as $index => &$beer ) {
-            $beerName = $beer['title'];
-            $beerKeywords = \array_column( $beer['keywords'], 'keyword' );
-            foreach ( $patterns as $pattern ) {
-                if ( !\preg_match( $pattern, $beerName ) &&
-                    !\preg_match( $pattern, \implode( ',', $beerKeywords ) ) ) {
-                    unset( $beers[$index] );
+        foreach ( $beers as $styleId => &$style ) {
+            if ( !\in_array( $styleId, self::SPECIAL_BEER_STYLE_IDS, true ) ) {
+                continue;
+            }
+            foreach ( $style as $beer ) {
+                $beerName = $beer['title'];
+                $beerKeywords = \array_column( $beer['keywords'], 'keyword' );
+                foreach ( $patterns as $pattern ) {
+                    if ( !\preg_match( $pattern, $beerName ) &&
+                        !\preg_match( $pattern, \implode(',', $beerKeywords ) ) ) {
+                        unset( $beers[$styleId] );
+                    }
                 }
             }
         }
-        unset( $beer );
-
-        $beers = \array_values( $beers ); //reindex
+        unset( $style );
     }
 
     private static function getPregMatchExclusionsPatterns( Answers $answers ): ?array

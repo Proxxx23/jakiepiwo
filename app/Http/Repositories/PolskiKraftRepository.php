@@ -64,21 +64,23 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
         }
 
         return \is_int( $translatedStyleId )
-            ? $this->fetchOne( $translatedStyleId )
-            : $this->fetchMultiple( $translatedStyleId );
+            ? $this->fetchOne( $styleId, $translatedStyleId )
+            : $this->fetchMultiple( $styleId, $translatedStyleId );
     }
 
     /**
+     * @param int $styleId
      * @param int $translatedStyleId
      *
      * @return PolskiKraftDataCollection|null
-     * @throws \GuzzleHttp\Exception\GuzzleException | \Exception
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \JsonException
      */
-    private function fetchOne( int $translatedStyleId ): ?PolskiKraftDataCollection
+    private function fetchOne( int $styleId, int $translatedStyleId ): ?PolskiKraftDataCollection
     {
         $cacheKey = $this->buildCacheKey( $translatedStyleId );
 
-        $cachedData = $this->cache->get( $cacheKey );
+        $cachedData = null;
         if ( $cachedData !== null ) {
             $cachedData->setCacheKey( $cacheKey );
 
@@ -94,7 +96,7 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
             return null; //todo: any message or exception - this case should be covered
         }
 
-        $data = \json_decode(
+        $data[$styleId] = \json_decode(
             $response->getBody()
                 ->getContents(), true, 512, JSON_THROW_ON_ERROR
         );
@@ -107,16 +109,18 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
     }
 
     /**
+     * @param int $styleId
      * @param array $translatedStyleIds
      *
      * @return PolskiKraftDataCollection|null
-     * @throws \GuzzleHttp\Exception\GuzzleException | \Exception
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \JsonException
      */
-    private function fetchMultiple( array $translatedStyleIds ): ?PolskiKraftDataCollection
+    private function fetchMultiple( int $styleId, array $translatedStyleIds ): ?PolskiKraftDataCollection
     {
         $cacheKey = $this->buildCacheKey( $translatedStyleIds );
 
-        $cachedData = $this->cache->get( $cacheKey );
+        $cachedData = null;
         if ( $cachedData !== null ) {
             $cachedData->setCacheKey( $cacheKey );
 
@@ -124,10 +128,10 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
         }
 
         $data = [];
-        foreach ( $translatedStyleIds as $styleId ) {
+        foreach ( $translatedStyleIds as $translatedId ) {
             $response = $this->httpClient->request(
                 'GET',
-                \sprintf( self::BEER_LIST_BY_STYLE_URL_PATTERN, $styleId )
+                \sprintf( self::BEER_LIST_BY_STYLE_URL_PATTERN, $translatedId )
             );
 
             $results = \json_decode(
@@ -135,14 +139,16 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
                     ->getContents(), true, 512, JSON_THROW_ON_ERROR
             );
 
-            $data[] = $results;
+            if ( empty( $results ) ) {
+                continue;
+            }
+
+            foreach ( $results as $result ) {
+                $data[$styleId][] = $result;
+            }
         }
 
-        if ( $data[0] === [] ) {
-            return null;
-        }
-
-        return $this->createPolskiKraftDataCollection( $data[0], $cacheKey );
+        return $this->createPolskiKraftDataCollection( $data, $cacheKey );
     }
 
     /**
@@ -202,19 +208,21 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
         $this->sortByRating( $beers );
 
         $beersToShow = $beersNotToShow = [];
-        foreach ( $beers as $beer ) {
-            $beerRating = (float) $beer['rating'];
+        foreach ( $beers as $style ) {
+            foreach ( $style as $beer ) {
+                $beerRating = (float) $beer['rating'];
 
-            $daysToLastUpdated = $this->getDaysToLastUpdate( $beer['updated_at'] );
+                $daysToLastUpdated = $this->getDaysToLastUpdate( $beer['updated_at'] );
 
-            if ( $this->isRatedInLastMonthsAndHasProperRating( $daysToLastUpdated, $beerRating ) ) {
-                $beersToShow[] = $beer;
-            } elseif ( $this->isRatedMaxHalfYearAgoAndHasProperRating( $daysToLastUpdated, $beerRating ) ) {
-                $beersNotToShow[] = $beer;
-            }
+                if ( $this->isRatedInLastMonthsAndHasProperRating( $daysToLastUpdated, $beerRating ) ) {
+                    $beersToShow[] = $beer;
+                } elseif ( $this->isRatedMaxHalfYearAgoAndHasProperRating( $daysToLastUpdated, $beerRating ) ) {
+                    $beersNotToShow[] = $beer;
+                }
 
-            if ( \count( $beersToShow ) === self::BEERS_TO_SHOW_LIMIT ) {
-                return $beersToShow;
+                if ( \count( $beersToShow ) === self::BEERS_TO_SHOW_LIMIT ) {
+                    return $beersToShow;
+                }
             }
         }
 
@@ -223,8 +231,8 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
         if ( $beersToShowCount < self::BEERS_TO_SHOW_LIMIT && \count( $beers ) >= 3 ) {
             $remaining = self::BEERS_TO_SHOW_LIMIT - $beersToShowCount;
             $beersToAppend = \array_slice( $beersNotToShow, 0, $remaining );
-            foreach ( $beersToAppend as $beer ) {
-                $beersToShow[] = $beer;
+            foreach ( $beersToAppend as $style ) {
+                $beersToShow[] = $style;
             }
         }
 
