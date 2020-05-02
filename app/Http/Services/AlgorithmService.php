@@ -51,16 +51,9 @@ final class AlgorithmService
     {
         $userAnswers = $user->getAnswers();
 
-        //todo: batch
-        $userAnswers->setChocolate( $inputAnswers[8] === 'tak' );
-        $userAnswers->setCoffee( $inputAnswers[9] === 'tak' );
-        $userAnswers->setSour( $inputAnswers[12] === 'tak' );
-        $userAnswers->setSmoked( $inputAnswers[13] === 'tak' );
-        $userAnswers->setBarrelAged( $inputAnswers[14] === 'tak' );
+        $this->batchMarkTaste( $userAnswers, $inputAnswers );
 
-        $inputAnswers = \array_filter(
-            $inputAnswers,
-            fn( $v ) => $v !== 'nie wiem');
+        $inputAnswers = \array_filter( $inputAnswers, fn( $v ) => $v !== 'nie wiem' );
 
         foreach ( $inputAnswers as $questionNumber => $givenAnswer ) {
 
@@ -143,6 +136,15 @@ final class AlgorithmService
                 'answers' => $inputAnswers,
             ]
         );
+    }
+
+    private function batchMarkTaste( Answers $userAnswers, array $inputAnswers ): void
+    {
+        $userAnswers->setChocolate( $inputAnswers[8] === 'tak' );
+        $userAnswers->setCoffee( $inputAnswers[9] === 'tak' );
+        $userAnswers->setSour( $inputAnswers[12] === 'tak' );
+        $userAnswers->setSmoked( $inputAnswers[13] === 'tak' );
+        $userAnswers->setBarrelAged( $inputAnswers[14] === 'tak' );
     }
 
     //todo osobna klasa
@@ -307,15 +309,16 @@ final class AlgorithmService
         //todo to jest tak złe xDDDDD - rozplątać koniecznie w pizdu tę rzeźbę
         /** @var StyleInfo $styleInfo */
         foreach ( $styleInfoCollection as $styleInfo ) {
-            if ( $answers->isSmoked() && \in_array( $styleInfo->getId(), ScoringRepository::POSSIBLE_SMOKED_DARK_BEERS, true ) ) {
+            if ( $answers->isSmoked() &&
+                \in_array( $styleInfo->getId(), ScoringRepository::POSSIBLE_SMOKED_DARK_BEERS, true ) ) {
                 $styleInfo->setSmokedNames();
             }
 
             $polskiKraftBeerDataCollection = $this->polskiKraftRepository->fetchByStyleId( $styleInfo->getId() );
             $stylesToTake = new StylesToTake( $styleInfo, $polskiKraftBeerDataCollection );
 
-            if ( \is_array( $answers->getHighlightedIds() )
-                && \in_array( $styleInfo->getId(), $answers->getHighlightedIds(), true ) ) {
+            if ( \is_array( $answers->getHighlightedIds() ) &&
+                \in_array( $styleInfo->getId(), $answers->getHighlightedIds(), true ) ) {
                 $stylesToTake->setHighlighted( true );
             }
 
