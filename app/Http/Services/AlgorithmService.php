@@ -60,10 +60,14 @@ final class AlgorithmService
 
         $inputAnswers = \array_filter(
             $inputAnswers,
-            fn( $v ) => $v !== 'nie wiem' && $v !== 'bez znaczenia'
-        );
+            fn( $v ) => $v !== 'nie wiem');
 
         foreach ( $inputAnswers as $questionNumber => $givenAnswer ) {
+
+            // Jeśli bez znaczenia, to nic nie robimy
+            if ( $givenAnswer === 'bez znaczenia' ) {
+                continue;
+            }
 
             // Nie idź dalej przy BA, bo nic nie liczymy na tej podstawie
             if ( (int) $questionNumber === 14 ) {
