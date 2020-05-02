@@ -581,7 +581,7 @@ final class BeersRepository implements BeersRepositoryInterface
             ],
             'moreUrlQuery' => 'pale%20ale',
         ],
-        73 => [ // todo: do wywalenia lub brać IPA itp. i filtrować na milkshake w nazwie i tagach
+        73 => [
             'name' => 'Milkshake IPA',
             'otherName' => '',
             'polishName' => '',
@@ -592,7 +592,7 @@ final class BeersRepository implements BeersRepositoryInterface
             ],
             'moreUrlQuery' => 'milkshake',
         ],
-        74 => [ // todo: brać wszystkie stouty i szukać pod kątem kawy
+        74 => [
             'name' => 'Coffee Stout',
             'otherName' => '',
             'polishName' => 'Stout Kawowy',

@@ -66,7 +66,7 @@ final class Filters
             return;
         }
 
-        $beers = reset( $beers );
+        $beers = \reset( $beers );
 
         foreach ( $beers as $index => &$beer ) {
             $beerName = $beer['title'];
@@ -91,16 +91,13 @@ final class Filters
     private static function filterSpecialBeers( Answers $answers, array &$beers ): void
     {
         $styleId = \array_key_first( $beers );
-        if ( !\in_array( $styleId, self::SPECIAL_BEER_STYLE_IDS, true ) ) {
-            return;
-        }
 
         $specialPatterns = self::getPregMatchSpecialBeersPatterns( \array_flip( $answers->getIncludedIds() ) );
         if ( $specialPatterns === null ) {
             return;
         }
 
-        $beers = reset( $beers );
+        $beers = \reset( $beers );
 
         foreach ( $beers as $index => &$beer ) {
             $beerName = $beer['title'];
@@ -130,7 +127,7 @@ final class Filters
         foreach ( $beers as $index => &$beer ) {
             $beerName = $beer['title'];
             $beerKeywords = \array_column( $beer['keywords'], 'keyword' );
-            foreach ( $specialPatterns as $pattern ) {
+            foreach ( $excludePatterns as $pattern ) {
                 if ( \preg_match( $pattern, $beerName ) ||
                     \preg_match( $pattern, \implode( ',', $beerKeywords) ) ) {
                     unset( $beers[$index] );
