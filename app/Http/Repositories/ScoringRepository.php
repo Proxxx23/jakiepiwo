@@ -18,7 +18,7 @@ final class ScoringRepository implements ScoringRepositoryInterface
         ],
         // Czy wolałbyś poznać wyłącznie style, które potrafią zszokować?
         [
-            'tak' => '1:1.5,2:2.5,3:2.5,5:2.5,6:2.5,7:2.5,8:2.5,15:2.5,16:2.5,36:2.5,37:2.5,40:2.5,42:2.5,44:2.5,50:2.5,51:2.5,55:2.5,56:2.5,57:2.5,60:1.5,61:1.5,73:2,74:2',
+            'tak' => '1:1.5,2:2.5,3:2.5,5:2.5,6:2.5,7:2.5,8:2.5,15:2.5,16:2.5,36:2.5,37:2.5,40:2.5,42:2.5,44:2.5,50:2.5,51:2.5,55:2,56:2.5,57:2.5,60:1.5,61:1.5,73:2,74:2',
             'nie' => null,
         ],
         // Chcesz czegoś lekkiego do ugaszenia pragnienia, czy złożonego i degustacyjnego?
@@ -62,7 +62,7 @@ final class ScoringRepository implements ScoringRepositoryInterface
         ],
         // Czy odpowiadałoby Ci piwo nieco przyprawowe
         [
-            'tak' => '2:1.5,20,25,45:1.5,47:1.5,48,49:2,50:2,53:1.5,67:1.5,68',
+            'tak' => '2:1.5,20,25,45:1.5,47:1.5,48,49:2,50:2,53:1.5,55,67:1.5,68',
             'nie' => null,
         ],
         // Czy chciałbyś piwo w klimatach owocowych (bez soku)?
