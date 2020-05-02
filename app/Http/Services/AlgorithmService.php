@@ -112,7 +112,7 @@ final class AlgorithmService
         $userAnswers->prepareAll();
         $userAnswers->removeAssignedPoints();
 
-        $stylesToTakeCollection = $this->createStylesToTakeCollection( $userAnswers );
+        $stylesToTakeCollection = $this->createStylesToTakeCollection( $inputAnswers, $userAnswers );
         $stylesToAvoidCollection = $this->createStylesToAvoidCollection( $userAnswers );
 
         $idStylesToTake = ( $stylesToTakeCollection !== null )
@@ -179,7 +179,7 @@ final class AlgorithmService
         return $idsToCalculate;
     }
 
-    private function createStylesToTakeCollection( Answers $answers ): ?StylesToTakeCollection
+    private function createStylesToTakeCollection( array $inputAnswers, Answers $answers ): ?StylesToTakeCollection
     {
         if ( $answers->getRecommendedIds() === [] ) {
             return null;
@@ -210,7 +210,7 @@ final class AlgorithmService
                 $styleInfo->setSmokedNames();
             }
 
-            $polskiKraftBeerDataCollection = $this->polskiKraftRepository->fetchByStyleId( $styleInfo->getId() );
+            $polskiKraftBeerDataCollection = $this->polskiKraftRepository->fetchByStyleId( $inputAnswers[7], $styleInfo->getId() );
             $stylesToTake = new StylesToTake( $styleInfo, $polskiKraftBeerDataCollection );
 
             if ( \is_array( $answers->getHighlightedIds() ) &&

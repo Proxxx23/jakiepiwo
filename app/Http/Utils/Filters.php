@@ -40,15 +40,17 @@ final class Filters
         'coffeestout' => ['coffee', 'beans', 'mocha', 'espresso', 'kaw', 'cafe', 'caffe', 'speciality'],
     ];
 
-    public static function filter( Answers $answers, array &$beers ): void
+    public static function filter( Answers $answers, array &$beers, string $density ): void
     {
         $styleId = \array_key_first( $beers );
         if ( \in_array( $styleId, self::SPECIAL_BEER_STYLE_IDS, true ) ) {
-            self::filterSpecialBeers( $answers, $beers );
+            self::filterSpecialBeers( $answers, $beers, $density );
             return;
         }
 
         self::filterExclusions( $answers, $beers );
+        self::filterImperials( $beers, $density );
+
     }
 
     /**
@@ -81,14 +83,36 @@ final class Filters
         unset( $beer );
     }
 
+    private static function filterImperials( array &$beers, string $density ): void
+    {
+        if ( $density !== 'wodniste i lekkie' ) {
+            return;
+        }
+
+        $beers = \reset( $beers );
+
+        foreach ( $beers as $index => &$beer ) {
+            $beerName = $beer['title'];
+            $beerSubtitle = $beer['subtitle_alt'];
+            $beerKeywords = \array_column( $beer['keywords'], 'keyword' );
+            if ( \preg_match( '/.*imperial.*/i', $beerName ) ||
+                \preg_match( '/.*imperial.*/i', $beerSubtitle ) ||
+                \preg_match( '/.*imperial.*/i', \implode( ',', $beerKeywords) ) ) {
+                unset( $beers[$index] );
+            }
+        }
+        unset( $beer );
+    }
+
     /**
      * Milkshake IPA & Coffee Stout has no style in PolskiKraft
      * We must filter those using regular styles and keywords combination
      *
      * @param Answers $answers
      * @param array $beers
+     * @param string $density
      */
-    private static function filterSpecialBeers( Answers $answers, array &$beers ): void
+    private static function filterSpecialBeers( Answers $answers, array &$beers, string $density ): void
     {
         $styleId = \array_key_first( $beers );
 
@@ -135,6 +159,8 @@ final class Filters
             }
         }
         unset( $beer );
+
+        self::filterImperials( $beers, $density );
     }
 
     private static function getPregMatchExclusionsPatterns( Answers $answers ): ?array

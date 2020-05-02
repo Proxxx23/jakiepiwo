@@ -46,13 +46,14 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
     }
 
     /**
+     * @param string $density
      * @param int $styleId
      *
      * @return PolskiKraftDataCollection|null
-     * @throws \Exception
      * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \JsonException
      */
-    public function fetchByStyleId( int $styleId ): ?PolskiKraftDataCollection
+    public function fetchByStyleId( string $density, int $styleId ): ?PolskiKraftDataCollection
     {
         if ( !\array_key_exists( $styleId, $this->dictionary->get() ) ) {
             return null;
@@ -64,19 +65,19 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
         }
 
         return \is_int( $translatedStyleId )
-            ? $this->fetchOne( $styleId, $translatedStyleId )
-            : $this->fetchMultiple( $styleId, $translatedStyleId );
+            ? $this->fetchOne( $styleId, $translatedStyleId, $density )
+            : $this->fetchMultiple( $styleId, $translatedStyleId, $density );
     }
 
     /**
      * @param int $styleId
      * @param int $translatedStyleId
      *
+     * @param string $density
      * @return PolskiKraftDataCollection|null
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     * @throws \JsonException
+     * @throws \GuzzleHttp\Exception\GuzzleException | \JsonException
      */
-    private function fetchOne( int $styleId, int $translatedStyleId ): ?PolskiKraftDataCollection
+    private function fetchOne( int $styleId, int $translatedStyleId, string $density ): ?PolskiKraftDataCollection
     {
         $cacheKey = $this->buildCacheKey( $translatedStyleId );
 
@@ -105,18 +106,18 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
             return null;
         }
 
-        return $this->createPolskiKraftDataCollection( $data, $cacheKey );
+        return $this->createPolskiKraftDataCollection( $data, $cacheKey, $density );
     }
 
     /**
      * @param int $styleId
      * @param array $translatedStyleIds
      *
+     * @param string $density
      * @return PolskiKraftDataCollection|null
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     * @throws \JsonException
+     * @throws \GuzzleHttp\Exception\GuzzleException | \JsonException
      */
-    private function fetchMultiple( int $styleId, array $translatedStyleIds ): ?PolskiKraftDataCollection
+    private function fetchMultiple( int $styleId, array $translatedStyleIds, string $density ): ?PolskiKraftDataCollection
     {
         $cacheKey = $this->buildCacheKey( $translatedStyleIds );
 
@@ -148,7 +149,7 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
             }
         }
 
-        return $this->createPolskiKraftDataCollection( $data, $cacheKey );
+        return $this->createPolskiKraftDataCollection( $data, $cacheKey, $density );
     }
 
     /**
@@ -170,9 +171,9 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
 
     }
 
-    private function createPolskiKraftDataCollection( array $data, string $cacheKey ): PolskiKraftDataCollection
+    private function createPolskiKraftDataCollection( array $data, string $cacheKey, string $density ): PolskiKraftDataCollection
     {
-        $beers = $this->retrieveBestBeers( $data );
+        $beers = $this->retrieveBestBeers( $data, $density );
 
         $polskiKraftDataCollection = new PolskiKraftDataCollection();
         foreach ( $beers as $beer ) {
@@ -200,18 +201,19 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
      *
      * @param array $beers
      *
+     * @param string $density
      * @return array
      */
-    private function retrieveBestBeers( array $beers ): array
+    private function retrieveBestBeers( array $beers, string $density ): array
     {
-        Filters::filter( $this->answers, $beers );
+        Filters::filter( $this->answers, $beers, $density );
         $this->sortByRating( $beers );
 
         $beersToShow = $beersNotToShow = [];
         foreach ( $beers as $beer ) {
             $beerRating = (float) $beer['rating'];
 
-            $daysToLastUpdated = $this->getDaysToLastUpdate( $beer['updated_at'] );
+            $daysToLastUpdated = $this->calculateDaysToLastUpdate( $beer['updated_at'] );
 
             if ( $this->isRatedInLastMonthsAndHasProperRating( $daysToLastUpdated, $beerRating ) ) {
                 $beersToShow[] = $beer;
@@ -251,7 +253,7 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
             && $daysToLastUpdated < self::LAST_UPDATED_MAX_DAYS && $beerRating >= self::MINIMAL_RATING;
     }
 
-    private function getDaysToLastUpdate( int $updatedAt ): int
+    private function calculateDaysToLastUpdate( int $updatedAt ): int
     {
         return Carbon::now()
             ->diffInDays( Carbon::createFromTimestamp( $updatedAt ) );
