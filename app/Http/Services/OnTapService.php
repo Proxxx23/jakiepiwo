@@ -31,9 +31,9 @@ final class OnTapService
         return $this->connectionRefused;
     }
 
-    public function getTapsByBeerName( string $beerName ): ?array
+    public function getTapsByBeerName( string $beerName, string $breweryName ): ?array
     {
-        return $this->onTapRepository->fetchTapsByBeerName( $beerName );
+        return $this->onTapRepository->fetchTapsByBeerName( $beerName, $breweryName );
     }
 
     //todo tests

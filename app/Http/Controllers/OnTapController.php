@@ -4,21 +4,20 @@ declare( strict_types=1 );
 namespace App\Http\Controllers;
 
 use App\Http\Objects\ValueObject\Coordinates;
+use App\Http\Utils\SharedCache;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\HttpFoundation\Response;
 
 final class OnTapController
 {
     /**
      * @param Request $request
-     * @param FilesystemAdapter $cache
+     * @param SharedCache $cache
      *
      * @return Response
-     * @throws \Psr\Cache\InvalidArgumentException
      */
-    public function handle( Request $request, FilesystemAdapter $cache ): Response
+    public function handle( Request $request, SharedCache $cache ): Response
     {
         $payload = $request->input();
 
@@ -63,12 +62,11 @@ final class OnTapController
         }
 
         $ontapService->setOnTapCityName( $cityName );
-
         $styles = null;
         foreach ( $cacheKeys as $key ) {
-            $item = $cache->getItem( $key );
-            if ( $item !== null && $item->isHit() ) {
-                $styles[] = $item->get();
+            $item = $cache->get( $key );
+            if ( $item !== null ) {
+                $styles[] = $item;
                 continue;
             }
         }
@@ -84,7 +82,7 @@ final class OnTapController
         $data = null;
         foreach ( $styles as $style ) {
             foreach ( $style as $item ) {
-                $ontapBeer = $ontapService->getTapsByBeerName( $item['title'] );
+                $ontapBeer = $ontapService->getTapsByBeerName( $item['title'], $item['subtitle'] );
                 if ( $ontapBeer !== null ) {
                     $data[] = $ontapBeer;
                 }

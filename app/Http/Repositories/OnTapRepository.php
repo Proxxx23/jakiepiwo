@@ -50,10 +50,11 @@ final class OnTapRepository implements OnTapRepositoryInterface
     /**
      * @param string $beerName
      *
+     * @param string $breweryName
      * @return array|null
      * @throws \GuzzleHttp\Exception\GuzzleException | \JsonException
      */
-    public function fetchTapsByBeerName( string $beerName ): ?array
+    public function fetchTapsByBeerName( string $beerName, string $breweryName ): ?array
     {
         if ( $beerName === '' ) {
             return null;
@@ -76,7 +77,7 @@ final class OnTapRepository implements OnTapRepositoryInterface
             if ( empty( $taps ) ) {
                 continue;
             }
-            if ( $this->hasBeer( $beerName, $taps ) ) {
+            if ( $this->hasBeer( $beerName, $breweryName, $taps ) ) {
                 $tapsData[$beerName][] = $place['name'];
                 continue;
             }
@@ -202,7 +203,6 @@ final class OnTapRepository implements OnTapRepositoryInterface
         if ( $cachedData !== null ) {
             return $cachedData;
         }
-
         $response = $this->httpClient->request(
             'GET', \sprintf( self::TAPS_LIST_URI, $placeId ), [
                 'headers' => [
@@ -222,13 +222,15 @@ final class OnTapRepository implements OnTapRepositoryInterface
         return $data;
     }
 
-    private function hasBeer( string $beerName, array $tapBeerData ): bool
+    private function hasBeer( string $beerName, string $breweryName, array $tapBeerData ): bool
     {
         foreach ( $tapBeerData as $tapBeer ) {
             if ( empty( $tapBeer['beer'] ) ) {
                 continue;
             }
-            if ( \stripos( $tapBeer['beer']['name'], $beerName ) !== false ) {
+
+            if ( \stripos( $tapBeer['beer']['name'], $beerName ) !== false &&
+                \stripos( $tapBeer['beer']['brewery'], $breweryName ) !== false ) {
                 return true;
             }
         }
