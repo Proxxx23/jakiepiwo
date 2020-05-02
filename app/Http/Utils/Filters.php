@@ -42,7 +42,12 @@ final class Filters
 
     public static function filter( Answers $answers, array &$beers ): void
     {
-        self::filterSpecialBeers( $answers, $beers );
+        $styleId = \array_key_first( $beers );
+        if ( \in_array( $styleId, self::SPECIAL_BEER_STYLE_IDS, true ) ) {
+            self::filterSpecialBeers( $answers, $beers );
+            return;
+        }
+
         self::filterExclusions( $answers, $beers );
     }
 
@@ -61,23 +66,23 @@ final class Filters
             return;
         }
 
-        foreach ( $beers as $styleId => &$style ) {
-            foreach ( $style as $beer ) {
-                $beerName = $beer['title'];
-                $beerKeywords = \array_column( $beer['keywords'], 'keyword' );
-                foreach ( $patterns as $pattern ) {
-                    if (\preg_match( $pattern, $beerName ) ||
-                        \preg_match( $pattern, \implode( ',', $beerKeywords) ) ) {
-                        unset( $beers[$styleId] );
-                    }
+        $beers = reset( $beers );
+
+        foreach ( $beers as $index => &$beer ) {
+            $beerName = $beer['title'];
+            $beerKeywords = \array_column( $beer['keywords'], 'keyword' );
+            foreach ( $patterns as $pattern ) {
+                if ( \preg_match( $pattern, $beerName ) ||
+                    \preg_match( $pattern, \implode( ',', $beerKeywords) ) ) {
+                    unset( $beers[$index] );
                 }
             }
         }
-        unset( $style );
+        unset( $beer );
     }
 
     /**
-     * Milkshake IPA & Coffee Stout has no style in PolskIKraft
+     * Milkshake IPA & Coffee Stout has no style in PolskiKraft
      * We must filter those using regular styles and keywords combination
      *
      * @param Answers $answers
@@ -85,27 +90,54 @@ final class Filters
      */
     private static function filterSpecialBeers( Answers $answers, array &$beers ): void
     {
-        $patterns = self::getPregMatchSpecialBeersPatterns( \array_flip( $answers->getIncludedIds() ) );
-        if ( $patterns === null ) {
+        $styleId = \array_key_first( $beers );
+        if ( !\in_array( $styleId, self::SPECIAL_BEER_STYLE_IDS, true ) ) {
             return;
         }
 
-        foreach ( $beers as $styleId => &$style ) {
-            if ( !\in_array( $styleId, self::SPECIAL_BEER_STYLE_IDS, true ) ) {
-                continue;
-            }
-            foreach ( $style as $beer ) {
-                $beerName = $beer['title'];
-                $beerKeywords = \array_column( $beer['keywords'], 'keyword' );
-                foreach ( $patterns as $pattern ) {
-                    if ( !\preg_match( $pattern, $beerName ) &&
-                        !\preg_match( $pattern, \implode(',', $beerKeywords ) ) ) {
-                        unset( $beers[$styleId] );
-                    }
+        $specialPatterns = self::getPregMatchSpecialBeersPatterns( \array_flip( $answers->getIncludedIds() ) );
+        if ( $specialPatterns === null ) {
+            return;
+        }
+
+        $beers = reset( $beers );
+
+        foreach ( $beers as $index => &$beer ) {
+            $beerName = $beer['title'];
+            $beerSubtitle = $beer['subtitle_alt'];
+            $beerKeywords = \array_column( $beer['keywords'], 'keyword' );
+
+            foreach ( $specialPatterns as $pattern ) {
+                if ( $styleId === 73 && //milkshake
+                    !\preg_match( $pattern, $beerName ) &&
+                    !\preg_match( $pattern, $beerSubtitle ) &&
+                    !\preg_match( $pattern, \implode(',', $beerKeywords ) ) ) {
+                    unset( $beers[$index] );
+                } elseif ( $styleId === 74 && //coffee stout
+                    !\preg_match( $pattern, $beerName ) &&
+                    !\preg_match( $pattern, $beerSubtitle ) ) {
+                    unset( $beers[$index] );
                 }
             }
         }
-        unset( $style );
+        unset( $beer );
+
+        $excludePatterns = self::getPregMatchExclusionsPatterns( $answers );
+        if ( $excludePatterns === null ) {
+            return;
+        }
+
+        foreach ( $beers as $index => &$beer ) {
+            $beerName = $beer['title'];
+            $beerKeywords = \array_column( $beer['keywords'], 'keyword' );
+            foreach ( $specialPatterns as $pattern ) {
+                if ( \preg_match( $pattern, $beerName ) ||
+                    \preg_match( $pattern, \implode( ',', $beerKeywords) ) ) {
+                    unset( $beers[$index] );
+                }
+            }
+        }
+        unset( $beer );
     }
 
     private static function getPregMatchExclusionsPatterns( Answers $answers ): ?array
