@@ -14,28 +14,28 @@ final class Answers
     private bool $barrelAged = false;
     private int $countStylesToTake = 3;
     private int $countStylesToAvoid = 3;
-    private array $excludedIds = [];
+    private array $unsuitableIds = [];
     private ?array $highlightedIds = null;
-    private array $includedIds = [];
+    private array $recommendedIds = [];
     private bool $smoked = false;
     private bool $sour = false;
     private bool $coffee = false;
     private bool $chocolate = false;
     private bool $shuffled = false;
 
-    public function getIncludedIds(): array
+    public function getRecommendedIds(): array
     {
-        return $this->includedIds;
+        return $this->recommendedIds;
     }
 
-    public function setIncludedIds( int $id ): void
+    public function setRecommendedIds( int $id ): void
     {
-        $this->includedIds[] = $id;
+        $this->recommendedIds[] = $id;
     }
 
-    public function getExcludedIds(): array
+    public function getUnsuitableIds(): array
     {
-        return $this->excludedIds;
+        return $this->unsuitableIds;
     }
 
     public function isBarrelAged(): bool
@@ -118,24 +118,24 @@ final class Answers
         return $this->highlightedIds;
     }
 
-    public function addToIncluded( int $styleId, float $strength ): void
+    public function addToRecommended( int $styleId, float $strength ): void
     {
-        $this->includedIds[$styleId] = $strength;
+        $this->recommendedIds[$styleId] = $strength;
     }
 
-    public function addStrengthToIncluded( int $styleId, float $strength ): void
+    public function addStrengthToRecommended( int $styleId, float $strength ): void
     {
-        $this->includedIds[$styleId] += $strength;
+        $this->recommendedIds[$styleId] += $strength;
     }
 
-    public function addToExcluded( int $styleId, float $strength ): void
+    public function addToUnsuitable( int $styleId, float $strength ): void
     {
-        $this->excludedIds[$styleId] = $strength;
+        $this->unsuitableIds[$styleId] = $strength;
     }
 
-    public function addStrengthToExcluded( int $styleId, float $strength ): void
+    public function addStrengthToUnsuitable( int $styleId, float $strength ): void
     {
-        $this->excludedIds[$styleId] += $strength;
+        $this->unsuitableIds[$styleId] += $strength;
     }
 
     /**
@@ -147,11 +147,11 @@ final class Answers
     public function applyPositiveSynergy( array $idsToMultiply, float $multiplier ): void
     {
         foreach ( $idsToMultiply as $id ) {
-            if ( !isset( $this->includedIds[$id] ) ) {
-                $this->includedIds[$id] = $multiplier;
+            if ( !isset( $this->recommendedIds[$id] ) ) {
+                $this->recommendedIds[$id] = $multiplier;
                 continue;
             }
-            $this->includedIds[$id] *= $multiplier;
+            $this->recommendedIds[$id] *= $multiplier;
         }
     }
 
@@ -164,10 +164,10 @@ final class Answers
     public function applyNegativeSynergy( array $idsToDivide, float $divider ): void
     {
         foreach ( $idsToDivide as $id ) {
-            if ( !isset( $this->excludedIds[$id] ) ) {
+            if ( !isset( $this->unsuitableIds[$id] ) ) {
                 continue;
             }
-            $this->excludedIds[$id] = \floor( $this->excludedIds[$id] / $divider );
+            $this->unsuitableIds[$id] = \floor( $this->unsuitableIds[$id] / $divider );
         }
     }
 
@@ -179,10 +179,10 @@ final class Answers
     public function excludeFromRecommended( array $idsToExclude ): void
     {
         foreach ( $idsToExclude as $id ) {
-            if ( !isset( $this->includedIds[$id] ) ) {
+            if ( !isset( $this->recommendedIds[$id] ) ) {
                 continue;
             }
-            $this->includedIds[$id] = 0; //todo: shouldn't be null?
+            $this->recommendedIds[$id] = 0; //todo: shouldn't be null?
         }
     }
 
@@ -191,13 +191,13 @@ final class Answers
      *
      * @param array $idsToExclude
      */
-    public function excludeFromNotRecommended( array $idsToExclude ): void
+    public function excludeFromUnsuitable( array $idsToExclude ): void
     {
         foreach ( $idsToExclude as $id ) {
-            if ( !isset( $this->excludedIds[$id] ) ) {
+            if ( !isset( $this->unsuitableIds[$id] ) ) {
                 continue;
             }
-            $this->excludedIds[$id] = 0; //todo: shouldn't be null?
+            $this->unsuitableIds[$id] = 0; //todo: shouldn't be null?
         }
     }
 
@@ -206,10 +206,10 @@ final class Answers
      */
     public function removeAssignedPoints(): void
     {
-        $this->includedIds = ( $this->shuffled === false )
-            ? \array_keys( $this->includedIds )
-            : \array_values( $this->includedIds ); //todo: wybadać, jak ma się to zachowywać!!!
-        $this->excludedIds = \array_keys( $this->excludedIds );
+        $this->recommendedIds = ( $this->shuffled === false )
+            ? \array_keys( $this->recommendedIds )
+            : \array_values( $this->recommendedIds ); //todo: wybadać, jak ma się to zachowywać!!!
+        $this->unsuitableIds = \array_keys( $this->unsuitableIds );
     }
 
     public function prepareAll(): void
@@ -224,8 +224,8 @@ final class Answers
 
     private function sortPickedUp(): void
     {
-        \arsort( $this->includedIds );
-        \arsort( $this->excludedIds );
+        \arsort( $this->recommendedIds );
+        \arsort( $this->unsuitableIds );
     }
 
     /**
@@ -234,12 +234,12 @@ final class Answers
      */
     private function retrieveOptionalStyles(): void
     {
-        $thirdStyleToTake = \array_values( \array_slice( $this->includedIds, 0, 3, true ) );
-        $thirdStyleToAvoid = \array_values( \array_slice( $this->excludedIds, 0, 3, true ) );
+        $thirdStyleToTake = \array_values( \array_slice( $this->recommendedIds, 0, 3, true ) );
+        $thirdStyleToAvoid = \array_values( \array_slice( $this->unsuitableIds, 0, 3, true ) );
 
         for ( $i = 3; $i <= 4; $i++ ) {
 
-            $toTakeChunk = \array_values( \array_slice( $this->includedIds, 0, $i, true ) );
+            $toTakeChunk = \array_values( \array_slice( $this->recommendedIds, 0, $i, true ) );
             if ( empty( $toTakeChunk ) ) {
                 continue;
             }
@@ -248,7 +248,7 @@ final class Answers
                 $this->countStylesToTake++;
             }
 
-            $toAvoidChunk = \array_values( \array_slice( $this->excludedIds, 0, $i, true ) );
+            $toAvoidChunk = \array_values( \array_slice( $this->unsuitableIds, 0, $i, true ) );
             if ( empty( $toAvoidChunk ) ) {
                 continue;
             }
@@ -267,10 +267,10 @@ final class Answers
      */
     private function retrieveStylesToTake(): void
     {
-        $firstStyleToTake = \array_values( \array_slice( $this->includedIds, 0, 1, true ) );
-        $secondStyleToTake = \array_values( \array_slice( $this->includedIds, 1, 1, true ) );
-        $thirdStyleToTake = \array_values( \array_slice( $this->includedIds, 2, 1, true ) );
-        $fourthStyleToTake = \array_values( \array_slice( $this->includedIds, 3, 1, true ) );
+        $firstStyleToTake = \array_values( \array_slice( $this->recommendedIds, 0, 1, true ) );
+        $secondStyleToTake = \array_values( \array_slice( $this->recommendedIds, 1, 1, true ) );
+        $thirdStyleToTake = \array_values( \array_slice( $this->recommendedIds, 2, 1, true ) );
+        $fourthStyleToTake = \array_values( \array_slice( $this->recommendedIds, 3, 1, true ) );
 
         if ( empty( $firstStyleToTake ) ||
             empty( $secondStyleToTake ) ||
@@ -279,22 +279,22 @@ final class Answers
             return;
         }
 
-        $includedBeerIds = \array_keys( $this->includedIds );
+        $includedBeerIds = \array_keys( $this->recommendedIds );
 
         if ( $secondStyleToTake[0] * self::MARGIN_STYLES_TO_DISTINGUISH <= $firstStyleToTake[0] ) {
-            $this->highlightedIds = [ $includedBeerIds[0] ];
+            $this->highlightedIds = [$includedBeerIds[0]];
         } else {
-            $this->highlightedIds = [ $includedBeerIds[0], $includedBeerIds[1] ];
+            $this->highlightedIds = [$includedBeerIds[0], $includedBeerIds[1]];
         }
 
         if ( $thirdStyleToTake[0] * self::MARGIN_STYLES_TO_DISTINGUISH <= $secondStyleToTake[0] ) {
-            $this->highlightedIds = [ $includedBeerIds[0], $includedBeerIds[1] ];
+            $this->highlightedIds = [$includedBeerIds[0], $includedBeerIds[1]];
         } else {
-            $this->highlightedIds = [ $includedBeerIds[0], $includedBeerIds[1], $includedBeerIds[2] ];
+            $this->highlightedIds = [$includedBeerIds[0], $includedBeerIds[1], $includedBeerIds[2]];
         }
 
         if ( $fourthStyleToTake[0] * self::MARGIN_STYLES_TO_DISTINGUISH <= $thirdStyleToTake[0] ) {
-            $this->highlightedIds = [ $includedBeerIds[0], $this->includedIds[1], $includedBeerIds[2] ];
+            $this->highlightedIds = [$includedBeerIds[0], $this->recommendedIds[1], $includedBeerIds[2]];
         } else {
             $this->highlightedIds = null;
         }
@@ -305,12 +305,12 @@ final class Answers
      */
     private function removeDuplicated(): void
     {
-        $included = \array_slice( $this->includedIds, 0, $this->countStylesToTake, true );
-        $excluded = \array_slice( $this->excludedIds, 0, $this->countStylesToAvoid, true );
+        $recommended = \array_slice( $this->recommendedIds, 0, $this->countStylesToTake, true );
+        $unsuitable = \array_slice( $this->unsuitableIds, 0, $this->countStylesToAvoid, true );
 
-        foreach ( $included as $id => $points ) {
-            if ( \array_key_exists( $id, $excluded ) ) {
-                unset( $this->includedIds[$id] );
+        foreach ( $recommended as $id => $points ) {
+            if ( \array_key_exists( $id, $unsuitable ) ) {
+                unset( $this->recommendedIds[$id] );
             }
         }
     }
@@ -322,13 +322,13 @@ final class Answers
      */
     private function checkMarginBetweenStyles(): void
     {
-        foreach ( $this->includedIds as $id => $points ) {
-            if ( \array_key_exists( $id, $this->excludedIds ) ) {
-                $excludedPoints = $this->excludedIds[$id];
-                $includedPoints = $points;
-                if ( $includedPoints > $excludedPoints &&
-                    $includedPoints <= $excludedPoints * self::MARGIN_INCLUDED_EXCLUDED ) {
-                    unset( $this->excludedIds[$id] );
+        foreach ( $this->recommendedIds as $id => $points ) {
+            if ( \array_key_exists( $id, $this->unsuitableIds ) ) {
+                $unsuitablePoints = $this->unsuitableIds[$id];
+                $recommendedPoints = $points;
+                if ( $recommendedPoints > $unsuitablePoints &&
+                    $recommendedPoints <= $unsuitablePoints * self::MARGIN_INCLUDED_EXCLUDED ) {
+                    unset( $this->unsuitableIds[$id] );
                 }
             }
         }
@@ -342,12 +342,12 @@ final class Answers
     private function shuffleIncludedStyles(): void
     {
         $toShuffle = 0;
-        $allIncludedStyles = \count( $this->includedIds );
-        $firstStylePoints = \array_values( \array_slice( $this->includedIds, 0, 1, true ) )[0];
+        $recommendedStylesCount = \count( $this->recommendedIds );
+        $firstStylePoints = \array_values( \array_slice( $this->recommendedIds, 0, 1, true ) )[0];
 
-        for ( $i = 1; $i < $allIncludedStyles; $i++ ) {
-            $previousStylePoints = \array_values( \array_slice( $this->includedIds, $i - 1, 1, true ) )[0];
-            $followingStylePoints = \array_values( \array_slice( $this->includedIds, $i, 1, true ) )[0];
+        for ( $i = 1; $i < $recommendedStylesCount; $i++ ) {
+            $previousStylePoints = \array_values( \array_slice( $this->recommendedIds, $i - 1, 1, true ) )[0];
+            $followingStylePoints = \array_values( \array_slice( $this->recommendedIds, $i, 1, true ) )[0];
 
             if ( $followingStylePoints >= $previousStylePoints * self::POINT_PERCENT_GAP_WITH_PREVIOUS ) {
                 $toShuffle++;
@@ -363,8 +363,8 @@ final class Answers
         }
 
         if ( $toShuffle > 4 ) {
-            $this->includedIds = \array_keys( \array_slice( $this->includedIds, 0, $toShuffle, true ) );
-            \shuffle( $this->includedIds );
+            $this->recommendedIds = \array_keys( \array_slice( $this->recommendedIds, 0, $toShuffle, true ) );
+            \shuffle( $this->recommendedIds );
             $this->setShuffled( true );
         }
     }

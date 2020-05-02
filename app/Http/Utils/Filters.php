@@ -92,7 +92,7 @@ final class Filters
     {
         $styleId = \array_key_first( $beers );
 
-        $specialPatterns = self::getPregMatchSpecialBeersPatterns( \array_flip( $answers->getIncludedIds() ) );
+        $specialPatterns = self::getPregMatchSpecialBeersPatterns( \array_flip( $answers->getRecommendedIds() ) );
         if ( $specialPatterns === null ) {
             return;
         }

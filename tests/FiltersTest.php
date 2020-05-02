@@ -226,7 +226,7 @@ final class FiltersTest extends TestCase
     public function testFiltersCoffeeStoutsByKeywordsProperly(): void
     {
         $answers = new Answers();
-        $answers->setIncludedIds( 74 );
+        $answers->setRecommendedIds( 74 );
         $answers->setCoffee( true );
 
         $beers = [
@@ -270,7 +270,7 @@ final class FiltersTest extends TestCase
     public function testFiltersCoffeeStoutsByTitleProperly(): void
     {
         $answers = new Answers();
-        $answers->setIncludedIds( 74 );
+        $answers->setRecommendedIds( 74 );
         $answers->setCoffee( true );
 
         $beers = [
@@ -314,7 +314,7 @@ final class FiltersTest extends TestCase
     public function testFiltersMilkshakesByKeywordsProperly(): void
     {
         $answers = new Answers();
-        $answers->setIncludedIds( 73 );
+        $answers->setRecommendedIds( 73 );
         $answers->setCoffee( true );
 
         $beers = [
@@ -358,7 +358,7 @@ final class FiltersTest extends TestCase
     public function testFiltersMilkshakesByTitleProperly(): void
     {
         $answers = new Answers();
-        $answers->setIncludedIds( 73 );
+        $answers->setRecommendedIds( 73 );
         $answers->setCoffee( true );
 
         $beers = [
@@ -405,7 +405,7 @@ final class FiltersTest extends TestCase
     public function testNoCoffeeButCoffeeStoutIncluded(): void
     {
         $answers = new Answers();
-        $answers->setIncludedIds( 74 );
+        $answers->setRecommendedIds( 74 );
         $answers->setCoffee( false );
 
         $beers = [
