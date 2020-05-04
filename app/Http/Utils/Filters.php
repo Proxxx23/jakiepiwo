@@ -89,8 +89,6 @@ final class Filters
             return;
         }
 
-        $beers = \reset( $beers );
-
         foreach ( $beers as $index => &$beer ) {
             $beerName = $beer['title'];
             $beerSubtitle = $beer['subtitle_alt'];
