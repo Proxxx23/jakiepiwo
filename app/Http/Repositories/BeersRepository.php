@@ -256,7 +256,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => '',
             'description' => [
-                'text' => 'Najbardziej znanym reprezentantem tego stylu jest Guinness. Lekkie, ciemne, palone, czasami nieco cierpkie, z wyraźnymi czekoladowymi, rzadziej kawowymi. Gładkie na języku, do picia w większej ilości.',
+                'text' => 'Najbardziej znanym reprezentantem tego stylu jest Guinness. Lekkie, ciemne, palone, czasami nieco cierpkie, z wyraźnymi smakami czekoladowymi, rzadziej kawowymi. Gładkie na języku, do picia w większej ilości.',
                 'url' => 'https://piwolucja.pl/piwa-polecane/piwo-guinness-stout/',
                 'urlText' => 'Recenzja piwa w tym stylu >>>',
             ],
