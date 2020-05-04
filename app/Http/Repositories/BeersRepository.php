@@ -454,7 +454,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => 'Dzikie Ale',
             'description' => [
-                'text' => 'Ten styl nie ma jeszcze opisu.',
+                'text' => 'Piwo fermentowane z udziałem tzw. "dzikich drożdży", w stylach klasycznych odpowidających za ewentualne zakażenie i finalnie psucie się piwa. Fermentacja z użyciem tzw. "brettów" wprowadza do piwa nuty określanem mianem "funky". W piwach "dzikich" lub "zdziczałych" wyczuć można intensywne aromaty stajni, mokrego siana, końskiej derki, owocowe czy nieco ziemiste. Piwa takie mogą też często być nieco kwaskowe lub wyraźnie kwaśne.',
                 'url' => null,
                 'urlText' => null,
             ],
@@ -542,7 +542,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => 'Amerykańskie Pszeniczne',
             'description' => [
-                'text' => 'Ten styl nie ma jeszcze opisu.',
+                'text' => 'Podstawa z lekkiego piwa pszenicznegoo, połączona z wyraźnym nachmieleniem za pomocą nowofalowych odmian chmielu. Chmiele amerykańskie wzbogacają ciasteczkową/biszkoptową podstawę słodową o wyraźne nuty żywiczne, kwiatowe i owocowe. Piwo lekkie, owocowe, charakteryzujące się zdecydowanie wyczuwalną goryczką. Przeważnie nieco słodkie.',
                 'url' => 'https://kompendiumpiwa.pl/american-wheat/',
                 'urlText' => 'Więcej o stylu Amerykańskie Pszeniczne >>>',
             ],
