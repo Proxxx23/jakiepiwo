@@ -289,7 +289,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => 'RIS',
             'polishName' => 'Stout Imperialny',
             'description' => [
-                'text' => 'Najmocniejszy wariant piwa w stylu stout. Gęste, bardzo mocne, intensywne. Bogate i kompleksowe tak w aromacie, jak i w smaku. Nuty od czekoladowych, kakao, palonych przez prażone, po kawowe i palone. "RIS-y" wzbogacane są często przeróżnymi dodatkami i leżakowane w beczkach po alkoholach szlachetnych - najczęściej bourbonie lub whisky. Nadaje im to dodatkowych nut drewnianych, wanilinowych czy kokosowych. Piwo likierowe, do picia w spokoju.',
+                'text' => 'Najmocniejszy wariant piwa w stylu stout. Gęste, bardzo mocne, intensywne. Bogate i kompleksowe tak w aromacie, jak i w smaku. Nuty od czekoladowych, kakao, palonych przez prażone, po kawowe i popiołowe. "RIS-y" wzbogacane są często przeróżnymi dodatkami i leżakowane w beczkach po alkoholach szlachetnych - najczęściej bourbonie lub whisky. Nadaje im to dodatkowych nut drewnianych, wanilinowych czy kokosowych. Piwo likierowe, do picia w spokoju.',
                 'url' => 'https://kompendiumpiwa.pl/russian-imperial-stout/',
                 'urlText' => 'Więcej o stylu Imperial Stout >>>',
             ],
