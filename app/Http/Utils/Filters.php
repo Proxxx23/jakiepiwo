@@ -10,8 +10,8 @@ final class Filters
 {
     private const EXCLUDE_FILTERS = [
         'smoked' => [ 'wędz', 'smoke', 'wedz', 'dym', 'szynk', 'torf', 'islay', 'laphroaig', 'ardbeg' ],
-        'sour' => [ 'kwaś', 'kwas', ],
-        'coffee' => [ 'kawa', 'kawow', 'coffee', 'cafe', 'espresso', 'latte', 'cappucino', 'kawą', ],
+        'sour' => [ 'kwaś', 'kwas', 'sour', 'lambic', 'gueuze' ],
+        'coffee' => [ 'kawa', 'kawow', 'coffee', 'cafe', 'espresso', 'latte', 'cappucino', 'kawą', 'arabica', 'robusta' ],
         'chocolate' => [ 'choco', 'cacao', 'cocoa', 'kakao', 'czekolad', ],
         'barrelaged' => [
             'barrel-aged',
