@@ -16,23 +16,25 @@ final class FiltersTest extends TestCase
         $answers->setSmoked( false );
 
         $beers = [
-            [
-                'title' => 'Some title',
-                'keywords' => [
-                    [
-                        'keyword' => 'smoked',
-                    ],
-                    [
-                        'keyword' => 'other keyword',
-                    ],
-                    [
-                        'keyword' => 'something',
+            17 => [
+                [
+                    'title' => 'Some title',
+                    'keywords' => [
+                        [
+                            'keyword' => 'smoked',
+                        ],
+                        [
+                            'keyword' => 'other keyword',
+                        ],
+                        [
+                            'keyword' => 'something',
+                        ],
                     ],
                 ],
             ],
         ];
 
-        Filters::filter( $answers, $beers );
+        Filters::filter( $answers, $beers, 'mocne i gęste' );
 
         self::assertEmpty( $beers );
     }
@@ -48,23 +50,25 @@ final class FiltersTest extends TestCase
         $answers->setBarrelAged( false );
 
         $beers = [
-            [
-                'title' => 'Some title',
-                'keywords' => [
-                    [
-                        'keyword' => $ba,
-                    ],
-                    [
-                        'keyword' => 'other keyword',
-                    ],
-                    [
-                        'keyword' => 'something',
+            17 => [
+                [
+                    'title' => 'Some title',
+                    'keywords' => [
+                        [
+                            'keyword' => $ba,
+                        ],
+                        [
+                            'keyword' => 'other keyword',
+                        ],
+                        [
+                            'keyword' => 'something',
+                        ],
                     ],
                 ],
             ],
         ];
 
-        Filters::filter( $answers, $beers );
+        Filters::filter( $answers, $beers, 'mocne i gęste' );
 
         self::assertEmpty( $beers );
     }
@@ -72,16 +76,16 @@ final class FiltersTest extends TestCase
     public function providerBarrelAgedKeywords(): array
     {
         return [
-            'jack daniels' => ['jack daniels'],
-            'barrel aged' => ['barrel aged'],
-            'laphroaig' => ['laphroaig'],
-            'bourbon ba' => ['bourbon ba'],
-            'bourbon' => ['bourbon'],
-            'ardbeg' => ['ardbeg'],
-            'woodford reserve' => ['woodford reserve'],
-            'whisky' => ['whisky'],
-            'islay blend' => ['islay blend'],
-            'bourbon barrel' => ['bourbon barrel'],
+            'jack daniels' => [ 'jack daniels' ],
+            'barrel aged' => [ 'barrel aged' ],
+            'laphroaig' => [ 'laphroaig' ],
+            'bourbon ba' => [ 'bourbon ba' ],
+            'bourbon' => [ 'bourbon' ],
+            'ardbeg' => [ 'ardbeg' ],
+            'woodford reserve' => [ 'woodford reserve' ],
+            'whisky' => [ 'whisky' ],
+            'islay blend' => [ 'islay blend' ],
+            'bourbon barrel' => [ 'bourbon barrel' ],
         ];
     }
 
@@ -96,37 +100,39 @@ final class FiltersTest extends TestCase
         $answers->setBarrelAged( false );
 
         $beers = [
-            [
-                'title' => $title,
-                'keywords' => [
-                    [
-                        'keyword' => 'keyword',
-                    ],
-                    [
-                        'keyword' => 'other keyword',
-                    ],
-                    [
-                        'keyword' => 'something',
+            17 => [
+                [
+                    'title' => $title,
+                    'keywords' => [
+                        [
+                            'keyword' => 'keyword',
+                        ],
+                        [
+                            'keyword' => 'other keyword',
+                        ],
+                        [
+                            'keyword' => 'something',
+                        ],
                     ],
                 ],
-            ],
-            [
-                'title' => 'Other Beer Title',
-                'keywords' => [
-                    [
-                        'keyword' => 'pszenica',
-                    ],
-                    [
-                        'keyword' => 'other keyword',
-                    ],
-                    [
-                        'keyword' => 'something',
+                [
+                    'title' => 'Other Beer Title',
+                    'keywords' => [
+                        [
+                            'keyword' => 'pszenica',
+                        ],
+                        [
+                            'keyword' => 'other keyword',
+                        ],
+                        [
+                            'keyword' => 'something',
+                        ],
                     ],
                 ],
             ],
         ];
 
-        Filters::filter( $answers, $beers );
+        Filters::filter( $answers, $beers, 'mocne i gęste' );
 
         self::assertCount( 1, $beers );
         self::assertEquals( 'Other Beer Title', $beers[0]['title'] );
@@ -135,10 +141,10 @@ final class FiltersTest extends TestCase
     public function providerBarrelAgedTitles(): array
     {
         return [
-            'Królowa Lodu Jack Daniels BA' => ['Królowa Lodu Jack Daniels BA'],
-            'Baltic Porter Laphroaig Barrel Aged' => ['Baltic Porter Laphroaig Barrel Aged'],
-            'Old Ale Woodford Reserve' => ['Old Ale Woodford Reserve'],
-            'Bock Rum BA' => ['Bock Rum BA'],
+            'Królowa Lodu Jack Daniels BA' => [ 'Królowa Lodu Jack Daniels BA' ],
+            'Baltic Porter Laphroaig Barrel Aged' => [ 'Baltic Porter Laphroaig Barrel Aged' ],
+            'Old Ale Woodford Reserve' => [ 'Old Ale Woodford Reserve' ],
+            'Bock Rum BA' => [ 'Bock Rum BA' ],
         ];
     }
 
@@ -148,23 +154,25 @@ final class FiltersTest extends TestCase
         $answers->setSour( false );
 
         $beers = [
-            [
-                'title' => 'Some title',
-                'keywords' => [
-                    [
-                        'keyword' => 'kwaśne',
-                    ],
-                    [
-                        'keyword' => 'other keyword',
-                    ],
-                    [
-                        'keyword' => 'something',
+            17 => [
+                [
+                    'title' => 'Some title',
+                    'keywords' => [
+                        [
+                            'keyword' => 'kwaśne',
+                        ],
+                        [
+                            'keyword' => 'other keyword',
+                        ],
+                        [
+                            'keyword' => 'something',
+                        ],
                     ],
                 ],
             ],
         ];
 
-        Filters::filter( $answers, $beers );
+        Filters::filter( $answers, $beers, 'mocne i gęste' );
 
         self::assertEmpty( $beers );
     }
@@ -175,23 +183,25 @@ final class FiltersTest extends TestCase
         $answers->setChocolate( false );
 
         $beers = [
-            [
-                'title' => 'Some title',
-                'keywords' => [
-                    [
-                        'keyword' => 'słód czekoladowy ciemny',
-                    ],
-                    [
-                        'keyword' => 'other keyword',
-                    ],
-                    [
-                        'keyword' => 'something',
+            17 => [
+                [
+                    'title' => 'Some title',
+                    'keywords' => [
+                        [
+                            'keyword' => 'słód czekoladowy ciemny',
+                        ],
+                        [
+                            'keyword' => 'other keyword',
+                        ],
+                        [
+                            'keyword' => 'something',
+                        ],
                     ],
                 ],
             ],
         ];
 
-        Filters::filter( $answers, $beers );
+        Filters::filter( $answers, $beers, 'mocne i gęste' );
 
         self::assertEmpty( $beers );
     }
@@ -202,23 +212,25 @@ final class FiltersTest extends TestCase
         $answers->setCoffee( false );
 
         $beers = [
-            [
-                'title' => 'Some title',
-                'keywords' => [
-                    [
-                        'keyword' => 'kawowy',
-                    ],
-                    [
-                        'keyword' => 'other keyword',
-                    ],
-                    [
-                        'keyword' => 'something',
+            17 => [
+                [
+                    'title' => 'Some title',
+                    'keywords' => [
+                        [
+                            'keyword' => 'kawowy',
+                        ],
+                        [
+                            'keyword' => 'other keyword',
+                        ],
+                        [
+                            'keyword' => 'something',
+                        ],
                     ],
                 ],
             ],
         ];
 
-        Filters::filter( $answers, $beers );
+        Filters::filter( $answers, $beers, 'mocne i gęste' );
 
         self::assertEmpty( $beers );
     }
@@ -260,7 +272,7 @@ final class FiltersTest extends TestCase
             ],
         ];
 
-        Filters::filter( $answers, $beers );
+        Filters::filter( $answers, $beers, 'mocne i gęste' );
 
         self::assertNotEmpty( $beers );
         self::assertCount( 1, $beers );
@@ -304,7 +316,7 @@ final class FiltersTest extends TestCase
             ],
         ];
 
-        Filters::filter( $answers, $beers );
+        Filters::filter( $answers, $beers, 'mocne i gęste' );
 
         self::assertNotEmpty( $beers );
         self::assertCount( 1, $beers );
@@ -348,7 +360,7 @@ final class FiltersTest extends TestCase
             ],
         ];
 
-        Filters::filter( $answers, $beers );
+        Filters::filter( $answers, $beers, 'mocne i gęste' );
 
         self::assertNotEmpty( $beers );
         self::assertCount( 1, $beers );
@@ -392,7 +404,7 @@ final class FiltersTest extends TestCase
             ],
         ];
 
-        Filters::filter( $answers, $beers );
+        Filters::filter( $answers, $beers, 'mocne i gęste' );
 
         self::assertNotEmpty( $beers );
         self::assertCount( 1, $beers );
@@ -439,7 +451,7 @@ final class FiltersTest extends TestCase
             ],
         ];
 
-        Filters::filter( $answers, $beers );
+        Filters::filter( $answers, $beers, 'mocne i gęste' );
 
         self::assertEmpty( $beers );
     }
