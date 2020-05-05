@@ -209,7 +209,6 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
      * - we take first 2 beers and add to first 3, having 3 of 3 slots full
      *
      * @param array $beers
-     *
      * @param string $density
      *
      * @return array

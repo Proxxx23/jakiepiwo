@@ -3,6 +3,7 @@ declare( strict_types=1 );
 
 namespace App\Http\Utils;
 
+use App\Helpers\Helper;
 use App\Http\Objects\Answers;
 
 final class Filters
@@ -46,7 +47,7 @@ final class Filters
     {
         $styleId = \array_key_first( $beers );
         if ( \in_array( $styleId, self::SPECIAL_BEER_STYLE_IDS, true ) ) {
-            self::filterSpecialBeers( $answers, $beers, $density );
+            self::filterSpecialBeers( $answers, $styleId, $beers, $density );
             return;
         }
 
@@ -114,15 +115,18 @@ final class Filters
      * We must filter those using regular styles and keywords combination
      *
      * @param Answers $answers
+     * @param int $styleId
      * @param array $beers
      * @param string $density
      */
-    private static function filterSpecialBeers( Answers $answers, array &$beers, string $density ): void
+    private static function filterSpecialBeers( Answers $answers, int $styleId, array &$beers, string $density ): void
     {
-        $styleId = \array_key_first( $beers );
+        if ( !in_array( $styleId, self::SPECIAL_BEER_STYLE_IDS, true ) ) {
+            return;
+        }
 
-        $specialPatterns = self::getPregMatchSpecialBeersPatterns( \array_flip( $answers->getRecommendedIds() ) );
-        if ( $specialPatterns === null ) {
+        $specialPattern = self::getPregMatchSpecialBeersPatterns( $styleId );
+        if ( $specialPattern === null ) {
             return;
         }
 
@@ -133,22 +137,8 @@ final class Filters
             $beerSubtitle = $beer['subtitle_alt'];
             $beerKeywords = \array_column( $beer['keywords'], 'keyword' );
 
-            foreach ( $specialPatterns as $pattern ) {
-                if ( $styleId === 73 && // milkshake
-                    !\preg_match( $pattern, $beerName ) &&
-                    !\preg_match( $pattern, $beerSubtitle ) &&
-                    !\preg_match( $pattern, \implode( ',', $beerKeywords ) ) ) {
-                    unset( $beers[$index] );
-                } elseif ( $styleId === 74 && // coffee stout
-                    !\preg_match( $pattern, $beerName ) &&
-                    !\preg_match( $pattern, $beerSubtitle ) ) {
-                    unset( $beers[$index] );
-                } elseif ( $styleId === 57 && //smoked ale
-                    !\preg_match( $pattern, $beerName ) &&
-                    !\preg_match( $pattern, $beerSubtitle ) &&
-                    !\preg_match( $pattern, \implode( ',', $beerKeywords ) ) ) {
-                    unset( $beers[$index] );
-                }
+            if ( !Helper::PregMatchMultiple( $specialPattern, [ $beerName, $beerSubtitle, \implode( ',', $beerKeywords ), ] ) ) {
+                unset( $beers[$index] );
             }
         }
         unset( $beer );
@@ -208,30 +198,17 @@ final class Filters
         return $patterns;
     }
 
-    private static function getPregMatchSpecialBeersPatterns( array $includedIds ): ?array
+    private static function getPregMatchSpecialBeersPatterns( int $styleId ): ?string
     {
-        $filters = null;
-        if ( \array_key_exists( 57, $includedIds ) ) {
-            $filters[] = 'smokedale';
+        switch ( $styleId ) {
+            case 57:
+                return '/.*' . \implode( '|', self::SPECIAL_BEERS_FILTERS['smokedale'] ) . '.*/i';
+            case 73:
+                return '/.*' . \implode( '|', self::SPECIAL_BEERS_FILTERS['milkshake'] ) . '.*/i';
+            case 74:
+                return '/.*' . \implode( '|', self::SPECIAL_BEERS_FILTERS['coffeestout'] ) . '.*/i';
+            default:
+                return null;
         }
-
-        if ( \array_key_exists( 73, $includedIds ) ) {
-            $filters[] = 'milkshake';
-        }
-
-        if ( \array_key_exists( 74, $includedIds ) ) {
-            $filters[] = 'coffeestout';
-        }
-
-        if ( $filters === null ) {
-            return null;
-        }
-
-        $patterns = null;
-        foreach ( $filters as $filter ) {
-            $patterns[] = '/.*' . \implode( '|', self::SPECIAL_BEERS_FILTERS[$filter] ) . '.*/i';
-        }
-
-        return $patterns;
     }
 }
