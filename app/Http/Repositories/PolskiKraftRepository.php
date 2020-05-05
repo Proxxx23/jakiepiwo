@@ -126,8 +126,7 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
     ): ?PolskiKraftDataCollection {
         $cacheKey = $this->buildCacheKey( $translatedStyleIds );
 
-//        $cachedData = $this->cache->get( $cacheKey );
-        $cachedData = null;
+        $cachedData = $this->cache->get( $cacheKey );
         if ( $cachedData !== null ) {
             $cachedData->setCacheKey( $cacheKey );
 
@@ -220,7 +219,7 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
         $this->sortByRating( $beers );
 
         $beersToShow = $beersNotToShow = [];
-        foreach ( $beers as $beer ) {
+        foreach ( $beers as &$beer ) {
             $beerRating = (float) $beer['rating'];
 
             $daysToLastUpdated = $this->calculateDaysToLastUpdate( $beer['updated_at'] );
@@ -234,6 +233,7 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
                 return $beersToShow;
             }
         }
+        unset( $beer );
 
         $beersToShowCount = \count( $beersToShow );
 

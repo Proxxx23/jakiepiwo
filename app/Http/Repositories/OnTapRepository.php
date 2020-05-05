@@ -225,14 +225,23 @@ final class OnTapRepository implements OnTapRepositoryInterface
 
     private function hasBeer( string $beerName, string $breweryName, array $tapBeerData ): bool
     {
+        $beerNameWordsCount = \count( \explode( ' ', $beerName ) );
+
         foreach ( $tapBeerData as $tapBeer ) {
             if ( empty( $tapBeer['beer'] ) ) {
                 continue;
             }
 
-            if ( \stripos( $tapBeer['beer']['name'], $beerName ) !== false &&
-                \stripos( $tapBeer['beer']['brewery'], $breweryName ) !== false ) {
+            if ( $beerNameWordsCount > 1 &&
+                \stripos( $tapBeer['beer']['name'], $beerName ) !== false ) {
                 return true;
+            }
+
+            if ( $beerNameWordsCount === 1 &&
+               \stripos( $tapBeer['beer']['name'], $beerName ) !== false &&
+               \stripos( $tapBeer['beer']['brewery'], $breweryName ) !== false) {
+               // todo: if beer name === picked style name
+               return true;
             }
         }
 
