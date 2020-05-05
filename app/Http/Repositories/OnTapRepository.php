@@ -51,6 +51,7 @@ final class OnTapRepository implements OnTapRepositoryInterface
      * @param string $beerName
      *
      * @param string $breweryName
+     *
      * @return array|null
      * @throws \GuzzleHttp\Exception\GuzzleException | \JsonException
      */

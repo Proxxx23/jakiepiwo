@@ -74,6 +74,7 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
      * @param int $translatedStyleId
      *
      * @param string $density
+     *
      * @return PolskiKraftDataCollection|null
      * @throws \GuzzleHttp\Exception\GuzzleException | \JsonException
      */
@@ -114,11 +115,15 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
      * @param array $translatedStyleIds
      *
      * @param string $density
+     *
      * @return PolskiKraftDataCollection|null
      * @throws \GuzzleHttp\Exception\GuzzleException | \JsonException
      */
-    private function fetchMultiple( int $styleId, array $translatedStyleIds, string $density ): ?PolskiKraftDataCollection
-    {
+    private function fetchMultiple(
+        int $styleId,
+        array $translatedStyleIds,
+        string $density
+    ): ?PolskiKraftDataCollection {
         $cacheKey = $this->buildCacheKey( $translatedStyleIds );
 
         $cachedData = $this->cache->get( $cacheKey );
@@ -154,6 +159,7 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
 
     /**
      * @param int|array $translatedStyleIds
+     *
      * @return string
      */
     private function buildCacheKey( $translatedStyleIds ): string
@@ -171,8 +177,11 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
 
     }
 
-    private function createPolskiKraftDataCollection( array $data, string $cacheKey, string $density ): PolskiKraftDataCollection
-    {
+    private function createPolskiKraftDataCollection(
+        array $data,
+        string $cacheKey,
+        string $density
+    ): PolskiKraftDataCollection {
         $beers = $this->retrieveBestBeers( $data, $density );
 
         $polskiKraftDataCollection = new PolskiKraftDataCollection();
@@ -202,6 +211,7 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
      * @param array $beers
      *
      * @param string $density
+     *
      * @return array
      */
     private function retrieveBestBeers( array $beers, string $density ): array

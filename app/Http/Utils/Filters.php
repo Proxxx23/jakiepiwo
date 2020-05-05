@@ -34,10 +34,10 @@ final class Filters
         ],
     ];
 
-    private const SPECIAL_BEER_STYLE_IDS = [73, 74,];
+    private const SPECIAL_BEER_STYLE_IDS = [ 73, 74, ];
     private const SPECIAL_BEERS_FILTERS = [
-        'milkshake' => ['shake', 'milk', 'szejk', 'laktoz', 'lactose'],
-        'coffeestout' => ['coffee', 'beans', 'mocha', 'espresso', 'kaw', 'cafe', 'caffe', 'speciality'],
+        'milkshake' => [ 'shake', 'milk', 'szejk', 'laktoz', 'lactose' ],
+        'coffeestout' => [ 'coffee', 'beans', 'mocha', 'espresso', 'kaw', 'cafe', 'caffe', 'speciality' ],
     ];
 
     public static function filter( Answers $answers, array &$beers, string $density ): void
@@ -75,7 +75,7 @@ final class Filters
             $beerKeywords = \array_column( $beer['keywords'], 'keyword' );
             foreach ( $patterns as $pattern ) {
                 if ( \preg_match( $pattern, $beerName ) ||
-                    \preg_match( $pattern, \implode( ',', $beerKeywords) ) ) {
+                    \preg_match( $pattern, \implode( ',', $beerKeywords ) ) ) {
                     unset( $beers[$index] );
                 }
             }
@@ -95,7 +95,7 @@ final class Filters
             $beerKeywords = \array_column( $beer['keywords'], 'keyword' );
             if ( \preg_match( '/.*imperial.*/i', $beerName ) ||
                 \preg_match( '/.*imperial.*/i', $beerSubtitle ) ||
-                \preg_match( '/.*imperial.*/i', \implode( ',', $beerKeywords) ) ) {
+                \preg_match( '/.*imperial.*/i', \implode( ',', $beerKeywords ) ) ) {
                 unset( $beers[$index] );
             }
         }
@@ -130,7 +130,7 @@ final class Filters
                 if ( $styleId === 73 && //milkshake
                     !\preg_match( $pattern, $beerName ) &&
                     !\preg_match( $pattern, $beerSubtitle ) &&
-                    !\preg_match( $pattern, \implode(',', $beerKeywords ) ) ) {
+                    !\preg_match( $pattern, \implode( ',', $beerKeywords ) ) ) {
                     unset( $beers[$index] );
                 } elseif ( $styleId === 74 && //coffee stout
                     !\preg_match( $pattern, $beerName ) &&
@@ -151,7 +151,7 @@ final class Filters
             $beerKeywords = \array_column( $beer['keywords'], 'keyword' );
             foreach ( $excludePatterns as $pattern ) {
                 if ( \preg_match( $pattern, $beerName ) ||
-                    \preg_match( $pattern, \implode( ',', $beerKeywords) ) ) {
+                    \preg_match( $pattern, \implode( ',', $beerKeywords ) ) ) {
                     unset( $beers[$index] );
                 }
             }

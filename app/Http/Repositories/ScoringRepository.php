@@ -87,7 +87,7 @@ final class ScoringRepository implements ScoringRepositoryInterface
         ],
     ];
 
-    public const POSSIBLE_SMOKED_DARK_BEERS = [36, 37,];
+    public const POSSIBLE_SMOKED_DARK_BEERS = [ 36, 37, ];
 
     public function fetchByQuestionNumber( int $questionNumber ): array
     {
