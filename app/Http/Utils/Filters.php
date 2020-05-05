@@ -40,8 +40,10 @@ final class Filters
     private const SPECIAL_BEERS_FILTERS = [
         'smokedale' => [ 'smoke', 'dym', 'wędz', 'rauch', 'islay', 'szynk', 'boczek', 'bocz', ],
         'milkshake' => [ 'shake', 'milk', 'szejk', 'laktoz', 'lactose', ],
-        'coffeestout' => [ 'coffee', 'beans', 'mocha', 'espresso', 'kaw', 'cafe', 'caffe', 'speciality', ],
+        'coffeestout' => [ 'coffee', 'mocha', 'espresso', 'kaw', 'cafe', 'caffe', ],
     ];
+
+    private const IMPERIAL_BEERS_PATTERN = '/.*imperial|ice|double|triple|quad|wymraz|wymraż.*/i';
 
     public static function filter( Answers $answers, array &$beers, string $density ): void
     {
@@ -75,9 +77,8 @@ final class Filters
         foreach ( $beers as $index => &$beer ) {
             $beerName = $beer['title'];
             $beerKeywords = \array_column( $beer['keywords'], 'keyword' );
-            foreach ( $patterns as $pattern ) {
-                if ( \preg_match( $pattern, $beerName ) ||
-                    \preg_match( $pattern, \implode( ',', $beerKeywords ) ) ) {
+            foreach ( $patterns as $pattern ) { //todo: get rid of this foreach
+                if ( Helper::PregMatchMultiple( $pattern, [ $beerName, \implode( ',', $beerKeywords ) ] ) ) {
                     unset( $beers[$index] );
                 }
             }
@@ -101,7 +102,7 @@ final class Filters
             $beerName = $beer['title'];
             $beerSubtitle = $beer['subtitle_alt'];
             $beerKeywords = \array_column( $beer['keywords'], 'keyword' );
-            if ( Helper::PregMatchMultiple('/.*imperial|ice|double|triple|quad|wymraz|wymraż.*/i', [ $beerName, $beerSubtitle,\implode( ',', $beerKeywords ) ] ) ) {
+            if ( Helper::PregMatchMultiple( self::IMPERIAL_BEERS_PATTERN, [ $beerName, $beerSubtitle,\implode( ',', $beerKeywords ) ] ) ) {
                 unset( $beers[$index] );
             }
         }
@@ -134,7 +135,6 @@ final class Filters
             $beerName = $beer['title'];
             $beerSubtitle = $beer['subtitle_alt'];
             $beerKeywords = \array_column( $beer['keywords'], 'keyword' );
-
             if ( !Helper::PregMatchMultiple( $specialPattern, [ $beerName, $beerSubtitle, \implode( ',', $beerKeywords ), ] ) ) {
                 unset( $beers[$index] );
             }
@@ -149,9 +149,8 @@ final class Filters
         foreach ( $beers as $index => &$beer ) {
             $beerName = $beer['title'];
             $beerKeywords = \array_column( $beer['keywords'], 'keyword' );
-            foreach ( $excludePatterns as $pattern ) {
-                if ( \preg_match( $pattern, $beerName ) ||
-                    \preg_match( $pattern, \implode( ',', $beerKeywords ) ) ) {
+            foreach ( $excludePatterns as $pattern ) { //todo: get rid of this foreach
+                if ( Helper::PregMatchMultiple( $pattern, [ $beerName,\implode( ',', $beerKeywords ) ] ) ) {
                     unset( $beers[$index] );
                 }
             }
