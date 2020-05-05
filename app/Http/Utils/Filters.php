@@ -21,6 +21,7 @@ final class Filters
             'whisky',
             'bourbon',
             'islay',
+            'slyrs',
             'burbon',
             'rum',
             'jack daniels',
