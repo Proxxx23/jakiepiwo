@@ -101,9 +101,7 @@ final class Filters
             $beerName = $beer['title'];
             $beerSubtitle = $beer['subtitle_alt'];
             $beerKeywords = \array_column( $beer['keywords'], 'keyword' );
-            if ( \preg_match( '/.*imperial|ice|double|triple|quad.*/i', $beerName ) ||
-                \preg_match( '/.*imperial|ice|double|triple|quad.*/i', $beerSubtitle ) ||
-                \preg_match( '/.*imperial|ice|double|triple|quad.*/i', \implode( ',', $beerKeywords ) ) ) {
+            if ( Helper::PregMatchMultiple('/.*imperial|ice|double|triple|quad|wymraz|wymraż.*/i', [ $beerName, $beerSubtitle,\implode( ',', $beerKeywords ) ] ) ) {
                 unset( $beers[$index] );
             }
         }
