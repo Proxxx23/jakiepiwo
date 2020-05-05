@@ -82,7 +82,7 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
     {
         $cacheKey = $this->buildCacheKey( $translatedStyleId );
 
-        $cachedData = $this->cache->get( $cacheKey );
+        $cachedData = null;
         if ( $cachedData !== null ) {
             $cachedData->setCacheKey( $cacheKey );
 
@@ -126,7 +126,7 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
     ): ?PolskiKraftDataCollection {
         $cacheKey = $this->buildCacheKey( $translatedStyleIds );
 
-        $cachedData = $this->cache->get( $cacheKey );
+        $cachedData = null;
         if ( $cachedData !== null ) {
             $cachedData->setCacheKey( $cacheKey );
 
@@ -224,7 +224,6 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
             $beerRating = (float) $beer['rating'];
 
             $daysToLastUpdated = $this->calculateDaysToLastUpdate( $beer['updated_at'] );
-
             if ( $this->isRatedInLastMonthsAndHasProperRating( $daysToLastUpdated, $beerRating ) ) {
                 $beersToShow[] = $beer;
             } elseif ( $this->isRatedMaxHalfYearAgoAndHasProperRating( $daysToLastUpdated, $beerRating ) ) {
@@ -238,7 +237,7 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
 
         $beersToShowCount = \count( $beersToShow );
 
-        if ( $beersToShowCount < self::BEERS_TO_SHOW_LIMIT && \count( $beers ) >= 3 ) {
+        if ( $beersToShowCount < self::BEERS_TO_SHOW_LIMIT ) {
             $remaining = self::BEERS_TO_SHOW_LIMIT - $beersToShowCount;
             $beersToAppend = \array_slice( $beersNotToShow, 0, $remaining );
             foreach ( $beersToAppend as $style ) {

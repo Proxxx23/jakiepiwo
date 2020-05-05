@@ -50,7 +50,6 @@ final class Filters
 
         self::filterExclusions( $answers, $beers );
         self::filterImperials( $beers, $density );
-
     }
 
     /**
@@ -93,9 +92,9 @@ final class Filters
             $beerName = $beer['title'];
             $beerSubtitle = $beer['subtitle_alt'];
             $beerKeywords = \array_column( $beer['keywords'], 'keyword' );
-            if ( \preg_match( '/.*imperial.*/i', $beerName ) ||
-                \preg_match( '/.*imperial.*/i', $beerSubtitle ) ||
-                \preg_match( '/.*imperial.*/i', \implode( ',', $beerKeywords ) ) ) {
+            if ( \preg_match( '/.*imperial|ice|double|triple|quad.*/i', $beerName ) ||
+                \preg_match( '/.*imperial|ice|double|triple|quad.*/i', $beerSubtitle ) ||
+                \preg_match( '/.*imperial|ice|double|triple|quad.*/i', \implode( ',', $beerKeywords ) ) ) {
                 unset( $beers[$index] );
             }
         }
