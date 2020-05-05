@@ -34,10 +34,11 @@ final class Filters
         ],
     ];
 
-    private const SPECIAL_BEER_STYLE_IDS = [ 73, 74, ];
+    private const SPECIAL_BEER_STYLE_IDS = [ 57, 73, 74, ];
     private const SPECIAL_BEERS_FILTERS = [
-        'milkshake' => [ 'shake', 'milk', 'szejk', 'laktoz', 'lactose' ],
-        'coffeestout' => [ 'coffee', 'beans', 'mocha', 'espresso', 'kaw', 'cafe', 'caffe', 'speciality' ],
+        'smokedale' => [ 'smoke', 'dym', 'wędz', 'rauch', 'islay', 'szynk', 'boczek', 'bocz', ],
+        'milkshake' => [ 'shake', 'milk', 'szejk', 'laktoz', 'lactose', ],
+        'coffeestout' => [ 'coffee', 'beans', 'mocha', 'espresso', 'kaw', 'cafe', 'caffe', 'speciality', ],
     ];
 
     public static function filter( Answers $answers, array &$beers, string $density ): void
@@ -82,6 +83,12 @@ final class Filters
         unset( $beer );
     }
 
+    /**
+     * Remove imperial beers if someone don't want to have these beers
+     *
+     * @param array $beers
+     * @param string $density
+     */
     private static function filterImperials( array &$beers, string $density ): void
     {
         if ( $density !== 'wodniste i lekkie' ) {
@@ -102,7 +109,7 @@ final class Filters
     }
 
     /**
-     * Milkshake IPA & Coffee Stout has no style in PolskiKraft
+     * Milkshake IPA, Coffee Stout and Smoked Ales has no style in PolskiKraft
      * We must filter those using regular styles and keywords combination
      *
      * @param Answers $answers
@@ -126,14 +133,19 @@ final class Filters
             $beerKeywords = \array_column( $beer['keywords'], 'keyword' );
 
             foreach ( $specialPatterns as $pattern ) {
-                if ( $styleId === 73 && //milkshake
+                if ( $styleId === 73 && // milkshake
                     !\preg_match( $pattern, $beerName ) &&
                     !\preg_match( $pattern, $beerSubtitle ) &&
                     !\preg_match( $pattern, \implode( ',', $beerKeywords ) ) ) {
                     unset( $beers[$index] );
-                } elseif ( $styleId === 74 && //coffee stout
+                } elseif ( $styleId === 74 && // coffee stout
                     !\preg_match( $pattern, $beerName ) &&
                     !\preg_match( $pattern, $beerSubtitle ) ) {
+                    unset( $beers[$index] );
+                } elseif ( $styleId === 57 && //smoked ale
+                    !\preg_match( $pattern, $beerName ) &&
+                    !\preg_match( $pattern, $beerSubtitle ) &&
+                    !\preg_match( $pattern, \implode( ',', $beerKeywords ) ) ) {
                     unset( $beers[$index] );
                 }
             }
@@ -197,11 +209,11 @@ final class Filters
 
     private static function getPregMatchSpecialBeersPatterns( array $includedIds ): ?array
     {
-        if ( !\array_key_exists( 73, $includedIds ) && !\array_key_exists( 74, $includedIds ) ) {
-            return null;
+        $filters = null;
+        if ( \array_key_exists( 57, $includedIds ) ) {
+            $filters[] = 'smokedale';
         }
 
-        $filters = null;
         if ( \array_key_exists( 73, $includedIds ) ) {
             $filters[] = 'milkshake';
         }
