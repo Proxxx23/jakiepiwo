@@ -11,7 +11,18 @@ final class Filters
     private const EXCLUDE_FILTERS = [
         'smoked' => [ 'wędz', 'smoke', 'wedz', 'dym', 'szynk', 'torf', 'islay', 'laphroaig', 'ardbeg' ],
         'sour' => [ 'kwaś', 'kwas', 'sour', 'lambic', 'gueuze' ],
-        'coffee' => [ 'kawa', 'kawow', 'coffee', 'cafe', 'espresso', 'latte', 'cappucino', 'kawą', 'arabica', 'robusta' ],
+        'coffee' => [
+            'kawa',
+            'kawow',
+            'coffee',
+            'cafe',
+            'espresso',
+            'latte',
+            'cappucino',
+            'kawą',
+            'arabica',
+            'robusta',
+        ],
         'chocolate' => [ 'choco', 'cacao', 'cocoa', 'kakao', 'czekolad', ],
         'barrelaged' => [
             'barrel-aged',
@@ -102,7 +113,9 @@ final class Filters
             $beerName = $beer['title'];
             $beerSubtitle = $beer['subtitle_alt'];
             $beerKeywords = \array_column( $beer['keywords'], 'keyword' );
-            if ( Helper::PregMatchMultiple( self::IMPERIAL_BEERS_PATTERN, [ $beerName, $beerSubtitle,\implode( ',', $beerKeywords ) ] ) ) {
+            if ( Helper::PregMatchMultiple(
+                self::IMPERIAL_BEERS_PATTERN, [ $beerName, $beerSubtitle, \implode( ',', $beerKeywords ) ]
+            ) ) {
                 unset( $beers[$index] );
             }
         }
@@ -120,7 +133,7 @@ final class Filters
      */
     private static function filterSpecialBeers( Answers $answers, int $styleId, array &$beers, string $density ): void
     {
-        if ( !in_array( $styleId, self::SPECIAL_BEER_STYLE_IDS, true ) ) {
+        if ( !\in_array( $styleId, self::SPECIAL_BEER_STYLE_IDS, true ) ) {
             return;
         }
 
@@ -135,7 +148,9 @@ final class Filters
             $beerName = $beer['title'];
             $beerSubtitle = $beer['subtitle_alt'];
             $beerKeywords = \array_column( $beer['keywords'], 'keyword' );
-            if ( !Helper::PregMatchMultiple( $specialPattern, [ $beerName, $beerSubtitle, \implode( ',', $beerKeywords ), ] ) ) {
+            if ( !Helper::PregMatchMultiple(
+                $specialPattern, [ $beerName, $beerSubtitle, \implode( ',', $beerKeywords ), ]
+            ) ) {
                 unset( $beers[$index] );
             }
         }
@@ -150,7 +165,7 @@ final class Filters
             $beerName = $beer['title'];
             $beerKeywords = \array_column( $beer['keywords'], 'keyword' );
             foreach ( $excludePatterns as $pattern ) { //todo: get rid of this foreach
-                if ( Helper::PregMatchMultiple( $pattern, [ $beerName,\implode( ',', $beerKeywords ) ] ) ) {
+                if ( Helper::PregMatchMultiple( $pattern, [ $beerName, \implode( ',', $beerKeywords ) ] ) ) {
                     unset( $beers[$index] );
                 }
             }

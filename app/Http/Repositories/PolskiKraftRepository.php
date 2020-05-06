@@ -100,7 +100,7 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
 
         $data[$styleId] = \json_decode(
             $response->getBody()
-                ->getContents(), true, 512, JSON_THROW_ON_ERROR
+                ->getContents(), true, 512, \JSON_THROW_ON_ERROR
         );
 
         if ( empty( $data ) ) {
@@ -142,7 +142,7 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
 
             $results = \json_decode(
                 $response->getBody()
-                    ->getContents(), true, 512, JSON_THROW_ON_ERROR
+                    ->getContents(), true, 512, \JSON_THROW_ON_ERROR
             );
 
             if ( empty( $results ) ) {

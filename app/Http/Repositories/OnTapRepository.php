@@ -238,10 +238,10 @@ final class OnTapRepository implements OnTapRepositoryInterface
             }
 
             if ( $beerNameWordsCount === 1 &&
-               \stripos( $tapBeer['beer']['name'], $beerName ) !== false &&
-               \stripos( $tapBeer['beer']['brewery'], $breweryName ) !== false) {
-               // todo: if beer name === picked style name
-               return true;
+                \stripos( $tapBeer['beer']['name'], $beerName ) !== false &&
+                \stripos( $tapBeer['beer']['brewery'], $breweryName ) !== false ) {
+                // todo: if beer name === picked style name
+                return true;
             }
         }
 
