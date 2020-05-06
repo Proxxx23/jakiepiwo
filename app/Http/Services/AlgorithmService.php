@@ -144,7 +144,7 @@ final class AlgorithmService
     {
         $userAnswers->setChocolate( $inputAnswers[8] === 'tak' );
         $userAnswers->setCoffee( $inputAnswers[9] === 'tak' );
-        $userAnswers->setSour( $inputAnswers[12] === 'tak' );
+        $userAnswers->setSour( $inputAnswers[12] === 'chętnie' );
         $userAnswers->setSmoked( $inputAnswers[13] === 'tak' );
         $userAnswers->setBarrelAged( $inputAnswers[14] === 'tak' );
     }
