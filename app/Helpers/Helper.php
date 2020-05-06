@@ -5,7 +5,7 @@ namespace App\Helpers;
 
 class Helper
 {
-    public static function PregMatchMultiple( string $pattern, array $subjects ): bool
+    public static function pregMatchMultiple( string $pattern, array $subjects ): bool
     {
         foreach ( $subjects as $subject ) {
             if ( \preg_match( $pattern, $subject, $matches ) ) {

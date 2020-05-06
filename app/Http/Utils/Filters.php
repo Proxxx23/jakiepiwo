@@ -78,8 +78,8 @@ final class Filters
      */
     private static function filterExclusions( Answers $answers, array &$beers ): void
     {
-        $patterns = self::getPregMatchExclusionsPatterns( $answers );
-        if ( $patterns === null ) {
+        $exclusionsPattern = self::getPregMatchExclusionsPatterns( $answers );
+        if ( $exclusionsPattern === null ) {
             return;
         }
 
@@ -88,10 +88,8 @@ final class Filters
         foreach ( $beers as $index => &$beer ) {
             $beerName = $beer['title'];
             $beerKeywords = \array_column( $beer['keywords'], 'keyword' );
-            foreach ( $patterns as $pattern ) { //todo: get rid of this foreach
-                if ( Helper::PregMatchMultiple( $pattern, [ $beerName, \implode( ',', $beerKeywords ) ] ) ) {
-                    unset( $beers[$index] );
-                }
+            if ( Helper::pregMatchMultiple( $exclusionsPattern, [ $beerName, \implode( ',', $beerKeywords ) ] ) ) {
+                unset( $beers[$index] );
             }
         }
         unset( $beer );
@@ -113,7 +111,7 @@ final class Filters
             $beerName = $beer['title'];
             $beerSubtitle = $beer['subtitle_alt'];
             $beerKeywords = \array_column( $beer['keywords'], 'keyword' );
-            if ( Helper::PregMatchMultiple(
+            if ( Helper::pregMatchMultiple(
                 self::IMPERIAL_BEERS_PATTERN, [ $beerName, $beerSubtitle, \implode( ',', $beerKeywords ) ]
             ) ) {
                 unset( $beers[$index] );
@@ -148,7 +146,7 @@ final class Filters
             $beerName = $beer['title'];
             $beerSubtitle = $beer['subtitle_alt'];
             $beerKeywords = \array_column( $beer['keywords'], 'keyword' );
-            if ( !Helper::PregMatchMultiple(
+            if ( !Helper::pregMatchMultiple(
                 $specialPattern, [ $beerName, $beerSubtitle, \implode( ',', $beerKeywords ), ]
             ) ) {
                 unset( $beers[$index] );
@@ -156,18 +154,16 @@ final class Filters
         }
         unset( $beer );
 
-        $excludePatterns = self::getPregMatchExclusionsPatterns( $answers );
-        if ( $excludePatterns === null ) {
+        $exclusionsPattern = self::getPregMatchExclusionsPatterns( $answers );
+        if ( $exclusionsPattern === null ) {
             return;
         }
 
         foreach ( $beers as $index => &$beer ) {
             $beerName = $beer['title'];
             $beerKeywords = \array_column( $beer['keywords'], 'keyword' );
-            foreach ( $excludePatterns as $pattern ) { //todo: get rid of this foreach
-                if ( Helper::PregMatchMultiple( $pattern, [ $beerName, \implode( ',', $beerKeywords ) ] ) ) {
-                    unset( $beers[$index] );
-                }
+            if ( Helper::pregMatchMultiple( $exclusionsPattern, [ $beerName, \implode( ',', $beerKeywords ) ] ) ) {
+                unset( $beers[$index] );
             }
         }
         unset( $beer );
@@ -175,9 +171,10 @@ final class Filters
         self::filterImperials( $beers, $density );
     }
 
-    private static function getPregMatchExclusionsPatterns( Answers $answers ): ?array
+    private static function getPregMatchExclusionsPatterns( Answers $answers ): ?string
     {
         $filters = null;
+
         if ( !$answers->isSmoked() ) {
             $filters[] = 'smoked';
         }
@@ -202,12 +199,13 @@ final class Filters
             return null;
         }
 
-        $patterns = null;
+        $pattern = '/.*';
         foreach ( $filters as $filter ) {
-            $patterns[] = '/.*' . \implode( '|', self::EXCLUDE_FILTERS[$filter] ) . '.*/i';
+            $pattern .= \implode( '|', self::EXCLUDE_FILTERS[$filter] );
         }
+        $pattern .= '.*/i';
 
-        return $patterns;
+        return $pattern;
     }
 
     private static function getPregMatchSpecialBeersPatterns( int $styleId ): ?string
