@@ -82,7 +82,8 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
     {
         $cacheKey = $this->buildCacheKey( $translatedStyleId );
 
-        $cachedData = $this->cache->get( $cacheKey );
+//        $cachedData = $this->cache->get( $cacheKey );
+        $cachedData = null;
         if ( $cachedData !== null ) {
             $cachedData->setCacheKey( $cacheKey );
 
@@ -126,7 +127,8 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
     ): ?PolskiKraftDataCollection {
         $cacheKey = $this->buildCacheKey( $translatedStyleIds );
 
-        $cachedData = $this->cache->get( $cacheKey );
+//        $cachedData = $this->cache->get( $cacheKey );
+        $cachedData = null;
         if ( $cachedData !== null ) {
             $cachedData->setCacheKey( $cacheKey );
 

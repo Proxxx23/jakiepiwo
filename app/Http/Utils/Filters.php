@@ -49,12 +49,12 @@ final class Filters
 
     private const SPECIAL_BEER_STYLE_IDS = [ 57, 73, 74, ];
     private const SPECIAL_BEERS_FILTERS = [
-        'smokedale' => [ 'smoke', 'dym', 'wędz', 'rauch', 'islay', 'szynk', 'boczek', 'bocz', ],
+        'smokedale' => [ 'smoke', 'dym', 'wędz', 'rauch', 'islay', 'szynk', 'boczek', 'boczk', 'kiełbas' ],
         'milkshake' => [ 'szejk', 'milk', 'shake', ],
         'coffeestout' => [ 'coffee', 'mocha', 'espresso', 'kaw', 'cafe', 'caffe', ],
     ];
 
-    private const IMPERIAL_BEERS_PATTERN = '/.*imperial|ice|double|triple|quad|wymraz|wymraż.*/i';
+    private const IMPERIAL_BEERS_PATTERN = '/.*imperial|ice|double|triple|quad|wymraz|wymraż|imperium.*/i';
 
     public static function filter( Answers $answers, array &$beers, string $density ): void
     {
