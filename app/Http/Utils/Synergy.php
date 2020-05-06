@@ -11,7 +11,7 @@ class Synergy
     {
         $userOptions = $user->getAnswers();
 
-        // Lekkie + owocowe + Kwaśne
+        // Lekkie + owocowe + kwaśne
         if ( $answerValue[3] === 'coś lekkiego' &&
             $answerValue[11] === 'tak' &&
             $answerValue[12] === 'chętnie' ) {
@@ -23,7 +23,7 @@ class Synergy
         if ( $answerValue[3] === 'coś złożonego' &&
             $answerValue[5] === 'jasne' &&
             ( $answerValue[1] === 'tak' || $answerValue[2] === 'tak' ) ) {
-            $userOptions->applyPositiveSynergy( [ 7, 15, 16, 22, 39, 42, 50, 60, 73 ], 2 );
+            $userOptions->applyPositiveSynergy( [ 6, 7, 15, 16, 22, 39, 42, 50, 60, 76 ], 2 );
         }
 
         // nowe smaki LUB szokujące + złożone + ciemne
@@ -72,7 +72,6 @@ class Synergy
             $userOptions->applyPositiveSynergy( [ 12, 33, 34, 35, 71 ], 2.5 );
         }
 
-
         // goryczka ledwo || lekka + jasne + nieczekoladowe + niegęste
         if ( $answerValue[5] === 'jasne' &&
             $answerValue[8] === 'nie' &&
@@ -95,7 +94,7 @@ class Synergy
         if ( $answerValue[5] === 'jasne' &&
             \in_array( $answerValue[4], [ 'zdecydowanie wyczuwalną', 'jestem hopheadem' ], true ) ) {
             $userOptions->applyPositiveSynergy( [ 1, 2, 5, 6, 7, 8, 61 ], 1.75 );
-            $userOptions->applyPositiveSynergy( [ 69, 70, 72 ], 1.5 );
+            $userOptions->applyPositiveSynergy( [ 6, 69, 70, 72 ], 1.5 );
             $userOptions->applyNegativeSynergy( [ 14, 25, 45, 47 ], 1.75 );
         }
 
@@ -108,7 +107,7 @@ class Synergy
         // goryczka ledwo || lekka
         if ( $answerValue[4] === 'ledwie wyczuwalną' || $answerValue[4] === 'lekką' ) {
             $userOptions->applyNegativeSynergy( [ 1, 2, 3, 5, 7, 8, 61 ], 2 );
-            $userOptions->applyNegativeSynergy( [ 6, 60, 69, 71, 72 ], 1.5 );
+            $userOptions->applyNegativeSynergy( [ 6, 69, 71, 72 ], 1.5 );
         }
     }
 }
