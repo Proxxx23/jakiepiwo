@@ -55,6 +55,8 @@ final class Filters
         'pastry' => [ 'pastry', ],
     ];
 
+    private const IMPERIAL_STYLE_IDS = [7, 36, 37, ];
+
     private const IMPERIAL_BEERS_PATTERN = '/.*imperial|ice|double|triple|quad|wymraz|wymraż|imperium|eis.*/i';
 
     public static function filter( Answers $answers, array &$beers, string $density ): void
@@ -66,7 +68,7 @@ final class Filters
         }
 
         self::filterExclusions( $answers, $beers );
-        self::filterImperials( $beers, $density );
+        self::filterImperials( $beers, $styleId, $density );
     }
 
     /**
@@ -100,11 +102,16 @@ final class Filters
      * Remove imperial beers if someone don't want to have these beers
      *
      * @param array $beers
+     * @param int $styleId
      * @param string $density
      */
-    private static function filterImperials( array &$beers, string $density ): void
+    private static function filterImperials( array &$beers, int $styleId, string $density ): void
     {
         if ( $density === 'mocne i gęste' ) {
+            return;
+        }
+
+        if ( \in_array( $styleId, self::IMPERIAL_STYLE_IDS, true ) ) {
             return;
         }
 
@@ -169,7 +176,7 @@ final class Filters
         }
         unset( $beer );
 
-        self::filterImperials( $beers, $density );
+        self::filterImperials( $beers, $styleId, $density );
     }
 
     private static function getPregMatchExclusionsPatterns( Answers $answers ): ?string
