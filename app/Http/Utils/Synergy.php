@@ -116,7 +116,7 @@ class Synergy
             $answerValue[4] === 'ledwie wyczuwalną' &&
             $answerValue[5] === 'jasne' &&
             $answerValue[6] === 'słodsze' &&
-            $answerValue[11] === 'nie' ) {
+            $answerValue[11] === 'tak' ) {
             $userOptions->applyPositiveSynergy( [ 999 ], 3 );
         }
 
@@ -126,7 +126,7 @@ class Synergy
             $answerValue[4] === 'ledwie wyczuwalną' &&
             $answerValue[5] === 'ciemne' &&
             $answerValue[6] === 'słodsze' &&
-            $answerValue[11] === 'tak' ) {
+            $answerValue[11] === 'nie' ) {
             $userOptions->applyPositiveSynergy( [ 998 ], 3 );
         }
     }

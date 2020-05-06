@@ -65,7 +65,7 @@ final class Dictionary
             74 => [ 44, 83, 51, 12, ], // Coffee Stout -> stouty bez RISA (see Filters)
             76 => [ 79, 110, 107, 88 ], // Bock -> Bock + Koźlak + Lentebock + American Bock
             998 => [ 8, 41, 47, 38, 38, 52, 142, 56, 57, 136, 154, 3, 54, 49, 65, 83, 84 ], // Dark Pastry Beer
-            999 => [ 58, 59, 44, 83, 51, 32, 58, 12, 134, 49, 109, 115, 122, 76, 82, 87 ], // Pale Pastry Beer
+            999 => [ 57, 58, 59, 44, 83, 51, 32, 58, 12, 134, 49, 109, 115, 122, 76, 82, 87 ], // Pale Pastry Beer
         ];
     }
 

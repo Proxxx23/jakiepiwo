@@ -24,7 +24,7 @@ final class ScoringRepository implements ScoringRepositoryInterface
         // Chcesz czegoś lekkiego do ugaszenia pragnienia, czy złożonego i degustacyjnego?
         [
             'coś lekkiego' => '9,10,11,12,13,21,25,33,40,45,47,51,52,70,69',
-            'coś pośrodku' => '14,15,16,19,20,25,27,30,34,35,38,42,44,45,47,48,49,53,55,56,57,60,61,64,68,71,72,73,74,76',
+            'coś pośrodku' => '14,15,16,19,20,25,27,30,34,35,38,42,44,45,47,48,49,53,55,56,57,60,61,64,68,71,72,73,74,76,999',
             'coś złożonego' => '1,2,3,5,6,7,8,22,24,36,37,39,42,44,50,67,998,999',
         ],
         // Jak wysoką goryczkę preferujesz?
