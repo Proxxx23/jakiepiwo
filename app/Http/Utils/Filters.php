@@ -47,14 +47,15 @@ final class Filters
         ],
     ];
 
-    private const SPECIAL_BEER_STYLE_IDS = [ 57, 73, 74, ];
+    private const SPECIAL_BEER_STYLE_IDS = [ 57, 73, 74, 998, 999 ];
     private const SPECIAL_BEERS_FILTERS = [
         'smokedale' => [ 'smoke', 'dym', 'wędz', 'rauch', 'islay', 'szynk', 'boczek', 'boczk', 'kiełbas' ],
         'milkshake' => [ 'szejk', 'milk', 'shake', ],
         'coffeestout' => [ 'coffee', 'mocha', 'espresso', 'kaw', 'cafe', 'caffe', ],
+        'pastry' => [ 'pastry', ],
     ];
 
-    private const IMPERIAL_BEERS_PATTERN = '/.*imperial|ice|double|triple|quad|wymraz|wymraż|imperium.*/i';
+    private const IMPERIAL_BEERS_PATTERN = '/.*imperial|ice|double|triple|quad|wymraz|wymraż|imperium|eis.*/i';
 
     public static function filter( Answers $answers, array &$beers, string $density ): void
     {
@@ -217,6 +218,9 @@ final class Filters
                 return '/.*' . \implode( '|', self::SPECIAL_BEERS_FILTERS['milkshake'] ) . '.*/i';
             case 74:
                 return '/.*' . \implode( '|', self::SPECIAL_BEERS_FILTERS['coffeestout'] ) . '.*/i';
+            case 998:
+            case 999:
+                return '/.*' . \implode( '|', self::SPECIAL_BEERS_FILTERS['pastry'] ) . '.*/i';
             default:
                 return null;
         }

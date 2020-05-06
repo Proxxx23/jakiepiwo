@@ -29,7 +29,7 @@ class Synergy
         // nowe smaki LUB szokujące + złożone + ciemne
         if ( $answerValue[3] === 'coś złożonego' &&
             $answerValue[5] === 'ciemne' &&
-            ( $answerValue[1] === 'tak' || $answerValue[3] === 'tak' ) ) {
+            ( $answerValue[1] === 'tak' || $answerValue[2] === 'tak' ) ) {
             $userOptions->applyPositiveSynergy( [ 36, 37 ], 2 );
         }
 
@@ -108,6 +108,26 @@ class Synergy
         if ( $answerValue[4] === 'ledwie wyczuwalną' || $answerValue[4] === 'lekką' ) {
             $userOptions->applyNegativeSynergy( [ 1, 2, 3, 5, 7, 8, 61 ], 2 );
             $userOptions->applyNegativeSynergy( [ 6, 69, 71, 72 ], 1.5 );
+        }
+
+        // goryczka ledwo && jasne && owoce && słodki && nowe smaki = pastry pale
+        if ( $answerValue[1] === 'tak' &&
+            $answerValue[2] === 'tak' &&
+            $answerValue[4] === 'ledwie wyczuwalną' &&
+            $answerValue[5] === 'jasne' &&
+            $answerValue[6] === 'słodsze' &&
+            $answerValue[11] === 'nie' ) {
+            $userOptions->applyPositiveSynergy( [ 999 ], 3 );
+        }
+
+        // goryczka ledwo && ciemne && nie owoce && słodki && nowe smaki = pastry black
+        if ( $answerValue[1] === 'tak' &&
+            $answerValue[2] === 'tak' &&
+            $answerValue[4] === 'ledwie wyczuwalną' &&
+            $answerValue[5] === 'ciemne' &&
+            $answerValue[6] === 'słodsze' &&
+            $answerValue[11] === 'tak' ) {
+            $userOptions->applyPositiveSynergy( [ 998 ], 3 );
         }
     }
 }
