@@ -8,7 +8,7 @@ use App\Http\Objects\PolskiKraftData;
 use App\Http\Objects\PolskiKraftDataCollection;
 use App\Http\Utils\Dictionary;
 use App\Http\Utils\Filters;
-use App\Http\Utils\SharedCache;
+use App\Http\Utils\UserCache;
 use Carbon\Carbon;
 use GuzzleHttp\ClientInterface;
 
@@ -25,13 +25,13 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
     private const MINIMAL_RATING = 3.0;
 
     private Answers $answers;
-    private SharedCache $cache;
+    private UserCache $cache;
     private Dictionary $dictionary;
     private ClientInterface $httpClient;
 
     public function __construct(
         Dictionary $dictionary,
-        SharedCache $cache,
+        UserCache $cache,
         ClientInterface $httpClient
     ) {
         $this->cache = $cache;

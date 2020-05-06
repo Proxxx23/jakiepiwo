@@ -21,7 +21,8 @@ use App\Http\Services\QuestionsService;
 use App\Http\Services\SimpleResultsService;
 use App\Http\Utils\Dictionary;
 use App\Http\Utils\ErrorsLogger;
-use App\Http\Utils\SharedCache;
+use App\Http\Utils\OnTapCache;
+use App\Http\Utils\UserCache;
 use DrewM\MailChimp\MailChimp;
 use GuzzleHttp\Client;
 use Illuminate\Support\ServiceProvider;
@@ -29,7 +30,8 @@ use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 
 class AppServiceProvider extends ServiceProvider
 {
-    private const DEFAULT_CACHE_TTL = 1800;
+    private const DEFAULT_USER_CACHE_TTL = 1800;
+    private const DEFAULT_ONTAP_CACHE_TTL = 7200;
     private const DEFAULT_ONTAP_TIMEOUT = 10; // in seconds
     private const DEFAULT_GEOLOCATION_TIMEOUT = 2; // in seconds
 
@@ -67,13 +69,23 @@ class AppServiceProvider extends ServiceProvider
         }
         );
         $this->app->singleton(
-            'FilesystemAdapter', static function () {
-            return new FilesystemAdapter( '', self::DEFAULT_CACHE_TTL );
+            'UserCacheFilesystemAdapter', static function () {
+            return new FilesystemAdapter( '', self::DEFAULT_USER_CACHE_TTL );
         }
         );
         $this->app->singleton(
-            'SharedCache', static function () {
-            return new SharedCache( \resolve( 'FilesystemAdapter' ) );
+            'OnTapCacheFilesystemAdapter', static function () {
+            return new FilesystemAdapter( '', self::DEFAULT_ONTAP_CACHE_TTL );
+        }
+        );
+        $this->app->singleton(
+            'UserCache', static function () {
+            return new UserCache( \resolve( 'UserCacheFilesystemAdapter' ) );
+        }
+        );
+        $this->app->singleton(
+            'OnTapCache', static function () {
+            return new OnTapCache( \resolve( 'OnTapCacheFilesystemAdapter' ) );
         }
         );
         $this->app->singleton(
@@ -85,7 +97,7 @@ class AppServiceProvider extends ServiceProvider
             'PolskiKraftRepository', static function () {
             return new PolskiKraftRepository(
                 new Dictionary(),
-                \resolve( 'SharedCache' ),
+                \resolve( 'UserCache' ),
                 \resolve( 'HttpClient' )
             );
         }
@@ -130,7 +142,7 @@ class AppServiceProvider extends ServiceProvider
             $geolocationConfig = [ 'timeout' => self::DEFAULT_GEOLOCATION_TIMEOUT ];
 
             return new OnTapService(
-                new OnTapRepository( new Client( $onTapConfig ), \resolve( 'SharedCache' ) ),
+                new OnTapRepository( new Client( $onTapConfig ), \resolve( 'OnTapCache' ) ),
                 new GeolocationRepository( new Client( $geolocationConfig ) )
             );
         }

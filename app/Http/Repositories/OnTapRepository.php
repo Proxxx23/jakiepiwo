@@ -3,7 +3,7 @@ declare( strict_types=1 );
 
 namespace App\Http\Repositories;
 
-use App\Http\Utils\SharedCache;
+use App\Http\Utils\OnTapCache;
 use GuzzleHttp\ClientInterface;
 
 final class OnTapRepository implements OnTapRepositoryInterface
@@ -18,18 +18,18 @@ final class OnTapRepository implements OnTapRepositoryInterface
     private const CACHE_KEY_CITIES = 'CITIES_ONTAP';
 
     private ClientInterface $httpClient;
-    private SharedCache $cache;
+    private OnTapCache $cache;
     private ?string $cityId = null;
     private bool $connectionError;
     private string $cityName;
 
     /**
      * @param ClientInterface $httpClient
-     * @param SharedCache $cache
+     * @param OnTapCache $cache
      *
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function __construct( ClientInterface $httpClient, SharedCache $cache )
+    public function __construct( ClientInterface $httpClient, OnTapCache $cache )
     {
         $this->cache = $cache;
         $this->httpClient = $httpClient; //todo: set headers globally

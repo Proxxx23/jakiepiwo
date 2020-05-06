@@ -5,8 +5,9 @@ namespace App\Http\Utils;
 
 use Psr\Cache\InvalidArgumentException;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
+use Symfony\Contracts\Cache\ItemInterface;
 
-final class SharedCache
+final class OnTapCache implements SharedCacheInterface
 {
     private FilesystemAdapter $cache;
 
@@ -28,6 +29,7 @@ final class SharedCache
 
         $item = null;
         try {
+            /** @var ItemInterface $item */
             $item = $this->cache->getItem( $cacheKey );
         } catch ( InvalidArgumentException $ex ) {
 
