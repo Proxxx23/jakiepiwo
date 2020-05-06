@@ -27,5 +27,15 @@ class Exclude
         if ( isset( $answers[3] ) && $answers[3] === 'coś lekkiego' ) {
             $userOptions->excludeFromRecommended( [ 7, 8, 22, 24, 36, 37, 39, 50, 998, 999 ] );
         }
+
+        // wykluczenia dla piw ciemnych
+        if ( isset( $answers[5] ) && $answers[5] === 'ciemne' ) {
+            $userOptions->excludeFromRecommended( [ 999 ] );
+        }
+
+        // wykluczenia dla piw ciemnych
+        if ( isset( $answers[5] ) && $answers[5] === 'jasne' ) {
+            $userOptions->excludeFromRecommended( [ 998 ] );
+        }
     }
 }

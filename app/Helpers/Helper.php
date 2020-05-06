@@ -8,7 +8,7 @@ class Helper
     public static function pregMatchMultiple( string $pattern, array $subjects ): bool
     {
         foreach ( $subjects as $subject ) {
-            if ( \preg_match( $pattern, $subject, $matches ) ) {
+            if ( \preg_match( $pattern, $subject ) ) {
                 return true;
             }
         }

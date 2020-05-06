@@ -82,12 +82,9 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
     {
         $cacheKey = $this->buildCacheKey( $translatedStyleId );
 
-//        $cachedData = $this->cache->get( $cacheKey );
-        $cachedData = null;
+        $cachedData = $this->cache->get( $cacheKey );
         if ( $cachedData !== null ) {
-            $cachedData->setCacheKey( $cacheKey );
-
-            return $cachedData;
+            return $this->createPolskiKraftDataCollection( $cachedData, $cacheKey, $density );
         }
 
         $response = $this->httpClient->request(
@@ -103,6 +100,8 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
             $response->getBody()
                 ->getContents(), true, 512, \JSON_THROW_ON_ERROR
         );
+
+        $this->cache->set( $cacheKey, $data );
 
         if ( empty( $data ) ) {
             return null;
@@ -127,12 +126,9 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
     ): ?PolskiKraftDataCollection {
         $cacheKey = $this->buildCacheKey( $translatedStyleIds );
 
-//        $cachedData = $this->cache->get( $cacheKey );
-        $cachedData = null;
+        $cachedData = $this->cache->get( $cacheKey );
         if ( $cachedData !== null ) {
-            $cachedData->setCacheKey( $cacheKey );
-
-            return $cachedData;
+            return $this->createPolskiKraftDataCollection( $cachedData, $cacheKey, $density );
         }
 
         $data = [];
@@ -155,6 +151,8 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
                 $data[$styleId][] = $result;
             }
         }
+
+        $this->cache->set( $cacheKey, $data );
 
         if ( $data === [] ) {
             return null;
@@ -196,10 +194,7 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
             $polskiKraftDataCollection->add( $polskiKraftData->toArray() );
         }
 
-        if ( $cacheKey !== null ) {
-            $this->cache->set( $cacheKey, $polskiKraftDataCollection );
-            $polskiKraftDataCollection->setCacheKey( $cacheKey );
-        }
+        $polskiKraftDataCollection->setCacheKey( $cacheKey );
 
         return $polskiKraftDataCollection;
     }

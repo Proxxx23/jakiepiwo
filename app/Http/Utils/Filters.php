@@ -87,7 +87,7 @@ final class Filters
         $beers = \reset( $beers );
 
         foreach ( $beers as $index => &$beer ) {
-            $beerName = $beer['title'];
+            $beerName = preg_replace( '/[\x{200B}-\x{200D}\x{FEFF}]/u', '', $beer['title'] );
             $beerKeywords = \array_column( $beer['keywords'], 'keyword' );
             if ( Helper::pregMatchMultiple( $exclusionsPattern, [ $beerName, \implode( ',', $beerKeywords ) ] ) ) {
                 unset( $beers[$index] );
@@ -109,8 +109,8 @@ final class Filters
         }
 
         foreach ( $beers as $index => &$beer ) {
-            $beerName = $beer['title'];
-            $beerSubtitle = $beer['subtitle_alt'];
+            $beerName = preg_replace( '/[\x{200B}-\x{200D}\x{FEFF}]/u', '', $beer['title'] );
+            $beerSubtitle = preg_replace( '/[\x{200B}-\x{200D}\x{FEFF}]/u', '', $beer['subtitle_alt'] );
             $beerKeywords = \array_column( $beer['keywords'], 'keyword' );
             if ( Helper::pregMatchMultiple(
                 self::IMPERIAL_BEERS_PATTERN, [ $beerName, $beerSubtitle, \implode( ',', $beerKeywords ) ]
@@ -144,8 +144,8 @@ final class Filters
         $beers = \reset( $beers );
 
         foreach ( $beers as $index => &$beer ) {
-            $beerName = $beer['title'];
-            $beerSubtitle = $beer['subtitle_alt'];
+            $beerName = preg_replace( '/[\x{200B}-\x{200D}\x{FEFF}]/u', '', $beer['title'] );
+            $beerSubtitle = preg_replace( '/[\x{200B}-\x{200D}\x{FEFF}]/u', '', $beer['subtitle_alt'] );
             $beerKeywords = \array_column( $beer['keywords'], 'keyword' );
             if ( !Helper::pregMatchMultiple(
                 $specialPattern, [ $beerName, $beerSubtitle, \implode( ',', $beerKeywords ), ]
@@ -161,7 +161,7 @@ final class Filters
         }
 
         foreach ( $beers as $index => &$beer ) {
-            $beerName = $beer['title'];
+            $beerName = preg_replace( '/[\x{200B}-\x{200D}\x{FEFF}]/u', '', $beer['title'] );
             $beerKeywords = \array_column( $beer['keywords'], 'keyword' );
             if ( Helper::pregMatchMultiple( $exclusionsPattern, [ $beerName, \implode( ',', $beerKeywords ) ] ) ) {
                 unset( $beers[$index] );

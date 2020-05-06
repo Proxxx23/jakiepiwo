@@ -56,4 +56,9 @@ final class SharedCache
             $this->cache->save( $dataCollection );
         }
     }
+
+    public function clear(): void
+    {
+        $this->cache->clear();
+    }
 }
