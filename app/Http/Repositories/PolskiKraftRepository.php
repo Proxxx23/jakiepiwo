@@ -156,6 +156,10 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
             }
         }
 
+        if ( $data === [] ) {
+            return null;
+        }
+
         return $this->createPolskiKraftDataCollection( $data, $cacheKey, $density );
     }
 
