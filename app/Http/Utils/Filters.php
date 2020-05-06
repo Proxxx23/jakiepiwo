@@ -39,7 +39,7 @@ final class Filters
     private const SPECIAL_BEER_STYLE_IDS = [ 57, 73, 74, ];
     private const SPECIAL_BEERS_FILTERS = [
         'smokedale' => [ 'smoke', 'dym', 'wędz', 'rauch', 'islay', 'szynk', 'boczek', 'bocz', ],
-        'milkshake' => [ 'shake', 'milk', 'szejk', 'laktoz', 'lactose', ],
+        'milkshake' => [ 'szejk', 'milk', 'shake', ],
         'coffeestout' => [ 'coffee', 'mocha', 'espresso', 'kaw', 'cafe', 'caffe', ],
     ];
 
@@ -94,7 +94,7 @@ final class Filters
      */
     private static function filterImperials( array &$beers, string $density ): void
     {
-        if ( $density !== 'wodniste i lekkie' ) {
+        if ( $density === 'mocne i gęste' ) {
             return;
         }
 
