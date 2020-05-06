@@ -29,7 +29,7 @@ use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 
 class AppServiceProvider extends ServiceProvider
 {
-    private const DEFAULT_CACHE_TTL = 900;
+    private const DEFAULT_CACHE_TTL = 1800;
     private const DEFAULT_ONTAP_TIMEOUT = 10; // in seconds
     private const DEFAULT_GEOLOCATION_TIMEOUT = 2; // in seconds
 
