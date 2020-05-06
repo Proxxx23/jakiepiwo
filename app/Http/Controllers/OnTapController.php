@@ -82,7 +82,7 @@ final class OnTapController
         $data = null;
         foreach ( $styles as $style ) {
             foreach ( $style as $item ) {
-                $ontapBeer = $ontapService->getTapsByBeerName( $item['title'], $item['subtitle'] );
+                $ontapBeer = $ontapService->getTapsByBeerName( $item );
                 if ( $ontapBeer !== null ) {
                     $data[] = $ontapBeer;
                 }

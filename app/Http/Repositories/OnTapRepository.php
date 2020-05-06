@@ -48,18 +48,22 @@ final class OnTapRepository implements OnTapRepositoryInterface
     }
 
     /**
-     * @param string $beerName
-     *
-     * @param string $breweryName
+     * @param array $beerData
      *
      * @return array|null
-     * @throws \GuzzleHttp\Exception\GuzzleException | \JsonException
+     *
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \JsonException
      */
-    public function fetchTapsByBeerName( string $beerName, string $breweryName ): ?array
+    public function fetchTapsByBeerName( array $beerData ): ?array
     {
+        $beerName = $beerData['title'];
         if ( $beerName === '' ) {
             return null;
         }
+
+        $breweryName = $beerData['subtitle'];
+        $style = $beerData['subtitleAlt'];
 
         //todo: strategy?
         $toHash = $this->cityId . '_' . $beerName;
@@ -73,16 +77,17 @@ final class OnTapRepository implements OnTapRepositoryInterface
 
         //fetch all the taps in given places and find beer
         $tapsData = null;
-        foreach ( $places as $place ) {
+        foreach ( $places as &$place ) {
             $taps = $this->fetchTapsByPlaceId( $place['id'] );
             if ( empty( $taps ) ) {
                 continue;
             }
-            if ( $this->hasBeer( $beerName, $breweryName, $taps ) ) {
+            if ( $this->hasBeer( $beerName, $breweryName, $style, $taps ) ) {
                 $tapsData[$beerName][] = $place['name'];
                 continue;
             }
         }
+        unset( $place );
 
         if ( $tapsData === null ) {
             return null;
@@ -223,27 +228,24 @@ final class OnTapRepository implements OnTapRepositoryInterface
         return $data;
     }
 
-    private function hasBeer( string $beerName, string $breweryName, array $tapBeerData ): bool
+    private function hasBeer( string $beerName, ?string $breweryName, ?string $style, array $tapBeerData ): bool
     {
-        $beerNameWordsCount = \count( \explode( ' ', $beerName ) );
-
-        foreach ( $tapBeerData as $tapBeer ) {
+        foreach ( $tapBeerData as &$tapBeer ) {
             if ( empty( $tapBeer['beer'] ) ) {
                 continue;
             }
 
-            if ( $beerNameWordsCount > 1 &&
-                \stripos( $tapBeer['beer']['name'], $beerName ) !== false ) {
+            if ( $style === $tapBeer['beer']['name'] &&
+                \stripos( $tapBeer['beer']['name'], $beerName ) !== false &&
+                \stripos( $tapBeer['beer']['brewery'], $breweryName ) !== false ) {
                 return true;
             }
 
-            if ( $beerNameWordsCount === 1 &&
-                \stripos( $tapBeer['beer']['name'], $beerName ) !== false &&
-                \stripos( $tapBeer['beer']['brewery'], $breweryName ) !== false ) {
-                // todo: if beer name === picked style name
+            if ( \stripos( $tapBeer['beer']['name'], $beerName ) !== false ) {
                 return true;
             }
         }
+        unset( $tapBeer );
 
         return false;
     }
