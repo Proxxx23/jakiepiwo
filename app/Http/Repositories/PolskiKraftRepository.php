@@ -17,7 +17,8 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
 {
     // private const DEFAULT_LIST_URI = 'https://www.polskikraft.pl/openapi/style/list';
     private const BEER_LIST_BY_STYLE_URL_PATTERN = 'https://www.polskikraft.pl/openapi/style/%d/examples';
-    private const CACHE_KEY_SUFFIX = 'POLSKIKRAFT';
+    private const RAW_RESULTS_CACHE_KEY_SUFFIX = 'POLSKIKRAFT';
+    private const USER_CACHE_KEY_SUFFIX = 'USER';
     private const LAST_UPDATED_DAYS_LIMIT = 60;
     private const LAST_UPDATED_MAX_DAYS = 180; // maximum limit if no beers found for last LAST_UPDATED_DAYS_LIMIT days
     private const BEERS_TO_SHOW_LIMIT = 3;
@@ -80,11 +81,11 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
      */
     private function fetchOne( int $styleId, int $translatedStyleId, string $density ): ?PolskiKraftDataCollection
     {
-        $cacheKey = $this->buildCacheKey( $translatedStyleId );
+        $resultsCacheKey = $this->buildRawResultsCacheKey( $styleId );
 
-        $cachedData = $this->cache->get( $cacheKey );
+        $cachedData = $this->cache->get( $resultsCacheKey );
         if ( $cachedData !== null ) {
-            return $this->createPolskiKraftDataCollection( $cachedData, $cacheKey, $density );
+            return $this->createPolskiKraftDataCollection( $cachedData, $styleId, $density );
         }
 
         $response = $this->httpClient->request(
@@ -101,13 +102,13 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
                 ->getContents(), true, 512, \JSON_THROW_ON_ERROR
         );
 
-        $this->cache->set( $cacheKey, $data );
+        $this->cache->set( $resultsCacheKey, $data );
 
         if ( empty( $data ) ) {
             return null;
         }
 
-        return $this->createPolskiKraftDataCollection( $data, $cacheKey, $density );
+        return $this->createPolskiKraftDataCollection( $data, $styleId, $density );
     }
 
     /**
@@ -124,11 +125,11 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
         array $translatedStyleIds,
         string $density
     ): ?PolskiKraftDataCollection {
-        $cacheKey = $this->buildCacheKey( $translatedStyleIds );
+        $resultsCacheKey = $this->buildRawResultsCacheKey( $styleId );
 
-        $cachedData = $this->cache->get( $cacheKey );
+        $cachedData = $this->cache->get( $resultsCacheKey );
         if ( $cachedData !== null ) {
-            return $this->createPolskiKraftDataCollection( $cachedData, $cacheKey, $density );
+            return $this->createPolskiKraftDataCollection( $cachedData, $styleId, $density );
         }
 
         $data = [];
@@ -152,40 +153,31 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
             }
         }
 
-        $this->cache->set( $cacheKey, $data );
+        $this->cache->set( $resultsCacheKey, $data );
 
         if ( $data === [] ) {
             return null;
         }
 
-        return $this->createPolskiKraftDataCollection( $data, $cacheKey, $density );
+        return $this->createPolskiKraftDataCollection( $data, $styleId, $density );
     }
 
-    /**
-     * @param int|array $translatedStyleIds
-     *
-     * @return string
-     */
-    private function buildCacheKey( $translatedStyleIds ): string
+    private function buildRawResultsCacheKey( int $styleId ): string
     {
-        if ( \is_int( $translatedStyleIds ) ) {
-            return $translatedStyleIds . '_' . self::CACHE_KEY_SUFFIX;
-        }
-
-        $prefix = '';
-        foreach ( $translatedStyleIds as $translatedId ) {
-            $prefix .= $translatedId . '_';
-        }
-
-        return $prefix . self::CACHE_KEY_SUFFIX;
-
+        return $styleId . '_' . self::RAW_RESULTS_CACHE_KEY_SUFFIX;
     }
 
-    private function createPolskiKraftDataCollection(
-        array $data,
-        string $cacheKey,
-        string $density
-    ): PolskiKraftDataCollection {
+    private function buildUserSpecificCacheKey( int $styleId ): string
+    {
+        $recommended = \implode( '_', $this->answers->getRecommendedIds() );
+        $unsuitable = \implode( '_', $this->answers->getUnsuitableIds() );
+        $hash  = \md5( $recommended . $unsuitable );
+
+        return $styleId . '_' . $hash . '_' . self::USER_CACHE_KEY_SUFFIX . '_' . \time();
+    }
+
+    private function createPolskiKraftDataCollection( array $data, int $styleId, string $density ): PolskiKraftDataCollection
+    {
         $beers = $this->retrieveBestBeers( $data, $density );
 
         $polskiKraftDataCollection = new PolskiKraftDataCollection();
@@ -194,7 +186,11 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
             $polskiKraftDataCollection->add( $polskiKraftData->toArray() );
         }
 
-        $polskiKraftDataCollection->setCacheKey( $cacheKey );
+        $userSpecificCacheKey = $this->buildUserSpecificCacheKey( $styleId );
+        if ( $userSpecificCacheKey !== null ) {
+            $this->cache->set( $userSpecificCacheKey, $polskiKraftDataCollection );
+            $polskiKraftDataCollection->setCacheKey( $userSpecificCacheKey );
+        }
 
         return $polskiKraftDataCollection;
     }
