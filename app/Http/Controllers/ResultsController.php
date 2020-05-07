@@ -72,7 +72,6 @@ final class ResultsController extends Controller
                 $ex->getFile(),
                 $ex->getLine()
             );
-            dd($errorMessage);
             $logger->logError( $errorMessage );
             return \response()->json(
                 [

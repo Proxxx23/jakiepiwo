@@ -55,12 +55,10 @@ final class AlgorithmService
 
         $this->batchMarkTaste( $userAnswers, $inputAnswers );
 
-        $inputAnswers = \array_filter( $inputAnswers, fn( $v ) => $v !== 'nie wiem' );
-
         foreach ( $inputAnswers as $questionNumber => $givenAnswer ) {
 
             // Jeśli bez znaczenia, to nic nie robimy
-            if ( $givenAnswer === 'bez znaczenia' ) {
+            if ( $givenAnswer === 'bez znaczenia' || $givenAnswer === 'nie wiem' ) {
                 continue;
             }
 
