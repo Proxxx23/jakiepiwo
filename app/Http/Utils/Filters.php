@@ -115,6 +115,11 @@ final class Filters
             return;
         }
 
+        if ( isset( $beers[$styleId] ) ) {
+            //todo: maybe flag or something?
+            $beers = \reset( $beers ); // hasn't been reset in previous function
+        }
+
         foreach ( $beers as $index => &$beer ) {
             $beerName = \preg_replace( '/[\x{200B}-\x{200D}\x{FEFF}]/u', '', $beer['title'] );
             $beerSubtitle = \preg_replace( '/[\x{200B}-\x{200D}\x{FEFF}]/u', '', $beer['subtitle_alt'] );

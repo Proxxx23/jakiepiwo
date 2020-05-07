@@ -17,7 +17,7 @@ final class ResultsController extends Controller
     private const INVALID_CONTENT_TYPE_EXCEPTION_MESSAGE = 'Set Content Type header to application/json.';
     private const EMPTY_DATA_EXCEPTION_MESSAGE = 'No valid data provided.';
     private const INVALID_RESULTS_HASH_EXCEPTION_MESSAGE = 'Invalid results hash.';
-    private const EXCEPTION_OR_ERROR_PATTERN = 'Exception or error. Message: %s. File: %s. Line: %s';
+    private const EXCEPTION_OR_ERROR_PATTERN = 'Exception or error. Message: %s. File: %s. Line: %s. Answers: %s.';
     private const INTERNAL_ERROR_MESSAGE = 'Internal error occured.';
     private const NO_RESULTS_FOR_HASH_ERROR_MESSAGE = 'Could not get results for provided hash.';
     private const APPLICATION_JSON_HEADER = 'application/json';
@@ -61,7 +61,8 @@ final class ResultsController extends Controller
                 self::EXCEPTION_OR_ERROR_PATTERN,
                 $ex->getMessage(),
                 $ex->getFile(),
-                $ex->getLine()
+                $ex->getLine(),
+                \implode( ',', $inputAnswers )
             );
             $logger->logError( $errorMessage );
             return \response( self::INTERNAL_ERROR_MESSAGE, Response::HTTP_INTERNAL_SERVER_ERROR );
