@@ -573,11 +573,11 @@ final class BeersRepository implements BeersRepositoryInterface
         72 => [
             'name' => 'Pale Ale',
             'otherName' => '',
-            'polishName' => 'Jasne ale',
+            'polishName' => 'Jasne Ale',
             'description' => [
-                'text' => 'Jasne piwo górnej fermentacji, odpowiednik jasnego lagera (fermentacja dolna). „Ejle” — w zestawieniu z podobnymi piwami dolnej fermentacji — są bardziej złożone, przeważnie szczodrzej nachmielone. Samo pale ale nie występuje raczej jako samoistny styl piwny i prawie zawsze dostaje odpowiedni przedrostek.',
+                'text' => 'Jasne piwo górnej fermentacji, odpowiednik jasnego lagera (fermentacja dolna). „Ejle” — w zestawieniu z podobnymi piwami dolnej fermentacji — są bardziej złożone, przeważnie szczodrzej nachmielone. Samo pale ale nie występuje raczej jako samoistny styl piwny i prawie zawsze dostaje odpowiedni przedrostek. Zazwyczaj są to piwa lekkie, w których obecne są nuty od ziemistych, ziołowych i tytoniowych przez owocowe po żywiczne.',
                 'url' => 'https://piwolucja.pl/felietony/apa-ipa-aipa-dipa-iipa-tipa-czym-sie-rozni/',
-                'urlText' => 'Przeczytaj o przedrostkach i wariacjach tego stylu >>>',
+                'urlText' => 'Przeczytaj o przedrostkach i wariantach tego stylu >>>',
             ],
             'moreUrlQuery' => 'pale%20ale',
         ],
@@ -630,7 +630,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'otherName' => '',
             'polishName' => 'Piwo z aromatami (wersja jasna)',
             'description' => [
-                'text' => 'To segment piw mających przypominać deser lub cokolwiek związanego z cukrem. Do wywołania takiego efektu używa się soków, owoców i bardzo często aromatów (przeważnie naturalnych). Bardzo słodkie, przypominające znane słodycze czy desery.',
+                'text' => 'To segment piw mających przypominać deser lub cokolwiek związanego z cukrem. Do wywołania takiego efektu używa się soków, owoców i bardzo często aromatów (przeważnie naturalnych). Bardzo słodkie, często również kwaśne, przypominające znane słodycze czy desery.',
                 'url' => 'https://piwolucja.pl/piwa-polecane/piwa-pastry-na-przykladzie-beeramisu-deer-bear/',
                 'urlText' => 'Recenzja piwa w stylu Pastry >>>',
             ],
