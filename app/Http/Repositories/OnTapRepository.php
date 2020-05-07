@@ -121,7 +121,7 @@ final class OnTapRepository implements OnTapRepositoryInterface
 
         $data = \json_decode(
             $response->getBody()
-                ->getContents(), true, 512, JSON_THROW_ON_ERROR
+                ->getContents(), true, 512, \JSON_THROW_ON_ERROR
         );
         $this->cache->set( self::CACHE_KEY_CITIES, $data );
 
@@ -189,7 +189,7 @@ final class OnTapRepository implements OnTapRepositoryInterface
 
         $data = \json_decode(
             $response->getBody()
-                ->getContents(), true, 512, JSON_THROW_ON_ERROR
+                ->getContents(), true, 512, \JSON_THROW_ON_ERROR
         );
         $this->cache->set( $cacheKey, $data );
 
@@ -221,7 +221,7 @@ final class OnTapRepository implements OnTapRepositoryInterface
 
         $data = \json_decode(
             $response->getBody()
-                ->getContents(), true, 512, JSON_THROW_ON_ERROR
+                ->getContents(), true, 512, \JSON_THROW_ON_ERROR
         );
         $this->cache->set( $cacheKey, $data );
 
