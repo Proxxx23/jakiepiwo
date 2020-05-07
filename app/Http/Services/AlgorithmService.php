@@ -83,10 +83,9 @@ final class AlgorithmService
                     }
                 }
 
-                //todo: wtf?
-                //                if ( \in_array( $questionNumber, [ 3, 5, 9 ], true ) ) {
-                //                    continue;
-                //                }
+                if ( \in_array( $questionNumber, [ 2, 10, 13 ], true ) ) {
+                    continue; // we don't give negative points for these questions
+                }
 
                 if ( $givenAnswer !== $mappedAnswer ) {
                     $idsToCalculate = $this->buildStrength( $ids );
