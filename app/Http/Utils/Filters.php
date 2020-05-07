@@ -59,6 +59,8 @@ final class Filters
 
     private const IMPERIAL_BEERS_PATTERN = '/.*imperial|ice|double|triple|quad|wymraz|wymraż|imperium|eis?[^s].*/i';
 
+    private static bool $reset = false; // flag to set that array has been reset
+
     public static function filter( Answers $answers, array &$beers, string $density ): void
     {
         $styleId = \array_key_first( $beers );
@@ -87,6 +89,7 @@ final class Filters
         }
 
         $beers = \reset( $beers );
+        self::$reset = true; //todo: get rid of this
 
         foreach ( $beers as $index => &$beer ) {
             $beerName = \preg_replace( '/[\x{200B}-\x{200D}\x{FEFF}]/u', '', $beer['title'] );
@@ -115,8 +118,7 @@ final class Filters
             return;
         }
 
-        if ( isset( $beers[$styleId] ) ) {
-            //todo: maybe flag or something?
+        if ( !self::$reset  ) {
             $beers = \reset( $beers ); // hasn't been reset in previous function
         }
 
