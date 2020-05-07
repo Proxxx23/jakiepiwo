@@ -27,38 +27,29 @@ final class ResultsController extends Controller
      *
      * @param ErrorsLogger $logger
      *
-     * @return JsonResponse
+     * @return Response
      */
-    public function resultsAction( Request $request, ErrorsLogger $logger ): JsonResponse
+    public function resultsAction( Request $request, ErrorsLogger $logger ): Response
     {
         if ( $request->header( 'Content-type' ) !== self::APPLICATION_JSON_HEADER ) {
             $logger->logError( self::INVALID_CONTENT_TYPE_EXCEPTION_MESSAGE );
-            return \response()->json(
-                [
-                    'messsage' => self::INVALID_CONTENT_TYPE_EXCEPTION_MESSAGE,
-                ], JsonResponse::HTTP_BAD_REQUEST
-            );
+
+            return \response( self::INVALID_CONTENT_TYPE_EXCEPTION_MESSAGE, Response::HTTP_BAD_REQUEST );
         }
 
         $requestData = $request->input();
         if ( $requestData === null || empty( $requestData['answers'] ) ) {
             $logger->logError( self::EMPTY_DATA_EXCEPTION_MESSAGE );
-            return \response()->json(
-                [
-                    'messsage' => self::EMPTY_DATA_EXCEPTION_MESSAGE,
-                ], JsonResponse::HTTP_BAD_REQUEST
-            );
+
+            return \response( self::EMPTY_DATA_EXCEPTION_MESSAGE, Response::HTTP_BAD_REQUEST );
         }
 
         try {
             $formData = new FormData( new Answers(), $requestData );
         } catch ( \InvalidArgumentException $ex ) {
             $logger->logError( self::INVALID_RESULTS_HASH_EXCEPTION_MESSAGE );
-            return \response()->json(
-                [
-                    'messsage' => self::INVALID_RESULTS_HASH_EXCEPTION_MESSAGE,
-                ], JsonResponse::HTTP_BAD_REQUEST
-            );
+
+            return \response( self::INVALID_RESULTS_HASH_EXCEPTION_MESSAGE, Response::HTTP_BAD_REQUEST );
         }
         $inputAnswers = \resolve( 'QuestionsService' )->validateInput( $requestData );
 
@@ -73,11 +64,7 @@ final class ResultsController extends Controller
                 $ex->getLine()
             );
             $logger->logError( $errorMessage );
-            return \response()->json(
-                [
-                    'messsage' => self::INTERNAL_ERROR_MESSAGE,
-                ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR
-            );
+            return \response( self::INTERNAL_ERROR_MESSAGE, Response::HTTP_INTERNAL_SERVER_ERROR );
         }
 
         if ( $formData->addToNewsletterList() && $formData->getEmail() !== null ) {
@@ -87,7 +74,7 @@ final class ResultsController extends Controller
         \resolve( 'AnswersLoggerService' )->logAnswers( $formData, $inputAnswers, $beerData );
 
         return \response()
-            ->json( $beerData->toArray(), JsonResponse::HTTP_OK, [], JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE );
+            ->json( $beerData->toArray(), JsonResponse::HTTP_OK, [], \JSON_THROW_ON_ERROR | \JSON_UNESCAPED_UNICODE );
     }
 
     public function resultsByResultsHashAction( string $resultsHash ): Response
@@ -96,11 +83,7 @@ final class ResultsController extends Controller
             ->getResultsByResultsHash( $resultsHash ); //todo: may be stored in cache for an hour?
 
         if ( $resulsJson === null ) {
-            return \response()->json(
-                [
-                    'messsage' => self::NO_RESULTS_FOR_HASH_ERROR_MESSAGE,
-                ], JsonResponse::HTTP_BAD_REQUEST
-            );
+            return \response( self::NO_RESULTS_FOR_HASH_ERROR_MESSAGE, Response::HTTP_BAD_REQUEST );
         }
 
         return \response( $resulsJson )->header( 'Content-Type', 'application/json' );

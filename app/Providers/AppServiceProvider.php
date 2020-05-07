@@ -33,7 +33,7 @@ class AppServiceProvider extends ServiceProvider
     private const DEFAULT_USER_CACHE_TTL = 1800;
     private const DEFAULT_ONTAP_CACHE_TTL = 7200;
     private const DEFAULT_ONTAP_TIMEOUT = 10; // in seconds
-    private const DEFAULT_GEOLOCATION_TIMEOUT = 2; // in seconds
+    private const DEFAULT_GEOLOCATION_TIMEOUT = 3; // in seconds
 
     /**
      * Bootstrap any application services.
@@ -70,12 +70,12 @@ class AppServiceProvider extends ServiceProvider
         );
         $this->app->singleton(
             'UserCacheFilesystemAdapter', static function () {
-            return new FilesystemAdapter( '', self::DEFAULT_USER_CACHE_TTL );
+            return new FilesystemAdapter( 'usercache', self::DEFAULT_USER_CACHE_TTL );
         }
         );
         $this->app->singleton(
             'OnTapCacheFilesystemAdapter', static function () {
-            return new FilesystemAdapter( '', self::DEFAULT_ONTAP_CACHE_TTL );
+            return new FilesystemAdapter( 'ontapcache', self::DEFAULT_ONTAP_CACHE_TTL );
         }
         );
         $this->app->singleton(

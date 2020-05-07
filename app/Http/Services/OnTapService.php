@@ -36,7 +36,6 @@ final class OnTapService
         return $this->onTapRepository->fetchTapsByBeerName( $beerData );
     }
 
-    //todo tests
     public function getCityByCoordinates( Coordinates $coordinates ): ?string
     {
         return $this->geolocationRepository->fetchCityByCoordinates( $coordinates );
