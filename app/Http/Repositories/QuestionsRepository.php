@@ -16,20 +16,20 @@ final class QuestionsRepository implements QuestionsRepositoryInterface
                 'question' => 'Czy chcesz poznać nowe piwne smaki?',
             ],
             [
-                'question' => 'Czy wolałbyś poznać wyłącznie style piwne, które potrafią zszokować?',
+                'question' => 'Czy wolałbyś poznać wyłącznie piwa, które potrafią zszokować?',
             ],
 
             [
-                'question' => 'Wolisz lekkie piwo do ugaszenia pragnienia, czy piwo bardziej złożone i degustacyjne?',
-                'answers' => [ 'coś lekkiego', 'coś pośrodku', 'coś złożonego' ],
-                'tooltip' => 'Piwa lekkie oferują mniejszą głębię. Piwa złożone to większe nagromadzenie różnych aromatów i smaków.',
+                'question' => 'Wolisz lekkie piwo do ugaszenia pragnienia, czy piwo cięższe i bardziej degustacyjne?',
+                'answers' => [ 'coś lekkiego', 'coś pośrodku', 'coś ciężkiego' ],
+                'tooltip' => 'Piwa lekkie oferują mniejszą głębię. Piwa ciężkie to większe nagromadzenie różnych aromatów i smaków.',
             ],
             [
                 'question' => 'Jak wysoką goryczkę preferujesz?',
                 'answers' => [
                     'ledwie wyczuwalną',
                     'lekką',
-                    'zdecydowanie wyczuwalną',
+                    'mocną',
                     'jestem hopheadem',
                 ],
             ],
