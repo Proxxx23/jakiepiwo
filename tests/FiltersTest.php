@@ -135,7 +135,7 @@ final class FiltersTest extends TestCase
         Filters::filter( $answers, $beers, 'mocne i gęste' );
 
         self::assertCount( 1, $beers );
-        self::assertEquals( 'Other Beer Title', $beers[0]['title'] );
+        self::assertEquals( 'Other Beer Title', $beers[1]['title'] );
     }
 
     public function providerBarrelAgedTitles(): array
@@ -238,35 +238,38 @@ final class FiltersTest extends TestCase
     public function testFiltersCoffeeStoutsByKeywordsProperly(): void
     {
         $answers = new Answers();
-        $answers->setRecommendedIds( 74 );
         $answers->setCoffee( true );
 
         $beers = [
-            [
-                'title' => 'Should stay title',
-                'keywords' => [
-                    [
-                        'keyword' => 'kawowy',
-                    ],
-                    [
-                        'keyword' => 'other keyword',
-                    ],
-                    [
-                        'keyword' => 'something',
+            74 => [
+                [
+                    'title' => 'Should stay title',
+                    'subtitle_alt' => 'Browar Koczkodan',
+                    'keywords' => [
+                        [
+                            'keyword' => 'kawowy',
+                        ],
+                        [
+                            'keyword' => 'other keyword',
+                        ],
+                        [
+                            'keyword' => 'something',
+                        ],
                     ],
                 ],
-            ],
-            [
-                'title' => 'Should be removed title',
-                'keywords' => [
-                    [
-                        'keyword' => 'catharina',
-                    ],
-                    [
-                        'keyword' => 'other keyword',
-                    ],
-                    [
-                        'keyword' => 'something',
+                [
+                    'title' => 'Should be removed title',
+                    'subtitle_alt' => 'Browar Sraczka',
+                    'keywords' => [
+                        [
+                            'keyword' => 'catharina',
+                        ],
+                        [
+                            'keyword' => 'other keyword',
+                        ],
+                        [
+                            'keyword' => 'something',
+                        ],
                     ],
                 ],
             ],
@@ -282,35 +285,38 @@ final class FiltersTest extends TestCase
     public function testFiltersCoffeeStoutsByTitleProperly(): void
     {
         $answers = new Answers();
-        $answers->setRecommendedIds( 74 );
         $answers->setCoffee( true );
 
         $beers = [
-            [
-                'title' => 'Coffee vanilla stout',
-                'keywords' => [
-                    [
-                        'keyword' => 'keyword',
-                    ],
-                    [
-                        'keyword' => 'other keyword',
-                    ],
-                    [
-                        'keyword' => 'something',
+            74 => [
+                [
+                    'title' => 'Coffee vanilla stout',
+                    'subtitle_alt' => 'Browar Koczkodan',
+                    'keywords' => [
+                        [
+                            'keyword' => 'keyword',
+                        ],
+                        [
+                            'keyword' => 'other keyword',
+                        ],
+                        [
+                            'keyword' => 'something',
+                        ],
                     ],
                 ],
-            ],
-            [
-                'title' => 'Should be removed title',
-                'keywords' => [
-                    [
-                        'keyword' => 'catharina',
-                    ],
-                    [
-                        'keyword' => 'other keyword',
-                    ],
-                    [
-                        'keyword' => 'something',
+                [
+                    'title' => 'Should be removed title',
+                    'subtitle_alt' => 'Browar Sraczka',
+                    'keywords' => [
+                        [
+                            'keyword' => 'catharina',
+                        ],
+                        [
+                            'keyword' => 'other keyword',
+                        ],
+                        [
+                            'keyword' => 'something',
+                        ],
                     ],
                 ],
             ],
@@ -326,35 +332,38 @@ final class FiltersTest extends TestCase
     public function testFiltersMilkshakesByKeywordsProperly(): void
     {
         $answers = new Answers();
-        $answers->setRecommendedIds( 73 );
         $answers->setCoffee( true );
 
         $beers = [
-            [
-                'title' => 'Should stay title',
-                'keywords' => [
-                    [
-                        'keyword' => 'milkshake',
-                    ],
-                    [
-                        'keyword' => 'other keyword',
-                    ],
-                    [
-                        'keyword' => 'something',
+            73 => [
+                [
+                    'title' => 'Should stay title',
+                    'subtitle_alt' => 'Browar Koczkodan',
+                    'keywords' => [
+                        [
+                            'keyword' => 'milkshake',
+                        ],
+                        [
+                            'keyword' => 'other keyword',
+                        ],
+                        [
+                            'keyword' => 'something',
+                        ],
                     ],
                 ],
-            ],
-            [
-                'title' => 'Should be removed title',
-                'keywords' => [
-                    [
-                        'keyword' => 'catharina',
-                    ],
-                    [
-                        'keyword' => 'other keyword',
-                    ],
-                    [
-                        'keyword' => 'something',
+                [
+                    'title' => 'Should be removed title',
+                    'subtitle_alt' => 'Browar Sraczka',
+                    'keywords' => [
+                        [
+                            'keyword' => 'catharina',
+                        ],
+                        [
+                            'keyword' => 'other keyword',
+                        ],
+                        [
+                            'keyword' => 'something',
+                        ],
                     ],
                 ],
             ],
@@ -370,35 +379,38 @@ final class FiltersTest extends TestCase
     public function testFiltersMilkshakesByTitleProperly(): void
     {
         $answers = new Answers();
-        $answers->setRecommendedIds( 73 );
         $answers->setCoffee( true );
 
         $beers = [
-            [
-                'title' => 'Milkshake IPA',
-                'keywords' => [
-                    [
-                        'keyword' => 'keyword',
-                    ],
-                    [
-                        'keyword' => 'other keyword',
-                    ],
-                    [
-                        'keyword' => 'something',
+            73 => [
+                [
+                    'title' => 'Milkshake IPA',
+                    'subtitle_alt' => 'Browar Koczkodan',
+                    'keywords' => [
+                        [
+                            'keyword' => 'keyword',
+                        ],
+                        [
+                            'keyword' => 'other keyword',
+                        ],
+                        [
+                            'keyword' => 'something',
+                        ],
                     ],
                 ],
-            ],
-            [
-                'title' => 'Should be removed title',
-                'keywords' => [
-                    [
-                        'keyword' => 'catharina',
-                    ],
-                    [
-                        'keyword' => 'other keyword',
-                    ],
-                    [
-                        'keyword' => 'something',
+                [
+                    'title' => 'Should be removed title',
+                    'subtitle_alt' => 'Browar Sraczka',
+                    'keywords' => [
+                        [
+                            'keyword' => 'catharina',
+                        ],
+                        [
+                            'keyword' => 'other keyword',
+                        ],
+                        [
+                            'keyword' => 'something',
+                        ],
                     ],
                 ],
             ],
@@ -417,35 +429,38 @@ final class FiltersTest extends TestCase
     public function testNoCoffeeButCoffeeStoutIncluded(): void
     {
         $answers = new Answers();
-        $answers->setRecommendedIds( 74 );
         $answers->setCoffee( false );
 
         $beers = [
-            [
-                'title' => 'Coffee Vanilla Stout',
-                'keywords' => [
-                    [
-                        'keyword' => 'kawa',
-                    ],
-                    [
-                        'keyword' => 'other keyword',
-                    ],
-                    [
-                        'keyword' => 'something',
+            74 => [
+                [
+                    'title' => 'Coffee Vanilla Stout',
+                    'subtitle_alt' => 'Browar Koczkodan',
+                    'keywords' => [
+                        [
+                            'keyword' => 'kawa',
+                        ],
+                        [
+                            'keyword' => 'other keyword',
+                        ],
+                        [
+                            'keyword' => 'something',
+                        ],
                     ],
                 ],
-            ],
-            [
-                'title' => 'Should not be removed title',
-                'keywords' => [
-                    [
-                        'keyword' => 'catharina',
-                    ],
-                    [
-                        'keyword' => 'other keyword',
-                    ],
-                    [
-                        'keyword' => 'something',
+                [
+                    'title' => 'Should not be removed title',
+                    'subtitle_alt' => 'Browar Sraczka',
+                    'keywords' => [
+                        [
+                            'keyword' => 'catharina',
+                        ],
+                        [
+                            'keyword' => 'other keyword',
+                        ],
+                        [
+                            'keyword' => 'something',
+                        ],
                     ],
                 ],
             ],

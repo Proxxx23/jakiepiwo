@@ -209,8 +209,9 @@ final class Filters
 
         $pattern = '/.*';
         foreach ( $filters as $filter ) {
-            $pattern .= \implode( '|', self::EXCLUDE_FILTERS[$filter] );
+            $pattern .= \implode( '|', self::EXCLUDE_FILTERS[$filter] ) . '|';
         }
+        $pattern = \rtrim( $pattern, '|' );
         $pattern .= '.*/i';
 
         return $pattern;

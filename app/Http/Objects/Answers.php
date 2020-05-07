@@ -28,11 +28,6 @@ final class Answers
         return $this->recommendedIds;
     }
 
-    public function setRecommendedIds( int $id ): void
-    {
-        $this->recommendedIds[] = $id;
-    }
-
     public function getUnsuitableIds(): array
     {
         return $this->unsuitableIds;
