@@ -9,6 +9,13 @@ class Exclude
 {
     public static function batch( array $answers, Answers $userOptions ): void
     {
+        // wykluczenia dla piw przyprawowych
+        if ( isset( $answers[10] ) && $answers[10] === 'nie' ) {
+            $userOptions->excludeFromRecommended( [ 47, 48, 49, 53, 67, 68, ] );
+        } elseif ( isset( $answers[10] ) && $answers[10] === 'tak' ) {
+            $userOptions->excludeFromUnsuitable( [ 47, 48, 49, 53, 67, 68, ] );
+        }
+
         // wykluczenia dla piw kwaśnych
         if ( isset( $answers[12] ) && $answers[12] === 'nie ma mowy' ) {
             $userOptions->excludeFromRecommended( [ 40, 42, 44, 51, 56, ] );
@@ -33,7 +40,7 @@ class Exclude
             $userOptions->excludeFromRecommended( [ 999 ] );
         }
 
-        // wykluczenia dla piw ciemnych
+        // wykluczenia dla piw jasnych
         if ( isset( $answers[5] ) && $answers[5] === 'jasne' ) {
             $userOptions->excludeFromRecommended( [ 998 ] );
         }
