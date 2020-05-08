@@ -23,7 +23,8 @@ class Synergy
         if ( $answerValue[3] === 'coś ciężkiego' &&
             $answerValue[5] === 'jasne' &&
             ( $answerValue[1] === 'tak' || $answerValue[2] === 'tak' ) ) {
-            $userOptions->applyPositiveSynergy( [ 6, 7, 15, 16, 22, 39, 42, 50, 60, 76 ], 2 );
+            $userOptions->applyPositiveSynergy( [ 6, 7, 15, 16, 22, 39, 42, 50, 60 ], 2 );
+            $userOptions->applyPositiveSynergy( [ 76 ], 1.5 );
         }
 
         // nowe smaki LUB szokujące + złożone + ciemne
