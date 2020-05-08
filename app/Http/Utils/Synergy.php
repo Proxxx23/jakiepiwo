@@ -62,15 +62,17 @@ class Synergy
         if ( $answerValue[5] === 'jasne' &&
             $answerValue[8] === 'nie' ) {
             $userOptions->applyNegativeSynergy(
-                [ 12, 21, 24, 29, 33, 34, 35, 36, 37, 71, 74 ], 2
+                [ 21, 24, 29, 33, 34, 35, 36, 37, 71, 74 ], 2
             );
+            $userOptions->applyNegativeSynergy( [ 12, ], 1.5 );
         }
 
         // ciemne + czekoladowe + lżejsze
         if ( $answerValue[5] === 'ciemne' &&
             $answerValue[8] === 'tak' &&
             $answerValue[7] !== 'mocne i gęste' ) {
-            $userOptions->applyPositiveSynergy( [ 12, 33, 34, 35, 71 ], 2.5 );
+            $userOptions->applyPositiveSynergy( [ 33, 34, 35, 71 ], 2.5 );
+            $userOptions->applyPositiveSynergy( [ 12 ], 1.5 );
         }
 
         // goryczka ledwo || lekka + jasne + nieczekoladowe + niegęste
@@ -78,7 +80,8 @@ class Synergy
             $answerValue[8] === 'nie' &&
             $answerValue[7] !== 'mocne i gęste' &&
             \in_array( $answerValue[4], [ 'ledwie wyczuwalną', 'lekką' ], true ) ) {
-            $userOptions->applyPositiveSynergy( [ 20, 25, 40, 44, 45, 47, 51, 52, 53, 68, 73 ], 2 );
+            $userOptions->applyPositiveSynergy( [ 20, 25, 40, 44, 45, 47, 51, 52, 53, 68, ], 2 );
+            $userOptions->applyPositiveSynergy( [ 73 ], 1.25 );
             $userOptions->applyNegativeSynergy( [ 3, 24, 35, 36, 37, 71 ], 2 );
         }
 
