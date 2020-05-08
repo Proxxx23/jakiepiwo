@@ -42,7 +42,7 @@ class Synergy
         }
 
         // złożone + ciemne + nieowocowe + kawowe
-        if ( $answerValue[3] === 'coś ciężkiego' &&
+        if ( $answerValue[3] === 'coś pośrodku' &&
             $answerValue[5] === 'ciemne' &&
             $answerValue[9] === 'tak' &&
             $answerValue[11] === 'nie' ) {
