@@ -57,7 +57,7 @@ final class Filters
 
     private const IMPERIAL_STYLE_IDS = [ 7, 36, 37, ];
 
-    private const IMPERIAL_BEERS_PATTERN = '/.*imperial|ice|double|triple|quad|wymraz|wymraż|imperium|eis?[^s].*/i';
+    private const IMPERIAL_BEERS_PATTERN = '/.*imperial|ice|double|triple|quad|wymraz|wymraż|imperium|doppel|eis?[^s].*/i';
 
     private static bool $reset = false; // flag to set that array has been reset
 
