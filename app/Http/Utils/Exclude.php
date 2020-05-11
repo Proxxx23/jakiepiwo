@@ -9,6 +9,14 @@ class Exclude
 {
     public static function batch( array $answerValue, Answers $userOptions ): void
     {
+        // wykluczenia dla piw kawowych
+        if ( isset( $answerValue[8] ) && $answerValue[8] === 'nie' ) {
+            $userOptions->excludeFromRecommended( [ 74, ] );
+        }
+        if ( isset( $answerValue[8] ) && $answerValue[8] === 'tak' ) {
+            $userOptions->excludeFromUnsuitable( [ 74, ] );
+        }
+
         // wykluczenia dla piw przyprawowych
         if ( isset( $answerValue[9] ) && $answerValue[9] === 'nie' ) {
             $userOptions->excludeFromRecommended( [ 47, 48, 49, 53, 67, 68, ] );

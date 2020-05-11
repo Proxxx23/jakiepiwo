@@ -161,7 +161,7 @@ final class AlgorithmService
             return null;
         }
 
-        $idsExploded = \explode( ',', \trim( $styleIds ) );
+        $idsExploded = \explode( ', ', \trim( $styleIds ) );
         $idsToCalculate = [];
 
         foreach ( $idsExploded as $idMultiplierPair ) {
