@@ -54,7 +54,7 @@ class Synergy
             $answerValue[5] === 'ciemne' &&
             $answerValue[6] === 'słodsze' &&
             !\in_array( $answerValue[4], [ 'mocną', 'jestem hopheadem' ], true ) ) {
-            $userOptions->applyPositiveSynergy( [ 1, 2, 29, 30, 34, 64 ], 2 );
+            $userOptions->applyPositiveSynergy( [ 1, 2, 29, 30, 34 ], 2 );
             $userOptions->applyNegativeSynergy( [ 36, 37 ], 3 );
         }
 

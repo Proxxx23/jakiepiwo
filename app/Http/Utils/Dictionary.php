@@ -54,7 +54,6 @@ final class Dictionary
             57 => [ 12, 15, 52, 59, 44, 83, 51, 66, 100, 142, 135, 169 ], // Smoked Ales
             60 => [ 136, 154, ], // NE IPA -> NE IPA + Vermont IPA
             61 => [ 3, 54, 42 ], // APA -> APA + White APA + Summer Ale
-            64 => 66, // Brown Ale
             67 => 155, // Belgian Strong Ale -> Belgian Ale
             68 => [ 34, 119 ], // Blonde -> Blonde + Blond Ale
             69 => 28, // American Wheat

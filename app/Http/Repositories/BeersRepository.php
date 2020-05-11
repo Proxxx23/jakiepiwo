@@ -504,17 +504,6 @@ final class BeersRepository implements BeersRepositoryInterface
             ],
             'moreUrlQuery' => 'american%20pale%20ale',
         ],
-        64 => [
-            'name' => 'Brown Ale',
-            'otherName' => '',
-            'polishName' => '',
-            'description' => [
-                'text' => 'Słodowe, ciemne, z wyczuwalną goryczką. W smaku dominują karmel, toffi, orzechy, czekolada czy cukier trzcinowy. Bywa czasami nieco palone lub popiołowe. Goryczka zdecydowanie wyczuwalna, ziołowa, tytoniowa lub korzenna. Średnio mocne.',
-                'url' => 'https://kompendiumpiwa.pl/american-brown-ale/',
-                'urlText' => 'Więcej o stylu (American) Brown Ale >>>',
-            ],
-            'moreUrlQuery' => 'brown%20ale',
-        ],
         67 => [
             'name' => 'Belgian Strong Ale',
             'otherName' => '',
