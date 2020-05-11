@@ -13,8 +13,8 @@ class Synergy
 
         // Lekkie + owocowe + kwaśne
         if ( $answerValue[3] === 'coś lekkiego' &&
-            $answerValue[11] === 'tak' &&
-            $answerValue[12] === 'chętnie' ) {
+            $answerValue[10] === 'tak' &&
+            $answerValue[11] === 'chętnie' ) {
             $userOptions->applyPositiveSynergy( [ 40, 56 ], 2 );
             $userOptions->applyPositiveSynergy( [ 51 ], 1.5 );
         }
@@ -37,15 +37,15 @@ class Synergy
         // złożone + ciemne + nieowocowe
         if ( $answerValue[3] === 'coś ciężkiego' &&
             $answerValue[5] === 'ciemne' &&
-            $answerValue[11] === 'nie' ) {
+            $answerValue[10] === 'nie' ) {
             $userOptions->applyPositiveSynergy( [ 3, 24, 35, 36, 37, 48 ], 1.5 );
         }
 
         // złożone + ciemne + nieowocowe + kawowe
         if ( $answerValue[3] === 'coś pośrodku' &&
             $answerValue[5] === 'ciemne' &&
-            $answerValue[9] === 'tak' &&
-            $answerValue[11] === 'nie' ) {
+            $answerValue[8] === 'tak' &&
+            $answerValue[10] === 'nie' ) {
             $userOptions->applyPositiveSynergy( [ 74 ], 2.5 );
         }
 
@@ -60,7 +60,7 @@ class Synergy
 
         // jasne + nieczekoladowe
         if ( $answerValue[5] === 'jasne' &&
-            $answerValue[8] === 'nie' ) {
+            $answerValue[7] === 'nie' ) {
             $userOptions->applyNegativeSynergy(
                 [ 21, 24, 29, 33, 34, 35, 36, 37, 71, 74 ], 2
             );
@@ -69,27 +69,26 @@ class Synergy
 
         // ciemne + czekoladowe + lżejsze
         if ( $answerValue[5] === 'ciemne' &&
-            $answerValue[8] === 'tak' &&
-            $answerValue[7] !== 'mocne i gęste' ) {
+            $answerValue[7] === 'tak' &&
+            $answerValue[3] !== 'coś ciężkiego' ) {
             $userOptions->applyPositiveSynergy( [ 33, 34, 35, 71 ], 2.5 );
             $userOptions->applyPositiveSynergy( [ 12 ], 1.5 );
         }
 
         // goryczka ledwo || lekka + jasne + nieczekoladowe + niegęste
         if ( $answerValue[5] === 'jasne' &&
-            $answerValue[8] === 'nie' &&
-            $answerValue[7] !== 'mocne i gęste' &&
+            $answerValue[7] === 'nie' &&
+            $answerValue[3] !== 'coś ciężkiego' &&
             \in_array( $answerValue[4], [ 'ledwie wyczuwalną', 'lekką' ], true ) ) {
             $userOptions->applyPositiveSynergy( [ 20, 25, 40, 44, 45, 47, 51, 52, 53, 68, ], 2 );
             $userOptions->applyPositiveSynergy( [ 73 ], 1.25 );
             $userOptions->applyNegativeSynergy( [ 3, 24, 35, 36, 37, 71 ], 2 );
         }
 
-        // jasne + lekkie + wodniste + wędzone = grodziskie
+        // jasne + lekkie + wędzone = grodziskie
         if ( $answerValue[3] === 'coś lekkiego' &&
             $answerValue[5] === 'jasne' &&
-            $answerValue[7] === 'wodniste' &&
-            $answerValue[13] === 'tak' ) {
+            $answerValue[12] === 'tak' ) {
             $userOptions->applyPositiveSynergy( [ 52 ], 3 );
             $userOptions->applyNegativeSynergy( [ 3, 22, 24, 35, 36, 37, 50, 71 ], 2 );
         }
@@ -120,7 +119,7 @@ class Synergy
             $answerValue[4] === 'ledwie wyczuwalną' &&
             $answerValue[5] === 'jasne' &&
             $answerValue[6] === 'słodsze' &&
-            $answerValue[11] === 'tak' ) {
+            $answerValue[10] === 'tak' ) {
             $userOptions->applyPositiveSynergy( [ 999 ], 3 );
         }
 
@@ -130,7 +129,7 @@ class Synergy
             $answerValue[4] === 'ledwie wyczuwalną' &&
             $answerValue[5] === 'ciemne' &&
             $answerValue[6] === 'słodsze' &&
-            $answerValue[11] === 'nie' ) {
+            $answerValue[10] === 'nie' ) {
             $userOptions->applyPositiveSynergy( [ 998 ], 3 );
         }
     }

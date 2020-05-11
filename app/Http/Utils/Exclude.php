@@ -7,41 +7,44 @@ use App\Http\Objects\Answers;
 
 class Exclude
 {
-    public static function batch( array $answers, Answers $userOptions ): void
+    public static function batch( array $answerValue, Answers $userOptions ): void
     {
         // wykluczenia dla piw przyprawowych
-        if ( isset( $answers[10] ) && $answers[10] === 'nie' ) {
+        if ( isset( $answerValue[9] ) && $answerValue[9] === 'nie' ) {
             $userOptions->excludeFromRecommended( [ 47, 48, 49, 53, 67, 68, ] );
-        } elseif ( isset( $answers[10] ) && $answers[10] === 'tak' ) {
+        }
+        if ( isset( $answerValue[9] ) && $answerValue[9] === 'tak' ) {
             $userOptions->excludeFromUnsuitable( [ 47, 48, 49, 53, 67, 68, ] );
         }
 
         // wykluczenia dla piw kwaśnych
-        if ( isset( $answers[12] ) && $answers[12] === 'nie ma mowy' ) {
+        if ( isset( $answerValue[11] ) && $answerValue[11] === 'nie ma mowy' ) {
             $userOptions->excludeFromRecommended( [ 40, 42, 44, 51, 56, ] );
-        } elseif ( isset( $answers[12] ) && $answers[12] === 'chętnie' ) {
+        }
+        if ( isset( $answerValue[11] ) && $answerValue[11] === 'chętnie' ) {
             $userOptions->excludeFromUnsuitable( [ 40, 42, 44, 51, 56, ] );
         }
 
         // wykluczenia dla wędzonek
-        if ( isset( $answers[13] ) && $answers[13] === 'nie' ) {
+        if ( isset( $answerValue[12] ) && $answerValue[12] === 'nie' ) {
             $userOptions->excludeFromRecommended( [ 15, 16, 52, 57, ] );
-        } elseif ( isset( $answers[13] ) && $answers[13] === 'tak' ) {
+        }
+        if ( isset( $answerValue[12] ) && $answerValue[12] === 'tak' ) {
             $userOptions->excludeFromUnsuitable( [ 15, 16, 52, 57, ] );
         }
 
         // wykluczenia dla piw lekkich
-        if ( isset( $answers[3] ) && $answers[3] === 'coś lekkiego' ) {
+        if ( isset( $answerValue[3] ) && $answerValue[3] === 'coś lekkiego' ) {
             $userOptions->excludeFromRecommended( [ 7, 8, 22, 24, 36, 37, 39, 50, 998, 999 ] );
         }
 
         // wykluczenia dla piw ciemnych
-        if ( isset( $answers[5] ) && $answers[5] === 'ciemne' ) {
+        if ( isset( $answerValue[5] ) && $answerValue[5] === 'ciemne' ) {
             $userOptions->excludeFromRecommended( [ 999 ] );
         }
 
         // wykluczenia dla piw jasnych
-        if ( isset( $answers[5] ) && $answers[5] === 'jasne' ) {
+        if ( isset( $answerValue[5] ) && $answerValue[5] === 'jasne' ) {
             $userOptions->excludeFromRecommended( [ 998 ] );
         }
     }

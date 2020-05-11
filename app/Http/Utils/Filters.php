@@ -110,7 +110,7 @@ final class Filters
      */
     private static function filterImperials( array &$beers, int $styleId, string $density ): void
     {
-        if ( $density === 'mocne i gęste' ) {
+        if ( $density === 'coś ciężkiego' ) {
             return;
         }
 
