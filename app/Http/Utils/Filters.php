@@ -156,6 +156,7 @@ final class Filters
         }
 
         $beers = \reset( $beers );
+        self::$reset = true;
 
         foreach ( $beers as $index => &$beer ) {
             $beerName = \preg_replace( '/[\x{200B}-\x{200D}\x{FEFF}]/u', '', $beer['title'] );
