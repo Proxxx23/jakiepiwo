@@ -9,8 +9,24 @@ use App\Http\Objects\Answers;
 final class Filters
 {
     private const EXCLUDE_FILTERS = [
-        'smoked' => [ 'wędz', 'smoke', 'wedz', 'dym', 'szynk', 'torf', 'islay', 'laphroaig', 'ardbeg' ],
-        'sour' => [ 'kwaś', 'kwas', 'sour', 'lambic', 'gueuze' ],
+        'smoked' => [
+            'wędz',
+            'smoke',
+            'wedz',
+            'dym',
+            'szynk',
+            'torf',
+            'islay',
+            'laphroaig',
+            'ardbeg',
+            'caol ila',
+            'bowmore',
+            'bunnahabhain',
+            'bruichladdich',
+            'kilchoman',
+            'lagavulin',
+        ],
+        'sour' => [ 'kwaś', 'kwas', 'sour', 'lambic', 'gueuze', 'tart' ],
         'coffee' => [
             'kawa',
             'kawow',
@@ -44,12 +60,21 @@ final class Filters
             'cognac',
             'brandy',
             'woodford',
+            'islay',
+            'ardbeg',
+            'caol ila',
+            'bowmore',
+            'bunnahabhain',
+            'bruichladdich',
+            'kilchoman',
+            'lagavulin',
+            'eagle rare',
         ],
     ];
 
-    private const SPECIAL_BEER_STYLE_IDS = [ 57, 73, 74, 998, 999 ];
+    private const SPECIAL_BEER_STYLE_IDS = [ 57, 73, 74, 998, 999, ];
     private const SPECIAL_BEERS_FILTERS = [
-        'smokedale' => [ 'smoke', 'dym', 'wędz', 'rauch', 'islay', 'szynk', 'boczek', 'boczk', 'kiełbas' ],
+        'smokedale' => [ 'smoke', 'dym', 'wędz', 'rauch', 'islay', 'szynk', 'boczek', 'boczk', 'kiełbas', ],
         'milkshake' => [ 'szejk', 'milk', 'shake', ],
         'coffeestout' => [ 'coffee', 'mocha', 'espresso', 'kaw', 'cafe', 'caffe', ],
         'pastry' => [ 'pastry', ],
