@@ -43,7 +43,7 @@ class Exclude
 
         // wykluczenia dla piw lekkich
         if ( isset( $answerValue[3] ) && $answerValue[3] === 'coś lekkiego' ) {
-            $userOptions->excludeFromRecommended( [ 7, 8, 22, 24, 36, 37, 39, 50, 998, 999 ] );
+            $userOptions->excludeFromRecommended( [ 7, 8, 22, 36, 37, 39, 50, 998, 999 ] );
         }
 
         // wykluczenia dla piw ciemnych

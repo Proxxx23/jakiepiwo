@@ -38,7 +38,7 @@ class Synergy
         if ( $answerValue[3] === 'coś ciężkiego' &&
             $answerValue[5] === 'ciemne' &&
             $answerValue[10] === 'nie' ) {
-            $userOptions->applyPositiveSynergy( [ 3, 24, 35, 36, 37, 48 ], 1.5 );
+            $userOptions->applyPositiveSynergy( [ 3, 35, 36, 37, 48 ], 1.5 );
         }
 
         // złożone + ciemne + nieowocowe + kawowe
@@ -62,9 +62,9 @@ class Synergy
         if ( $answerValue[5] === 'jasne' &&
             $answerValue[7] === 'nie' ) {
             $userOptions->applyNegativeSynergy(
-                [ 21, 24, 29, 33, 34, 35, 36, 37, 71, 74 ], 2
+                [ 21, 29, 33, 34, 35, 36, 37, 71, 74 ], 2
             );
-            $userOptions->applyNegativeSynergy( [ 12, ], 1.5 );
+            $userOptions->applyNegativeSynergy( [ 12, 30 ], 1.5 );
         }
 
         // ciemne + czekoladowe + lżejsze
@@ -72,7 +72,7 @@ class Synergy
             $answerValue[7] === 'tak' &&
             $answerValue[3] !== 'coś ciężkiego' ) {
             $userOptions->applyPositiveSynergy( [ 33, 34, 35, 71 ], 2.5 );
-            $userOptions->applyPositiveSynergy( [ 12 ], 1.5 );
+            $userOptions->applyPositiveSynergy( [ 12, 30 ], 1.5 );
         }
 
         // goryczka ledwo || lekka + jasne + nieczekoladowe + niegęste
@@ -82,7 +82,7 @@ class Synergy
             \in_array( $answerValue[4], [ 'ledwie wyczuwalną', 'lekką' ], true ) ) {
             $userOptions->applyPositiveSynergy( [ 20, 25, 40, 44, 45, 47, 51, 52, 53, 68, ], 2 );
             $userOptions->applyPositiveSynergy( [ 73 ], 1.25 );
-            $userOptions->applyNegativeSynergy( [ 3, 24, 35, 36, 37, 71 ], 2 );
+            $userOptions->applyNegativeSynergy( [ 3, 30, 35, 36, 37, 71 ], 2 );
         }
 
         // jasne + lekkie + wędzone = grodziskie
@@ -90,7 +90,7 @@ class Synergy
             $answerValue[5] === 'jasne' &&
             $answerValue[12] === 'tak' ) {
             $userOptions->applyPositiveSynergy( [ 52 ], 3 );
-            $userOptions->applyNegativeSynergy( [ 3, 22, 24, 35, 36, 37, 50, 71 ], 2 );
+            $userOptions->applyNegativeSynergy( [ 3, 22, 35, 36, 37, 50, 71 ], 2 );
         }
 
         // duża/hophead goryczka + jasne
