@@ -63,7 +63,7 @@ final class AlgorithmService
             }
 
             // Nie idź dalej przy BA, bo nic nie liczymy na tej podstawie
-            if ( (int) $questionNumber === 14 ) {
+            if ( (int) $questionNumber === 13 ) {
                 continue;
             }
 
@@ -83,7 +83,7 @@ final class AlgorithmService
                     }
                 }
 
-                if ( \in_array( $questionNumber, [ 2, 10, 13 ], true ) ) {
+                if ( \in_array( $questionNumber, [ 2, 9, 12 ], true ) ) {
                     continue; // we don't give negative points for these questions
                 }
 
@@ -109,7 +109,7 @@ final class AlgorithmService
         $userAnswers->prepareAll();
         $userAnswers->removeAssignedPoints();
 
-        $stylesToTakeCollection = $this->createStylesToTakeCollection( $inputAnswers, $userAnswers );
+        $stylesToTakeCollection = $this->createStylesToTakeCollection( $inputAnswers[3], $userAnswers );
         $stylesToAvoidCollection = $this->createStylesToAvoidCollection( $userAnswers );
 
         $idStylesToTake = ( $stylesToTakeCollection !== null )
@@ -139,11 +139,11 @@ final class AlgorithmService
 
     private function batchMarkTaste( Answers $userAnswers, array $inputAnswers ): void
     {
-        $userAnswers->setChocolate( $inputAnswers[8] === 'tak' );
-        $userAnswers->setCoffee( $inputAnswers[9] === 'tak' );
-        $userAnswers->setSour( $inputAnswers[12] === 'chętnie' );
-        $userAnswers->setSmoked( $inputAnswers[13] === 'tak' );
-        $userAnswers->setBarrelAged( $inputAnswers[14] === 'tak' );
+        $userAnswers->setChocolate( $inputAnswers[7] === 'tak' );
+        $userAnswers->setCoffee( $inputAnswers[8] === 'tak' );
+        $userAnswers->setSour( $inputAnswers[11] === 'chętnie' );
+        $userAnswers->setSmoked( $inputAnswers[12] === 'tak' );
+        $userAnswers->setBarrelAged( $inputAnswers[13] === 'tak' );
     }
 
     /**
@@ -161,7 +161,7 @@ final class AlgorithmService
             return null;
         }
 
-        $idsExploded = \explode( ',', \trim( $styleIds ) );
+        $idsExploded = \explode( ', ', \trim( $styleIds ) );
         $idsToCalculate = [];
 
         foreach ( $idsExploded as $idMultiplierPair ) {
@@ -176,7 +176,7 @@ final class AlgorithmService
         return $idsToCalculate;
     }
 
-    private function createStylesToTakeCollection( array $inputAnswers, Answers $answers ): ?StylesToTakeCollection
+    private function createStylesToTakeCollection( string $density, Answers $answers ): ?StylesToTakeCollection
     {
         if ( $answers->getRecommendedIds() === [] ) {
             return null;
@@ -207,7 +207,7 @@ final class AlgorithmService
                 $styleInfo->setSmokedNames();
             }
 
-            $polskiKraftBeerDataCollection = $this->polskiKraftRepository->fetchByStyleId( $inputAnswers[7], $styleInfo->getId() );
+            $polskiKraftBeerDataCollection = $this->polskiKraftRepository->fetchByStyleId( $density, $styleInfo->getId() );
             $stylesToTake = new StylesToTake( $styleInfo, $polskiKraftBeerDataCollection );
 
             if ( \is_array( $answers->getHighlightedIds() ) &&

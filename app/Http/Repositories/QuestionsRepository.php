@@ -41,11 +41,6 @@ final class QuestionsRepository implements QuestionsRepositoryInterface
                 'question' => 'Smakują Ci bardziej piwa słodsze, czy piwa wytrawniejsze?',
                 'answers' => [ 'słodsze', 'bez znaczenia', 'wytrawniejsze' ],
             ],
-
-            [
-                'question' => 'Jak mocne i gęste piwa preferujesz?',
-                'answers' => [ 'wodniste i lekkie', 'średnie', 'mocne i gęste' ],
-            ],
             [
                 'question' => 'Czy odpowiadałby Ci smak czekoladowy w piwie?',
             ],

@@ -27,7 +27,6 @@ final class Dictionary
             20 => 48,// Weizenbock
             21 => [ 11, 31, ], // Dark Lager -> Schwarzbier + International Dark Lager
             22 => 110, // Doppelbock / Eisbock
-            24 => 58, // Baltic Porter
             25 => [ 35, 75, 89, 105 ], // Weizen + Hefe + Weiss
             27 => [ 6, 99, ], // Bitter/ESB
             30 => [ 59, 78 ], // Brown Porter -> Porter + Robust
@@ -35,7 +34,7 @@ final class Dictionary
             34 => [ 46, 83 ], // Milk Stout
             35 => [ 51, 84 ], // FES + Double Milk Stout
             36 => 32, // RIS
-            37 => 58, // Imperial Porter
+            37 => 58, // (Imperial) Baltic Porter
             38 => 100, // Old Ale
             39 => [ 52, 142, ], // English Barleywine -> Barleywine + Wheat Wine
             40 => 56, // Berliner Weisse
