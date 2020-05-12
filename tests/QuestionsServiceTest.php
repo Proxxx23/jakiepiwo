@@ -30,7 +30,6 @@ class QuestionsServiceTest extends TestCase
             11 => 'tak',
             12 => 'tak',
             13 => 'tak',
-            14 => 'tak',
         ];
 
         $service = new QuestionsService( new QuestionsRepository() );

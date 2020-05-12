@@ -18,7 +18,6 @@ final class Dictionary
             9 => [ 14, 29, ], // Pale Lager + International Pale Lager
             10 => 53, // Czech Pils -> Bohemian Pils
             11 => 145, // Desitka
-            12 => 11, // Tmave -> Schwarzbier
             13 => 50, // German Pils -> Pils (ogólnie)
             14 => [ 36, 13, ], // Marzen -> Marzen + Oktoberfest
             15 => [ 67, 151 ], // Rauchbock + Rauchweizenbock

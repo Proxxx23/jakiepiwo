@@ -103,6 +103,7 @@ final class FiltersTest extends TestCase
             17 => [
                 [
                     'title' => $title,
+                    'subtitle_alt' => '',
                     'keywords' => [
                         [
                             'keyword' => 'keyword',
@@ -117,6 +118,7 @@ final class FiltersTest extends TestCase
                 ],
                 [
                     'title' => 'Other Beer Title',
+                    'subtitle_alt' => '',
                     'keywords' => [
                         [
                             'keyword' => 'pszenica',

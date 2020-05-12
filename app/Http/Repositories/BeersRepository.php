@@ -119,17 +119,6 @@ final class BeersRepository implements BeersRepositoryInterface
             ],
             'moreUrlQuery' => 'desitka',
         ],
-        12 => [
-            'name' => 'Tmavé', //Może nie być przykładów
-            'otherName' => '',
-            'polishName' => 'Czeski Ciemny Lager',
-            'description' => [
-                'text' => 'Lekkie piwo w stylu wywodzącym się z Czech. Orzeźwiające, bardzo pijalne, raczej z niską ziołową goryczką. Wyczuwalne są w nim nuty przede wszystkim karmelu, toffi czy skórki z ciemnego pieczywa.',
-                'url' => 'https://kompendiumpiwa.pl/ciemne-lekkie-tmave-vycepni/',
-                'urlText' => 'Więcej o stylu Tmavé >>>',
-            ],
-            'moreUrlQuery' => 'tmave',
-        ],
         13 => [
             'name' => 'Pilsner', //dawniej German Pils
             'otherName' => 'Pils',
