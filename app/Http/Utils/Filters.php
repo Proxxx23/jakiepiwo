@@ -26,7 +26,7 @@ final class Filters
             'kilchoman',
             'lagavulin',
         ],
-        'sour' => [ 'kwaś', 'kwas', 'sour', 'lambic', 'gueuze', 'tart' ],
+        'sour' => [ 'kwaś', 'kwas', 'sour', 'lambic', 'gueuze', 'tart', ],
         'coffee' => [
             'kawa',
             'kawow',
@@ -76,7 +76,18 @@ final class Filters
     private const SPECIAL_BEERS_FILTERS = [
         'smokedale' => [ 'smoke', 'dym', 'wędz', 'rauch', 'islay', 'szynk', 'boczek', 'boczk', 'kiełbas', ],
         'milkshake' => [ 'szejk', 'milk', 'shake', ],
-        'coffeestout' => [ 'coffee', 'mocha', 'espresso', 'kaw', 'cafe', 'caffe', 'robusta', 'arabica', 'latte', 'cappucino', ],
+        'coffeestout' => [
+            'coffee',
+            'mocha',
+            'espresso',
+            'kaw',
+            'cafe',
+            'caffe',
+            'robusta',
+            'arabica',
+            'latte',
+            'cappucino',
+        ],
         'pastry' => [ 'pastry', ],
     ];
 
@@ -143,7 +154,7 @@ final class Filters
             return;
         }
 
-        if ( !self::$reset  ) {
+        if ( !self::$reset ) {
             $beers = \reset( $beers ); // hasn't been reset in previous function
         }
 

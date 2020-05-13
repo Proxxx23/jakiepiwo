@@ -277,19 +277,19 @@ final class Answers
         $includedBeerIds = \array_keys( $this->recommendedIds );
 
         if ( $secondStyleToTake[0] * self::MARGIN_STYLES_TO_DISTINGUISH <= $firstStyleToTake[0] ) {
-            $this->highlightedIds = [$includedBeerIds[0]];
+            $this->highlightedIds = [ $includedBeerIds[0] ];
         } else {
-            $this->highlightedIds = [$includedBeerIds[0], $includedBeerIds[1]];
+            $this->highlightedIds = [ $includedBeerIds[0], $includedBeerIds[1] ];
         }
 
         if ( $thirdStyleToTake[0] * self::MARGIN_STYLES_TO_DISTINGUISH <= $secondStyleToTake[0] ) {
-            $this->highlightedIds = [$includedBeerIds[0], $includedBeerIds[1]];
+            $this->highlightedIds = [ $includedBeerIds[0], $includedBeerIds[1] ];
         } else {
-            $this->highlightedIds = [$includedBeerIds[0], $includedBeerIds[1], $includedBeerIds[2]];
+            $this->highlightedIds = [ $includedBeerIds[0], $includedBeerIds[1], $includedBeerIds[2] ];
         }
 
         if ( $fourthStyleToTake[0] * self::MARGIN_STYLES_TO_DISTINGUISH <= $thirdStyleToTake[0] ) {
-            $this->highlightedIds = [$includedBeerIds[0], $this->recommendedIds[1], $includedBeerIds[2]];
+            $this->highlightedIds = [ $includedBeerIds[0], $this->recommendedIds[1], $includedBeerIds[2] ];
         } else {
             $this->highlightedIds = null;
         }

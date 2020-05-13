@@ -207,7 +207,9 @@ final class AlgorithmService
                 $styleInfo->setSmokedNames();
             }
 
-            $polskiKraftBeerDataCollection = $this->polskiKraftRepository->fetchByStyleId( $density, $styleInfo->getId() );
+            $polskiKraftBeerDataCollection = $this->polskiKraftRepository->fetchByStyleId(
+                $density, $styleInfo->getId()
+            );
             $stylesToTake = new StylesToTake( $styleInfo, $polskiKraftBeerDataCollection );
 
             if ( \is_array( $answers->getHighlightedIds() ) &&
