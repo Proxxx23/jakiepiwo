@@ -92,14 +92,12 @@ final class Filters
     ];
 
     private const IMPERIAL_STYLE_IDS = [ 7, 36, 37, ];
-
     private const IMPERIAL_BEERS_PATTERN = '/.*imperial|ice|double|triple|quad|wymraz|wymraż|imperium|doppel|eis[^s?].*/i';
-
-    private static bool $reset = false; // flag to set that array has been reset
 
     public static function filter( Answers $answers, array &$beers, string $density ): void
     {
         $styleId = \array_key_first( $beers );
+        $beers = \reset( $beers );
         if ( \in_array( $styleId, self::SPECIAL_BEER_STYLE_IDS, true ) ) {
             self::filterSpecialBeers( $answers, $styleId, $beers, $density );
             return;
@@ -123,9 +121,6 @@ final class Filters
         if ( $exclusionsPattern === null ) {
             return;
         }
-
-        $beers = \reset( $beers );
-        self::$reset = true; //todo: get rid of this
 
         foreach ( $beers as $index => &$beer ) {
             $beerName = \preg_replace( '/[\x{200B}-\x{200D}\x{FEFF}]/u', '', $beer['title'] );
@@ -152,10 +147,6 @@ final class Filters
 
         if ( \in_array( $styleId, self::IMPERIAL_STYLE_IDS, true ) ) {
             return;
-        }
-
-        if ( !self::$reset ) {
-            $beers = \reset( $beers ); // hasn't been reset in previous function
         }
 
         foreach ( $beers as $index => &$beer ) {
@@ -190,9 +181,6 @@ final class Filters
         if ( $specialPattern === null ) {
             return;
         }
-
-        $beers = \reset( $beers );
-        self::$reset = true;
 
         foreach ( $beers as $index => &$beer ) {
             $beerName = \preg_replace( '/[\x{200B}-\x{200D}\x{FEFF}]/u', '', $beer['title'] );
