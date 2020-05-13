@@ -56,11 +56,75 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
      */
     public function fetchByStyleId( string $density, int $styleId ): ?PolskiKraftDataCollection
     {
-        $translatedStyleIds = $this->dictionary->getById( $styleId );
-        if ( $translatedStyleIds === null ) {
+        if ( !\array_key_exists( $styleId, $this->dictionary->get() ) ) {
             return null;
         }
 
+        $translatedStyleId = $this->dictionary->getById( $styleId );
+        if ( $translatedStyleId === null ) {
+            return null;
+        }
+
+        return \is_int( $translatedStyleId )
+            ? $this->fetchOne( $styleId, $translatedStyleId, $density )
+            : $this->fetchMultiple( $styleId, $translatedStyleId, $density );
+    }
+
+    /**
+     * @param int $styleId
+     * @param int $translatedStyleId
+     *
+     * @param string $density
+     *
+     * @return PolskiKraftDataCollection|null
+     * @throws \GuzzleHttp\Exception\GuzzleException | \JsonException
+     */
+    private function fetchOne( int $styleId, int $translatedStyleId, string $density ): ?PolskiKraftDataCollection
+    {
+        $resultsCacheKey = $this->buildRawResultsCacheKey( $styleId );
+
+        $cachedData = $this->cache->get( $resultsCacheKey );
+        if ( $cachedData !== null ) {
+            return $this->createPolskiKraftDataCollection( $cachedData, $styleId, $density );
+        }
+
+        $response = $this->httpClient->request(
+            'GET',
+            \sprintf( self::BEER_LIST_BY_STYLE_URL_PATTERN, $translatedStyleId )
+        );
+
+        if ( $response->getStatusCode() !== 200 ) {
+            return null; //todo: any message or exception - this case should be covered
+        }
+
+        $data[$styleId] = \json_decode(
+            $response->getBody()
+                ->getContents(), true, 512, \JSON_THROW_ON_ERROR
+        );
+
+        $this->cache->set( $resultsCacheKey, $data );
+
+        if ( empty( $data ) ) {
+            return null;
+        }
+
+        return $this->createPolskiKraftDataCollection( $data, $styleId, $density );
+    }
+
+    /**
+     * @param int $styleId
+     * @param array $translatedStyleIds
+     *
+     * @param string $density
+     *
+     * @return PolskiKraftDataCollection|null
+     * @throws \GuzzleHttp\Exception\GuzzleException | \JsonException
+     */
+    private function fetchMultiple(
+        int $styleId,
+        array $translatedStyleIds,
+        string $density
+    ): ?PolskiKraftDataCollection {
         $resultsCacheKey = $this->buildRawResultsCacheKey( $styleId );
 
         $cachedData = $this->cache->get( $resultsCacheKey );
@@ -185,15 +249,14 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
 
     private function isRatedInLastMonthsAndHasProperRating( int $daysToLastUpdated, float $beerRating ): bool
     {
-        return $daysToLastUpdated < self::LAST_UPDATED_DAYS_LIMIT &&
-            $beerRating >= self::MINIMAL_RATING;
+        return $daysToLastUpdated < self::LAST_UPDATED_DAYS_LIMIT
+            && $beerRating >= self::MINIMAL_RATING;
     }
 
     private function isRatedMaxHalfYearAgoAndHasProperRating( int $daysToLastUpdated, float $beerRating ): bool
     {
-        return $daysToLastUpdated > self::LAST_UPDATED_DAYS_LIMIT &&
-            $daysToLastUpdated < self::LAST_UPDATED_MAX_DAYS &&
-            $beerRating >= self::MINIMAL_RATING;
+        return $daysToLastUpdated > self::LAST_UPDATED_DAYS_LIMIT
+            && $daysToLastUpdated < self::LAST_UPDATED_MAX_DAYS && $beerRating >= self::MINIMAL_RATING;
     }
 
     private function calculateDaysToLastUpdate( int $updatedAt ): int
