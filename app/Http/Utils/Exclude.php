@@ -46,14 +46,14 @@ class Exclude
             $userOptions->excludeFromRecommended( [ 7, 8, 22, 36, 37, 38, 39, 50, 67, 998, 999, ] );
         }
 
-        // wykluczenia dla piw jasnych
+        // wykluczenia dla piw jasnych (tylko bardzo jasne)
         if ( isset( $answerValue[5] ) && $answerValue[5] === 'ciemne' ) {
-            $userOptions->excludeFromRecommended( [ 999, ] );
+            $userOptions->excludeFromRecommended( [ 9, 10, 11, 13, 25, 40, 45, 52, 70, 999, ] );
         }
 
         // wykluczenia dla piw ciemnych
         if ( isset( $answerValue[5] ) && $answerValue[5] === 'jasne' ) {
-            $userOptions->excludeFromRecommended( [ 3, 21, 30, 33, 34, 35, 36, 37, 71, 74, 998, ] );
+            $userOptions->excludeFromRecommended( [ 3, 21, 33, 34, 35, 36, 37, 71, 74, 998, ] );
         }
     }
 }
