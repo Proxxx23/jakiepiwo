@@ -53,7 +53,7 @@ class Synergy
         if ( $answerValue[3] === 'coś lekkiego' &&
             $answerValue[5] === 'ciemne' &&
             $answerValue[6] === 'słodsze' &&
-            !\in_array( $answerValue[4], [ 'mocną', 'jestem hopheadem' ], true ) ) {
+            !\in_array( $answerValue[4], [ 'wyraźnie gorzkiego', 'jestem hopheadem' ], true ) ) {
             $userOptions->applyPositiveSynergy( [ 1, 2, 29, 30, 34 ], 2 );
             $userOptions->applyNegativeSynergy( [ 36, 37 ], 3 );
         }
@@ -79,7 +79,7 @@ class Synergy
         if ( $answerValue[5] === 'jasne' &&
             $answerValue[7] === 'nie' &&
             $answerValue[3] !== 'coś ciężkiego' &&
-            \in_array( $answerValue[4], [ 'ledwie wyczuwalną', 'lekką' ], true ) ) {
+            \in_array( $answerValue[4], [ 'prawie bez goryczki', 'z wyczuwalną goryczką' ], true ) ) {
             $userOptions->applyPositiveSynergy( [ 20, 25, 40, 44, 45, 47, 51, 52, 53, 68, ], 2 );
             $userOptions->applyPositiveSynergy( [ 73 ], 1.25 );
             $userOptions->applyNegativeSynergy( [ 3, 30, 35, 36, 37, 71 ], 2 );
@@ -95,7 +95,7 @@ class Synergy
 
         // duża/hophead goryczka + jasne
         if ( $answerValue[5] === 'jasne' &&
-            \in_array( $answerValue[4], [ 'mocną', 'jestem hopheadem' ], true ) ) {
+            \in_array( $answerValue[4], [ 'wyraźnie gorzkiego', 'jestem hopheadem' ], true ) ) {
             $userOptions->applyPositiveSynergy( [ 1, 2, 5, 6, 7, 8, 61 ], 1.75 );
             $userOptions->applyPositiveSynergy( [ 6, 69, 70, 72 ], 1.5 );
             $userOptions->applyNegativeSynergy( [ 14, 25, 45, 47 ], 1.75 );
@@ -103,12 +103,12 @@ class Synergy
 
         // duża/hophead goryczka + ciemne
         if ( $answerValue[5] === 'ciemne' &&
-            \in_array( $answerValue[5], [ 'mocną', 'jestem hopheadem' ], true ) ) {
+            \in_array( $answerValue[5], [ 'wyraźnie gorzkiego', 'jestem hopheadem' ], true ) ) {
             $userOptions->applyPositiveSynergy( [ 3, 36, 37 ], 1.75 );
         }
 
         // goryczka ledwo || lekka
-        if ( $answerValue[4] === 'ledwie wyczuwalną' || $answerValue[4] === 'lekką' ) {
+        if ( $answerValue[4] === 'prawie bez goryczki' || $answerValue[4] === 'z wyczuwalną goryczką' ) {
             $userOptions->applyNegativeSynergy( [ 1, 2, 3, 5, 7, 8, 61 ], 2 );
             $userOptions->applyNegativeSynergy( [ 6, 69, 71, 72 ], 1.5 );
         }
@@ -116,7 +116,7 @@ class Synergy
         // goryczka ledwo && jasne && owoce && słodki && nowe smaki = pastry pale
         if ( $answerValue[1] === 'tak' &&
             $answerValue[2] === 'tak' &&
-            $answerValue[4] === 'ledwie wyczuwalną' &&
+            $answerValue[4] === 'prawie bez goryczki' &&
             $answerValue[5] === 'jasne' &&
             $answerValue[6] === 'słodsze' &&
             $answerValue[10] === 'tak' ) {
@@ -126,7 +126,7 @@ class Synergy
         // goryczka ledwo && ciemne && nie owoce && słodki && nowe smaki = pastry black
         if ( $answerValue[1] === 'tak' &&
             $answerValue[2] === 'tak' &&
-            $answerValue[4] === 'ledwie wyczuwalną' &&
+            $answerValue[4] === 'prawie bez goryczki' &&
             $answerValue[5] === 'ciemne' &&
             $answerValue[6] === 'słodsze' &&
             $answerValue[10] === 'nie' ) {
