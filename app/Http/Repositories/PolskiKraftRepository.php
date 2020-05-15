@@ -8,7 +8,7 @@ use App\Http\Objects\PolskiKraftData;
 use App\Http\Objects\PolskiKraftDataCollection;
 use App\Http\Utils\Dictionary;
 use App\Http\Utils\Filters;
-use App\Http\Utils\UserCache;
+use App\Http\Utils\SharedCache;
 use Carbon\Carbon;
 use GuzzleHttp\ClientInterface;
 
@@ -23,15 +23,16 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
     private const LAST_UPDATED_MAX_DAYS = 180; // maximum limit if no beers found for last LAST_UPDATED_DAYS_LIMIT days
     private const BEERS_TO_SHOW_LIMIT = 3;
     private const MINIMAL_RATING = 3.0;
+    private const DEFAULT_CACHE_TTL = 1800;
 
     private Answers $answers;
-    private UserCache $cache;
+    private SharedCache $cache;
     private Dictionary $dictionary;
     private ClientInterface $httpClient;
 
     public function __construct(
         Dictionary $dictionary,
-        UserCache $cache,
+        SharedCache $cache,
         ClientInterface $httpClient
     ) {
         $this->cache = $cache;
@@ -89,7 +90,7 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
             }
         }
 
-        $this->cache->set( $resultsCacheKey, $data );
+        $this->cache->set( $resultsCacheKey, $data, self::DEFAULT_CACHE_TTL );
 
         if ( $data === [] ) {
             return null;
@@ -124,7 +125,7 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
 
         $userSpecificCacheKey = $this->buildUserSpecificCacheKey( $styleId );
         if ( $userSpecificCacheKey !== null ) {
-            $this->cache->set( $userSpecificCacheKey, $polskiKraftDataCollection );
+            $this->cache->set( $userSpecificCacheKey, $polskiKraftDataCollection, self::DEFAULT_CACHE_TTL );
             $polskiKraftDataCollection->setCacheKey( $userSpecificCacheKey );
         }
 

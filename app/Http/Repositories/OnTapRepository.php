@@ -3,7 +3,7 @@ declare( strict_types=1 );
 
 namespace App\Http\Repositories;
 
-use App\Http\Utils\OnTapCache;
+use App\Http\Utils\SharedCache;
 use GuzzleHttp\ClientInterface;
 
 final class OnTapRepository implements OnTapRepositoryInterface
@@ -19,20 +19,22 @@ final class OnTapRepository implements OnTapRepositoryInterface
 
     private const CITIES_CACHE_TTL = 604800; // 7 days
     private const PLACES_CACHE_TTL = 604800; // 7 days
+    private const TAPS_CACHE_TTL = 7200; // 1 hour
+    private const TAPS_BY_BEER_CACHE_TTL = 7200; // 1 hour
 
     private ClientInterface $httpClient;
-    private OnTapCache $cache;
+    private SharedCache $cache;
     private ?string $cityId = null;
     private bool $connectionError;
     private string $cityName;
 
     /**
      * @param ClientInterface $httpClient
-     * @param OnTapCache $cache
+     * @param SharedCache $cache
      *
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function __construct( ClientInterface $httpClient, OnTapCache $cache )
+    public function __construct( ClientInterface $httpClient, SharedCache $cache )
     {
         $this->cache = $cache;
         $this->httpClient = $httpClient; //todo: set headers globally
@@ -96,7 +98,7 @@ final class OnTapRepository implements OnTapRepositoryInterface
             return null;
         }
 
-        $this->cache->set( $cacheKey, $tapsData );
+        $this->cache->set( $cacheKey, $tapsData, self::TAPS_BY_BEER_CACHE_TTL );
 
         return $tapsData;
     }
@@ -226,7 +228,7 @@ final class OnTapRepository implements OnTapRepositoryInterface
             $response->getBody()
                 ->getContents(), true, 512, \JSON_THROW_ON_ERROR
         );
-        $this->cache->set( $cacheKey, $data );
+        $this->cache->set( $cacheKey, $data, self::TAPS_CACHE_TTL );
 
         return $data;
     }

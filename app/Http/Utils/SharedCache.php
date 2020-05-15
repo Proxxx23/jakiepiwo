@@ -6,11 +6,10 @@ namespace App\Http\Utils;
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\InvalidArgumentException;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
-use Symfony\Contracts\Cache\ItemInterface;
 
-final class UserCache implements SharedCacheInterface
+final class SharedCache implements SharedCacheInterface
 {
-    public const DEFAULT_USER_CACHE_TTL = 1800;
+    public const DEFAULT_CACHE_TTL = 1800;
 
     private FilesystemAdapter $cache;
 
@@ -32,7 +31,7 @@ final class UserCache implements SharedCacheInterface
 
         $item = null;
         try {
-            /** @var ItemInterface $item */
+            /** @var CacheItemInterface $item */
             $item = $this->cache->getItem( $cacheKey );
         } catch ( InvalidArgumentException $ex ) {
 
@@ -48,7 +47,7 @@ final class UserCache implements SharedCacheInterface
      * @param mixed $data
      * @param int $ttl
      */
-    public function set( string $cacheKey, $data, int $ttl = self::DEFAULT_USER_CACHE_TTL ): void
+    public function set( string $cacheKey, $data, int $ttl = self::DEFAULT_CACHE_TTL ): void
     {
         $dataCollection = null;
         try {
@@ -59,8 +58,8 @@ final class UserCache implements SharedCacheInterface
         }
 
         if ( $dataCollection !== null ) {
-            $dataCollection->set( $data );
-            $dataCollection->expiresAfter( $ttl );
+            $dataCollection->set( $data )
+                ->expiresAfter( $ttl );
             $this->cache->save( $dataCollection );
         }
     }

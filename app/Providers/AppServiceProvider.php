@@ -21,8 +21,7 @@ use App\Http\Services\QuestionsService;
 use App\Http\Services\SimpleResultsService;
 use App\Http\Utils\Dictionary;
 use App\Http\Utils\ErrorsLogger;
-use App\Http\Utils\OnTapCache;
-use App\Http\Utils\UserCache;
+use App\Http\Utils\SharedCache;
 use DrewM\MailChimp\MailChimp;
 use GuzzleHttp\Client;
 use Illuminate\Support\ServiceProvider;
@@ -67,23 +66,13 @@ class AppServiceProvider extends ServiceProvider
         }
         );
         $this->app->singleton(
-            'UserCacheFilesystemAdapter', static function () {
-            return new FilesystemAdapter( 'usercache', UserCache::DEFAULT_USER_CACHE_TTL );
+            'SharedCacheFilesystemAdapter', static function () {
+            return new FilesystemAdapter( '', SharedCache::DEFAULT_CACHE_TTL );
         }
         );
         $this->app->singleton(
-            'OnTapCacheFilesystemAdapter', static function () {
-            return new FilesystemAdapter( 'ontapcache', OnTapCache::DEFAULT_ONTAP_CACHE_TTL );
-        }
-        );
-        $this->app->singleton(
-            'UserCache', static function () {
-            return new UserCache( \resolve( 'UserCacheFilesystemAdapter' ) );
-        }
-        );
-        $this->app->singleton(
-            'OnTapCache', static function () {
-            return new OnTapCache( \resolve( 'OnTapCacheFilesystemAdapter' ) );
+            'SharedCache', static function () {
+            return new SharedCache( \resolve( 'SharedCacheFilesystemAdapter' ) );
         }
         );
         $this->app->singleton(
@@ -95,7 +84,7 @@ class AppServiceProvider extends ServiceProvider
             'PolskiKraftRepository', static function () {
             return new PolskiKraftRepository(
                 new Dictionary(),
-                \resolve( 'UserCache' ),
+                \resolve( 'SharedCache' ),
                 \resolve( 'HttpClient' )
             );
         }
@@ -140,7 +129,7 @@ class AppServiceProvider extends ServiceProvider
             $geolocationConfig = [ 'timeout' => self::DEFAULT_GEOLOCATION_TIMEOUT ];
 
             return new OnTapService(
-                new OnTapRepository( new Client( $onTapConfig ), \resolve( 'OnTapCache' ) ),
+                new OnTapRepository( new Client( $onTapConfig ), \resolve( 'SharedCache' ) ),
                 new GeolocationRepository( new Client( $geolocationConfig ) )
             );
         }

@@ -4,7 +4,7 @@ declare( strict_types=1 );
 namespace App\Http\Controllers;
 
 use App\Http\Objects\ValueObject\Coordinates;
-use App\Http\Utils\UserCache;
+use App\Http\Utils\SharedCache;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -12,11 +12,11 @@ final class OnTapController
 {
     /**
      * @param Request $request
-     * @param UserCache $cache
+     * @param SharedCache $cache
      *
      * @return Response
      */
-    public function handle( Request $request, UserCache $cache ): Response
+    public function handle( Request $request, SharedCache $cache ): Response
     {
         $payload = $request->input();
 
