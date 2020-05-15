@@ -67,9 +67,6 @@ final class OnTapRepository implements OnTapRepositoryInterface
             return null;
         }
 
-        $breweryName = $beerData['subtitle'];
-        $style = $beerData['subtitleAlt'];
-
         //todo: strategy?
         $toHash = $this->cityId . '_' . $beerName;
         $cacheKey = \sprintf( self::CACHE_KEY_BEER_PATTERN, \md5( $toHash ) );
@@ -87,7 +84,7 @@ final class OnTapRepository implements OnTapRepositoryInterface
             if ( empty( $taps ) ) {
                 continue;
             }
-            if ( $this->hasBeer( $beerName, $breweryName, $style, $taps ) ) {
+            if ( $this->hasBeer( $beerData, $taps ) ) {
                 $tapsData[$beerName][] = $place['name'];
                 continue;
             }
@@ -233,25 +230,37 @@ final class OnTapRepository implements OnTapRepositoryInterface
         return $data;
     }
 
-    private function hasBeer( string $beerName, ?string $breweryName, ?string $style, array $tapBeerData ): bool
+    private function hasBeer( array $beerData, array $tapBeerData ): bool
     {
+        $beerName = \strtolower( $beerData['title'] );
+        $breweryName = \strtolower( $beerData['subtitle'] );
+        $style = \strtolower( $beerData['subtitleAlt'] );
+
         foreach ( $tapBeerData as &$tapBeer ) {
             if ( empty( $tapBeer['beer'] ) ) {
                 continue;
             }
 
-            if ( $style === $tapBeer['beer']['name'] &&
-                \stripos( $tapBeer['beer']['name'], $beerName ) !== false &&
-                \stripos( $tapBeer['beer']['brewery'], $breweryName ) !== false ) {
-                return true;
-            }
+            $onTapBeerName = \strtolower( $tapBeer['beer']['name'] );
+            $breweryNameMatches = $this->breweryNameMatches( $breweryName, $tapBeer['beer']['brewery'] );
 
-            if ( \stripos( $tapBeer['beer']['name'], $beerName ) !== false ) {
+            if ( ( $style === $onTapBeerName || $onTapBeerName === $beerName ) && $breweryNameMatches ) {
                 return true;
             }
         }
         unset( $tapBeer );
 
         return false;
+    }
+
+    private function breweryNameMatches( string $breweryName, string $onTapBreweryName ): bool
+    {
+        $variants = [ $breweryName ];
+
+        if ( \preg_match( '/^Browar (?P<breweryName>[a-zA-Z ]+)/', $breweryName, $matches ) ) {
+            $variants[] = $matches['breweryName'];
+        }
+
+        return (bool) \preg_match( '/.*' . \implode( '|', $variants ) . '.*/i', $onTapBreweryName );
     }
 }

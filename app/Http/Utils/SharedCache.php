@@ -49,19 +49,17 @@ final class SharedCache implements SharedCacheInterface
      */
     public function set( string $cacheKey, $data, int $ttl = self::DEFAULT_CACHE_TTL ): void
     {
-        $dataCollection = null;
+        $item = null;
         try {
-            /** @var CacheItemInterface $dataCollection */
-            $dataCollection = $this->cache->getItem( $cacheKey );
+            /** @var CacheItemInterface $item */
+            $item = $this->cache->getItem( $cacheKey );
         } catch ( InvalidArgumentException $ex ) {
 
         }
 
-        if ( $dataCollection !== null ) {
-            $dataCollection->set( $data )
-                ->expiresAfter( $ttl );
-            $this->cache->save( $dataCollection );
-        }
+        $item->set( $data )
+            ->expiresAfter( $ttl );
+        $this->cache->save( $item );
     }
 
     public function clear(): void
