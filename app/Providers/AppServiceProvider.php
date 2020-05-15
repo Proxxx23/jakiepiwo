@@ -30,8 +30,6 @@ use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 
 class AppServiceProvider extends ServiceProvider
 {
-    private const DEFAULT_USER_CACHE_TTL = 1800;
-    private const DEFAULT_ONTAP_CACHE_TTL = 7200;
     private const DEFAULT_ONTAP_TIMEOUT = 10; // in seconds
     private const DEFAULT_GEOLOCATION_TIMEOUT = 3; // in seconds
 
@@ -70,12 +68,12 @@ class AppServiceProvider extends ServiceProvider
         );
         $this->app->singleton(
             'UserCacheFilesystemAdapter', static function () {
-            return new FilesystemAdapter( 'usercache', self::DEFAULT_USER_CACHE_TTL );
+            return new FilesystemAdapter( 'usercache', UserCache::DEFAULT_USER_CACHE_TTL );
         }
         );
         $this->app->singleton(
             'OnTapCacheFilesystemAdapter', static function () {
-            return new FilesystemAdapter( 'ontapcache', self::DEFAULT_ONTAP_CACHE_TTL );
+            return new FilesystemAdapter( 'ontapcache', OnTapCache::DEFAULT_ONTAP_CACHE_TTL );
         }
         );
         $this->app->singleton(

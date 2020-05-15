@@ -17,6 +17,9 @@ final class OnTapRepository implements OnTapRepositoryInterface
     private const CACHE_KEY_TAPS_PATTERN = '%s_TAPS_ONTAP';
     private const CACHE_KEY_CITIES = 'CITIES_ONTAP';
 
+    private const CITIES_CACHE_TTL = 604800; // 7 days
+    private const PLACES_CACHE_TTL = 604800; // 7 days
+
     private ClientInterface $httpClient;
     private OnTapCache $cache;
     private ?string $cityId = null;
@@ -123,7 +126,7 @@ final class OnTapRepository implements OnTapRepositoryInterface
             $response->getBody()
                 ->getContents(), true, 512, \JSON_THROW_ON_ERROR
         );
-        $this->cache->set( self::CACHE_KEY_CITIES, $data );
+        $this->cache->set( self::CACHE_KEY_CITIES, $data, self::CITIES_CACHE_TTL );
 
         return $data;
     }
@@ -191,7 +194,7 @@ final class OnTapRepository implements OnTapRepositoryInterface
             $response->getBody()
                 ->getContents(), true, 512, \JSON_THROW_ON_ERROR
         );
-        $this->cache->set( $cacheKey, $data );
+        $this->cache->set( $cacheKey, $data, self::PLACES_CACHE_TTL );
 
         return $data;
     }
