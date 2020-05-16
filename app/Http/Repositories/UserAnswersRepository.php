@@ -12,28 +12,24 @@ final class UserAnswersRepository implements UserAnswersRepositoryInterface
     public function addAnswers( FormData $formInput, array $answers, BeerData $results ): void
     {
         try {
-            DB::insert(
-                'INSERT INTO `user_answers`
-                                    (`name`, 
-                                     `e_mail`, 
-                                     `newsletter`, 
-                                     `answers`,
-                                     `results`,
-                                     `results_hash`,
-                                     `created_at`) 
-                                        VALUES 
-                                        (?, ?, ?, ?, ?, ?, ?)',
-                [
-                    $formInput->getUsername(),
-                    $formInput->getEmail(),
-                    $formInput->addToNewsletterList(),
-                    \json_encode( $answers, JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE, 512 ),
-                    \json_encode( $results->toArray(), JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE, 512 ),
-                    $formInput->getResultsHash(),
-                    \now(),
-                ]
-            );
-        } catch ( \Exception $exception ) {
+            DB::table( 'user_answers' )
+                ->insert(
+                    [
+                        'name' => $formInput->getUsername(),
+                        'e_mail' => $formInput->getEmail(),
+                        'newsletter' => $formInput->addToNewsletterList(),
+                        'answers' => \json_encode(
+                            $answers, \JSON_THROW_ON_ERROR | \JSON_UNESCAPED_UNICODE
+                        ),
+                        'results' => \json_encode(
+                            $results->toArray(), \JSON_THROW_ON_ERROR | \JSON_UNESCAPED_UNICODE
+                        ),
+                        'results_hash' => $formInput->getResultsHash(),
+                        'created_at' => \now(),
+
+                    ]
+                );
+        } catch ( \Exception $ex ) {
 
         }
     }

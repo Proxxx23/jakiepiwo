@@ -25,21 +25,21 @@ final class ResultsController extends Controller
     /**
      * @param Request $request
      *
-     * @param ErrorsLogger $logger
+     * @param ErrorsLogger $errorsLogger
      *
      * @return Response
      */
-    public function resultsAction( Request $request, ErrorsLogger $logger ): Response
+    public function resultsAction( Request $request, ErrorsLogger $errorsLogger ): Response
     {
         if ( $request->header( 'Content-type' ) !== self::APPLICATION_JSON_HEADER ) {
-            $logger->logError( self::INVALID_CONTENT_TYPE_EXCEPTION_MESSAGE );
+            $errorsLogger->log( self::INVALID_CONTENT_TYPE_EXCEPTION_MESSAGE );
 
             return \response( self::INVALID_CONTENT_TYPE_EXCEPTION_MESSAGE, Response::HTTP_BAD_REQUEST );
         }
 
         $requestData = $request->input();
         if ( $requestData === null || empty( $requestData['answers'] ) ) {
-            $logger->logError( self::EMPTY_DATA_EXCEPTION_MESSAGE );
+            $errorsLogger->log( self::EMPTY_DATA_EXCEPTION_MESSAGE );
 
             return \response( self::EMPTY_DATA_EXCEPTION_MESSAGE, Response::HTTP_BAD_REQUEST );
         }
@@ -47,7 +47,7 @@ final class ResultsController extends Controller
         try {
             $formData = new FormData( new Answers(), $requestData );
         } catch ( \InvalidArgumentException $ex ) {
-            $logger->logError( self::INVALID_RESULTS_HASH_EXCEPTION_MESSAGE );
+            $errorsLogger->log( self::INVALID_RESULTS_HASH_EXCEPTION_MESSAGE );
 
             return \response( self::INVALID_RESULTS_HASH_EXCEPTION_MESSAGE, Response::HTTP_BAD_REQUEST );
         }
@@ -64,7 +64,7 @@ final class ResultsController extends Controller
                 $ex->getLine(),
                 \implode( ',', $inputAnswers )
             );
-            $logger->logError( $errorMessage );
+            $errorsLogger->log( $errorMessage );
             return \response( self::INTERNAL_ERROR_MESSAGE, Response::HTTP_INTERNAL_SERVER_ERROR );
         }
 

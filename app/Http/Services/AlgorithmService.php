@@ -122,7 +122,7 @@ final class AlgorithmService
         try {
             $this->stylesLogsRepository->logStyles( $user, $recommendedIds, $unsuitableIds );
         } catch ( Exception $ex ) {
-            $this->errorsLogger->logError( $ex->getMessage() );
+            $this->errorsLogger->log( $ex->getMessage() );
         }
 
         return BeerData::fromArray(

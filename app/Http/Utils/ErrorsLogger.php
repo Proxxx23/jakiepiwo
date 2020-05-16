@@ -14,8 +14,8 @@ final class ErrorsLogger implements ErrorsLoggerInterface
         $this->errorLogsRepository = $errorLogsRepository;
     }
 
-    public function logError( string $message ): void
+    public function log( string $errorMessage ): void
     {
-        $this->errorLogsRepository->log( $message );
+        $this->errorLogsRepository->log( $errorMessage );
     }
 }

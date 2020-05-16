@@ -5,5 +5,5 @@ namespace App\Http\Utils;
 
 interface ErrorsLoggerInterface
 {
-    public function logError( string $message ): void;
+    public function log( string $errorMessage ): void;
 }
