@@ -12,7 +12,7 @@ use App\Http\Utils\SharedCache;
 use Carbon\Carbon;
 use GuzzleHttp\ClientInterface;
 
-//todo: right now this is a service - change to service
+//todo: right now this is a service - change to service and move fetch to repo
 final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
 {
     // private const DEFAULT_LIST_URI = 'https://www.polskikraft.pl/openapi/style/list';
@@ -23,7 +23,6 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
     private const LAST_UPDATED_MAX_DAYS = 180; // maximum limit if no beers found for last LAST_UPDATED_DAYS_LIMIT days
     private const BEERS_TO_SHOW_LIMIT = 3;
     private const MINIMAL_RATING = 3.0;
-    private const DEFAULT_CACHE_TTL = 1800;
 
     private Answers $answers;
     private SharedCache $cache;
@@ -52,8 +51,7 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
      * @param int $styleId
      *
      * @return PolskiKraftDataCollection|null
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     * @throws \JsonException
+     * @throws \GuzzleHttp\Exception\GuzzleException | \JsonException
      */
     public function fetchByStyleId( string $density, int $styleId ): ?PolskiKraftDataCollection
     {
@@ -90,7 +88,7 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
             }
         }
 
-        $this->cache->set( $resultsCacheKey, $data, self::DEFAULT_CACHE_TTL );
+        $this->cache->set( $resultsCacheKey, $data );
 
         if ( $data === [] ) {
             return null;
