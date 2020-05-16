@@ -105,8 +105,8 @@ final class AlgorithmService
         Exclude::batch( $inputAnswers, $userAnswers );
         Synergy::apply( $inputAnswers, $user );
 
-        $userAnswers->prepareAll();
-        $userAnswers->removeAssignedPoints();
+        $userAnswers->prepareAll()
+            ->removeAssignedPoints();
 
         $recommendedStylesCollection = $this->createRecommendedStylesCollection( $inputAnswers[3], $userAnswers );
         $unsuitableStylesCollection = $this->createUnsuitableStylesCollection( $userAnswers );

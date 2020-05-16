@@ -207,7 +207,7 @@ final class Answers
         $this->unsuitableIds = \array_keys( $this->unsuitableIds );
     }
 
-    public function prepareAll(): void
+    public function prepareAll(): Answers
     {
         $this->sortRecommendedAndUnsuitable();
         $this->retrieveOptionalStyles();
@@ -215,6 +215,8 @@ final class Answers
         $this->checkMarginBetweenStyles();
         $this->retrieveRecommendedStyles();
         $this->shuffleRecommendedStyles();
+
+        return $this;
     }
 
     private function sortRecommendedAndUnsuitable(): void

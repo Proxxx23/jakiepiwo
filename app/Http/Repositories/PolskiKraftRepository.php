@@ -125,7 +125,7 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
 
         $userSpecificCacheKey = $this->buildUserSpecificCacheKey( $styleId );
         if ( $userSpecificCacheKey !== null ) {
-            $this->cache->set( $userSpecificCacheKey, $polskiKraftDataCollection, self::DEFAULT_CACHE_TTL );
+            $this->cache->set( $userSpecificCacheKey, $polskiKraftDataCollection );
             $polskiKraftDataCollection->setCacheKey( $userSpecificCacheKey );
         }
 

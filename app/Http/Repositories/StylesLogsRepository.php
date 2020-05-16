@@ -8,16 +8,16 @@ use Illuminate\Support\Facades\DB;
 
 final class StylesLogsRepository implements StylesLogsRepositoryInterface
 {
-    public function logStyles( FormData $user, ?array $recommendedStyle, ?array $unsuitableStyle ): void
+    public function logStyles( FormData $user, ?array $recommendedIds, ?array $unsuitableIds ): void
     {
         $lastID = DB::select( 'SELECT MAX(id_answer) AS lastid FROM `styles_logs` LIMIT 1' );
         $nextID = (int) $lastID[0]->lastid + 1;
 
         $insertsCount = null;
-        if ( $recommendedStyle !== null ) {
-            $insertsCount = \count( $recommendedStyle );
-        } elseif ( $unsuitableStyle !== null ) {
-            $insertsCount = \count( $unsuitableStyle );
+        if ( $recommendedIds !== null ) {
+            $insertsCount = \count( $recommendedIds );
+        } elseif ( $unsuitableIds !== null ) {
+            $insertsCount = \count( $unsuitableIds );
         }
 
         if ( $insertsCount === null || $insertsCount === 0 ) {
@@ -42,8 +42,8 @@ final class StylesLogsRepository implements StylesLogsRepositoryInterface
                     $user->getUsername(),
                     $user->getEmail(),
                     $user->addToNewsletterList(),
-                    $recommendedStyle[$i] ?? null,
-                    $unsuitableStyle[$i] ?? null,
+                    $recommendedIds[$i] ?? null,
+                    $unsuitableIds[$i] ?? null,
                     $_SERVER['REMOTE_ADDR'],
                     \now(),
                 ]

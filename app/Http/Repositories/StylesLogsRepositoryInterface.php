@@ -7,5 +7,5 @@ use App\Http\Objects\FormData;
 
 interface StylesLogsRepositoryInterface
 {
-    public function logStyles( FormData $user, ?array $recommendedStyle, ?array $unsuitableStyle ): void;
+    public function logStyles( FormData $user, ?array $recommendedIds, ?array $unsuitableIds ): void;
 }
