@@ -10,10 +10,10 @@ use App\Http\Utils\Synergy;
 use Exception;
 use App\Http\Objects\Answers;
 use App\Http\Objects\BeerData;
-use App\Http\Objects\StylesToAvoid;
-use App\Http\Objects\StylesToAvoidCollection;
-use App\Http\Objects\StylesToTake;
-use App\Http\Objects\StylesToTakeCollection;
+use App\Http\Objects\UnsuitableStyles;
+use App\Http\Objects\UnsuitableStylesCollection;
+use App\Http\Objects\RecommendedStyles;
+use App\Http\Objects\RecommendedStylesCollection;
 use App\Http\Objects\FormData;
 use App\Http\Repositories\BeersRepositoryInterface;
 use App\Http\Repositories\PolskiKraftRepositoryInterface;
@@ -69,9 +69,8 @@ final class AlgorithmService
 
             $scoringMap = $this->scoringRepository->fetchByQuestionNumber( (int) $questionNumber );
             foreach ( $scoringMap as $mappedAnswer => $ids ) {
-
                 if ( $givenAnswer === $mappedAnswer ) {
-                    $idsToCalculate = $this->buildStrength( $ids );
+                    $idsToCalculate = $this->getIdsToCalculateWithStrength( $ids );
                     if ( $idsToCalculate !== null ) {
                         foreach ( $idsToCalculate as $styleId => $strength ) {
                             if ( empty( $userAnswers->getRecommendedIds()[$styleId] ) ) {
@@ -88,7 +87,7 @@ final class AlgorithmService
                 }
 
                 if ( $givenAnswer !== $mappedAnswer ) {
-                    $idsToCalculate = $this->buildStrength( $ids );
+                    $idsToCalculate = $this->getIdsToCalculateWithStrength( $ids );
                     if ( $idsToCalculate !== null ) {
                         foreach ( $idsToCalculate as $styleId => $strength ) {
                             if ( empty( $userAnswers->getUnsuitableIds()[$styleId] ) ) {
@@ -109,27 +108,27 @@ final class AlgorithmService
         $userAnswers->prepareAll();
         $userAnswers->removeAssignedPoints();
 
-        $stylesToTakeCollection = $this->createStylesToTakeCollection( $inputAnswers[3], $userAnswers );
-        $stylesToAvoidCollection = $this->createStylesToAvoidCollection( $userAnswers );
+        $recommendedStylesCollection = $this->createRecommendedStylesCollection( $inputAnswers[3], $userAnswers );
+        $unsuitableStylesCollection = $this->createUnsuitableStylesCollection( $userAnswers );
 
-        $idStylesToTake = ( $stylesToTakeCollection !== null )
-            ? $stylesToTakeCollection->getIdStylesToTake()
+        $recommendedIds = ( $recommendedStylesCollection !== null )
+            ? $recommendedStylesCollection->getRecommendedIds()
             : null;
 
-        $idStylesToAvoid = ( $stylesToAvoidCollection !== null )
-            ? $stylesToAvoidCollection->getIdStylesToAvoid()
+        $unsuitableIds = ( $unsuitableStylesCollection !== null )
+            ? $unsuitableStylesCollection->getUnsuitableIds()
             : null;
 
         try {
-            $this->stylesLogsRepository->logStyles( $user, $idStylesToTake, $idStylesToAvoid );
-        } catch ( Exception $e ) {
-            $this->errorsLogger->logError( $e->getMessage() );
+            $this->stylesLogsRepository->logStyles( $user, $recommendedIds, $unsuitableIds );
+        } catch ( Exception $ex ) {
+            $this->errorsLogger->logError( $ex->getMessage() );
         }
 
         return BeerData::fromArray(
             [
-                'buyThis' => $stylesToTakeCollection !== null ? $stylesToTakeCollection->toArray() : null,
-                'avoidThis' => $stylesToAvoidCollection !== null ? $stylesToAvoidCollection->toArray() : null,
+                'buyThis' => $recommendedStylesCollection !== null ? $recommendedStylesCollection->toArray() : null,
+                'avoidThis' => $unsuitableStylesCollection !== null ? $unsuitableStylesCollection->toArray() : null,
                 'username' => $user->getUsername(),
                 'barrelAged' => $userAnswers->isBarrelAged(),
                 'answers' => $inputAnswers,
@@ -150,12 +149,13 @@ final class AlgorithmService
      * Buduje siłę dla konkretnych ID stylu
      * Jeśli id ma postać 5:2.5 to zwiększy (przy trafieniu w to ID) punktację tego stylu o 2.5 a nie o 1
      * Domyślnie zwiększa punktację stylu o 1
+     * Buduje tablicę z danymi na temat mnożników, aby później kalkulować na tej podstawie
      *
      * @param string $styleIds
      *
      * @return array|null
      */
-    private function buildStrength( ?string $styleIds ): ?array
+    private function getIdsToCalculateWithStrength( ?string $styleIds ): ?array
     {
         if ( $styleIds === null ) {
             return null;
@@ -165,9 +165,14 @@ final class AlgorithmService
         $idsToCalculate = [];
 
         foreach ( $idsExploded as $idMultiplierPair ) {
-            if ( \strpos( $idMultiplierPair, ':' ) !== false || \strpos( $idMultiplierPair, ' :' ) !== false ) {
-                $tmp = \explode( ':', $idMultiplierPair );
-                $idsToCalculate[$tmp[0]] = (float) $tmp[1];
+            if ( \strpos( \trim( $idMultiplierPair ), ':' ) !== false ) {
+
+                /** @var array $idPointsPair */
+                $idPointsPair = \explode( ':', $idMultiplierPair );
+                $styleId = $idPointsPair[0];
+                $multiplier = $idPointsPair[1];
+
+                $idsToCalculate[$styleId] = (float) $multiplier;
             } else {
                 $idsToCalculate[$idMultiplierPair] = 1;
             }
@@ -176,79 +181,70 @@ final class AlgorithmService
         return $idsToCalculate;
     }
 
-    private function createStylesToTakeCollection( string $density, Answers $answers ): ?StylesToTakeCollection
+    private function createRecommendedStylesCollection( string $density, Answers $answers ): ?RecommendedStylesCollection
     {
         if ( $answers->getRecommendedIds() === [] ) {
             return null;
         }
 
-        $idStylesToTake = null;
-        for ( $i = 0; $i < $answers->getCountStylesToTake(); $i++ ) {
-            $idStylesToTake[] = $answers->getRecommendedIds()[$i];
+        $recommendedIds = \array_slice( $answers->getRecommendedIds(), 0, $answers->getCountRecommended(), true );
+        if ( $recommendedIds === [] ) {
+            return null; // should never happen
         }
 
-        $styleInfoCollection = null;
-        if ( $idStylesToTake !== [] && $idStylesToTake !== null ) {
-            $styleInfoCollection = $this->beersRepository->fetchByIds( $idStylesToTake );
-        }
-
+        $styleInfoCollection = $this->beersRepository->fetchByIds( $recommendedIds );
         if ( $styleInfoCollection === null ) {
             return null; // should never happen
         }
 
         $this->polskiKraftRepository->setUserAnswers( $answers );
 
-        $stylesToTakeCollection = ( new StylesToTakeCollection() )->setIdStylesToTake( $idStylesToTake );
-        //todo to jest tak złe xDDDDD - rozplątać koniecznie w pizdu tę rzeźbę
+        $recommendedStylesCollection = ( new RecommendedStylesCollection() )->setRecommendedIds( $recommendedIds );
         /** @var StyleInfo $styleInfo */
         foreach ( $styleInfoCollection as $styleInfo ) {
             if ( $answers->isSmoked() &&
                 \in_array( $styleInfo->getId(), ScoringRepository::POSSIBLE_SMOKED_DARK_BEERS, true ) ) {
-                $styleInfo->setSmokedNames();
+                $styleInfo->setSmokedNames(); // add "smoked" prefix to smoked beers if user picked yes on smoked question
             }
 
             $polskiKraftBeerDataCollection = $this->polskiKraftRepository->fetchByStyleId(
                 $density, $styleInfo->getId()
             );
-            $stylesToTake = new StylesToTake( $styleInfo, $polskiKraftBeerDataCollection );
+            $stylesToTake = new RecommendedStyles( $styleInfo, $polskiKraftBeerDataCollection );
 
-            if ( \is_array( $answers->getHighlightedIds() ) &&
+            if ( $answers->getHighlightedIds() !== null &&
                 \in_array( $styleInfo->getId(), $answers->getHighlightedIds(), true ) ) {
                 $stylesToTake->setHighlighted( true );
             }
 
-            $stylesToTakeCollection->add( $stylesToTake->toArray() );
+            $recommendedStylesCollection->add( $stylesToTake->toArray() );
         }
 
-        return $stylesToTakeCollection;
+        return $recommendedStylesCollection;
     }
 
-    private function createStylesToAvoidCollection( Answers $answers ): ?StylesToAvoidCollection
+    private function createUnsuitableStylesCollection( Answers $answers ): ?UnsuitableStylesCollection
     {
         if ( $answers->getUnsuitableIds() === [] ) {
             return null;
         }
 
-        $idStylesToAvoid = null;
-        for ( $i = 0; $i < $answers->getCountStylesToAvoid(); $i++ ) {
-            $idStylesToAvoid[] = $answers->getUnsuitableIds()[$i];
+        $unsuitableIds = \array_slice( $answers->getUnsuitableIds(), 0, $answers->getCountUnsuitable(), true );
+        if ( $unsuitableIds === [] ) {
+            return null; // should never happen
         }
 
-        $styleInfoCollection = null;
-        if ( $idStylesToAvoid !== [] && $idStylesToAvoid !== null ) {
-            $styleInfoCollection = $this->beersRepository->fetchByIds( $idStylesToAvoid );
-        }
-
+        $styleInfoCollection = $this->beersRepository->fetchByIds( $unsuitableIds );
         if ( $styleInfoCollection === null ) {
             return null; // should never happen
         }
 
-        $stylesToAvoidCollection = ( new StylesToAvoidCollection() )->setIdStylesToAvoid( $idStylesToAvoid );
+        $unsuitableStylesCollection = ( new UnsuitableStylesCollection() )->setUnsuitableIds( $unsuitableIds );
         /** @var StyleInfo $styleInfo */
         foreach ( $styleInfoCollection as $styleInfo ) {
-            $stylesToAvoidCollection->add( ( new StylesToAvoid( $styleInfo ) )->toArray() );
+            $unsuitableStylesCollection->add( ( new UnsuitableStyles( $styleInfo ) )->toArray() );
         }
 
-        return $stylesToAvoidCollection;
+        return $unsuitableStylesCollection;
     }
 }

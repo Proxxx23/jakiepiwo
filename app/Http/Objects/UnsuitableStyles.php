@@ -3,7 +3,7 @@ declare( strict_types=1 );
 
 namespace App\Http\Objects;
 
-final class StylesToAvoid extends AbstractStyles
+final class UnsuitableStyles extends AbstractStyles
 {
     public function __construct( StyleInfo $styleInfo )
     {

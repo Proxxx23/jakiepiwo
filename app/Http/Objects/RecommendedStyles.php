@@ -3,7 +3,7 @@ declare( strict_types=1 );
 
 namespace App\Http\Objects;
 
-final class StylesToTake extends AbstractStyles
+final class RecommendedStyles extends AbstractStyles
 {
     private ?PolskiKraftDataCollection $beerDataCollection;
     private string $cacheKey = '';

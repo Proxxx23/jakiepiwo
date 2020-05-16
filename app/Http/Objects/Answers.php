@@ -12,8 +12,8 @@ final class Answers
     private const MARGIN_PERCENT_FOR_OPTIONAL_TO_SHOW = 90;
 
     private bool $barrelAged = false;
-    private int $countStylesToTake = 3;
-    private int $countStylesToAvoid = 3;
+    private int $countRecommended = 3;
+    private int $countUnsuitable = 3;
     private array $unsuitableIds = [];
     private ?array $highlightedIds = null;
     private array $recommendedIds = [];
@@ -98,14 +98,14 @@ final class Answers
         $this->shuffled = $shuffled;
     }
 
-    public function getCountStylesToTake(): int
+    public function getCountRecommended(): int
     {
-        return $this->countStylesToTake;
+        return $this->countRecommended;
     }
 
-    public function getCountStylesToAvoid(): int
+    public function getCountUnsuitable(): int
     {
-        return $this->countStylesToAvoid;
+        return $this->countUnsuitable;
     }
 
     public function getHighlightedIds(): ?array
@@ -209,15 +209,15 @@ final class Answers
 
     public function prepareAll(): void
     {
-        $this->sortPickedUp();
+        $this->sortRecommendedAndUnsuitable();
         $this->retrieveOptionalStyles();
         $this->removeDuplicated();
         $this->checkMarginBetweenStyles();
-        $this->retrieveStylesToTake();
-        $this->shuffleIncludedStyles();
+        $this->retrieveRecommendedStyles();
+        $this->shuffleRecommendedStyles();
     }
 
-    private function sortPickedUp(): void
+    private function sortRecommendedAndUnsuitable(): void
     {
         \arsort( $this->recommendedIds );
         \arsort( $this->unsuitableIds );
@@ -229,27 +229,28 @@ final class Answers
      */
     private function retrieveOptionalStyles(): void
     {
-        $thirdStyleToTake = \array_values( \array_slice( $this->recommendedIds, 0, 3, true ) );
-        $thirdStyleToAvoid = \array_values( \array_slice( $this->unsuitableIds, 0, 3, true ) );
+        $thirdRecommendedStyle = \array_values( \array_slice( $this->recommendedIds, 0, 3, true ) );
+        $thirdUnsuitableStyle = \array_values( \array_slice( $this->unsuitableIds, 0, 3, true ) );
 
+        //todo: remove for loop
         for ( $i = 3; $i <= 4; $i++ ) {
 
-            $toTakeChunk = \array_values( \array_slice( $this->recommendedIds, 0, $i, true ) );
-            if ( empty( $toTakeChunk ) ) {
+            $recommendedChunk = \array_values( \array_slice( $this->recommendedIds, 0, $i, true ) );
+            if ( empty( $recommendedChunk ) ) {
                 continue;
             }
 
-            if ( $toTakeChunk[0] >= ( $thirdStyleToTake[0] / 100 * self::MARGIN_PERCENT_FOR_OPTIONAL_TO_SHOW ) ) {
-                $this->countStylesToTake++;
+            if ( $recommendedChunk[0] >= ( $thirdRecommendedStyle[0] / 100 * self::MARGIN_PERCENT_FOR_OPTIONAL_TO_SHOW ) ) {
+                $this->countRecommended++;
             }
 
-            $toAvoidChunk = \array_values( \array_slice( $this->unsuitableIds, 0, $i, true ) );
-            if ( empty( $toAvoidChunk ) ) {
+            $unsuitableChunk = \array_values( \array_slice( $this->unsuitableIds, 0, $i, true ) );
+            if ( empty( $unsuitableChunk ) ) {
                 continue;
             }
 
-            if ( $toAvoidChunk[0] >= ( $thirdStyleToAvoid[0] / 100 * self::MARGIN_PERCENT_FOR_OPTIONAL_TO_SHOW ) ) {
-                $this->countStylesToAvoid++;
+            if ( $unsuitableChunk[0] >= ( $thirdUnsuitableStyle[0] / 100 * self::MARGIN_PERCENT_FOR_OPTIONAL_TO_SHOW ) ) {
+                $this->countUnsuitable++;
             }
         }
     }
@@ -259,37 +260,53 @@ final class Answers
      * It works like this:
      * - check if 1st style has 125% of points of 2nd style. If yes - 1st style is distinguish
      * - if not - distinguish 1st and 2nd and check 3rd with 2nd etc etc.
+     *
+     * todo: refactor slightly
      */
-    private function retrieveStylesToTake(): void
+    private function retrieveRecommendedStyles(): void
     {
-        $firstStyleToTake = \array_values( \array_slice( $this->recommendedIds, 0, 1, true ) );
-        $secondStyleToTake = \array_values( \array_slice( $this->recommendedIds, 1, 1, true ) );
-        $thirdStyleToTake = \array_values( \array_slice( $this->recommendedIds, 2, 1, true ) );
-        $fourthStyleToTake = \array_values( \array_slice( $this->recommendedIds, 3, 1, true ) );
-
-        if ( empty( $firstStyleToTake ) ||
-            empty( $secondStyleToTake ) ||
-            empty( $thirdStyleToTake ) ||
-            empty( $fourthStyleToTake ) ) {
+        $firstFiveRecommended = \array_values( \array_slice( $this->recommendedIds, 0, 5, true ) );
+        if ( \in_array( null, $firstFiveRecommended, true ) || \in_array( [], $firstFiveRecommended, true ) ) {
             return;
         }
 
-        $includedBeerIds = \array_keys( $this->recommendedIds );
+        //todo: musi być jakaś ogólna maksymalna pula punktów, aby to wykminić
 
-        if ( $secondStyleToTake[0] * self::MARGIN_STYLES_TO_DISTINGUISH <= $firstStyleToTake[0] ) {
-            $this->highlightedIds = [ $includedBeerIds[0] ];
+        $firstRecommended = \array_values( \array_slice( $this->recommendedIds, 0, 1, true ) )[0];
+        $secondRecommended = \array_values( \array_slice( $this->recommendedIds, 1, 1, true ) )[0];
+        $thirdRecommended = \array_values( \array_slice( $this->recommendedIds, 2, 1, true ) )[0];
+        $fourthRecommended = \array_values( \array_slice( $this->recommendedIds, 3, 1, true ) )[0];
+        $fifthRecommended = \array_values( \array_slice( $this->recommendedIds, 4, 1, true ) )[0];
+        $sixthRecommended = \array_values( \array_slice( $this->recommendedIds, 5, 1, true ) )[0];
+
+        $recommendedIds = \array_keys( $this->recommendedIds );
+
+        if ( $secondRecommended * self::MARGIN_STYLES_TO_DISTINGUISH <= $firstRecommended ) {
+            $this->highlightedIds = [ $recommendedIds[0] ];
         } else {
-            $this->highlightedIds = [ $includedBeerIds[0], $includedBeerIds[1] ];
+            $this->highlightedIds = [ $recommendedIds[0], $recommendedIds[1] ];
         }
 
-        if ( $thirdStyleToTake[0] * self::MARGIN_STYLES_TO_DISTINGUISH <= $secondStyleToTake[0] ) {
-            $this->highlightedIds = [ $includedBeerIds[0], $includedBeerIds[1] ];
+        if ( $thirdRecommended * self::MARGIN_STYLES_TO_DISTINGUISH <= $secondRecommended ) {
+            $this->highlightedIds = [ $recommendedIds[0], $recommendedIds[1] ];
         } else {
-            $this->highlightedIds = [ $includedBeerIds[0], $includedBeerIds[1], $includedBeerIds[2] ];
+            $this->highlightedIds = [ $recommendedIds[0], $recommendedIds[1], $recommendedIds[2] ];
         }
 
-        if ( $fourthStyleToTake[0] * self::MARGIN_STYLES_TO_DISTINGUISH <= $thirdStyleToTake[0] ) {
-            $this->highlightedIds = [ $includedBeerIds[0], $this->recommendedIds[1], $includedBeerIds[2] ];
+        if ( $fourthRecommended * self::MARGIN_STYLES_TO_DISTINGUISH <= $thirdRecommended ) {
+            $this->highlightedIds = [ $recommendedIds[0], $recommendedIds[1], $recommendedIds[2] ];
+        } else {
+            $this->highlightedIds = [ $recommendedIds[0], $recommendedIds[1], $recommendedIds[2], $recommendedIds[3] ];
+        }
+
+        if ( $fifthRecommended * self::MARGIN_STYLES_TO_DISTINGUISH <= $fourthRecommended ) {
+            $this->highlightedIds = [ $recommendedIds[0], $recommendedIds[1], $recommendedIds[2], $recommendedIds[3] ];
+        } else {
+            $this->highlightedIds = [ $recommendedIds[0], $recommendedIds[1], $recommendedIds[2], $recommendedIds[3], $recommendedIds[4] ];
+        }
+
+        if ( $sixthRecommended * self::MARGIN_STYLES_TO_DISTINGUISH <= $fifthRecommended ) {
+            $this->highlightedIds = [ $recommendedIds[0], $recommendedIds[1], $recommendedIds[2], $recommendedIds[3], $recommendedIds[4] ];
         } else {
             $this->highlightedIds = null;
         }
@@ -300,8 +317,8 @@ final class Answers
      */
     private function removeDuplicated(): void
     {
-        $recommended = \array_slice( $this->recommendedIds, 0, $this->countStylesToTake, true );
-        $unsuitable = \array_slice( $this->unsuitableIds, 0, $this->countStylesToAvoid, true );
+        $recommended = \array_slice( $this->recommendedIds, 0, $this->countRecommended, true );
+        $unsuitable = \array_slice( $this->unsuitableIds, 0, $this->countUnsuitable, true );
 
         foreach ( $recommended as $id => $points ) {
             if ( \array_key_exists( $id, $unsuitable ) ) {
@@ -317,14 +334,14 @@ final class Answers
      */
     private function checkMarginBetweenStyles(): void
     {
-        foreach ( $this->recommendedIds as $id => $points ) {
-            if ( \array_key_exists( $id, $this->unsuitableIds ) ) {
-                $unsuitablePoints = $this->unsuitableIds[$id];
-                $recommendedPoints = $points;
-                if ( $recommendedPoints > $unsuitablePoints &&
-                    $recommendedPoints <= $unsuitablePoints * self::MARGIN_INCLUDED_EXCLUDED ) {
-                    unset( $this->unsuitableIds[$id] );
-                }
+        foreach ( $this->recommendedIds as $id => $recommendedPoints ) {
+            if ( !\array_key_exists( $id, $this->unsuitableIds ) ) {
+                continue;
+            }
+            $unsuitablePoints = $this->unsuitableIds[$id];
+            if ( $recommendedPoints > $unsuitablePoints &&
+                $recommendedPoints <= $unsuitablePoints * self::MARGIN_INCLUDED_EXCLUDED ) {
+                unset( $this->unsuitableIds[$id] );
             }
         }
     }
@@ -334,13 +351,17 @@ final class Answers
      * Margin between previous and next style should be less than 90% of points
      * Margin between first and n-th style should not be less than 80% of points
      */
-    private function shuffleIncludedStyles(): void
+    private function shuffleRecommendedStyles(): void
     {
+        if ( $this->highlightedIds !== null ) {
+            return; //we do not shuffle if we have recommended styles
+        }
+
         $toShuffle = 0;
-        $recommendedStylesCount = \count( $this->recommendedIds );
+        $allRecommendedStylesCount = \count( $this->recommendedIds );
         $firstStylePoints = \array_values( \array_slice( $this->recommendedIds, 0, 1, true ) )[0];
 
-        for ( $i = 1; $i < $recommendedStylesCount; $i++ ) {
+        for ( $i = 1; $i < $allRecommendedStylesCount; $i++ ) {
             $previousStylePoints = \array_values( \array_slice( $this->recommendedIds, $i - 1, 1, true ) )[0];
             $followingStylePoints = \array_values( \array_slice( $this->recommendedIds, $i, 1, true ) )[0];
 
