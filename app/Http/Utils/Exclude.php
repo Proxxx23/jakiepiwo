@@ -46,9 +46,9 @@ class Exclude
             $userOptions->excludeFromRecommended( [ 7, 8, 22, 36, 37, 38, 39, 50, 67, 998, 999, ] );
         }
 
-        // wykluczenia dla piw jasnych (tylko bardzo jasne)
+        // wykluczenia dla piw jasnych
         if ( isset( $answerValue[5] ) && $answerValue[5] === 'ciemne' ) {
-            $userOptions->excludeFromRecommended( [ 9, 10, 11, 13, 25, 40, 45, 52, 70, 999, ] );
+            $userOptions->excludeFromRecommended( [ 1, 2, 6, 9, 10, 11, 13, 14, 25, 40, 44, 45, 49, 51, 52, 60, 61, 68, 69, 70, 72, 999, ] );
         }
 
         // wykluczenia dla piw ciemnych
