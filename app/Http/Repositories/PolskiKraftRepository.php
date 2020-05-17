@@ -60,7 +60,7 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
             return null;
         }
 
-        $resultsCacheKey = $this->buildRawResultsCacheKey( $styleId );
+        $resultsCacheKey = $styleId . '_' . self::RAW_RESULTS_CACHE_KEY_SUFFIX;
 
         $cachedData = $this->cache->get( $resultsCacheKey );
         if ( $cachedData !== null ) {
@@ -95,11 +95,6 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
         }
 
         return $this->createPolskiKraftDataCollection( $data, $styleId, $density );
-    }
-
-    private function buildRawResultsCacheKey( int $styleId ): string
-    {
-        return $styleId . '_' . self::RAW_RESULTS_CACHE_KEY_SUFFIX;
     }
 
     private function buildUserSpecificCacheKey( int $styleId ): string
