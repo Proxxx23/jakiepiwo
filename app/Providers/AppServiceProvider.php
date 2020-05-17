@@ -114,7 +114,7 @@ class AppServiceProvider extends ServiceProvider
         );
         $this->app->singleton(
             'SimpleResultsService', static function () {
-            return new SimpleResultsService( new ResultsRepository() );
+            return new SimpleResultsService( new ResultsRepository(), \resolve( 'SharedCache' ) );
         }
         );
         $this->app->singleton(

@@ -20,7 +20,6 @@ final class ResultsController extends Controller
     private const EXCEPTION_OR_ERROR_PATTERN = 'Exception or error. Message: %s. File: %s. Line: %s. Answers: %s.';
     private const INTERNAL_ERROR_MESSAGE = 'Internal error occured.';
     private const NO_RESULTS_FOR_HASH_ERROR_MESSAGE = 'Could not get results for provided hash.';
-    private const APPLICATION_JSON_HEADER = 'application/json';
 
     /**
      * @param Request $request
@@ -31,7 +30,7 @@ final class ResultsController extends Controller
      */
     public function resultsAction( Request $request, ErrorsLogger $errorsLogger ): Response
     {
-        if ( $request->header( 'Content-type' ) !== self::APPLICATION_JSON_HEADER ) {
+        if ( $request->header( 'Content-type' ) !== 'application/json' ) {
             $errorsLogger->log( self::INVALID_CONTENT_TYPE_EXCEPTION_MESSAGE );
 
             return \response( self::INVALID_CONTENT_TYPE_EXCEPTION_MESSAGE, Response::HTTP_BAD_REQUEST );
@@ -51,7 +50,14 @@ final class ResultsController extends Controller
 
             return \response( self::INVALID_RESULTS_HASH_EXCEPTION_MESSAGE, Response::HTTP_BAD_REQUEST );
         }
-        $inputAnswers = \resolve( 'QuestionsService' )->validateInput( $requestData );
+
+        try {
+            $inputAnswers = \resolve( 'QuestionsService' )->validateInput( $requestData );
+        } catch ( \UnexpectedValueException $ex ) {
+            $errorsLogger->log( $ex->getMessage() );
+
+            return \response( $ex->getMessage(), Response::HTTP_BAD_REQUEST );
+        }
 
         try {
             $beerData = ( \resolve( 'AlgorithmService' ) )

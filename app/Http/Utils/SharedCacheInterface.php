@@ -13,7 +13,8 @@ interface SharedCacheInterface
     /**
      * @param string $cacheKey
      * @param mixed $data
+     * @param int $ttl
      */
-    public function set( string $cacheKey, $data ): void;
+    public function set( string $cacheKey, $data, int $ttl ): void;
     public function clear(): void;
 }
