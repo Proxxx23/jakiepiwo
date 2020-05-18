@@ -16,7 +16,7 @@ class Synergy
             $answerValue[10] === 'tak' &&
             $answerValue[11] === 'chętnie' ) {
             $userOptions->applyPositiveSynergy( [ 40, 56 ], 2 );
-            $userOptions->applyPositiveSynergy( [ 51 ], 1.5 );
+            $userOptions->applyPositiveSynergy( [ 51, 77 ], 1.5 );
         }
 
         // nowe smaki LUB szokujące + złożone + jasne
@@ -115,17 +115,15 @@ class Synergy
 
         // goryczka ledwo && jasne && owoce && słodki && nowe smaki = pastry pale
         if ( $answerValue[1] === 'tak' &&
-            $answerValue[2] === 'tak' &&
             $answerValue[4] === 'prawie bez goryczki' &&
             $answerValue[5] === 'jasne' &&
             $answerValue[6] === 'słodsze' &&
             $answerValue[10] === 'tak' ) {
-            $userOptions->applyPositiveSynergy( [ 999 ], 3 );
+            $userOptions->applyPositiveSynergy( [ 77, 999 ], 3 );
         }
 
         // goryczka ledwo && ciemne && nie owoce && słodki && nowe smaki = pastry black
         if ( $answerValue[1] === 'tak' &&
-            $answerValue[2] === 'tak' &&
             $answerValue[4] === 'prawie bez goryczki' &&
             $answerValue[5] === 'ciemne' &&
             $answerValue[6] === 'słodsze' &&

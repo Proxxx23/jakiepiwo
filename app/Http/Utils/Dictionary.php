@@ -61,6 +61,7 @@ final class Dictionary
             73 => [ 8, 20, 41, 82, 87, 47, 38, 136, 154, 3, 54, 28, 49, 109, 115, 122, 42, 73 ], // Milkshake -> wszystkie IPA/APA (see Filters)
             74 => [ 12, 44, 46, 51, 65, 83, 84, 60 ], // Coffee Stout -> stouty bez RISA (see Filters)
             76 => [ 79, 110, 107, 88, ], // Bock -> Bock + Koźlak + Lentebock + American Bock
+            77 => [ 134 ], // Fruit Beer
             998 => [ 12, 15, 80, 11, 31, 59, 78, 44, 65, 46, 83, 51, 84, 32, 58, 60, 22, 62 ], // Dark Pastry Beer
             999 => [ 8, 20, 82, 87, 41, 47, 76, 56, 17, 39, 170, 57, 3, 54, 42, 28, 26, 49, 109, 115, 122, ], // Pale Pastry Beer
         ];

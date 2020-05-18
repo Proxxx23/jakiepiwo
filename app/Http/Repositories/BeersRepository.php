@@ -592,6 +592,17 @@ final class BeersRepository implements BeersRepositoryInterface
             ],
             'moreUrlQuery' => 'bock',
         ],
+        77 => [
+            'name' => 'Fruit Beer',
+            'otherName' => '',
+            'polishName' => 'Piwo Owocowe',
+            'description' => [
+                'text' => 'To segment piw z dodatkiem owoców w różnej postaci - całych, przecierów, pulp czy soków. Znajdziesz tu piwa w różnych stylach.',
+                'url' => null,
+                'urlText' => null,
+            ],
+            'moreUrlQuery' => 'fruit%20beer',
+        ],
         998 => [
             'name' => 'Pastry Beer',
             'otherName' => '',
