@@ -72,7 +72,7 @@ final class Filters
         ],
     ];
 
-    private const SPECIAL_BEER_STYLE_IDS = [ 57, 73, 74, 998, 999, ];
+    private const SPECIAL_BEER_STYLE_IDS = [ 22, 57, 73, 74, 998, 999, ];
     private const SPECIAL_BEERS_FILTERS = [
         'smokedale' => [ 'smoke', 'dym', 'wędz', 'rauch', 'islay', 'szynk', 'boczek', 'boczk', 'kiełbas', ],
         'milkshake' => [ 'szejk', 'milk', 'shake', ],
@@ -89,6 +89,7 @@ final class Filters
             'cappucino',
         ],
         'pastry' => [ 'pastry', ],
+        'doppelbock' => [ 'doppel', 'ice', 'eis', 'double' ],
     ];
 
     private const IMPERIAL_STYLE_IDS = [ 7, 36, 37, ];
@@ -252,6 +253,8 @@ final class Filters
     private static function getPregMatchSpecialBeersPatterns( int $styleId ): ?string
     {
         switch ( $styleId ) {
+            case 22:
+                return '/.*' . \implode( '|', self::SPECIAL_BEERS_FILTERS['doppelbock'] ) . '.*/i';
             case 57:
                 return '/.*' . \implode( '|', self::SPECIAL_BEERS_FILTERS['smokedale'] ) . '.*/i';
             case 73:

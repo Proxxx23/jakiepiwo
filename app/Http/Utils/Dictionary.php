@@ -25,7 +25,7 @@ final class Dictionary
             19 => [ 69, 149 ], // Dunkelweizen
             20 => [ 48, ],// Weizenbock
             21 => [ 11, 31, ], // Dark Lager -> Schwarzbier + International Dark Lager
-            22 => [ 110, ], // Doppelbock / Eisbock
+            22 => [ 110, 79, 88, ], // Doppelbock / Eisbock
             25 => [ 35, 75, 89, 105, ], // Weizen + Hefe + Weiss + Pszeniczne
             27 => [ 6, 99, ], // Bitter/ESB
             30 => [ 59, 78, ], // Brown Porter -> Porter + Robust
@@ -41,7 +41,7 @@ final class Dictionary
             44 => [ 16, 164, ], // Lambic / Gueuze -> Lambic + Kriek
             45 => [ 17, ],// Witbier
             47 => [ 18, ], // Saison
-            48 => [ 71, ],// Dubbel
+            48 => [ 71, 96 ],// Dubbel
             49 => [ 92, ],// Tripel
             50 => [ 90, 125 ], // Quadrupel
             51 => [ 39, ], // Gose
@@ -57,11 +57,11 @@ final class Dictionary
             69 => [ 28, ], // American Wheat
             70 => [ 26, ], // American Lager
             71 => [ 12, ], // Oatmeal Stout
-            72 => [ 49, 109, 115, 122, 73 ], // Pale Ale -> Pale Ale + Red Ale + Rye Pale Ale + Amber Ale + Belgian
-            73 => [ 8, 20, 41, 82, 87, 47, 38, 136, 154, 3, 54, 28, 49, 109, 115, 122, 42, 73 ], // Milkshake -> wszystkie IPA/APA (see Filters)
+            72 => [ 49, 109, 115, 122, 73, 86 ], // Pale Ale -> Pale Ale + Red Ale + Rye Pale Ale + Amber Ale + Belgian + American Rye
+            73 => [ 8, 20, 41, 82, 87, 47, 38, 136, 154, 3, 54, 28, 49, 109, 115, 122, 42, 73, 134 ], // Milkshake -> wszystkie IPA/APA (see Filters)
             74 => [ 12, 44, 46, 51, 65, 83, 84, 60 ], // Coffee Stout -> stouty bez RISA (see Filters)
             76 => [ 79, 110, 107, 88, ], // Bock -> Bock + Koźlak + Lentebock + American Bock
-            77 => [ 134 ], // Fruit Beer
+            77 => [ 134, 161 ], // Fruit Beer + Radler
             998 => [ 12, 15, 80, 11, 31, 59, 78, 44, 65, 46, 83, 51, 84, 32, 58, 60, 22, 62 ], // Dark Pastry Beer
             999 => [ 8, 20, 82, 87, 41, 47, 76, 56, 17, 39, 170, 57, 3, 54, 42, 28, 26, 49, 109, 115, 122, ], // Pale Pastry Beer
         ];
