@@ -12,6 +12,7 @@ use App\Http\Repositories\QuestionsRepository;
 use App\Http\Repositories\ResultsRepository;
 use App\Http\Repositories\ScoringRepository;
 use App\Http\Repositories\StylesLogsRepository;
+use App\Http\Repositories\UntappdRepository;
 use App\Http\Repositories\UserAnswersRepository;
 use App\Http\Services\AlgorithmService;
 use App\Http\Services\AnswersLoggerService;
