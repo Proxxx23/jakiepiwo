@@ -67,7 +67,7 @@ class Synergy
             $userOptions->applyNegativeSynergy( [ 30 ], 1.5 );
         }
 
-        // ciemne + czekoladowe + lżejsze
+        // ciemne + czekoladowe + nieciężkie
         if ( $answerValue[5] === 'ciemne' &&
             $answerValue[7] === 'tak' &&
             $answerValue[3] !== 'coś ciężkiego' ) {
@@ -104,7 +104,7 @@ class Synergy
         // duża/hophead goryczka + ciemne
         if ( $answerValue[5] === 'ciemne' &&
             \in_array( $answerValue[5], [ 'wyraźnie gorzkiego', 'jestem hopheadem' ], true ) ) {
-            $userOptions->applyPositiveSynergy( [ 3, 36, 37 ], 1.75 );
+            $userOptions->applyPositiveSynergy( [ 3, 36, 37 ], 2 );
         }
 
         // goryczka ledwo || lekka
