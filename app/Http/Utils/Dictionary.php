@@ -49,7 +49,7 @@ final class Dictionary
             53 => [ 7, ], // Roggenbier
             55 => [ 170, ], // Wild Ale -> Brett Ale
             56 => [ 57, ], // Sour Ale -> Sour
-            57 => [ 12, 15, 52, 59, 44, 83, 51, 66, 100, 142, 135, 169, ], // Smoked Ales
+            57 => [ 12, 15, 52, 44, 83, 51, 66, 100, 142, 135, 169, ], // Smoked Ales
             60 => [ 136, 154, ], // NE IPA -> NE IPA + Vermont IPA
             61 => [ 3, 54, 42, ], // APA -> APA + White APA + Summer Ale
             67 => [ 155, ], // Belgian Strong Ale -> Belgian Ale
