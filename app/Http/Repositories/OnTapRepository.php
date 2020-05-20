@@ -24,7 +24,6 @@ final class OnTapRepository implements OnTapRepositoryInterface
 
     private ClientInterface $httpClient;
     private SharedCache $cache;
-    private ?string $cityId = null;
     private bool $connectionError;
     private string $cityName;
 
@@ -68,7 +67,7 @@ final class OnTapRepository implements OnTapRepositoryInterface
         }
 
         //todo: strategy?
-        $toHash = $this->cityId . '_' . $beerName;
+        $toHash = $this->cityName . '_' . $beerName;
         $cacheKey = \sprintf( self::CACHE_KEY_BEER_PATTERN, \md5( $toHash ) );
         $item = $this->cache->get( $cacheKey );
         if ( $item !== null ) {
