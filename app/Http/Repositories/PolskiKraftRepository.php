@@ -19,7 +19,7 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
     private const BEER_LIST_BY_STYLE_URL_PATTERN = 'https://www.polskikraft.pl/openapi/style/%d/examples';
     private const RAW_RESULTS_CACHE_KEY_SUFFIX = 'POLSKIKRAFT';
     private const USER_CACHE_KEY_SUFFIX = 'USER';
-    private const LAST_UPDATED_DAYS_LIMIT = 30;
+    private const LAST_UPDATED_DAYS_LIMIT = 14;
     private const LAST_UPDATED_MAX_DAYS = 180; // maximum limit if no beers found for last LAST_UPDATED_DAYS_LIMIT days
     private const BEERS_TO_SHOW_LIMIT = 3;
     private const MINIMAL_RATING = 3.0;
