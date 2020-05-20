@@ -52,8 +52,8 @@ final class GeolocationRepository implements GeolocationRepositoryInterface
             $request->getBody()
                 ->getContents()
         );
-        $json = \json_encode( $xml, JSON_THROW_ON_ERROR, 512 );
-        $content = \json_decode( $json, true, 512, JSON_THROW_ON_ERROR );
+        $json = \json_encode( $xml, \JSON_THROW_ON_ERROR, 512 );
+        $content = \json_decode( $json, true, 512, \JSON_THROW_ON_ERROR );
 
         $partsToSearch = [
             'city' => $content['addressparts']['city'] ?? null,
