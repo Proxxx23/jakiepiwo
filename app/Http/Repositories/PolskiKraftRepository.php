@@ -19,10 +19,11 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
     private const BEER_LIST_BY_STYLE_URL_PATTERN = 'https://www.polskikraft.pl/openapi/style/%d/examples';
     private const RAW_RESULTS_CACHE_KEY_SUFFIX = 'POLSKIKRAFT';
     private const USER_CACHE_KEY_SUFFIX = 'USER';
-    private const LAST_UPDATED_DAYS_LIMIT = 14;
+    private const LAST_UPDATED_DAYS_LIMIT = 3;
+    private const LAST_UPDATED_DAYS_LIMIT_SECOND_TURN = 7;
     private const LAST_UPDATED_MAX_DAYS = 180; // maximum limit if no beers found for last LAST_UPDATED_DAYS_LIMIT days
     private const BEERS_TO_SHOW_LIMIT = 3;
-    private const MINIMAL_RATING = 3.0;
+    private const MINIMAL_RATING = 2.5;
 
     private Answers $answers;
     private SharedCache $cache;
@@ -145,13 +146,15 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
         Filters::filter( $this->answers, $beers, $density );
         $this->sortByRating( $beers );
 
-        $beersToShow = $beersNotToShow = [];
+        $beersToShow = $beersNotToShow = $beersToShowSecondTurn = [];
         foreach ( $beers as &$beer ) {
             $beerRating = (float) $beer['rating'];
 
             $daysToLastUpdated = $this->calculateDaysToLastUpdate( $beer['updated_at'] );
-            if ( $this->isRatedInLastMonthsAndHasProperRating( $daysToLastUpdated, $beerRating ) ) {
+            if ( $this->isRatedInLastTimeAndHasProperRating( $daysToLastUpdated, $beerRating ) ) {
                 $beersToShow[] = $beer;
+            } elseif ( $this->isRatedInLastWeeksAndHasProperRating( $daysToLastUpdated, $beerRating ) ) {
+                $beersToShowSecondTurn[] = $beer;
             } elseif ( $this->isRatedMaxHalfYearAgoAndHasProperRating( $daysToLastUpdated, $beerRating ) ) {
                 $beersNotToShow[] = $beer;
             }
@@ -162,6 +165,20 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
         }
         unset( $beer );
 
+        // todo: refactor completly
+        $beersToShowCount = \count( $beersToShow );
+
+        if ( $beersToShowCount < self::BEERS_TO_SHOW_LIMIT ) {
+            $remaining = self::BEERS_TO_SHOW_LIMIT - $beersToShowCount;
+            $beersToAppend = \array_slice( $beersToShowSecondTurn, 0, $remaining );
+            foreach ( $beersToAppend as $style ) {
+                $beersToShow[] = $style;
+                if ( \count( $beersToShow ) >= self::BEERS_TO_SHOW_LIMIT ) {
+                    break;
+                }
+            }
+        }
+
         $beersToShowCount = \count( $beersToShow );
 
         if ( $beersToShowCount < self::BEERS_TO_SHOW_LIMIT ) {
@@ -169,6 +186,9 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
             $beersToAppend = \array_slice( $beersNotToShow, 0, $remaining );
             foreach ( $beersToAppend as $style ) {
                 $beersToShow[] = $style;
+                if ( \count( $beersToShow ) >= self::BEERS_TO_SHOW_LIMIT ) {
+                    break;
+                }
             }
         }
 
@@ -177,9 +197,15 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
         return $beersToShow;
     }
 
-    private function isRatedInLastMonthsAndHasProperRating( int $daysToLastUpdated, float $beerRating ): bool
+    private function isRatedInLastTimeAndHasProperRating( int $daysToLastUpdated, float $beerRating ): bool
     {
         return $daysToLastUpdated < self::LAST_UPDATED_DAYS_LIMIT &&
+            $beerRating >= self::MINIMAL_RATING;
+    }
+
+    private function isRatedInLastWeeksAndHasProperRating( int $daysToLastUpdated, float $beerRating ): bool
+    {
+        return $daysToLastUpdated < self::LAST_UPDATED_DAYS_LIMIT_SECOND_TURN &&
             $beerRating >= self::MINIMAL_RATING;
     }
 
