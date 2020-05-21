@@ -86,6 +86,10 @@ final class OnTapRepository implements OnTapRepositoryInterface
                 }
                 if ( $this->hasBeer( $beerData, $taps ) ) {
                     $tapsData[$beerName][] = $place['name'];
+//                    $tapsData[$beerName] = [
+//                        'name' => $place['name'],
+//                        'url' => 'https://ontap.pl/?multitap_id=' . $place['id'],
+//                    ];
                     continue;
                 }
             }
