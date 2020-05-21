@@ -5,8 +5,9 @@ namespace Tests;
 
 use App\Http\Objects\Answers;
 use App\Http\Objects\FormData;
+use PHPUnit\Framework\TestCase;
 
-final class FormDataTest extends FinalsBypassedTestCase
+final class FormDataTest extends TestCase
 {
     public function testReturnsEmailForValidEmail(): void
     {

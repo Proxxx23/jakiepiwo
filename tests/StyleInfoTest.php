@@ -4,8 +4,9 @@ declare( strict_types=1 );
 namespace Tests;
 
 use App\Http\Objects\StyleInfo;
+use PHPUnit\Framework\TestCase;
 
-final class StyleInfoTest extends FinalsBypassedTestCase
+final class StyleInfoTest extends TestCase
 {
     public function testSetsSmokedPorterProperly(): void
     {

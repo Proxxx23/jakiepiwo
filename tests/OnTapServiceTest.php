@@ -3,17 +3,18 @@ declare( strict_types=1 );
 
 namespace Tests;
 
-use App\Http\Repositories\GeolocationRepository;
-use App\Http\Repositories\OnTapRepository;
+use App\Http\Repositories\GeolocationRepositoryInterface;
+use App\Http\Repositories\OnTapRepositoryInterface;
 use App\Http\Services\OnTapService;
 use Prophecy\Prophet;
+use PHPUnit\Framework\TestCase;
 
-final class OnTapServiceTest extends FinalsBypassedTestCase
+final class OnTapServiceTest extends TestCase
 {
     public function testReturnsTapsByBeerNameProperly(): void
     {
         $prophet = new Prophet();
-        $prophecy = $prophet->prophesize( OnTapRepository::class );
+        $prophecy = $prophet->prophesize( OnTapRepositoryInterface::class );
         $prophecy->fetchTapsByBeerName( [ 'title' => 'mockBeerName', 'susbtitle' => 'mockBreweryName', 'subtitleAlt' => '' ] )
             ->shouldBeCalledOnce();
         $prophecy->fetchAllCities()
@@ -21,7 +22,7 @@ final class OnTapServiceTest extends FinalsBypassedTestCase
         $prophecy->connectionRefused()
             ->willReturn( false );
 
-        $geolocationRepository = $this->createMock( GeolocationRepository::class );
+        $geolocationRepository = $this->createMock( GeolocationRepositoryInterface::class );
         $service = new OnTapService( $prophecy->reveal(), $geolocationRepository );
 
         self::assertNotNull(
@@ -34,13 +35,13 @@ final class OnTapServiceTest extends FinalsBypassedTestCase
 
     public function testReturnsNullIfNotConnected(): void
     {
-        $onTapRepository = $this->createMock( OnTapRepository::class );
+        $onTapRepository = $this->createMock( OnTapRepositoryInterface::class );
         $onTapRepository->method( 'connectionRefused' )
             ->willReturn( true );
         $onTapRepository->method( 'fetchAllCities' )
             ->willReturn( [] );
 
-        $geolocationRepository = $this->createMock( GeolocationRepository::class );
+        $geolocationRepository = $this->createMock( GeolocationRepositoryInterface::class );
 
         $service = new OnTapService( $onTapRepository, $geolocationRepository );
 

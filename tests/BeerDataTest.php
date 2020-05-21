@@ -4,8 +4,9 @@ declare( strict_types=1 );
 namespace Tests;
 
 use App\Http\Objects\BeerData;
+use PHPUnit\Framework\TestCase;
 
-final class BeerDataTest extends FinalsBypassedTestCase
+final class BeerDataTest extends TestCase
 {
     public function testCompletesHashKeysProperly(): void
     {
