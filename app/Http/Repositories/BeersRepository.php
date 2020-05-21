@@ -606,9 +606,9 @@ final class BeersRepository implements BeersRepositoryInterface
         998 => [
             'name' => 'Pastry Beer',
             'otherName' => '',
-            'polishName' => 'Piwo z aromatami (wersja ciemna)',
+            'polishName' => 'Piwo deserowe (wersja ciemna)',
             'description' => [
-                'text' => 'To segment piw mających przypominać deser lub cokolwiek związanego z cukrem. Do wywołania takiego efektu używa się soków, owoców i bardzo często aromatów (przeważnie naturalnych). Bardzo słodkie, przypominające znane słodycze czy desery.',
+                'text' => 'To segment piw mających przypominać deser lub cokolwiek związanego z cukrem. Do wywołania takiego efektu używa się soków, owoców czy aromatów (przeważnie naturalnych). Bardzo słodkie, przypominające znane słodycze, ciasta czy desery.',
                 'url' => 'https://piwolucja.pl/piwa-polecane/piwa-pastry-na-przykladzie-beeramisu-deer-bear/',
                 'urlText' => 'Recenzja piwa w stylu Pastry >>>',
             ],
@@ -617,9 +617,9 @@ final class BeersRepository implements BeersRepositoryInterface
         999 => [
             'name' => 'Pastry Beer',
             'otherName' => '',
-            'polishName' => 'Piwo z aromatami (wersja jasna)',
+            'polishName' => 'Piwo deserowe (wersja jasna)',
             'description' => [
-                'text' => 'To segment piw mających przypominać deser lub cokolwiek związanego z cukrem. Do wywołania takiego efektu używa się soków, owoców i bardzo często aromatów (przeważnie naturalnych). Bardzo słodkie, często również kwaśne, przypominające znane słodycze czy desery.',
+                'text' => 'To segment piw mających przypominać deser lub cokolwiek związanego z cukrem. Do wywołania takiego efektu używa się soków, owoców czy aromatów (przeważnie naturalnych). Bardzo słodkie, często również kwaśne, przypominające znane słodycze czy desery.',
                 'url' => 'https://piwolucja.pl/piwa-polecane/piwa-pastry-na-przykladzie-beeramisu-deer-bear/',
                 'urlText' => 'Recenzja piwa w stylu Pastry >>>',
             ],
