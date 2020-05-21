@@ -1,3 +1,5 @@
 FROM nginx:alpine
-CMD ["nginx"]
-EXPOSE 80 443
+
+COPY sites/default.conf /etc/nginx/conf.d/default.conf
+
+WORKDIR /var/www/html
