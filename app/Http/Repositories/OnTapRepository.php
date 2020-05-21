@@ -190,6 +190,7 @@ final class OnTapRepository implements OnTapRepositoryInterface
             return $cachedData;
         }
 
+        $data = null;
         foreach ( $cityIds as $cityId ) {
             $response = $this->httpClient->request(
                 'GET', \sprintf( self::PLACES_LIST_URI, $cityId ), [
