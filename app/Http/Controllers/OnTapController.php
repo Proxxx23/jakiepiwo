@@ -47,7 +47,7 @@ final class OnTapController
         $ontapService->setOnTapCities( $cities );
         $styles = null;
         foreach ( $cacheKeys as $key ) {
-            $item = $cache->get( $key );
+            $item = $cache->get( $key ); // todo: we now holds it in cache for 7 days - we should write it to DB forever
             if ( $item !== null ) {
                 $styles[] = $item;
                 continue;

@@ -15,7 +15,7 @@ use GuzzleHttp\ClientInterface;
 //todo: right now this is a service - change to service and move fetch to repo
 final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
 {
-    // private const DEFAULT_LIST_URI = 'https://www.polskikraft.pl/openapi/style/list';
+    private const DEFAULT_LIST_URI = 'https://www.polskikraft.pl/openapi/style/list';
     private const BEER_LIST_BY_STYLE_URL_PATTERN = 'https://www.polskikraft.pl/openapi/style/%d/examples';
     private const RAW_RESULTS_CACHE_KEY_SUFFIX = 'POLSKIKRAFT';
     private const USER_CACHE_KEY_SUFFIX = 'USER';
@@ -26,6 +26,7 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
     private const MINIMAL_RATING = 2.5;
 
     private Answers $answers;
+    private bool $connectionError;
     private SharedCache $cache;
     private Dictionary $dictionary;
     private ClientInterface $httpClient;
@@ -38,6 +39,15 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
         $this->cache = $cache;
         $this->dictionary = $dictionary;
         $this->httpClient = $httpClient;
+        $this->connectionError = $this->checkIsConnectionRefused();
+        if ( $this->checkIsConnectionRefused() ) {
+            return; // we don't want to go further if connection refused
+        }
+    }
+
+    public function connectionRefused(): bool
+    {
+        return $this->connectionError;
     }
 
     public function setUserAnswers( Answers $answers ): self
@@ -119,7 +129,7 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
 
         $userSpecificCacheKey = $this->buildUserSpecificCacheKey( $styleId );
         if ( $userSpecificCacheKey !== null ) {
-            $this->cache->set( $userSpecificCacheKey, $polskiKraftDataCollection, 604800 );
+            $this->cache->set( $userSpecificCacheKey, $polskiKraftDataCollection, 604800 ); // TODO: save it to DB and to cache for 1 hour
             $polskiKraftDataCollection->setCacheKey( $userSpecificCacheKey );
         }
 
@@ -231,5 +241,26 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
             return ( $b['rating'] <=> $a['rating'] );
         }
         );
+    }
+
+    /**
+     * @return bool
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    private function checkIsConnectionRefused(): bool
+    {
+        $response = $this->httpClient->request(
+            'GET', self::DEFAULT_LIST_URI, [
+                'headers' => [
+                    'Accept' => 'application/json',
+                    'Content-Type' => 'application/json',
+                ],
+            ]
+        );
+
+        return empty(
+            $response->getBody()
+                ->getContents()
+            ) || $response->getStatusCode() !== 200;
     }
 }

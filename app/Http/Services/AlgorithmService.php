@@ -3,6 +3,7 @@ declare( strict_types=1 );
 
 namespace App\Http\Services;
 
+use App\Exceptions\ConnectionException;
 use App\Http\Objects\StyleInfo;
 use App\Http\Repositories\ScoringRepository;
 use App\Http\Utils\Exclude;
@@ -51,6 +52,10 @@ final class AlgorithmService
 
     public function createBeerData( array $inputAnswers, FormData $user ): BeerData
     {
+        if ( $this->polskiKraftRepository->connectionRefused() ) {
+            throw new ConnectionException( 'Problem connecting to PolskiKraft API.' );
+        }
+
         $userAnswers = $user->getAnswers();
 
         $this->batchMarkTaste( $userAnswers, $inputAnswers );

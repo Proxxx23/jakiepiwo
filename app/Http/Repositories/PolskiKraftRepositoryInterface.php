@@ -10,4 +10,5 @@ interface PolskiKraftRepositoryInterface
 {
     public function fetchByStyleId( string $density, int $styleId ): ?PolskiKraftDataCollection;
     public function setUserAnswers( Answers $answers ): self;
+    public function connectionRefused(): bool;
 }
