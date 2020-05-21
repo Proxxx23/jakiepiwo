@@ -39,12 +39,12 @@ final class OnTapController
             return \response( 'Could not connect to OnTap API - connection refused.', Response::HTTP_SERVICE_UNAVAILABLE );
         }
 
-        $cityName = $ontapService->getCityByCoordinates( $coordinates );
-        if ( $cityName === null ) {
+        $cities = $ontapService->getCitiesByCoordinates( $coordinates );
+        if ( empty( $cities ) ) {
             return \response( 'Could not determine city name.', Response::HTTP_NO_CONTENT );
         }
 
-        $ontapService->setOnTapCityName( $cityName );
+        $ontapService->setOnTapCities( $cities );
         $styles = null;
         foreach ( $cacheKeys as $key ) {
             $item = $cache->get( $key );
@@ -55,7 +55,7 @@ final class OnTapController
         }
 
         if ( $styles === null ) {
-            return \response( 'No styles found in given city.', Response::HTTP_NO_CONTENT );
+            return \response( 'No styles found in cache.', Response::HTTP_NOT_FOUND );
         }
 
         $data = null;

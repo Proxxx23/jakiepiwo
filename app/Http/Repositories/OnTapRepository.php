@@ -13,7 +13,7 @@ final class OnTapRepository implements OnTapRepositoryInterface
     private const TAPS_LIST_URI = 'https://ontap.pl/api/v1/pubs/%s/taps';
 
     private const CACHE_KEY_BEER_PATTERN = '%s_BEER_ONTAP';
-    private const CACHE_KEY_PLACE_PATTERN = '%s_PLACE_ONTAP';
+    private const CACHE_KEY_PLACES_PATTERN = '%s_PLACES_ONTAP';
     private const CACHE_KEY_TAPS_PATTERN = '%s_TAPS_ONTAP';
     private const CACHE_KEY_CITIES = 'CITIES_ONTAP';
 
@@ -25,7 +25,7 @@ final class OnTapRepository implements OnTapRepositoryInterface
     private ClientInterface $httpClient;
     private SharedCache $cache;
     private bool $connectionError;
-    private string $cityName;
+    private array $cities;
 
     /**
      * @param ClientInterface $httpClient
@@ -41,9 +41,9 @@ final class OnTapRepository implements OnTapRepositoryInterface
 
     }
 
-    public function setCityName( string $cityName ): void
+    public function setCities( array $cities ): void
     {
-        $this->cityName = $cityName;
+        $this->cities = $cities;
     }
 
     public function connectionRefused(): bool
@@ -67,7 +67,7 @@ final class OnTapRepository implements OnTapRepositoryInterface
         }
 
         //todo: strategy?
-        $toHash = $this->cityName . '_' . $beerName;
+        $toHash = \implode( '_', $this->cities ) . '_' . $beerName;
         $cacheKey = \sprintf( self::CACHE_KEY_BEER_PATTERN, \md5( $toHash ) );
         $item = $this->cache->get( $cacheKey );
         if ( $item !== null ) {
@@ -78,17 +78,20 @@ final class OnTapRepository implements OnTapRepositoryInterface
 
         //fetch all the taps in given places and find beer
         $tapsData = null;
-        foreach ( $places as &$place ) {
-            $taps = $this->fetchTapsByPlaceId( $place['id'] );
-            if ( empty( $taps ) ) {
-                continue;
+        foreach ( $places as &$cityId ) {
+            foreach ( $cityId as &$place ) {
+                $taps = $this->fetchTapsByPlaceId( $place['id'] );
+                if ( empty( $taps ) ) {
+                    continue;
+                }
+                if ( $this->hasBeer( $beerData, $taps ) ) {
+                    $tapsData[$beerName][] = $place['name'];
+                    continue;
+                }
             }
-            if ( $this->hasBeer( $beerData, $taps ) ) {
-                $tapsData[$beerName][] = $place['name'];
-                continue;
-            }
+            unset( $place );
         }
-        unset( $place );
+        unset( $cityId );
 
         if ( $tapsData === null ) {
             return null;
@@ -130,17 +133,22 @@ final class OnTapRepository implements OnTapRepositoryInterface
     }
 
     /**
-     * @return string|null
+     * @return array|null
      * @throws \GuzzleHttp\Exception\GuzzleException | \JsonException
      */
-    private function fetchCityIdByName(): ?string
+    private function fetchCityIdsByName(): ?array
     {
         $cities = $this->fetchAllCities();
-        $cityId = \array_search( $this->cityName, \array_column( $cities, 'name' ), true );
+        $cityIds = null;
+        foreach ( $this->cities as $city ) {
+            $cityId = \array_search( $city, \array_column( $cities, 'name' ), true );
+            if ( \is_int( $cityId ) ) {
+                $cityIds[] = $cities[$cityId]['id'];
+                continue;
+            }
+        }
 
-        return \is_int( $cityId )
-            ? $cities[$cityId]['id']
-            : null;
+        return $cityIds ?? null;
     }
 
     /**
@@ -171,27 +179,30 @@ final class OnTapRepository implements OnTapRepositoryInterface
      */
     private function fetchPlacesByCityId(): array
     {
-        $cityId = $this->fetchCityIdByName();
-        $cacheKey = \sprintf( self::CACHE_KEY_PLACE_PATTERN, $cityId );
+        $cityIds = $this->fetchCityIdsByName();
+        $cacheKey = \sprintf( self::CACHE_KEY_PLACES_PATTERN, \md5( \implode( '_', $cityIds ) ) );
         $cachedData = $this->cache->get( $cacheKey );
         if ( $cachedData !== null ) {
             return $cachedData;
         }
 
-        $response = $this->httpClient->request(
-            'GET', \sprintf( self::PLACES_LIST_URI, $cityId ), [
-                'headers' => [
-                    'Accept' => 'application/json',
-                    'Content-Type' => 'application/json',
-                    'Api-Key' => $_ENV['ONTAP_API_KEY'],
-                ],
-            ]
-        );
+        foreach ( $cityIds as $cityId ) {
+            $response = $this->httpClient->request(
+                'GET', \sprintf( self::PLACES_LIST_URI, $cityId ), [
+                    'headers' => [
+                        'Accept' => 'application/json',
+                        'Content-Type' => 'application/json',
+                        'Api-Key' => $_ENV['ONTAP_API_KEY'],
+                    ],
+                ]
+            );
 
-        $data = \json_decode(
-            $response->getBody()
-                ->getContents(), true, 512, \JSON_THROW_ON_ERROR
-        );
+            $data[$cityId] = \json_decode(
+                $response->getBody()
+                    ->getContents(), true, 512, \JSON_THROW_ON_ERROR
+            );
+        }
+
         $this->cache->set( $cacheKey, $data, self::PLACES_CACHE_TTL );
 
         return $data;

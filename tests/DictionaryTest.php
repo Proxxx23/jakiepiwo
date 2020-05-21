@@ -10,6 +10,6 @@ final class DictionaryTest extends TestCase
 {
     public function testGetsTranslatedIdProperly(): void
     {
-        self::assertEquals( 28, ( new Dictionary() )->getById( 69 ) );
+        self::assertEquals( [ 28 ], ( new Dictionary() )->getById( 69 ) );
     }
 }

@@ -36,13 +36,13 @@ final class OnTapService
         return $this->onTapRepository->fetchTapsByBeerName( $beerData );
     }
 
-    public function getCityByCoordinates( Coordinates $coordinates ): ?string
+    public function getCitiesByCoordinates( Coordinates $coordinates ): ?array
     {
-        return $this->geolocationRepository->fetchCityByCoordinates( $coordinates );
+        return $this->geolocationRepository->fetchCitiesByCoordinates( $coordinates );
     }
 
-    public function setOnTapCityName( string $cityName ): void
+    public function setOnTapCities( array $cities ): void
     {
-        $this->onTapRepository->setCityName( $cityName ); //todo: Lukasz, chryste Panie, strzeż się boga...
+        $this->onTapRepository->setCities( $cities ); //todo: Lukasz, chryste Panie, strzeż się boga...
     }
 }

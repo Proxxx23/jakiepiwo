@@ -119,7 +119,7 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
 
         $userSpecificCacheKey = $this->buildUserSpecificCacheKey( $styleId );
         if ( $userSpecificCacheKey !== null ) {
-            $this->cache->set( $userSpecificCacheKey, $polskiKraftDataCollection );
+            $this->cache->set( $userSpecificCacheKey, $polskiKraftDataCollection, 604800 );
             $polskiKraftDataCollection->setCacheKey( $userSpecificCacheKey );
         }
 
@@ -168,6 +168,7 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
         // todo: refactor completly
         $beersToShowCount = \count( $beersToShow );
 
+        // check first turn (up to 7 days) and append
         if ( $beersToShowCount < self::BEERS_TO_SHOW_LIMIT ) {
             $remaining = self::BEERS_TO_SHOW_LIMIT - $beersToShowCount;
             $beersToAppend = \array_slice( $beersToShowSecondTurn, 0, $remaining );
@@ -181,6 +182,7 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
 
         $beersToShowCount = \count( $beersToShow );
 
+        // check up to 180 days and append
         if ( $beersToShowCount < self::BEERS_TO_SHOW_LIMIT ) {
             $remaining = self::BEERS_TO_SHOW_LIMIT - $beersToShowCount;
             $beersToAppend = \array_slice( $beersNotToShow, 0, $remaining );
