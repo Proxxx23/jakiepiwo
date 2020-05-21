@@ -240,6 +240,17 @@ final class BeersRepository implements BeersRepositoryInterface
             ],
             'moreUrlQuery' => 'brown%20porter',
         ],
+        32 => [
+            'name' => 'American Stout',
+            'otherName' => '',
+            'polishName' => '',
+            'description' => [
+                'text' => 'Ciemne, wyraźnie palone i intensywnie goryczkowe. Dominują w nim nuty czekolady, żywiczne, prażone, sosnowe, czasami wspierane przez nuty owocowe. Połącznie klasycznego stoutu ze sporą dawką amerykańskich chmieli.',
+                'url' => 'https://kompendiumpiwa.pl/american-stout/',
+                'urlText' => 'Więcej o stylu American Stout >>>',
+            ],
+            'moreUrlQuery' => 'dry%20stout',
+        ],
         33 => [
             'name' => '(Dry) Stout',
             'otherName' => '',
@@ -252,7 +263,7 @@ final class BeersRepository implements BeersRepositoryInterface
             'moreUrlQuery' => 'dry%20stout',
         ],
         34 => [
-            'name' => 'Milk Stout',
+            'name' => 'Milk / Sweet Stout',
             'otherName' => '',
             'polishName' => 'Stout Mleczny',
             'description' => [

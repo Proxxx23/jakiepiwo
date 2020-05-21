@@ -29,6 +29,7 @@ final class Dictionary
             25 => [ 35, 75, 89, 105, ], // Weizen + Hefe + Weiss + Pszeniczne
             27 => [ 6, 99, ], // Bitter/ESB
             30 => [ 59, 78, ], // Brown Porter -> Porter + Robust
+            32 => [ 37 ], // American Stout
             33 => [ 44, 65, 22 ], // Dry Stout + Cream Stout
             34 => [ 46, 83, ], // Milk Stout
             35 => [ 51, 84, 60 ], // FES + Double Milk Stout
