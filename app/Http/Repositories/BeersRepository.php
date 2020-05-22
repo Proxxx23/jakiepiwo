@@ -18,7 +18,7 @@ final class BeersRepository implements BeersRepositoryInterface
                 'url' => 'https://kompendiumpiwa.pl/india-pale-ale/',
                 'urlText' => 'Węcej o stylu India Pale Ale >>>',
             ],
-            'moreUrlQuery' => 'american%20india%20pale%ale',
+            'moreUrlQuery' => 'american%20ipa',
         ],
         2 => [
             'name' => 'Belgian IPA (India Pale Ale)',
@@ -249,7 +249,7 @@ final class BeersRepository implements BeersRepositoryInterface
                 'url' => 'https://kompendiumpiwa.pl/american-stout/',
                 'urlText' => 'Więcej o stylu American Stout >>>',
             ],
-            'moreUrlQuery' => 'dry%20stout',
+            'moreUrlQuery' => 'american%20stout',
         ],
         33 => [
             'name' => '(Dry) Stout',
@@ -304,7 +304,7 @@ final class BeersRepository implements BeersRepositoryInterface
                 'url' => 'https://piwolucja.pl/szybki-lyk/imperialny-porter-baltycki-z-bursztynem-prost/',
                 'urlText' => 'Recenzja piwa w tym stylu >>>',
             ],
-            'moreUrlQuery' => 'porter%20baltycki',
+            'moreUrlQuery' => 'porter%20bałtycki',
         ],
         38 => [
             'name' => 'Old Ale',
@@ -337,7 +337,7 @@ final class BeersRepository implements BeersRepositoryInterface
                 'url' => 'https://kompendiumpiwa.pl/berliner-weisse/',
                 'urlText' => 'Więcej o stylu Berliner Weisse >>>',
             ],
-            'moreUrlQuery' => 'breliner',
+            'moreUrlQuery' => 'berliner',
         ],
         42 => [
             'name' => 'Flanders Red Ale / Oud Bruin',
