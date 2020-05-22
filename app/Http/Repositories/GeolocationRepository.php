@@ -69,8 +69,8 @@ final class GeolocationRepository implements GeolocationRepositoryInterface
             return null; // todo: jakoś o tym informować
         }
 
-        $osmResults = $this->searchViaOSM( $coordinates );
-        $geoDbResults = $this->searchViaGeoDB( $coordinates );
+        $osmResults = $this->searchViaOSM( $coordinates ) ?? [];
+        $geoDbResults = $this->searchViaGeoDB( $coordinates ) ?? [];
         $results = \array_unique( \array_merge( $osmResults, $geoDbResults ) );
 
         return !empty( $results )
@@ -172,6 +172,7 @@ final class GeolocationRepository implements GeolocationRepositoryInterface
             return null;
         }
 
+        /** @var string $state */
         $state = \str_replace( 'województwo ', '', $this->state );
 
         return self::ONTAP_CITIES[$state] ?? null;
