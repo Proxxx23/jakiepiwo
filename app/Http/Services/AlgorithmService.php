@@ -74,15 +74,18 @@ final class AlgorithmService
 
             $scoringMap = $this->scoringRepository->fetchByQuestionNumber( (int) $questionNumber );
             foreach ( $scoringMap as $mappedAnswer => $ids ) {
+
+                $idsToCalculate = $this->getIdsToCalculateWithStrength( $ids );
+                if ( $idsToCalculate === null ) {
+                    continue;
+                }
+
                 if ( $givenAnswer === $mappedAnswer ) {
-                    $idsToCalculate = $this->getIdsToCalculateWithStrength( $ids );
-                    if ( $idsToCalculate !== null ) {
-                        foreach ( $idsToCalculate as $styleId => $strength ) {
-                            if ( empty( $userAnswers->getRecommendedIds()[$styleId] ) ) {
-                                $userAnswers->addToRecommended( $styleId, $strength );
-                            } else {
-                                $userAnswers->addStrengthToRecommended( $styleId, $strength );
-                            }
+                    foreach ( $idsToCalculate as $styleId => $strength ) {
+                        if ( empty( $userAnswers->getRecommendedIds()[$styleId] ) ) {
+                            $userAnswers->addToRecommended( $styleId, $strength );
+                        } else {
+                            $userAnswers->addStrengthToRecommended( $styleId, $strength );
                         }
                     }
                 }
@@ -92,19 +95,16 @@ final class AlgorithmService
                 }
 
                 if ( $givenAnswer !== $mappedAnswer ) {
-                    $idsToCalculate = $this->getIdsToCalculateWithStrength( $ids );
-                    if ( $idsToCalculate !== null ) {
-                        foreach ( $idsToCalculate as $styleId => $strength ) {
-                            if ( empty( $userAnswers->getUnsuitableIds()[$styleId] ) ) {
-                                $userAnswers->addToUnsuitable( $styleId, $strength );
-                            } else {
-                                $userAnswers->addStrengthToUnsuitable( $styleId, $strength );
-                            }
+                    foreach ( $idsToCalculate as $styleId => $strength ) {
+                        if ( empty( $userAnswers->getUnsuitableIds()[$styleId] ) ) {
+                            $userAnswers->addToUnsuitable( $styleId, $strength );
+                        } else {
+                            $userAnswers->addStrengthToUnsuitable( $styleId, $strength );
                         }
                     }
                 }
-
             }
+
         }
 
         Exclude::batch( $inputAnswers, $userAnswers );
@@ -148,6 +148,11 @@ final class AlgorithmService
         $userAnswers->setSour( $inputAnswers[11] === 'chętnie' );
         $userAnswers->setSmoked( $inputAnswers[12] === 'tak' );
         $userAnswers->setBarrelAged( $inputAnswers[13] === 'tak' );
+    }
+
+    private function shouldConsiderAsUnsuitable(): bool
+    {
+
     }
 
     /**
