@@ -15,7 +15,7 @@ final class OnTapServiceTest extends TestCase
     {
         $prophet = new Prophet();
         $prophecy = $prophet->prophesize( OnTapRepositoryInterface::class );
-        $prophecy->fetchTapsByBeerName( [ 'title' => 'mockBeerName', 'susbtitle' => 'mockBreweryName', 'subtitleAlt' => '' ] )
+        $prophecy->fetchTapsByBeerName( [ 'title' => 'mockBeerName', 'subtitle' => 'mockBreweryName', 'subtitleAlt' => '' ] )
             ->shouldBeCalledOnce();
         $prophecy->fetchAllCities()
             ->willReturn( [] );
@@ -45,6 +45,6 @@ final class OnTapServiceTest extends TestCase
 
         $service = new OnTapService( $onTapRepository, $geolocationRepository );
 
-        self::assertNull( $service->getTapsByBeerName( [ 'title' => 'mockBeerName', 'susbtitle' => 'mockBreweryName', 'subtitleAlt' => '' ] ) );
+        self::assertNull( $service->getTapsByBeerName( [ 'title' => 'mockBeerName', 'subtitle' => 'mockBreweryName', 'subtitleAlt' => '' ] ) );
     }
 }
