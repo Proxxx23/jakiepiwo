@@ -12,27 +12,38 @@ final class GeolocationRepository implements GeolocationRepositoryInterface
         'pomorskie' => [ 'Gdańsk', 'Gdynia', 'Sopot', 'Elbląg', 'Tleń', ],
         'dolnośląskie' => [ 'Jelenia Góra', 'Świdnica', 'Wrocław' ],
         'kujawsko-pomorskie' => [ 'Bydgoszcz', 'Toruń' ],
-        'lubelskie' => [ 'Lublin',  ],
+        'lubelskie' => [ 'Lublin', ],
         'lubuskie' => [ 'Zielona Góra' ],
         'łódzkie' => [ 'Łódź' ],
-        'małopolskie' => [ 'Kraków', 'Nowy Sącz', 'Ostrów Wielkopolski', 'Piła', 'Poznań',  ],
-        'mazowieckie' => [ 'Legionowo', 'Warszawa', 'Nowy Dwór Mazowiecki',  ],
+        'małopolskie' => [ 'Kraków', 'Nowy Sącz', 'Ostrów Wielkopolski', 'Piła', 'Poznań', ],
+        'mazowieckie' => [ 'Legionowo', 'Warszawa', 'Nowy Dwór Mazowiecki', ],
         'opolskie' => [ 'Opole' ],
         'podkarpackie' => [ 'Rzeszów' ],
-        'podlaskie' => [ 'Białystok',  ],
-        'śląskie' => [ 'Bielsko-Biała', 'Bytom', 'Chorzów', 'Częstochowa', 'Gliwice', 'Katowice', 'Ruda Śląska', 'Rybnik', 'Sosnowiec', 'Tychy' ],
+        'podlaskie' => [ 'Białystok', ],
+        'śląskie' => [
+            'Bielsko-Biała',
+            'Bytom',
+            'Chorzów',
+            'Częstochowa',
+            'Gliwice',
+            'Katowice',
+            'Ruda Śląska',
+            'Rybnik',
+            'Sosnowiec',
+            'Tychy',
+        ],
         'świętokrzyskie' => [ 'Kielce' ],
-        'warmińsko-mazurskie' => [ 'Olsztyn',  ],
+        'warmińsko-mazurskie' => [ 'Olsztyn', ],
         'wielkopolskie' => [ 'Kalisz' ],
         'zachodniopomorskie' => [ 'Szczecin' ],
     ];
 
-    private const API_URL_PATTERN = 'https://nominatim.openstreetmap.org/reverse?lat=%f&lon=%f';
+    private const OSM_API_URL_PATTERN = 'https://nominatim.openstreetmap.org/reverse?lat=%f&lon=%f'; // takes only city, no radius
+    private const GEODB_API_URL_PATTERN = 'http://geodb-free-service.wirefreethought.com/v1/geo/locations/%f+%f/nearbyCities?limit=5&offset=0&minPopulation=40000&radius=50&sort=-population'; // nearest ciies
 
     private ClientInterface $httpClient;
     private array $citiesList;
-
-    //todo indicator like in ontap - errorconnection
+    private ?string $state;
 
     public function __construct( ClientInterface $httpClient )
     {
@@ -50,7 +61,7 @@ final class GeolocationRepository implements GeolocationRepositoryInterface
      * @param Coordinates $coordinates
      *
      * @return array|null
-     * @throws \GuzzleHttp\Exception\GuzzleException | \JsonException
+     * @throws \GuzzleHttp\Exception\GuzzleException|\JsonException
      */
     public function fetchCitiesByCoordinates( Coordinates $coordinates ): ?array
     {
@@ -58,17 +69,34 @@ final class GeolocationRepository implements GeolocationRepositoryInterface
             return null; // todo: jakoś o tym informować
         }
 
+        $osmResults = $this->searchViaOSM( $coordinates ) ?? [];
+        $geoDbResults = $this->searchViaGeoDB( $coordinates ) ?? [];
+        $results = \array_unique( \array_merge( $osmResults, $geoDbResults ) );
+
+        return !empty( $results )
+            ? $results
+            : $this->getAllCitiesInVoivodeship() ?? null;  // no city at all
+    }
+
+    /**
+     * @param Coordinates $coordinates
+     *
+     * @return array|null[]|null
+     * @throws \GuzzleHttp\Exception\GuzzleException|\JsonException
+     */
+    private function searchViaOSM( Coordinates $coordinates ): ?array
+    {
         try {
             $request = $this->httpClient->request(
                 'GET',
-                \sprintf( self::API_URL_PATTERN, $coordinates->getLatitude(), $coordinates->getLongitude() )
+                \sprintf( self::OSM_API_URL_PATTERN, $coordinates->getLatitude(), $coordinates->getLongitude() )
             );
         } catch ( \Exception $ex ) {
-            return null; // todo: informować
+            return null;
         }
 
         if ( $request->getStatusCode() !== 200 ) {
-            return null; // todo: informować
+            return null;
         }
 
         $xml = \simplexml_load_string(
@@ -85,26 +113,67 @@ final class GeolocationRepository implements GeolocationRepositoryInterface
             'neighbourhood' => $content['addressparts']['neighbourhood'] ?? null,
         ];
 
+        $this->state = $content['addressparts']['state'] ?? null;
+
         foreach ( $partsToSearch as $locality ) {
             if ( \in_array( $locality, $this->citiesList, true ) ) {
                 return [ $locality ];
             }
         }
 
-        // brak miasta
-        $cities = $this->getAllCitiesInVoivodeship( $content['addressparts']['state'] ?? null );
-
-        return $cities ?? null;
+        return null;
     }
 
-    private function getAllCitiesInVoivodeship( ?string $state ): ?array
+    /**
+     * @param Coordinates $coordinates
+     *
+     * @return array|null[]|null
+     * @throws \GuzzleHttp\Exception\GuzzleException|\JsonException
+     */
+    private function searchViaGeoDB( Coordinates $coordinates ): ?array
     {
-        if ( empty( $state ) ) {
+        try {
+            $request = $this->httpClient->request(
+                'GET',
+                \sprintf( self::GEODB_API_URL_PATTERN, $coordinates->getLatitude(), $coordinates->getLongitude() )
+            );
+        } catch ( \Exception $ex ) {
+            return null;
+        }
+
+        if ( $request->getStatusCode() !== 200 ) {
+            return null;
+        }
+
+
+        $content = \json_decode(
+            $request->getBody()
+                ->getContents(), true, 512, \JSON_THROW_ON_ERROR
+        );
+
+        $data = $content['data'] ?? null;
+        if ( $data === null ) {
+            return null;
+        }
+
+        $nearbyCities = null;
+        foreach ( $data as $locality ) {
+            if ( \in_array( $locality['city'], $this->citiesList, true ) ) {
+                $nearbyCities[] = $locality['city'];
+            }
+        }
+
+        return $nearbyCities;
+    }
+
+    private function getAllCitiesInVoivodeship(): ?array
+    {
+        if ( empty( $this->state ) ) {
             return null;
         }
 
         /** @var string $state */
-        $state = \str_replace( 'województwo ', '', $state );
+        $state = \str_replace( 'województwo ', '', $this->state );
 
         return self::ONTAP_CITIES[$state] ?? null;
     }

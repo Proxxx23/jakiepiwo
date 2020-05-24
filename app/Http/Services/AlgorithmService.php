@@ -73,16 +73,20 @@ final class AlgorithmService
             }
 
             $scoringMap = $this->scoringRepository->fetchByQuestionNumber( (int) $questionNumber );
+            $map = $this->explodeIds( $scoringMap );
             foreach ( $scoringMap as $mappedAnswer => $ids ) {
+
+                $idsToCalculate = $this->getIdsToCalculateWithStrength( $ids );
+                if ( $idsToCalculate === null ) {
+                    continue;
+                }
+
                 if ( $givenAnswer === $mappedAnswer ) {
-                    $idsToCalculate = $this->getIdsToCalculateWithStrength( $ids );
-                    if ( $idsToCalculate !== null ) {
-                        foreach ( $idsToCalculate as $styleId => $strength ) {
-                            if ( empty( $userAnswers->getRecommendedIds()[$styleId] ) ) {
-                                $userAnswers->addToRecommended( $styleId, $strength );
-                            } else {
-                                $userAnswers->addStrengthToRecommended( $styleId, $strength );
-                            }
+                    foreach ( $idsToCalculate as $styleId => $strength ) {
+                        if ( empty( $userAnswers->getRecommendedIds()[$styleId] ) ) {
+                            $userAnswers->addToRecommended( $styleId, $strength );
+                        } else {
+                            $userAnswers->addStrengthToRecommended( $styleId, $strength );
                         }
                     }
                 }
@@ -92,19 +96,16 @@ final class AlgorithmService
                 }
 
                 if ( $givenAnswer !== $mappedAnswer ) {
-                    $idsToCalculate = $this->getIdsToCalculateWithStrength( $ids );
-                    if ( $idsToCalculate !== null ) {
-                        foreach ( $idsToCalculate as $styleId => $strength ) {
-                            if ( empty( $userAnswers->getUnsuitableIds()[$styleId] ) ) {
-                                $userAnswers->addToUnsuitable( $styleId, $strength );
-                            } else {
-                                $userAnswers->addStrengthToUnsuitable( $styleId, $strength );
-                            }
+                    foreach ( $idsToCalculate as $styleId => $strength ) {
+                        if ( empty( $userAnswers->getUnsuitableIds()[$styleId] ) ) {
+                            $userAnswers->addToUnsuitable( $styleId, $strength );
+                        } else {
+                            $userAnswers->addStrengthToUnsuitable( $styleId, $strength );
                         }
                     }
                 }
-
             }
+
         }
 
         Exclude::batch( $inputAnswers, $userAnswers );
@@ -150,6 +151,36 @@ final class AlgorithmService
         $userAnswers->setBarrelAged( $inputAnswers[13] === 'tak' );
     }
 
+    private function explodeIds( array $pairs ): array
+    {
+        $sortedIds = [];
+        foreach ( $pairs as $answer => $idMultiplierPair ) {
+            $pair = \explode( ', ', $idMultiplierPair );
+            foreach ( $pair as $item ) {
+                if ( \strpos( \trim( $item ), ':' ) !== false ) {
+
+                    /** @var array $idPointsPair */
+                    $idPointsPair = \explode( ':', $item );
+                    $styleId = $idPointsPair[0];
+
+                    $sortedIds[$answer][] = $styleId;
+                } else {
+                    /** @var array $idPointsPair */
+                    $idPointsPair = \explode( ', ', $item );
+                    $styleId = $idPointsPair[0];
+                    $sortedIds[$answer][] = $styleId;
+                }
+            }
+        }
+
+        return $sortedIds;
+    }
+
+    private function shouldConsiderAsUnsuitable(): bool
+    {
+
+    }
+
     /**
      * Buduje siłę dla konkretnych ID stylu
      * Jeśli id ma postać 5:2.5 to zwiększy (przy trafieniu w to ID) punktację tego stylu o 2.5 a nie o 1
@@ -186,8 +217,10 @@ final class AlgorithmService
         return $idsToCalculate;
     }
 
-    private function createRecommendedStylesCollection( string $density, Answers $answers ): ?RecommendedStylesCollection
-    {
+    private function createRecommendedStylesCollection(
+        string $density,
+        Answers $answers
+    ): ?RecommendedStylesCollection {
         if ( $answers->getRecommendedIds() === [] ) {
             return null;
         }
@@ -209,7 +242,8 @@ final class AlgorithmService
         foreach ( $styleInfoCollection as $styleInfo ) {
             if ( $answers->isSmoked() &&
                 \in_array( $styleInfo->getId(), ScoringRepository::POSSIBLE_SMOKED_DARK_BEERS, true ) ) {
-                $styleInfo->setSmokedNames(); // add "smoked" prefix to smoked beers if user picked yes on smoked question
+                $styleInfo->setSmokedNames(
+                ); // add "smoked" prefix to smoked beers if user picked yes on smoked question
             }
 
             $polskiKraftBeerDataCollection = $this->polskiKraftRepository->fetchByStyleId(
