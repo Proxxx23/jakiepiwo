@@ -62,18 +62,18 @@ final class AlgorithmService
 
         foreach ( $inputAnswers as $questionNumber => $givenAnswer ) {
 
-            // Jeśli bez znaczenia, to nic nie robimy
+            // If has no meaning - do nothing
             if ( $givenAnswer === 'bez znaczenia' || $givenAnswer === 'nie wiem' ) {
                 continue;
             }
 
-            // Nie idź dalej przy BA, bo nic nie liczymy na tej podstawie
+            // We don't make anything with barrel-ages - don't calculate
             if ( (int) $questionNumber === 13 ) {
                 continue;
             }
 
             $scoringMap = $this->scoringRepository->fetchByQuestionNumber( (int) $questionNumber );
-//            $map = $this->explodeIds( $scoringMap );
+            $questionIdsMap = $this->createIdsMapForQuestion( $scoringMap );
             foreach ( $scoringMap as $mappedAnswer => $ids ) {
 
                 $idsToCalculate = $this->getIdsToCalculateWithStrength( $ids );
@@ -91,12 +91,17 @@ final class AlgorithmService
                     }
                 }
 
-                if ( \in_array( $questionNumber, [ 2, 9, 12 ], true ) ) {
+                if ( \in_array( $questionNumber, [ 2, 9, 12, ], true ) ) {
                     continue; // we don't give negative points for these questions
                 }
 
                 if ( $givenAnswer !== $mappedAnswer ) {
                     foreach ( $idsToCalculate as $styleId => $strength ) {
+
+                        if ( \in_array( (string) $styleId, $questionIdsMap[$givenAnswer], true ) ) {
+                            continue; // if we find recommended ID also in unsuitable, do not apply negative strength.
+                        }
+
                         if ( empty( $userAnswers->getUnsuitableIds()[$styleId] ) ) {
                             $userAnswers->addToUnsuitable( $styleId, $strength );
                         } else {
@@ -105,7 +110,6 @@ final class AlgorithmService
                     }
                 }
             }
-
         }
 
         Exclude::batch( $inputAnswers, $userAnswers );
@@ -133,8 +137,12 @@ final class AlgorithmService
 
         return BeerData::fromArray(
             [
-                'buyThis' => $recommendedStylesCollection !== null ? $recommendedStylesCollection->toArray() : null,
-                'avoidThis' => $unsuitableStylesCollection !== null ? $unsuitableStylesCollection->toArray() : null,
+                'buyThis' => $recommendedStylesCollection !== null
+                    ? $recommendedStylesCollection->toArray()
+                    : null,
+                'avoidThis' => $unsuitableStylesCollection !== null
+                    ? $unsuitableStylesCollection->toArray()
+                    : null,
                 'username' => $user->getUsername(),
                 'barrelAged' => $userAnswers->isBarrelAged(),
                 'answers' => $inputAnswers,
@@ -151,10 +159,23 @@ final class AlgorithmService
         $userAnswers->setBarrelAged( $inputAnswers[13] === 'tak' );
     }
 
-    private function explodeIds( array $pairs ): array
+    /**
+     * Builds an array of all the ID-s that will gain points for given question
+     * So all the IDs for "yes" and "no" response, in two arrays
+     * This is used to check if the same ID won't be added to unsuitables after adding to recommended
+     *
+     * @param array $pairs
+     *
+     * @return array
+     */
+    private function createIdsMapForQuestion( array $pairs ): array
     {
         $sortedIds = [];
         foreach ( $pairs as $answer => $idMultiplierPair ) {
+            if ( $idMultiplierPair === null ) {
+                continue;
+            }
+
             $pair = \explode( ', ', $idMultiplierPair );
             foreach ( $pair as $item ) {
                 if ( \strpos( \trim( $item ), ':' ) !== false ) {
@@ -174,11 +195,6 @@ final class AlgorithmService
         }
 
         return $sortedIds;
-    }
-
-    private function shouldConsiderAsUnsuitable(): bool
-    {
-
     }
 
     /**
