@@ -9,7 +9,6 @@ final class BeerData
     private ?array $avoidThis;
     private bool $barrelAged;
     private ?array $buyThis;
-    private ?array $cacheKeys = null;
     private ?string $username;
 
     public function __construct(
@@ -24,7 +23,6 @@ final class BeerData
         $this->barrelAged = $barrelAged;
         $this->buyThis = $buyThis;
         $this->username = $username;
-        $this->completeCacheKeys( $buyThis );
     }
 
     public static function fromArray( array $data ): self
@@ -38,11 +36,6 @@ final class BeerData
         );
     }
 
-    public function getCacheKeys(): ?array
-    {
-        return $this->cacheKeys;
-    }
-
     public function toArray(): array
     {
         return [
@@ -51,21 +44,6 @@ final class BeerData
             'barrelAged' => $this->barrelAged,
             'buyThis' => $this->buyThis,
             'username' => $this->username,
-            'cacheKeys' => $this->cacheKeys,
         ];
-    }
-
-    private function completeCacheKeys( ?array $buyThis ): void
-    {
-        if ( $buyThis === null ) {
-            return;
-        }
-
-        foreach ( $buyThis as $item ) {
-            if ( $item['cacheKey'] !== null ) {
-                $this->cacheKeys[] = $item['cacheKey'];
-                continue;
-            }
-        }
     }
 }

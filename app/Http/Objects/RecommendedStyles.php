@@ -6,16 +6,12 @@ namespace App\Http\Objects;
 final class RecommendedStyles extends AbstractStyles
 {
     private ?PolskiKraftDataCollection $beerDataCollection;
-    private string $cacheKey = '';
     private bool $highlighted = false;
     private ?string $moreUrlQuery;
 
     public function __construct( StyleInfo $styleInfo, ?PolskiKraftDataCollection $beerDataCollection )
     {
         $this->beerDataCollection = $beerDataCollection;
-        if ( $beerDataCollection !== null ) {
-            $this->cacheKey = $beerDataCollection->getCacheKey();
-        }
         $this->description = $styleInfo->getDescription();
         $this->id = $styleInfo->getId();
         $this->moreUrlQuery = $styleInfo->getMoreUrlQuery();
@@ -33,7 +29,6 @@ final class RecommendedStyles extends AbstractStyles
     {
         return [
             'beerDataCollection' => $this->beerDataCollection !== null ? $this->beerDataCollection->toArray() : null,
-            'cacheKey' => $this->cacheKey,
             'description' => $this->description,
             'highlighted' => $this->highlighted,
             'id' => $this->id,

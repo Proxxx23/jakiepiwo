@@ -6,6 +6,7 @@ namespace App\Http\Services;
 use App\Http\Objects\ValueObject\Coordinates;
 use App\Http\Repositories\GeolocationRepositoryInterface;
 use App\Http\Repositories\OnTapRepositoryInterface;
+use App\Http\Repositories\UserAnswersRepositoryInterface;
 
 final class OnTapService
 {

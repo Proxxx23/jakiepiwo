@@ -73,7 +73,7 @@ final class AlgorithmService
             }
 
             $scoringMap = $this->scoringRepository->fetchByQuestionNumber( (int) $questionNumber );
-            $map = $this->explodeIds( $scoringMap );
+//            $map = $this->explodeIds( $scoringMap );
             foreach ( $scoringMap as $mappedAnswer => $ids ) {
 
                 $idsToCalculate = $this->getIdsToCalculateWithStrength( $ids );

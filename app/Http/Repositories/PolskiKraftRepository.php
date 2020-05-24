@@ -18,7 +18,6 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
     private const DEFAULT_LIST_URI = 'https://www.polskikraft.pl/openapi/style/list';
     private const BEER_LIST_BY_STYLE_URL_PATTERN = 'https://www.polskikraft.pl/openapi/style/%d/examples';
     private const RAW_RESULTS_CACHE_KEY_SUFFIX = 'POLSKIKRAFT';
-    private const USER_CACHE_KEY_SUFFIX = 'USER';
     private const LAST_UPDATED_DAYS_LIMIT = 3;
     private const LAST_UPDATED_DAYS_LIMIT_SECOND_TURN = 7;
     private const LAST_UPDATED_MAX_DAYS = 180; // maximum limit if no beers found for last LAST_UPDATED_DAYS_LIMIT days
@@ -75,7 +74,7 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
 
         $cachedData = $this->cache->get( $resultsCacheKey );
         if ( $cachedData !== null ) {
-            return $this->createPolskiKraftDataCollection( $cachedData, $styleId, $density );
+            return $this->createPolskiKraftDataCollection( $cachedData, $density );
         }
 
         $data = [];
@@ -105,32 +104,17 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
             return null;
         }
 
-        return $this->createPolskiKraftDataCollection( $data, $styleId, $density );
+        return $this->createPolskiKraftDataCollection( $data, $density );
     }
 
-    private function buildUserSpecificCacheKey( int $styleId ): string
+    private function createPolskiKraftDataCollection( array $data, string $density ): PolskiKraftDataCollection
     {
-        $recommended = \implode( '_', $this->answers->getRecommendedIds() );
-        $unsuitable = \implode( '_', $this->answers->getUnsuitableIds() );
-        $hash  = \md5( $recommended . $unsuitable );
-
-        return $styleId . '_' . $hash . '_' . self::USER_CACHE_KEY_SUFFIX . '_' . \time();
-    }
-
-    private function createPolskiKraftDataCollection( array $data, int $styleId, string $density ): PolskiKraftDataCollection
-    {
-        $beers = $this->retrieveBestBeers( $data, $density );
+        $bestBeers = $this->retrieveBestBeers( $data, $density );
 
         $polskiKraftDataCollection = new PolskiKraftDataCollection();
-        foreach ( $beers as $beer ) {
+        foreach ( $bestBeers as $beer ) {
             $polskiKraftData = new PolskiKraftData( $beer );
             $polskiKraftDataCollection->add( $polskiKraftData->toArray() );
-        }
-
-        $userSpecificCacheKey = $this->buildUserSpecificCacheKey( $styleId );
-        if ( $userSpecificCacheKey !== null ) {
-            $this->cache->set( $userSpecificCacheKey, $polskiKraftDataCollection, 604800 ); // TODO: save it to DB and to cache for 1 hour
-            $polskiKraftDataCollection->setCacheKey( $userSpecificCacheKey );
         }
 
         return $polskiKraftDataCollection;

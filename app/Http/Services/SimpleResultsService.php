@@ -8,6 +8,8 @@ use App\Http\Utils\SharedCacheInterface;
 
 final class SimpleResultsService
 {
+    public const RESULTS_CACHE_KEY_PREFIX = 'RESULTS_';
+
     private const RESULTS_TTL = 900;
 
     private ResultsRepositoryInterface $repository;
@@ -21,16 +23,15 @@ final class SimpleResultsService
 
     public function getResultsByResultsHash( string $resultsHash ): ?string
     {
-        $cacheKey = 'RESULTS_' . $resultsHash;
+        $cacheKey = self::RESULTS_CACHE_KEY_PREFIX . $resultsHash;
         $cachedResults = $this->cache->get( $cacheKey );
-
-        if ( $cachedResults === null ) {
-            $results = $this->repository->fetchByResultsHash( $resultsHash );
-            $this->cache->set( $cacheKey, $results, self::RESULTS_TTL );
-
-            return $results;
+        if ( $cachedResults !== null ) {
+            return $cachedResults;
         }
 
-        return $cachedResults;
+        $results = $this->repository->fetchByResultsHash( $resultsHash );
+        $this->cache->set( $cacheKey, $results, self::RESULTS_TTL );
+
+        return $results;
     }
 }

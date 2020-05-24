@@ -3,6 +3,8 @@ declare( strict_types=1 );
 
 namespace App\Http\Controllers;
 
+use App\Http\Services\SimpleResultsService;
+use App\Http\Utils\SharedCache;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Routing\Controller;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,14 +23,17 @@ final class ResultsController extends Controller
     private const INTERNAL_ERROR_MESSAGE = 'Internal error occured.';
     private const NO_RESULTS_FOR_HASH_ERROR_MESSAGE = 'Could not get results for provided hash.';
 
+    private const ONTAP_RESULTS_HASH_PATTERN = '%s_USER';
+
     /**
      * @param Request $request
-     *
      * @param ErrorsLogger $errorsLogger
+     * @param SharedCache $sharedCache
      *
      * @return Response
+     * @throws \JsonException
      */
-    public function resultsAction( Request $request, ErrorsLogger $errorsLogger ): Response
+    public function resultsAction( Request $request, ErrorsLogger $errorsLogger, SharedCache $sharedCache ): Response
     {
         if ( $request->header( 'Content-type' ) !== 'application/json' ) {
             $errorsLogger->log( self::INVALID_CONTENT_TYPE_EXCEPTION_MESSAGE );
@@ -79,6 +84,13 @@ final class ResultsController extends Controller
         }
 
         \resolve( 'AnswersLoggerService' )->logAnswers( $formData, $inputAnswers, $beerData );
+
+        // save it to cache for an hour for OnTap
+        $cacheKey = SimpleResultsService::RESULTS_CACHE_KEY_PREFIX . $formData->getResultsHash();
+        $jsonResults = \json_encode(
+            $beerData->toArray(), \JSON_THROW_ON_ERROR | \JSON_UNESCAPED_UNICODE
+        );
+        $sharedCache->set( $cacheKey, $jsonResults );
 
         return \response()
             ->json( $beerData->toArray(), JsonResponse::HTTP_OK, [], \JSON_THROW_ON_ERROR | \JSON_UNESCAPED_UNICODE );
