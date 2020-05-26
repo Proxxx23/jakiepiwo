@@ -141,7 +141,7 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
         Filters::filter( $this->answers, $beers, $density );
         $this->sortByRating( $beers );
 
-        $beersToShow = $beersNotToShow = $beersToShowSecondTurn = [];
+        $beersToShow = $beersLeft = $beersToShowSecondTurn = [];
         foreach ( $beers as &$beer ) {
             $beerRating = (float) $beer['rating'];
 
@@ -152,7 +152,7 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
             } elseif ( $this->isRatedInLastWeeksAndHasProperRating( $daysToLastUpdated, $beerRating ) ) {
                 $beersToShowSecondTurn[] = $beer;
             } elseif ( $this->isRatedMaxHalfYearAgoAndHasProperRating( $daysToLastUpdated, $beerRating ) ) {
-                $beersNotToShow[] = $beer;
+                $beersLeft[] = $beer;
             }
 
             if ( \count( $beersToShow ) === self::BEERS_TO_SHOW_LIMIT ) {
@@ -163,28 +163,28 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
 
         $beersToShowCount = \count( $beersToShow );
         $remaining = self::BEERS_TO_SHOW_LIMIT - $beersToShowCount;
-        while ( $beersToShowCount < self::BEERS_TO_SHOW_LIMIT || $remaining > 0 ) {
-
+        if ( $beersToShowCount < self::BEERS_TO_SHOW_LIMIT && $remaining > 0 ) {
             // check first turn (up to 7 days) and append
             $beersToAppend = \array_slice( $beersToShowSecondTurn, 0, $remaining );
             foreach ( $beersToAppend as $style ) {
                 $beersToShow[] = $style;
                 if ( \count( $beersToShow ) >= self::BEERS_TO_SHOW_LIMIT ) {
-                    break 2;
+                    break;
                 }
             }
+        }
 
-            $beersToAppend = \array_slice( $beersNotToShow, 0, $remaining );
+
+        $beersToShowCount = \count( $beersToShow );
+        $remaining = self::BEERS_TO_SHOW_LIMIT - $beersToShowCount;
+        if ( $beersToShowCount < self::BEERS_TO_SHOW_LIMIT && $remaining > 1 ) {
+            $beersToAppend = \array_slice( $beersLeft, 0, $remaining );
             foreach ( $beersToAppend as $style ) {
                 $beersToShow[] = $style;
                 if ( \count( $beersToShow ) >= self::BEERS_TO_SHOW_LIMIT ) {
-                    break 2;
+                    break;
                 }
             }
-
-            $remaining = self::BEERS_TO_SHOW_LIMIT - $beersToShowCount;
-            $beersToShowCount = \count( $beersToShow );
-
         }
 
         $this->sortByRating( $beersToShow );
