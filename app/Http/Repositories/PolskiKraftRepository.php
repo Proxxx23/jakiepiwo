@@ -19,6 +19,7 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
     private const BEER_LIST_BY_STYLE_URL_PATTERN = 'https://www.polskikraft.pl/openapi/style/%d/examples';
     private const RAW_RESULTS_CACHE_KEY_SUFFIX = 'POLSKIKRAFT';
     private const LAST_UPDATED_DAYS_LIMIT = 3;
+    private const CREATION_DAYS_LIMIT = 14;
     private const LAST_UPDATED_DAYS_LIMIT_SECOND_TURN = 7;
     private const LAST_UPDATED_MAX_DAYS = 180; // maximum limit if no beers found for last LAST_UPDATED_DAYS_LIMIT days
     private const BEERS_TO_SHOW_LIMIT = 3;
@@ -144,8 +145,9 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
         foreach ( $beers as &$beer ) {
             $beerRating = (float) $beer['rating'];
 
-            $daysToLastUpdated = $this->calculateDaysToLastUpdate( $beer['updated_at'] );
-            if ( $this->isRatedInLastTimeAndHasProperRating( $daysToLastUpdated, $beerRating ) ) {
+            $daysToLastUpdated = $this->calculateDaysTo( $beer['updated_at'] );
+            $daysToCreation = $this->calculateDaysTo( $beer['created_at'] );
+            if ( $this->isJustRatedOrCreatedAndHasProperRating( $daysToCreation, $daysToLastUpdated, $beerRating ) ) {
                 $beersToShow[] = $beer;
             } elseif ( $this->isRatedInLastWeeksAndHasProperRating( $daysToLastUpdated, $beerRating ) ) {
                 $beersToShowSecondTurn[] = $beer;
@@ -193,10 +195,10 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
         return $beersToShow;
     }
 
-    private function isRatedInLastTimeAndHasProperRating( int $daysToLastUpdated, float $beerRating ): bool
+    private function isJustRatedOrCreatedAndHasProperRating( int $daysToCreation, int $daysToLastUpdated, float $beerRating ): bool
     {
-        return $daysToLastUpdated < self::LAST_UPDATED_DAYS_LIMIT &&
-            $beerRating >= self::MINIMAL_RATING;
+        return ( $daysToLastUpdated < self::LAST_UPDATED_DAYS_LIMIT &&
+            $beerRating >= self::MINIMAL_RATING ) || $daysToCreation < self::CREATION_DAYS_LIMIT;
     }
 
     private function isRatedInLastWeeksAndHasProperRating( int $daysToLastUpdated, float $beerRating ): bool
@@ -212,10 +214,10 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
             $beerRating >= self::MINIMAL_RATING;
     }
 
-    private function calculateDaysToLastUpdate( int $updatedAt ): int
+    private function calculateDaysTo( int $timestamp ): int
     {
         return Carbon::now()
-            ->diffInDays( Carbon::createFromTimestamp( $updatedAt ) );
+            ->diffInDays( Carbon::createFromTimestamp( $timestamp ) );
     }
 
     private function sortByRating( array &$beers ): void
