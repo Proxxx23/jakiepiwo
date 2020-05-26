@@ -161,33 +161,30 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
         }
         unset( $beer );
 
-        // todo: refactor completly
         $beersToShowCount = \count( $beersToShow );
+        $remaining = self::BEERS_TO_SHOW_LIMIT - $beersToShowCount;
+        while ( $beersToShowCount < self::BEERS_TO_SHOW_LIMIT || $remaining > 0 ) {
 
-        // check first turn (up to 7 days) and append
-        if ( $beersToShowCount < self::BEERS_TO_SHOW_LIMIT ) {
-            $remaining = self::BEERS_TO_SHOW_LIMIT - $beersToShowCount;
+            // check first turn (up to 7 days) and append
             $beersToAppend = \array_slice( $beersToShowSecondTurn, 0, $remaining );
             foreach ( $beersToAppend as $style ) {
                 $beersToShow[] = $style;
                 if ( \count( $beersToShow ) >= self::BEERS_TO_SHOW_LIMIT ) {
-                    break;
+                    break 2;
                 }
             }
-        }
 
-        $beersToShowCount = \count( $beersToShow );
-
-        // check up to 180 days and append
-        if ( $beersToShowCount < self::BEERS_TO_SHOW_LIMIT ) {
-            $remaining = self::BEERS_TO_SHOW_LIMIT - $beersToShowCount;
             $beersToAppend = \array_slice( $beersNotToShow, 0, $remaining );
             foreach ( $beersToAppend as $style ) {
                 $beersToShow[] = $style;
                 if ( \count( $beersToShow ) >= self::BEERS_TO_SHOW_LIMIT ) {
-                    break;
+                    break 2;
                 }
             }
+
+            $remaining = self::BEERS_TO_SHOW_LIMIT - $beersToShowCount;
+            $beersToShowCount = \count( $beersToShow );
+
         }
 
         $this->sortByRating( $beersToShow );
