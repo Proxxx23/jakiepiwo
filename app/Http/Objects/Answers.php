@@ -285,30 +285,40 @@ class Answers
 
         if ( $secondRecommended * self::MARGIN_STYLES_TO_DISTINGUISH <= $firstRecommended ) {
             $this->highlightedIds = [ $recommendedIds[0] ];
+
+            return;
         } else {
             $this->highlightedIds = [ $recommendedIds[0], $recommendedIds[1] ];
         }
 
         if ( $thirdRecommended * self::MARGIN_STYLES_TO_DISTINGUISH <= $secondRecommended ) {
             $this->highlightedIds = [ $recommendedIds[0], $recommendedIds[1] ];
+
+            return;
         } else {
             $this->highlightedIds = [ $recommendedIds[0], $recommendedIds[1], $recommendedIds[2] ];
         }
 
         if ( $fourthRecommended * self::MARGIN_STYLES_TO_DISTINGUISH <= $thirdRecommended ) {
             $this->highlightedIds = [ $recommendedIds[0], $recommendedIds[1], $recommendedIds[2] ];
+
+            return;
         } else {
             $this->highlightedIds = [ $recommendedIds[0], $recommendedIds[1], $recommendedIds[2], $recommendedIds[3] ];
         }
 
         if ( $fifthRecommended * self::MARGIN_STYLES_TO_DISTINGUISH <= $fourthRecommended ) {
             $this->highlightedIds = [ $recommendedIds[0], $recommendedIds[1], $recommendedIds[2], $recommendedIds[3] ];
+
+            return;
         } else {
             $this->highlightedIds = [ $recommendedIds[0], $recommendedIds[1], $recommendedIds[2], $recommendedIds[3], $recommendedIds[4] ];
         }
 
         if ( $sixthRecommended * self::MARGIN_STYLES_TO_DISTINGUISH <= $fifthRecommended ) {
             $this->highlightedIds = [ $recommendedIds[0], $recommendedIds[1], $recommendedIds[2], $recommendedIds[3], $recommendedIds[4] ];
+
+            return;
         } else {
             $this->highlightedIds = null;
         }
