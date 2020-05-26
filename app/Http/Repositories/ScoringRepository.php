@@ -62,11 +62,11 @@ final class ScoringRepository implements ScoringRepositoryInterface
         // Czy chciałbyś piwo w klimatach owocowych?
         [
             'tak' => '1:2, 2:1.5, 5:1.5, 6:1.5, 7:2, 8:2, 25, 40:1.5, 42:1.5, 44, 45, 47:0.5, 49:1.5, 50, 51:1.25, 55, 56:1.5, 60:2, 61:2, 67, 69:2, 70:1.5, 72, 73:2.5, 76, 77:3, 999:3',
-            'nie' => '3, 9, 10, 11, 13, 14, 15, 16, 19, 20, 21, 22, 27, 30, 32, 33, 34, 35, 36, 37, 38, 39, 47, 48, 52, 53, 57, 68, 71, 74, 998',
+            'nie' => '3, 9, 10, 11, 13, 14, 15, 16, 19, 20, 21, 22, 27, 30, 32, 33, 34, 35, 36, 37, 38, 39, 47, 48, 52, 53, 56, 57, 68, 71, 74, 998',
         ],
         // Co powiesz na piwo kwaśne?
         [
-            'chętnie' => '40:2, 42:3, 44:3, 51:2, 56:3, 77:1.5, 999:1.5',
+            'chętnie' => '40:2, 42:3, 44:3, 51:2, 56:4, 77:1.5, 999:1.5',
             'nie ma mowy' => '1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 13, 14, 15, 16, 19, 20, 21, 22, 25, 27, 30, 32, 33, 34, 35, 36, 37, 38, 39, 40, 45, 47, 48, 49, 50, 52, 53, 55:0.5, 57, 60, 61, 67, 68, 69, 70, 71, 72, 73, 74, 76, 998',
         ],
         // Czy odpowiadałby Ci smak wędzony/dymny w piwie?
@@ -81,7 +81,7 @@ final class ScoringRepository implements ScoringRepositoryInterface
         ],
     ];
 
-    public const POSSIBLE_SMOKED_DARK_BEERS = [ 36,  37,  ];
+    public const POSSIBLE_SMOKED_DARK_BEERS = [ 36, 37, ];
 
     public function fetchByQuestionNumber( int $questionNumber ): array
     {
