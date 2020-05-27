@@ -93,7 +93,7 @@ final class Filters
     ];
 
     private const IMPERIAL_STYLE_IDS = [ 7, 36, 37, ];
-    private const IMPERIAL_BEERS_PATTERN = '/.*imperial|ice|double|triple|quad|wymraz|wymraż|imperium|doppel|eis[^s?].*/i';
+    private const IMPERIAL_BEERS_PATTERN = '/.*imperial|ice|double|triple|quad|wymraz|wymraż|imperium|doppel|eis[^s].*/i';
 
     public static function filter( Answers $answers, array &$beers, string $density ): void
     {
