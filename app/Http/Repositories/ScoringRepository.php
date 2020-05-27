@@ -87,5 +87,4 @@ final class ScoringRepository implements ScoringRepositoryInterface
     {
         return self::SCORE[$questionNumber];
     }
-
 }

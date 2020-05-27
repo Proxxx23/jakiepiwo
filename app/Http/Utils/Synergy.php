@@ -83,13 +83,13 @@ class Synergy
             $userOptions->applyPositiveSynergy( [ 3, 30 ], 1.5 );
         }
 
-        // goryczka ledwo || lekka + jasne + nieczekoladowe + niegęste
+        // goryczka ledwo || lekka + jasne + nieczekoladowe + nieciężkie
         if ( $answerValue[5] === 'jasne' &&
             $answerValue[7] === 'nie' &&
             $answerValue[3] !== 'coś ciężkiego' &&
             \in_array( $answerValue[4], [ 'prawie bez goryczki', 'z wyczuwalną goryczką' ], true ) ) {
-            $userOptions->applyPositiveSynergy( [ 20, 25, 40, 44, 45, 47, 51, 52, 53, 68, ], 2 );
-            $userOptions->applyPositiveSynergy( [ 73 ], 1.25 );
+            $userOptions->applyPositiveSynergy( [ 20, 25, 44, 45, 47, 51, 52, 53, 68, ], 2 );
+            $userOptions->applyPositiveSynergy( [ 73, 77 ], 1.25 );
             $userOptions->applyNegativeSynergy( [ 3, 30, 35, 36, 37, 71 ], 2 );
         }
 
