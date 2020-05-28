@@ -30,19 +30,22 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
     private SharedCache $cache;
     private Dictionary $dictionary;
     private ClientInterface $httpClient;
+    private UntappdRepositoryInterface $untappdRepository;
 
     public function __construct(
         Dictionary $dictionary,
         SharedCache $cache,
-        ClientInterface $httpClient
+        ClientInterface $httpClient,
+        UntappdRepositoryInterface $untappdRepository
     ) {
-        $this->cache = $cache;
-        $this->dictionary = $dictionary;
         $this->httpClient = $httpClient;
         $this->connectionError = $this->checkIsConnectionRefused();
         if ( $this->checkIsConnectionRefused() ) {
             return; // we don't want to go further if connection refused
         }
+        $this->cache = $cache;
+        $this->dictionary = $dictionary;
+        $this->untappdRepository = $untappdRepository;
     }
 
     public function connectionRefused(): bool
@@ -98,6 +101,26 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
                 $data[$styleId][] = $result;
             }
         }
+
+//        $rule = ':: Latin-ASCII; :: NFD; :: [:Nonspacing Mark:] Remove; :: Lower(); :: NFC;';
+//        $i18n = \Transliterator::createFromRules($rule, \Transliterator::FORWARD);
+//        // check with Untappd if beer is in production
+//        foreach ( $data[$styleId] as $index => $beer ) {
+//            $breweryName = $i18n->transliterate( $beer['subtitle'] );
+//            $beerName = \preg_replace( '/[^A-Za-z0-9_ ]/', '', $i18n->transliterate( $beer['title'] ) );
+//
+//            $beerInfo = $this->untappdRepository->fetchOne( $breweryName, $beerName );
+//            if ( $beerInfo === null ) {
+//                continue;
+//            }
+//
+//            if ( $beerInfo['inProduction'] === false ) {
+//                unset( $data[$styleId][$index] );
+//            }
+//
+//            // true = in production
+//            // null = we can't be 100% sure
+//        }
 
         $this->cache->set( $resultsCacheKey, $data );
 

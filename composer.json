@@ -6,10 +6,11 @@
     "type": "project",
     "require": {
         "php": ">=7.4",
-        "ext-json": "*",
-        "ext-pdo": "*",
-        "ext-mbstring": "*",
         "ext-curl": "*",
+        "ext-intl": "^7.4",
+        "ext-json": "*",
+        "ext-mbstring": "*",
+        "ext-pdo": "*",
         "ext-simplexml": "*",
         "barryvdh/laravel-cors": "~1.0.1",
         "fideloper/proxy": "~4.3.0",
@@ -18,8 +19,8 @@
         "laravel/helpers": "~1.2.0",
         "laravel/tinker": "~2.4.0",
         "nesbot/carbon": "~2.32.0",
-        "symfony/dotenv": "~5.0.1",
-        "symfony/cache": "~5.0.1"
+        "symfony/cache": "~5.0.1",
+        "symfony/dotenv": "~5.0.1"
     },
     "require-dev": {
         "drewm/mailchimp-api": "~2.5.0",

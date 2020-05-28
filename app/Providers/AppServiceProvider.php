@@ -82,11 +82,20 @@ class AppServiceProvider extends ServiceProvider
         }
         );
         $this->app->singleton(
+            'UntappdRepository', static function () {
+            return new UntappdRepository(
+                \resolve( 'HttpClient' ),
+                \resolve( 'SharedCache' ),
+            );
+        }
+        );
+        $this->app->singleton(
             'PolskiKraftRepository', static function () {
             return new PolskiKraftRepository(
                 new Dictionary(),
                 \resolve( 'SharedCache' ),
-                \resolve( 'HttpClient' )
+                \resolve( 'HttpClient' ),
+                \resolve( 'UntappdRepository' )
             );
         }
         );
