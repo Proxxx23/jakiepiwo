@@ -32,7 +32,7 @@ class Synergy
             $answerValue[5] === 'jasne' &&
             ( $answerValue[1] === 'tak' || $answerValue[2] === 'tak' ) ) {
             $userOptions->applyPositiveSynergy( [ 6, 15, 16, 42, 60, 76 ], 2 );
-            $userOptions->applyPositiveSynergy( [ 39, 39 ], 1.5 );
+            $userOptions->applyPositiveSynergy( [ 20, 39, 39 ], 1.5 );
         }
 
         // nowe smaki LUB szokujące + złożone + ciemne
@@ -88,7 +88,7 @@ class Synergy
             $answerValue[7] === 'nie' &&
             $answerValue[3] !== 'coś ciężkiego' &&
             \in_array( $answerValue[4], [ 'prawie bez goryczki', 'z wyczuwalną goryczką' ], true ) ) {
-            $userOptions->applyPositiveSynergy( [ 20, 25, 44, 45, 47, 51, 52, 53, 68, ], 2 );
+            $userOptions->applyPositiveSynergy( [ 25, 44, 45, 47, 51, 52, 53, 68, ], 2 );
             $userOptions->applyPositiveSynergy( [ 73, 77 ], 1.25 );
             $userOptions->applyNegativeSynergy( [ 3, 30, 35, 36, 37, 71 ], 2 );
         }
