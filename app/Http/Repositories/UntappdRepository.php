@@ -6,6 +6,7 @@ namespace App\Http\Repositories;
 use App\Http\Utils\SharedCache;
 use GuzzleHttp\ClientInterface;
 use Illuminate\Support\Facades\DB;
+use Transliterator;
 
 final class UntappdRepository implements UntappdRepositoryInterface
 {
@@ -63,9 +64,24 @@ final class UntappdRepository implements UntappdRepositoryInterface
 
     public function add( array $beerData ): void
     {
+        $rule = ':: Latin-ASCII; :: NFD; :: [:Nonspacing Mark:] Remove; :: Lower(); :: NFC;';
+        $i18n = \Transliterator::createFromRules( $rule, Transliterator::FORWARD );
+
+        $data = null;
+        foreach ( $beerData as $index => $beer ) {
+            $breweryName = $i18n->transliterate( $beer['subtitle'] );
+            $beerName = \preg_replace( '/[^A-Za-z0-9_ ]/', '', $i18n->transliterate( $beer['title'] ) );
+            $data[] = [
+                'beer_name' => $beerName,
+                'brewery_name' => $breweryName,
+                'next_update' => \time(),
+            ];
+        }
+
+
         try {
             DB::table( 'untappd' )
-                ->insertOrIgnore( $beerData );
+                ->insertOrIgnore( $data );
         } catch ( \Exception $ex ) {
 
         }

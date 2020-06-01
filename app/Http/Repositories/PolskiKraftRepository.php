@@ -102,25 +102,7 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
             }
         }
 
-//        $rule = ':: Latin-ASCII; :: NFD; :: [:Nonspacing Mark:] Remove; :: Lower(); :: NFC;';
-//        $i18n = \Transliterator::createFromRules($rule, \Transliterator::FORWARD);
-//        // check with Untappd if beer is in production
-//        foreach ( $data[$styleId] as $index => $beer ) {
-//            $breweryName = $i18n->transliterate( $beer['subtitle'] );
-//            $beerName = \preg_replace( '/[^A-Za-z0-9_ ]/', '', $i18n->transliterate( $beer['title'] ) );
-//
-//            $beerInfo = $this->untappdRepository->fetchOne( $breweryName, $beerName );
-//            if ( $beerInfo === null ) {
-//                continue;
-//            }
-//
-//            if ( $beerInfo['inProduction'] === false ) {
-//                unset( $data[$styleId][$index] );
-//            }
-//
-//            // true = in production
-//            // null = we can't be 100% sure
-//        }
+//        $this->untappdRepository->add( $data[$styleId] );
 
         $this->cache->set( $resultsCacheKey, $data );
 

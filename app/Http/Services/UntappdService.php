@@ -25,6 +25,10 @@ final class UntappdService
             ->orderBy( 'next_update', 'desc' )
             ->limit( self::DAILY_LIMIT );
 
+        if ( $records->count() === 0 ) {
+            return;
+        }
+
         foreach ( $records as $record ) {
             $beerInfo = $this->untappdRepository->fetchOne( $record['beer_name'], $record['brewery_name'] );
             if ( $beerInfo === null || $beerInfo === [] ) {
