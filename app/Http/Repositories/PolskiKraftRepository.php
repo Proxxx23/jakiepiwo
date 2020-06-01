@@ -102,8 +102,6 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
             }
         }
 
-//        $this->untappdRepository->add( $data[$styleId] );
-
         $this->cache->set( $resultsCacheKey, $data );
 
         if ( $data === [] ) {
@@ -116,6 +114,8 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
     private function createPolskiKraftDataCollection( array $data, string $density ): PolskiKraftDataCollection
     {
         $bestBeers = $this->retrieveBestBeers( $data, $density );
+
+        $this->untappdRepository->add( $bestBeers );
 
         $polskiKraftDataCollection = new PolskiKraftDataCollection();
         foreach ( $bestBeers as $beer ) {

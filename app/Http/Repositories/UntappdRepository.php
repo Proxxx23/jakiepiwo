@@ -72,12 +72,11 @@ final class UntappdRepository implements UntappdRepositoryInterface
             $breweryName = $i18n->transliterate( $beer['subtitle'] );
             $beerName = \preg_replace( '/[^A-Za-z0-9_ ]/', '', $i18n->transliterate( $beer['title'] ) );
             $data[] = [
-                'beer_name' => $beerName,
-                'brewery_name' => $breweryName,
+                'beer_name' => \str_replace( '  ', ' ', $beerName ),
+                'brewery_name' => \str_replace( '  ', ' ', $breweryName ),
                 'next_update' => \time(),
             ];
         }
-
 
         try {
             DB::table( 'untappd' )
