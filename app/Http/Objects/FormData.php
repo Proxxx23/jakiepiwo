@@ -9,7 +9,6 @@ final class FormData
     private Answers $answers;
     private ?string $email;
     private string $resultsHash;
-    private ?string $username;
 
     public function __construct( Answers $answers, array $requestData )
     {
@@ -19,9 +18,6 @@ final class FormData
             ? $requestData['email']
             : null;
         $this->resultsHash = $requestData['resultsHash'];
-        $this->username = \is_string( $requestData['username'] ) && $requestData['username'] !== ''
-            ? $requestData['username']
-            : null;
 
         if ( !isset( $requestData['admin'] ) && !$this->resultsHashIsValid( $requestData['resultsHash'] ) ) {
             throw new \InvalidArgumentException( 'Invalid results hash.' );
@@ -46,11 +42,6 @@ final class FormData
     public function getResultsHash(): string
     {
         return $this->resultsHash;
-    }
-
-    public function getUsername(): ?string
-    {
-        return $this->username;
     }
 
     private function emailIsValid( ?string $email ): bool

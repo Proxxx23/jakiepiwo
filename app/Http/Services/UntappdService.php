@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 
 final class UntappdService
 {
-    private const DAILY_LIMIT = 100;
+    private const DAILY_LIMIT = 2;
     private const NEXT_UPDATE_IN_SECONDS = 2678400; // 1 month
 
     private UntappdRepositoryInterface $untappdRepository;

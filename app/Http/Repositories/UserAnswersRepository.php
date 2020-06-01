@@ -15,7 +15,6 @@ final class UserAnswersRepository implements UserAnswersRepositoryInterface
             DB::table( 'user_answers' )
                 ->insert(
                     [
-                        'name' => $formInput->getUsername(),
                         'e_mail' => $formInput->getEmail(),
                         'newsletter' => $formInput->addToNewsletterList(),
                         'answers' => \json_encode(

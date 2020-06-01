@@ -18,7 +18,6 @@ final class FormDataTest extends TestCase
                 'resultsHash' => 'abcabc',
                 'admin' => true,
                 'email' => 'valid@email.com',
-                'username' => 'mock',
             ]
         );
 
@@ -34,7 +33,6 @@ final class FormDataTest extends TestCase
                 'email' => 'invali&@#',
                 'resultsHash' => 'abcabc',
                 'admin' => true,
-                'username' => 'mock',
             ]
         );
 

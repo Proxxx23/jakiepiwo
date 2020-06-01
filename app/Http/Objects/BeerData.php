@@ -9,20 +9,17 @@ final class BeerData
     private ?array $avoidThis;
     private bool $barrelAged;
     private ?array $buyThis;
-    private ?string $username;
 
     public function __construct(
         array $answers,
         ?array $avoidThis,
         bool $barrelAged,
-        ?array $buyThis,
-        ?string $username
+        ?array $buyThis
     ) {
         $this->answers = $answers;
         $this->avoidThis = $avoidThis;
         $this->barrelAged = $barrelAged;
         $this->buyThis = $buyThis;
-        $this->username = $username;
     }
 
     public static function fromArray( array $data ): self
@@ -32,7 +29,6 @@ final class BeerData
             $data['avoidThis'],
             $data['barrelAged'],
             $data['buyThis'],
-            $data['username']
         );
     }
 
@@ -43,7 +39,6 @@ final class BeerData
             'avoidThis' => $this->avoidThis,
             'barrelAged' => $this->barrelAged,
             'buyThis' => $this->buyThis,
-            'username' => $this->username,
         ];
     }
 }

@@ -18,7 +18,6 @@ final class StylesLogsRepository implements StylesLogsRepositoryInterface
             DB::table( 'styles_logs' )
                 ->insert(
                     [
-                        'username' => $user->getUsername(),
                         'email' => $user->getEmail(),
                         'recommended_ids' => \implode( ', ', $recommendedIds ),
                         'unsuitable_ids' => \implode( ', ', $unsuitableIds ),

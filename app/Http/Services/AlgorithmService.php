@@ -143,7 +143,6 @@ final class AlgorithmService
                 'avoidThis' => $unsuitableStylesCollection !== null
                     ? $unsuitableStylesCollection->toArray()
                     : null,
-                'username' => $user->getUsername(),
                 'barrelAged' => $userAnswers->isBarrelAged(),
                 'answers' => $inputAnswers,
             ]
