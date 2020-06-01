@@ -5,6 +5,7 @@ namespace App\Http\Repositories;
 
 use App\Http\Utils\SharedCache;
 use GuzzleHttp\ClientInterface;
+use Illuminate\Support\Facades\DB;
 
 final class UntappdRepository implements UntappdRepositoryInterface
 {
@@ -19,6 +20,7 @@ final class UntappdRepository implements UntappdRepositoryInterface
         $this->cache = $cache;
     }
 
+    // todo refactor this class and method to UntappdAPI
     public function fetchOne( string $beerName, string $breweryName ): ?array
     {
         $searchPhrase = $this->buildSearchPhrase( $breweryName, $beerName );
@@ -51,13 +53,21 @@ final class UntappdRepository implements UntappdRepositoryInterface
             ? $response['response']['beers']['items'][0]['beer']['in_production'] ?? null
             : null;
 
-        // set to cache for 7 days
-
         return [ 'inProduction' => $inProduction ];
     }
 
     private function buildSearchPhrase( string $breweryName, string $beerName ): string
     {
         return \str_replace( ' ', '+', $breweryName ) . '+' . \str_replace( ' ', '+', $beerName );
+    }
+
+    public function add( array $beerData ): void
+    {
+        try {
+            DB::table( 'untappd' )
+                ->insertOrIgnore( $beerData );
+        } catch ( \Exception $ex ) {
+
+        }
     }
 }

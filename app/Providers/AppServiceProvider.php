@@ -20,6 +20,7 @@ use App\Http\Services\NewsletterService;
 use App\Http\Services\OnTapService;
 use App\Http\Services\QuestionsService;
 use App\Http\Services\SimpleResultsService;
+use App\Http\Services\UntappdService;
 use App\Http\Utils\Dictionary;
 use App\Http\Utils\ErrorsLogger;
 use App\Http\Utils\SharedCache;
@@ -86,6 +87,13 @@ class AppServiceProvider extends ServiceProvider
             return new UntappdRepository(
                 \resolve( 'HttpClient' ),
                 \resolve( 'SharedCache' ),
+            );
+        }
+        );
+        $this->app->singleton(
+            'UntappdService', static function () {
+            return new UntappdService(
+                \resolve( 'UntappdRepository' ),
             );
         }
         );
