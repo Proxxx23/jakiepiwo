@@ -46,15 +46,20 @@ final class UntappdRepository implements UntappdRepositoryInterface
                 ->getContents(), true
         );
 
-        if ( empty( $response ) ) {
+        $beerCount = \count( $response['response']['beers']['count'] ) ?? 0;
+        if ( empty( $response ) || $beerCount !== 1 ) {
             return null;
         }
 
-        $inProduction = isset( $response['response']['beers'] ) && $response['response']['beers']['count'] === 1
-            ? $response['response']['beers']['items'][0]['beer']['in_production'] ?? null
-            : null;
-
-        return [ 'inProduction' => $inProduction ];
+        return [
+            'beerId' => $response['response']['beers']['items'][0]['beer']['bid'] ?? null,
+            'beerAbv' => $response['response']['beers']['items'][0]['beer']['beer_abv'] ?? null,
+            'beerIbu' => $response['response']['beers']['items'][0]['beer']['beer_ibu'] ?? null,
+            'beerDescription' => $response['response']['beers']['items'][0]['beer']['beer_description'] ?? null,
+            'checkinCount' => $response['response']['beers']['items'][0]['checkin_count'] ?? null,
+            'beerStyle' => $response['response']['beers']['items'][0]['beer']['beer_style'] ?? null,
+            'inProduction' => $response['response']['beers']['items'][0]['beer']['in_production'] ?? null,
+        ];
     }
 
     private function buildSearchPhrase( string $breweryName, string $beerName ): string
