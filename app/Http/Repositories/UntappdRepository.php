@@ -4,6 +4,7 @@ declare( strict_types=1 );
 namespace App\Http\Repositories;
 
 use App\Http\Utils\SharedCache;
+use Carbon\Carbon;
 use GuzzleHttp\ClientInterface;
 use Illuminate\Support\Facades\DB;
 use Transliterator;
@@ -46,7 +47,7 @@ final class UntappdRepository implements UntappdRepositoryInterface
                 ->getContents(), true
         );
 
-        $beerCount = \count( $response['response']['beers']['count'] ) ?? 0;
+        $beerCount = $response['response']['beers']['count'] ?? 0;
         if ( empty( $response ) || $beerCount !== 1 ) {
             return null;
         }
@@ -79,7 +80,8 @@ final class UntappdRepository implements UntappdRepositoryInterface
             $data[] = [
                 'beer_name' => \str_replace( '  ', ' ', $beerName ),
                 'brewery_name' => \str_replace( '  ', ' ', $breweryName ),
-                'next_update' => \time(),
+                'next_update' => Carbon::now()
+                    ->format( 'Y-m-d H:i:s' ),
             ];
         }
 

@@ -4,13 +4,13 @@ declare( strict_types=1 );
 namespace App\Http\Services;
 
 use App\Http\Repositories\UntappdRepositoryInterface;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
 final class UntappdService
 {
     private static int $remainingLimit = self::DAILY_LIMIT;
-    private const DAILY_LIMIT = 2;
-    private const NEXT_UPDATE_IN_SECONDS = 2678400; // 1 month
+    private const DAILY_LIMIT = 100;
 
     private UntappdRepositoryInterface $untappdRepository;
 
@@ -22,29 +22,37 @@ final class UntappdService
     public function process(): void
     {
         $newRecords = DB::table( 'untappd' )
-            ->select( 'beer_name', 'brewery_name' )
+            ->select( 'id', 'beer_name', 'brewery_name' )
             ->where( 'next_update', '=', '0000-00-00 00:00' )
             ->limit( self::DAILY_LIMIT )
-            ->get()
-            ->toArray();
+            ->get();
 
-        self::$remainingLimit -= \count( $newRecords );
+        self::$remainingLimit -= $newRecords->count();
 
-        $recordsToUpdate = DB::table( 'untappd' )
-            ->select( 'beer_name', 'brewery_name' )
-            ->where( 'next_update', '<>', '0000-00-00 00:00' )
-            ->orderBy( 'next_update', 'desc' )
-            ->limit( self::$remainingLimit )
-            ->get()
-            ->toArray();
+        $recordsToUpdate = [];
+        if ( self::$remainingLimit > 0 ) {
+            $time = Carbon::now()
+                ->format( 'Y-m-d H:i:s' );
+            $recordsToUpdate = DB::table( 'untappd' )
+                ->select( 'id', 'beer_name', 'brewery_name' )
+                ->where( 'next_update', '<>', '0000-00-00 00:00' )
+                ->where( 'next_update', '<', $time )
+                ->where( 'beer_id', '<>', 'null' )
+                ->orderBy( 'next_update', 'desc' )
+                ->limit( self::$remainingLimit )
+                ->get();
+        }
 
-        $records = \array_merge( $newRecords, $recordsToUpdate );
-        if ( \count($records) === 0 ) {
+        $records = \array_merge( $newRecords->toArray(), $recordsToUpdate->toArray() );
+        if ( \count( $records ) === 0 ) {
             return;
         }
 
         foreach ( $records as $record ) {
-            $beerInfo = $this->untappdRepository->fetchOne( $record['beer_name'], $record['brewery_name'] );
+
+            $beerName = $record->beer_name;
+            $breweryName = $record->brewery_name;
+            $beerInfo = $this->untappdRepository->fetchOne( $beerName, $breweryName );
             if ( $beerInfo === null || $beerInfo === [] ) {
                 continue;
             }
@@ -52,8 +60,8 @@ final class UntappdService
             DB::table( 'untappd' )
                 ->updateOrInsert(
                     [
-                        'beer_name' => $record['beerName'],
-                        'brewery_name' => $record['breweryName'],
+                        'beer_name' => $beerName,
+                        'brewery_name' => $breweryName,
                     ],
                     [
                         'beer_id' => $beerInfo['beerId'],
@@ -61,10 +69,13 @@ final class UntappdService
                         'beer_ibu' => $beerInfo['beerIbu'],
                         'beer_description' => $beerInfo['beerDescription'],
                         'beer_style' => $beerInfo['beerStyle'],
-                        'checkin_count' => $beerInfo['checkingCount'],
+                        'checkin_count' => $beerInfo['checkinCount'],
                         'in_production' => $beerInfo['inProduction'],
-                        'updated_at' => \time(),
-                        'next_update' => \time() + self::NEXT_UPDATE_IN_SECONDS,
+                        'updated_at' => Carbon::now()
+                            ->format( 'Y-m-d H:i:s' ),
+                        'next_update' => Carbon::now()
+                            ->addMonth()
+                            ->format( 'Y-m-d H:i:s' ),
                     ],
                 );
         }
