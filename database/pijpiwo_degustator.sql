@@ -60,17 +60,20 @@ CREATE TABLE `styles_logs` (
 CREATE TABLE `untappd` (
   `id` int(11) NOT NULL,
   `beer_id` int(11) DEFAULT NULL,
-  `beer_name` varchar(255) COLLATE utf16_unicode_ci NOT NULL,
-  `brewery_name` varchar(255) COLLATE utf16_unicode_ci NOT NULL,
+  `beer_name` varchar(100) COLLATE utf16_unicode_ci NULL,
+  `brewery_name` varchar(100) COLLATE utf16_unicode_ci NULL,
   `beer_abv` float DEFAULT NULL,
-  `beer_ibu` int(11) DEFAULT NULL,
+  `beer_ibu` int(3) DEFAULT NULL,
   `beer_description` text COLLATE utf16_unicode_ci,
-  `beer_style` varchar(255) COLLATE utf16_unicode_ci DEFAULT NULL,
+  `beer_style` varchar(100) COLLATE utf16_unicode_ci DEFAULT NULL,
   `checkin_count` int(100) DEFAULT NULL,
   `in_production` int(1) DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `next_update` datetime NOT NULL
+  `updated_at` datetime NULL DEFAULT NULL,
+  `next_update` datetime NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf16 COLLATE=utf16_unicode_ci;
+
+ALTER TABLE untappd
+    ADD CONSTRAINT brewery_and_beer_name UNIQUE(brewery_name, beer_name);
 
 -- --------------------------------------------------------
 

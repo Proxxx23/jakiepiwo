@@ -23,11 +23,12 @@ final class UntappdService
     {
         $newRecords = DB::table( 'untappd' )
             ->select( 'id', 'beer_name', 'brewery_name' )
-            ->where( 'next_update', '=', '0000-00-00 00:00' )
+            ->whereNull( 'next_update' )
             ->limit( self::DAILY_LIMIT )
-            ->get();
+            ->get()
+            ->toArray();
 
-        self::$remainingLimit -= $newRecords->count();
+        self::$remainingLimit -= \count( $newRecords );
 
         $recordsToUpdate = [];
         if ( self::$remainingLimit > 0 ) {
@@ -35,15 +36,16 @@ final class UntappdService
                 ->format( 'Y-m-d H:i:s' );
             $recordsToUpdate = DB::table( 'untappd' )
                 ->select( 'id', 'beer_name', 'brewery_name' )
-                ->where( 'next_update', '<>', '0000-00-00 00:00' )
+                ->whereNotNull( 'next_update' )
                 ->where( 'next_update', '<', $time )
                 ->where( 'beer_id', '<>', 'null' )
                 ->orderBy( 'next_update', 'desc' )
                 ->limit( self::$remainingLimit )
-                ->get();
+                ->get()
+                ->toArray();
         }
 
-        $records = \array_merge( $newRecords->toArray(), $recordsToUpdate->toArray() );
+        $records = \array_merge( $newRecords, $recordsToUpdate );
         if ( \count( $records ) === 0 ) {
             return;
         }
