@@ -13,21 +13,21 @@
         "ext-pdo": "*",
         "ext-simplexml": "*",
         "barryvdh/laravel-cors": "~1.0.1",
-        "fideloper/proxy": "~4.3.0",
-        "guzzlehttp/guzzle": "~6.5.0",
+        "fideloper/proxy": "~4.4.0",
+        "guzzlehttp/guzzle": "~7.2.0",
         "laravel/framework": "~6.18.0",
-        "laravel/helpers": "~1.2.0",
+        "laravel/helpers": "~1.3.0",
         "laravel/tinker": "~2.4.0",
-        "nesbot/carbon": "~2.32.0",
-        "symfony/cache": "~5.0.1",
-        "symfony/dotenv": "~5.0.1"
+        "nesbot/carbon": "~2.41.0",
+        "symfony/cache": "~5.1.0",
+        "symfony/dotenv": "~5.1.0"
     },
     "require-dev": {
         "drewm/mailchimp-api": "~2.5.0",
-        "filp/whoops": "~2.7.0",
-        "mockery/mockery": "~1.3.1",
+        "filp/whoops": "~2.8.0",
+        "mockery/mockery": "~1.4.1",
         "phpstan/phpstan": "~0.12.0",
-        "phpunit/phpunit": "~9.1.0",
+        "phpunit/phpunit": "~9.4.0",
         "roave/security-advisories": "dev-master"
     },
     "autoload": {
