@@ -76,7 +76,6 @@ final class UntappdRepository implements UntappdRepositoryInterface
     {
         $rule = ':: Latin-ASCII; :: NFD; :: [:Nonspacing Mark:] Remove; :: Lower(); :: NFC;';
         $i18n = Transliterator::createFromRules( $rule, Transliterator::FORWARD );
-
         $data = null;
         foreach ( $beerData as $index => $beer ) {
             $breweryName = $i18n->transliterate( $beer['subtitle'] );
@@ -85,6 +84,10 @@ final class UntappdRepository implements UntappdRepositoryInterface
                 'beer_name' => \str_replace( '  ', ' ', $beerName ),
                 'brewery_name' => \str_replace( '  ', ' ', $breweryName ),
             ];
+        }
+
+        if ($data === null) {
+            return;
         }
 
         try {
