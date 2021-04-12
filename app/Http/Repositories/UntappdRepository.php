@@ -21,7 +21,15 @@ final class UntappdRepository implements UntappdRepositoryInterface
         $this->cache = $cache;
     }
 
-    // todo refactor this class and method to UntappdAPI
+    /**
+     * todo refactor this class and method to UntappdAPI
+     *
+     * @param string $beerName
+     * @param string $breweryName
+     *
+     * @return array|null
+     * @throws \GuzzleHttp\Exception\GuzzleException|\JsonException
+     */
     public function fetchOne( string $beerName, string $breweryName ): ?array
     {
         $searchPhrase = $this->buildSearchPhrase( $breweryName, $beerName );
@@ -41,10 +49,7 @@ final class UntappdRepository implements UntappdRepositoryInterface
             return null;
         }
 
-        $response = \json_decode(
-            $request->getBody()
-                ->getContents(), true
-        );
+        $response = \json_decode( $request->getBody()->getContents(), true, 512, \JSON_THROW_ON_ERROR );
 
         $beerCount = $response['response']['beers']['count'] ?? 0;
         if ( empty( $response ) || $beerCount !== 1 ) {
@@ -70,7 +75,7 @@ final class UntappdRepository implements UntappdRepositoryInterface
     public function add( array $beerData ): void
     {
         $rule = ':: Latin-ASCII; :: NFD; :: [:Nonspacing Mark:] Remove; :: Lower(); :: NFC;';
-        $i18n = \Transliterator::createFromRules( $rule, Transliterator::FORWARD );
+        $i18n = Transliterator::createFromRules( $rule, Transliterator::FORWARD );
 
         $data = null;
         foreach ( $beerData as $index => $beer ) {

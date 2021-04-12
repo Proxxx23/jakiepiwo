@@ -50,6 +50,13 @@ final class AlgorithmService
         $this->errorsLogger = $errorsLogger;
     }
 
+    /**
+     * @param array $inputAnswers
+     * @param FormData $user
+     *
+     * @return BeerData
+     * @throws ConnectionException
+     */
     public function createBeerData( array $inputAnswers, FormData $user ): BeerData
     {
         if ( $this->polskiKraftRepository->connectionRefused() ) {
@@ -151,11 +158,11 @@ final class AlgorithmService
 
     private function batchMarkTaste( Answers $userAnswers, array $inputAnswers ): void
     {
-        $userAnswers->setChocolate( $inputAnswers[7] === 'tak' );
-        $userAnswers->setCoffee( $inputAnswers[8] === 'tak' );
-        $userAnswers->setSour( $inputAnswers[11] === 'chętnie' );
-        $userAnswers->setSmoked( $inputAnswers[12] === 'tak' );
-        $userAnswers->setBarrelAged( $inputAnswers[13] === 'tak' );
+        $userAnswers->setChocolate( $inputAnswers[7] === 'tak' )
+            ->setCoffee( $inputAnswers[8] === 'tak' )
+            ->setSour( $inputAnswers[11] === 'chętnie' )
+            ->setSmoked( $inputAnswers[12] === 'tak' )
+            ->setBarrelAged( $inputAnswers[13] === 'tak' );
     }
 
     /**
@@ -202,7 +209,7 @@ final class AlgorithmService
      * Domyślnie zwiększa punktację stylu o 1
      * Buduje tablicę z danymi na temat mnożników, aby później kalkulować na tej podstawie
      *
-     * @param string $styleIds
+     * @param string|null $styleIds
      *
      * @return array|null
      */
@@ -220,8 +227,7 @@ final class AlgorithmService
 
                 /** @var array $idPointsPair */
                 $idPointsPair = \explode( ':', $idMultiplierPair );
-                $styleId = $idPointsPair[0];
-                $multiplier = $idPointsPair[1];
+                [ $styleId, $multiplier ] = $idPointsPair;
 
                 $idsToCalculate[$styleId] = (float) $multiplier;
             } else {

@@ -6,7 +6,7 @@ namespace App\Http\Controllers;
 use App\Http\Services\UntappdService;
 use Illuminate\Routing\Controller;
 
-class UntappdCronController extends Controller
+final class UntappdCronController extends Controller
 {
     public function handle(): void
     {

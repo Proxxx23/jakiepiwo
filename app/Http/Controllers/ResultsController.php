@@ -23,8 +23,6 @@ final class ResultsController extends Controller
     private const INTERNAL_ERROR_MESSAGE = 'Internal error occured.';
     private const NO_RESULTS_FOR_HASH_ERROR_MESSAGE = 'Could not get results for provided hash.';
 
-    private const ONTAP_RESULTS_HASH_PATTERN = '%s_USER';
-
     /**
      * @param Request $request
      * @param ErrorsLogger $errorsLogger

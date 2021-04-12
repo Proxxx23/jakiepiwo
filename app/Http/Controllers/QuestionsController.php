@@ -10,7 +10,7 @@ final class QuestionsController
     public function handle(): JsonResponse
     {
         return \response()->json(
-            \resolve( 'QuestionsService' )->getQuestions(), 200, [], JSON_UNESCAPED_UNICODE
+            \resolve( 'QuestionsService' )->getQuestions(), 200, [], \JSON_UNESCAPED_UNICODE
         );
     }
 }

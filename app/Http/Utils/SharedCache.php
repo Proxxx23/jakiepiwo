@@ -19,7 +19,7 @@ final class SharedCache implements SharedCacheInterface
     }
 
     /**
-     * @param string $cacheKey
+     * @param string|null $cacheKey
      *
      * @return mixed|null
      */

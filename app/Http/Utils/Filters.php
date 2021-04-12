@@ -123,14 +123,13 @@ final class Filters
             return;
         }
 
-        foreach ( $beers as $index => &$beer ) {
+        foreach ( $beers as $index => $beer ) {
             $beerName = \preg_replace( '/[\x{200B}-\x{200D}\x{FEFF}]/u', '', $beer['title'] );
             $beerKeywords = \array_column( $beer['keywords'], 'keyword' );
             if ( Helper::pregMatchMultiple( $exclusionsPattern, [ $beerName, \implode( ',', $beerKeywords ) ] ) ) {
                 unset( $beers[$index] );
             }
         }
-        unset( $beer );
     }
 
     /**
@@ -150,7 +149,7 @@ final class Filters
             return;
         }
 
-        foreach ( $beers as $index => &$beer ) {
+        foreach ( $beers as $index => $beer ) {
             $beerName = \preg_replace( '/[\x{200B}-\x{200D}\x{FEFF}]/u', '', $beer['title'] );
             $beerSubtitle = \preg_replace( '/[\x{200B}-\x{200D}\x{FEFF}]/u', '', $beer['subtitle_alt'] );
             $beerKeywords = \array_column( $beer['keywords'], 'keyword' );
@@ -160,7 +159,6 @@ final class Filters
                 unset( $beers[$index] );
             }
         }
-        unset( $beer );
     }
 
     /**
@@ -200,14 +198,13 @@ final class Filters
             return;
         }
 
-        foreach ( $beers as $index => &$beer ) {
+        foreach ( $beers as $index => $beer ) {
             $beerName = \preg_replace( '/[\x{200B}-\x{200D}\x{FEFF}]/u', '', $beer['title'] );
             $beerKeywords = \array_column( $beer['keywords'], 'keyword' );
             if ( Helper::pregMatchMultiple( $exclusionsPattern, [ $beerName, \implode( ',', $beerKeywords ) ] ) ) {
                 unset( $beers[$index] );
             }
         }
-        unset( $beer );
 
         self::filterImperials( $beers, $styleId, $density );
     }

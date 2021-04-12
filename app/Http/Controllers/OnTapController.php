@@ -16,6 +16,7 @@ final class OnTapController
      * @param SharedCache $cache
      *
      * @return Response
+     * @throws \JsonException
      */
     public function handle( Request $request, SharedCache $cache ): Response
     {
@@ -49,10 +50,10 @@ final class OnTapController
         $cachedData = $cache->get( $cacheKey );
 
         $resulsJson = ( $cachedData !== null )
-            ? \json_decode( $cachedData, true )
+            ? \json_decode( $cachedData, true, 512, \JSON_THROW_ON_ERROR )
             : \json_decode(
                 \resolve( 'SimpleResultsService' )
-                    ->getResultsByResultsHash( $resultsHash ), true
+                    ->getResultsByResultsHash( $resultsHash ), true, 512, \JSON_THROW_ON_ERROR
             ); // first we ask DB, then cache same as above
 
         $styles = $resulsJson['buyThis'] ?? null;

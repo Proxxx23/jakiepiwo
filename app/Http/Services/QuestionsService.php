@@ -24,7 +24,7 @@ final class QuestionsService
      * @param array $requestData
      *
      * @return array
-     * @throws \UnexpectedValueException
+     * @throws UnexpectedValueException
      */
     public function validateInput( array $requestData ): array
     {

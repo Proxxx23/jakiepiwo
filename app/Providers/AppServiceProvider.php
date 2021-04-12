@@ -1,4 +1,5 @@
 <?php
+declare( strict_types=1 );
 
 namespace App\Providers;
 
@@ -34,114 +35,76 @@ class AppServiceProvider extends ServiceProvider
     private const DEFAULT_ONTAP_TIMEOUT = 10; // in seconds
     private const DEFAULT_GEOLOCATION_TIMEOUT = 3; // in seconds
 
-    /**
-     * Bootstrap any application services.
-     */
-    public function boot(): void
-    {
-
-    }
-
-    /**
-     * Register any application services.
-     */
     public function register(): void
     {
         $this->app->bind(
-            ErrorsLogger::class, static function () {
-            return new ErrorsLogger( new ErrorLogsRepository() );
-        }
+            ErrorsLogger::class, static fn(): ErrorsLogger => new ErrorsLogger( new ErrorLogsRepository() )
         );
         $this->app->singleton(
-            'ScoringRepository', static function () {
-            return new ScoringRepository();
-        }
+            'ScoringRepository', static fn(): ScoringRepository => new ScoringRepository()
         );
         $this->app->singleton(
-            'StylesLogsRepository', static function () {
-            return new StylesLogsRepository();
-        }
+            'StylesLogsRepository', static fn(): StylesLogsRepository => new StylesLogsRepository()
         );
         $this->app->singleton(
-            'BeersRepository', static function () {
-            return new BeersRepository();
-        }
+            'BeersRepository', static fn(): BeersRepository => new BeersRepository()
         );
         $this->app->singleton(
-            'SharedCacheFilesystemAdapter', static function () {
-            return new FilesystemAdapter( '', SharedCache::DEFAULT_CACHE_TTL );
-        }
+            'SharedCacheFilesystemAdapter',
+            static fn(): FilesystemAdapter => new FilesystemAdapter( '', SharedCache::DEFAULT_CACHE_TTL )
         );
         $this->app->singleton(
-            'SharedCache', static function () {
-            return new SharedCache( \resolve( 'SharedCacheFilesystemAdapter' ) );
-        }
+            'SharedCache', static fn(): SharedCache => new SharedCache( \resolve( 'SharedCacheFilesystemAdapter' ) )
         );
         $this->app->singleton(
-            'HttpClient', static function () {
-            return new Client();
-        }
+            'HttpClient', static fn(): Client => new Client()
         );
         $this->app->singleton(
-            'UntappdRepository', static function () {
-            return new UntappdRepository(
-                \resolve( 'HttpClient' ),
-                \resolve( 'SharedCache' ),
-            );
-        }
+            'UntappdRepository', static fn(): UntappdRepository => new UntappdRepository(
+            \resolve( 'HttpClient' ),
+            \resolve( 'SharedCache' ),
+        )
         );
         $this->app->singleton(
-            'UntappdService', static function () {
-            return new UntappdService(
-                \resolve( 'UntappdRepository' ),
-            );
-        }
+            'UntappdService', static fn(): UntappdService => new UntappdService(
+            \resolve( 'UntappdRepository' ),
+        )
         );
         $this->app->singleton(
-            'PolskiKraftRepository', static function () {
-            return new PolskiKraftRepository(
-                new Dictionary(),
-                \resolve( 'SharedCache' ),
-                \resolve( 'HttpClient' ),
-                \resolve( 'UntappdRepository' )
-            );
-        }
+            'PolskiKraftRepository', static fn(): PolskiKraftRepository => new PolskiKraftRepository(
+            new Dictionary(),
+            \resolve( 'SharedCache' ),
+            \resolve( 'HttpClient' ),
+            \resolve( 'UntappdRepository' )
+        )
         );
         $this->app->singleton(
-            'AlgorithmService', static function () {
-            return new AlgorithmService(
-                \resolve( 'ScoringRepository' ),
-                \resolve( 'PolskiKraftRepository' ),
-                \resolve( 'StylesLogsRepository' ),
-                \resolve( 'BeersRepository' ),
-                \resolve( ErrorsLogger::class )
-            );
-        }
+            'AlgorithmService', static fn(): AlgorithmService => new AlgorithmService(
+            \resolve( 'ScoringRepository' ),
+            \resolve( 'PolskiKraftRepository' ),
+            \resolve( 'StylesLogsRepository' ),
+            \resolve( 'BeersRepository' ),
+            \resolve( ErrorsLogger::class )
+        )
         );
         $this->app->singleton(
-            'NewsletterService', static function () {
-            return new NewsletterService(
-                new NewsletterRepository( new MailChimp( \config( 'mail.mailchimpApiKey' ) ) )
-            );
-        }
+            'NewsletterService', static fn(): NewsletterService => new NewsletterService(
+            new NewsletterRepository( new MailChimp( \config( 'mail.mailchimpApiKey' ) ) )
+        )
         );
         $this->app->singleton(
-            'AnswersLoggerService', static function () {
-            return new AnswersLoggerService( new UserAnswersRepository() );
-        }
+            'AnswersLoggerService',
+            static fn(): AnswersLoggerService => new AnswersLoggerService( new UserAnswersRepository() )
         );
         $this->app->singleton(
-            'SimpleResultsService', static function () {
-            return new SimpleResultsService( new ResultsRepository(), \resolve( 'SharedCache' ) );
-        }
+            'SimpleResultsService',
+            static fn() => new SimpleResultsService( new ResultsRepository(), \resolve( 'SharedCache' ) )
         );
         $this->app->singleton(
-            'QuestionsService', static function () {
-            return new QuestionsService( new QuestionsRepository() );
-        }
+            'QuestionsService', static fn(): QuestionsService => new QuestionsService( new QuestionsRepository() )
         );
         $this->app->singleton(
-            'OnTapService', static function () {
+            'OnTapService', static function (): OnTapService {
 
             $onTapConfig = [ 'timeout' => self::DEFAULT_ONTAP_TIMEOUT ];
             $geolocationConfig = [ 'timeout' => self::DEFAULT_GEOLOCATION_TIMEOUT ];

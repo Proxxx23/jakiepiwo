@@ -78,8 +78,8 @@ final class OnTapRepository implements OnTapRepositoryInterface
 
         //fetch all the taps in given places and find beer
         $tapsData = null;
-        foreach ( $places as &$cityId ) {
-            foreach ( $cityId as &$place ) {
+        foreach ( $places as $cityId ) {
+            foreach ( $cityId as $place ) {
                 $taps = $this->fetchTapsByPlaceId( $place['id'] );
                 if ( empty( $taps ) ) {
                     continue;
@@ -92,9 +92,7 @@ final class OnTapRepository implements OnTapRepositoryInterface
                     continue;
                 }
             }
-            unset( $place );
         }
-        unset( $cityId );
 
         if ( $tapsData === null ) {
             return null;
@@ -250,7 +248,7 @@ final class OnTapRepository implements OnTapRepositoryInterface
         $breweryName = \strtolower( $beerData['subtitle'] );
         $style = \strtolower( $beerData['subtitleAlt'] );
 
-        foreach ( $tapBeerData as &$tapBeer ) {
+        foreach ( $tapBeerData as $tapBeer ) {
             if ( empty( $tapBeer['beer'] ) ) {
                 continue;
             }
@@ -262,7 +260,6 @@ final class OnTapRepository implements OnTapRepositoryInterface
                 return true;
             }
         }
-        unset( $tapBeer );
 
         return false;
     }

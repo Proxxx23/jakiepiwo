@@ -32,6 +32,14 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
     private ClientInterface $httpClient;
     private UntappdRepositoryInterface $untappdRepository;
 
+    /**
+     * @param Dictionary $dictionary
+     * @param SharedCache $cache
+     * @param ClientInterface $httpClient
+     * @param UntappdRepositoryInterface $untappdRepository
+     *
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
     public function __construct(
         Dictionary $dictionary,
         SharedCache $cache,
@@ -147,7 +155,7 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
         $this->sortByRating( $beers );
 
         $beersToShow = $beersLeft = $beersToShowSecondTurn = [];
-        foreach ( $beers as &$beer ) {
+        foreach ( $beers as $beer ) {
             $beerRating = (float) $beer['rating'];
 
             $daysToLastUpdated = $this->calculateDaysTo( $beer['updated_at'] );
@@ -164,7 +172,6 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
                 return $beersToShow;
             }
         }
-        unset( $beer );
 
         $beersToShowCount = \count( $beersToShow );
         $remaining = self::BEERS_TO_SHOW_LIMIT - $beersToShowCount;
