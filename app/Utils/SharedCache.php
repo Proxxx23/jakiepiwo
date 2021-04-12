@@ -1,7 +1,7 @@
 <?php
 declare( strict_types=1 );
 
-namespace App\Http\Utils;
+namespace App\Utils;
 
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\InvalidArgumentException;
