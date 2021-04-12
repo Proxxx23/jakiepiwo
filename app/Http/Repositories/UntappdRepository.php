@@ -3,7 +3,7 @@ declare( strict_types=1 );
 
 namespace App\Http\Repositories;
 
-use App\Http\Utils\SharedCache;
+use App\Utils\SharedCache;
 use GuzzleHttp\ClientInterface;
 use Illuminate\Support\Facades\DB;
 use Transliterator;

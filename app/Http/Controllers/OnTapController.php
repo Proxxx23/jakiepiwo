@@ -4,8 +4,8 @@ declare( strict_types=1 );
 namespace App\Http\Controllers;
 
 use App\Http\Objects\ValueObject\Coordinates;
-use App\Http\Services\SimpleResultsService;
-use App\Http\Utils\SharedCache;
+use App\Services\SimpleResultsService;
+use App\Utils\SharedCache;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 

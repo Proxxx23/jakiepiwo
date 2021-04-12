@@ -4,7 +4,7 @@ declare( strict_types=1 );
 namespace App\Services;
 
 use App\Http\Repositories\ResultsRepositoryInterface;
-use App\Http\Utils\SharedCacheInterface;
+use App\Utils\SharedCacheInterface;
 
 final class SimpleResultsService
 {

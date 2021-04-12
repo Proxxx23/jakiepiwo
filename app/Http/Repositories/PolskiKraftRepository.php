@@ -6,9 +6,9 @@ namespace App\Http\Repositories;
 use App\Http\Objects\Answers;
 use App\Http\Objects\PolskiKraftData;
 use App\Http\Objects\PolskiKraftDataCollection;
-use App\Http\Utils\Dictionary;
-use App\Http\Utils\Filters;
-use App\Http\Utils\SharedCache;
+use App\Utils\Dictionary;
+use App\Utils\Filters;
+use App\Utils\SharedCache;
 use Carbon\Carbon;
 use GuzzleHttp\ClientInterface;
 

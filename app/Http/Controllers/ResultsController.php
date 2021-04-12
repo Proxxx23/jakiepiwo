@@ -3,15 +3,14 @@ declare( strict_types=1 );
 
 namespace App\Http\Controllers;
 
-use App\Http\Services\SimpleResultsService;
-use App\Http\Utils\SharedCache;
+use App\Services\SimpleResultsService;
+use App\Utils\SharedCache;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Routing\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use App\Http\Objects\Answers;
 use App\Http\Objects\FormData;
-
-use App\Http\Utils\ErrorsLogger;
+use App\Utils\ErrorsLogger;
 use Illuminate\Http\Request;
 
 final class ResultsController extends Controller

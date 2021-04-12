@@ -3,7 +3,7 @@ declare( strict_types=1 );
 
 namespace App\Http\Controllers;
 
-use App\Http\Services\UntappdService;
+use App\Services\UntappdService;
 use Illuminate\Routing\Controller;
 
 final class UntappdCronController extends Controller

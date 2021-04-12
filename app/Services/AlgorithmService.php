@@ -6,8 +6,9 @@ namespace App\Services;
 use App\Exceptions\ConnectionException;
 use App\Http\Objects\StyleInfo;
 use App\Http\Repositories\ScoringRepository;
-use App\Http\Utils\Exclude;
-use App\Http\Utils\Synergy;
+use App\Utils\ErrorsLoggerInterface;
+use App\Utils\Exclude;
+use App\Utils\Synergy;
 use Exception;
 use App\Http\Objects\Answers;
 use App\Http\Objects\BeerData;
@@ -20,7 +21,6 @@ use App\Http\Repositories\BeersRepositoryInterface;
 use App\Http\Repositories\PolskiKraftRepositoryInterface;
 use App\Http\Repositories\ScoringRepositoryInterface;
 use App\Http\Repositories\StylesLogsRepositoryInterface;
-use App\Http\Utils\ErrorsLoggerInterface;
 
 final class AlgorithmService
 {
