@@ -28,7 +28,7 @@ final class UserAnswersRepository implements UserAnswersRepositoryInterface
 
                     ]
                 );
-        } catch ( \Exception $ex ) {
+        } catch ( \Exception ) {
 
         }
     }

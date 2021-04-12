@@ -17,7 +17,7 @@ final class ErrorLogsRepository implements ErrorLogsRepositoryInterface
                         'created_at' => \now(),
                     ]
                 );
-        } catch ( \Exception $exception ) {
+        } catch ( \Exception ) {
 
         }
     }

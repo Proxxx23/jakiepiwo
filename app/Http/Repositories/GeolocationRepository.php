@@ -75,14 +75,15 @@ final class GeolocationRepository implements GeolocationRepositoryInterface
 
         return !empty( $results )
             ? $results
-            : $this->getAllCitiesInVoivodeship() ?? null;  // no city at all
+            : $this->getAllCitiesInVoivodeship();  // no city at all
     }
 
     /**
      * @param Coordinates $coordinates
      *
-     * @return array|null[]|null
-     * @throws \GuzzleHttp\Exception\GuzzleException|\JsonException
+     * @return array|null
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \JsonException
      */
     private function searchViaOSM( Coordinates $coordinates ): ?array
     {
@@ -91,7 +92,7 @@ final class GeolocationRepository implements GeolocationRepositoryInterface
                 'GET',
                 \sprintf( self::OSM_API_URL_PATTERN, $coordinates->getLatitude(), $coordinates->getLongitude() )
             );
-        } catch ( \Exception $ex ) {
+        } catch ( \Exception ) {
             return null;
         }
 
@@ -103,7 +104,7 @@ final class GeolocationRepository implements GeolocationRepositoryInterface
             $request->getBody()
                 ->getContents()
         );
-        $json = \json_encode( $xml, \JSON_THROW_ON_ERROR, 512 );
+        $json = \json_encode( $xml, \JSON_THROW_ON_ERROR );
         $content = \json_decode( $json, true, 512, \JSON_THROW_ON_ERROR );
 
         $partsToSearch = [
@@ -127,8 +128,9 @@ final class GeolocationRepository implements GeolocationRepositoryInterface
     /**
      * @param Coordinates $coordinates
      *
-     * @return array|null[]|null
-     * @throws \GuzzleHttp\Exception\GuzzleException|\JsonException
+     * @return array|null
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \JsonException
      */
     private function searchViaGeoDB( Coordinates $coordinates ): ?array
     {
@@ -137,7 +139,7 @@ final class GeolocationRepository implements GeolocationRepositoryInterface
                 'GET',
                 \sprintf( self::GEODB_API_URL_PATTERN, $coordinates->getLatitude(), $coordinates->getLongitude() )
             );
-        } catch ( \Exception $ex ) {
+        } catch ( \Exception ) {
             return null;
         }
 

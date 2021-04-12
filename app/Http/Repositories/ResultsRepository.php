@@ -3,14 +3,12 @@ declare( strict_types=1 );
 
 namespace App\Http\Repositories;
 
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
 final class ResultsRepository implements ResultsRepositoryInterface
 {
     public function fetchByResultsHash( string $resultsHash ): ?string
     {
-        /** @var Collection $results */
         $results = DB::table( 'user_answers' )
             ->select( 'results' )
             ->where( 'results_hash', '=', $resultsHash )

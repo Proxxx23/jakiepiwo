@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Helpers;
 
-class Helper
+final class Helper
 {
     public static function pregMatchMultiple( string $pattern, array $subjects ): bool
     {

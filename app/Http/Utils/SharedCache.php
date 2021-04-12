@@ -33,7 +33,7 @@ final class SharedCache implements SharedCacheInterface
         try {
             /** @var CacheItemInterface $item */
             $item = $this->cache->getItem( $cacheKey );
-        } catch ( InvalidArgumentException $ex ) {
+        } catch ( InvalidArgumentException ) {
 
         }
 
@@ -53,7 +53,7 @@ final class SharedCache implements SharedCacheInterface
         try {
             /** @var CacheItemInterface $item */
             $item = $this->cache->getItem( $cacheKey );
-        } catch ( InvalidArgumentException $ex ) {
+        } catch ( InvalidArgumentException ) {
 
         }
 

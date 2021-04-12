@@ -93,7 +93,7 @@ final class UntappdRepository implements UntappdRepositoryInterface
         try {
             DB::table( 'untappd' )
                 ->insertOrIgnore( $data );
-        } catch ( \Exception $ex ) {
+        } catch ( \Exception ) {
 
         }
     }

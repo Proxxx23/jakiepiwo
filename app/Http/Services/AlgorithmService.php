@@ -184,7 +184,7 @@ final class AlgorithmService
 
             $pair = \explode( ', ', $idMultiplierPair );
             foreach ( $pair as $item ) {
-                if ( \strpos( \trim( $item ), ':' ) !== false ) {
+                if ( \str_contains( \trim( $item ), ':' ) ) {
 
                     /** @var array $idPointsPair */
                     $idPointsPair = \explode( ':', $item );
@@ -223,7 +223,7 @@ final class AlgorithmService
         $idsToCalculate = [];
 
         foreach ( $idsExploded as $idMultiplierPair ) {
-            if ( \strpos( \trim( $idMultiplierPair ), ':' ) !== false ) {
+            if ( \str_contains( \trim( $idMultiplierPair ), ':' ) ) {
 
                 /** @var array $idPointsPair */
                 $idPointsPair = \explode( ':', $idMultiplierPair );

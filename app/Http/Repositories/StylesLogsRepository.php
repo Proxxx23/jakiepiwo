@@ -25,7 +25,7 @@ final class StylesLogsRepository implements StylesLogsRepositoryInterface
                         'created_at' => \now(),
                     ]
                 );
-        } catch ( \Exception $ex ) {
+        } catch ( \Exception ) {
 
         }
     }
