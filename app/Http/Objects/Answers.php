@@ -3,7 +3,7 @@ declare( strict_types=1 );
 
 namespace App\Http\Objects;
 
-class Answers
+final class Answers
 {
     private const POINT_PERCENT_GAP_WITH_PREVIOUS = 0.90;
     private const POINT_PERCENT_GAP_WITH_FIRST = 0.80;
@@ -14,8 +14,11 @@ class Answers
     private bool $barrelAged = false;
     private int $countRecommended = 3;
     private int $countUnsuitable = 3;
+    /** @var int[]|null[] */
     private array $unsuitableIds = [];
+    /** @var int[]|null */
     private ?array $highlightedIds = null;
+    /** @var int[]|null[] */
     private array $recommendedIds = [];
     private bool $smoked = false;
     private bool $sour = false;
@@ -133,12 +136,7 @@ class Answers
         $this->unsuitableIds[$styleId] += $strength;
     }
 
-    /**
-     * Builds positive synergy if user ticks 2-4 particular answers
-     *
-     * @param array $idsToMultiply
-     * @param float $multiplier
-     */
+    // Builds positive synergy if user ticks 2-4 particular answers
     public function applyPositiveSynergy( array $idsToMultiply, float $multiplier ): void
     {
         foreach ( $idsToMultiply as $id ) {
@@ -150,12 +148,7 @@ class Answers
         }
     }
 
-    /**
-     * Builds negative synergy if user ticks 2-4 particular answers
-     *
-     * @param array $idsToDivide
-     * @param float $divider
-     */
+    // Builds negative synergy if user ticks 2-4 particular answers
     public function applyNegativeSynergy( array $idsToDivide, float $divider ): void
     {
         foreach ( $idsToDivide as $id ) {
@@ -166,33 +159,25 @@ class Answers
         }
     }
 
-    /**
-     * Excludes sour/smoked beers from recommended styles if user says NO
-     *
-     * @param array $idsToExclude
-     */
+    // Excludes sour/smoked beers from recommended styles if user says NO
     public function excludeFromRecommended( array $idsToExclude ): void
     {
         foreach ( $idsToExclude as $id ) {
             if ( !isset( $this->recommendedIds[$id] ) ) {
                 continue;
             }
-            $this->recommendedIds[$id] = 0; //todo: shouldn't be null?
+            $this->recommendedIds[$id] = null;
         }
     }
 
-    /**
-     * Excludes sour/smoked beers from not recommended styles if user says YES
-     *
-     * @param array $idsToExclude
-     */
+    // Excludes sour/smoked beers from not recommended styles if user says YES
     public function excludeFromUnsuitable( array $idsToExclude ): void
     {
         foreach ( $idsToExclude as $id ) {
             if ( !isset( $this->unsuitableIds[$id] ) ) {
                 continue;
             }
-            $this->unsuitableIds[$id] = 0; //todo: shouldn't be null?
+            $this->unsuitableIds[$id] = null;
         }
     }
 
