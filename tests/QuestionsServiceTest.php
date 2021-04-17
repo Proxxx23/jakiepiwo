@@ -4,7 +4,7 @@ declare( strict_types=1 );
 namespace Tests;
 
 use App\Http\Repositories\QuestionsRepository;
-use App\Http\Services\QuestionsService;
+use App\Services\QuestionsService;
 use PHPUnit\Framework\TestCase;
 use UnexpectedValueException;
 

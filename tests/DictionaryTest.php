@@ -3,7 +3,7 @@ declare( strict_types=1 );
 
 namespace Tests;
 
-use App\Http\Utils\Dictionary;
+use App\Utils\Dictionary;
 use PHPUnit\Framework\TestCase;
 
 final class DictionaryTest extends TestCase

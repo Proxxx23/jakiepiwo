@@ -6,7 +6,7 @@ namespace Tests;
 
 use App\Http\Objects\Answers;
 use PHPUnit\Framework\TestCase;
-use \App\Http\Utils\Filters;
+use \App\Utils\Filters;
 
 final class FiltersTest extends TestCase
 {

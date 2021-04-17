@@ -3,7 +3,7 @@ declare( strict_types=1 );
 
 namespace App\Http\Objects;
 
-final class Answers
+class Answers
 {
     private const POINT_PERCENT_GAP_WITH_PREVIOUS = 0.90;
     private const POINT_PERCENT_GAP_WITH_FIRST = 0.80;
