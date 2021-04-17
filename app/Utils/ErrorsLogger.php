@@ -7,12 +7,8 @@ use App\Http\Repositories\ErrorLogsRepositoryInterface;
 
 final class ErrorsLogger implements ErrorsLoggerInterface
 {
-    private ErrorLogsRepositoryInterface $errorLogsRepository;
-
-    public function __construct( ErrorLogsRepositoryInterface $errorLogsRepository )
-    {
-        $this->errorLogsRepository = $errorLogsRepository;
-    }
+    public function __construct( private ErrorLogsRepositoryInterface $errorLogsRepository )
+    { }
 
     public function log( string $errorMessage ): void
     {

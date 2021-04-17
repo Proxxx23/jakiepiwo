@@ -22,8 +22,6 @@ final class OnTapRepository implements OnTapRepositoryInterface
     private const TAPS_CACHE_TTL = 7200; // 1 hour
     private const TAPS_BY_BEER_CACHE_TTL = 7200; // 1 hour
 
-    private ClientInterface $httpClient;
-    private SharedCache $cache;
     private bool $connectionError;
     private array $cities;
 
@@ -33,12 +31,9 @@ final class OnTapRepository implements OnTapRepositoryInterface
      *
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function __construct( ClientInterface $httpClient, SharedCache $cache )
+    public function __construct( private ClientInterface $httpClient, private SharedCache $cache )
     {
-        $this->cache = $cache;
-        $this->httpClient = $httpClient; //todo: set headers globally
         $this->connectionError = $this->checkIsConnectionRefused();
-
     }
 
     public function setCities( array $cities ): void

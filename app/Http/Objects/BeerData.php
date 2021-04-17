@@ -5,22 +5,12 @@ namespace App\Http\Objects;
 
 final class BeerData
 {
-    private array $answers;
-    private ?array $avoidThis;
-    private bool $barrelAged;
-    private ?array $buyThis;
-
     public function __construct(
-        array $answers,
-        ?array $avoidThis,
-        bool $barrelAged,
-        ?array $buyThis
-    ) {
-        $this->answers = $answers;
-        $this->avoidThis = $avoidThis;
-        $this->barrelAged = $barrelAged;
-        $this->buyThis = $buyThis;
-    }
+        private array $answers,
+        private ?array $avoidThis,
+        private bool $barrelAged,
+        private ?array $buyThis
+    ) { }
 
     public static function fromArray( array $data ): self
     {

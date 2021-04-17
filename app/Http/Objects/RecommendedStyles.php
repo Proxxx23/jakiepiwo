@@ -5,13 +5,11 @@ namespace App\Http\Objects;
 
 final class RecommendedStyles extends AbstractStyles
 {
-    private ?PolskiKraftDataCollection $beerDataCollection;
     private bool $highlighted = false;
     private ?string $moreUrlQuery;
 
-    public function __construct( StyleInfo $styleInfo, ?PolskiKraftDataCollection $beerDataCollection )
+    public function __construct( StyleInfo $styleInfo, private ?PolskiKraftDataCollection $beerDataCollection )
     {
-        $this->beerDataCollection = $beerDataCollection;
         $this->description = $styleInfo->getDescription();
         $this->id = $styleInfo->getId();
         $this->moreUrlQuery = $styleInfo->getMoreUrlQuery();

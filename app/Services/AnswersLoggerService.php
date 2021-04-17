@@ -9,12 +9,8 @@ use App\Http\Repositories\UserAnswersRepositoryInterface;
 
 final class AnswersLoggerService
 {
-    private UserAnswersRepositoryInterface $userAnswersRepository;
-
-    public function __construct( UserAnswersRepositoryInterface $userAnswersRepository )
-    {
-        $this->userAnswersRepository = $userAnswersRepository;
-    }
+    public function __construct( private UserAnswersRepositoryInterface $userAnswersRepository )
+    { }
 
     public function logAnswers( FormData $formInput, array $answers, BeerData $results ): void
     {

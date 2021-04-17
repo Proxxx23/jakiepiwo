@@ -41,14 +41,11 @@ final class GeolocationRepository implements GeolocationRepositoryInterface
     private const OSM_API_URL_PATTERN = 'https://nominatim.openstreetmap.org/reverse?lat=%f&lon=%f'; // takes only city, no radius
     private const GEODB_API_URL_PATTERN = 'http://geodb-free-service.wirefreethought.com/v1/geo/locations/%f+%f/nearbyCities?limit=5&offset=0&minPopulation=40000&radius=50&sort=-population'; // nearest ciies
 
-    private ClientInterface $httpClient;
     private array $citiesList;
     private ?string $state;
 
-    public function __construct( ClientInterface $httpClient )
-    {
-        $this->httpClient = $httpClient;
-    }
+    public function __construct( private ClientInterface $httpClient )
+    { }
 
     public function setCitiesList( array $citiesList ): void
     {

@@ -12,14 +12,8 @@ final class UntappdRepository implements UntappdRepositoryInterface
 {
     private const BEER_SEARCH_URL_PATTERN = 'https://api.untappd.com/v4/search/beer?q=%s&client_id=%s&client_secret=%s';
 
-    private ClientInterface $client;
-    private SharedCache $cache;
-
-    public function __construct( ClientInterface $client, SharedCache $cache )
-    {
-        $this->client = $client;
-        $this->cache = $cache;
-    }
+    public function __construct( private ClientInterface $client, private SharedCache $cache )
+    { }
 
     /**
      * todo refactor this class and method to UntappdAPI

@@ -8,12 +8,8 @@ use App\Http\Repositories\QuestionsRepositoryInterface;
 
 final class QuestionsService
 {
-    private QuestionsRepositoryInterface $questionsRepository;
-
-    public function __construct( QuestionsRepositoryInterface $questionsRepository )
-    {
-        $this->questionsRepository = $questionsRepository;
-    }
+    public function __construct( private QuestionsRepositoryInterface $questionsRepository )
+    { }
 
     public function getQuestions(): array
     {

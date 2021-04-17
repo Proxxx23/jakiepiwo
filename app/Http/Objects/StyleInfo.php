@@ -5,25 +5,14 @@ namespace App\Http\Objects;
 
 final class StyleInfo
 {
-    private array $description;
-    private int $id;
-    private ?string $moreUrlQuery;
-    private string $name;
-    private ?string $otherName;
-    private ?string $polishName;
-
     private function __construct(
-        array $description,
-        int $id,
-        ?string $moreUrlQuery,
-        string $name,
-        ?string $otherName,
-        ?string $polishName
+        private array $description,
+        private int $id,
+        private ?string $moreUrlQuery,
+        private string $name,
+        private ?string $otherName,
+        private ?string $polishName
     ) {
-        $this->description = $description;
-        $this->id = $id;
-        $this->moreUrlQuery = $moreUrlQuery;
-        $this->name = $name;
         $this->otherName = \is_string( $otherName ) ? \trim( $otherName ) : null;
         $this->polishName = \is_string( $polishName ) ? \trim( $polishName ) : null;
 

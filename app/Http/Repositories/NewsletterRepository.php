@@ -7,12 +7,8 @@ use \DrewM\MailChimp\MailChimp;
 
 final class NewsletterRepository implements NewsletterRepositoryInterface
 {
-    private MailChimp $mailChimp;
-
-    public function __construct( MailChimp $mailChimp )
-    {
-        $this->mailChimp = $mailChimp;
-    }
+    public function __construct( private MailChimp $mailChimp )
+    { }
 
     public function subscribe( string $email ): void
     {

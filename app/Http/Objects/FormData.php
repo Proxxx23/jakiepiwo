@@ -6,14 +6,12 @@ namespace App\Http\Objects;
 final class FormData
 {
     private bool $subscribeNewsletter;
-    private Answers $answers;
     private ?string $email;
     private string $resultsHash;
 
-    public function __construct( Answers $answers, array $requestData )
+    public function __construct( private Answers $answers, array $requestData )
     {
         $this->subscribeNewsletter = \is_bool( $requestData['newsletter'] ) ? $requestData['newsletter'] : false;
-        $this->answers = $answers;
         $this->email = $this->emailIsValid( $requestData['email'] )
             ? $requestData['email']
             : null;

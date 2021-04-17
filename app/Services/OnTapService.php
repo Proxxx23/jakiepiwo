@@ -9,20 +9,16 @@ use App\Http\Repositories\OnTapRepositoryInterface;
 
 final class OnTapService
 {
-    private OnTapRepositoryInterface $onTapRepository;
-    private GeolocationRepositoryInterface $geolocationRepository;
     private bool $connectionRefused;
 
     public function __construct(
-        OnTapRepositoryInterface $onTapRepository,
-        GeolocationRepositoryInterface $geolocationRepository
+        private OnTapRepositoryInterface $onTapRepository,
+        private GeolocationRepositoryInterface $geolocationRepository
     ) {
-        $this->onTapRepository = $onTapRepository;
         $this->connectionRefused = $onTapRepository->connectionRefused();
         if ( $onTapRepository->connectionRefused() ) {
             return; // we don't want to go further if connection refused
         }
-        $this->geolocationRepository = $geolocationRepository;
         $this->geolocationRepository->setCitiesList( $this->onTapRepository->fetchAllCities() ); //todo bardzo nieładnie
     }
 

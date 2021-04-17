@@ -24,31 +24,14 @@ use App\Http\Repositories\StylesLogsRepositoryInterface;
 
 final class AlgorithmService
 {
-    /** @var ScoringRepositoryInterface */
-    private ScoringRepositoryInterface $scoringRepository;
-    /** @var PolskiKraftRepositoryInterface */
-    private PolskiKraftRepositoryInterface $polskiKraftRepository;
-    /** @var StylesLogsRepositoryInterface */
-    private StylesLogsRepositoryInterface $stylesLogsRepository;
-    /** @var BeersRepositoryInterface */
-    private BeersRepositoryInterface $beersRepository;
-    /** @var ErrorsLoggerInterface */
-    private ErrorsLoggerInterface $errorsLogger;
-
     public function __construct
     (
-        ScoringRepositoryInterface $scoringRepository,
-        PolskiKraftRepositoryInterface $polskiKraftRepository,
-        StylesLogsRepositoryInterface $stylesLogsRepository,
-        BeersRepositoryInterface $beersRepository,
-        ErrorsLoggerInterface $errorsLogger
-    ) {
-        $this->scoringRepository = $scoringRepository;
-        $this->polskiKraftRepository = $polskiKraftRepository;
-        $this->stylesLogsRepository = $stylesLogsRepository;
-        $this->beersRepository = $beersRepository;
-        $this->errorsLogger = $errorsLogger;
-    }
+        private ScoringRepositoryInterface $scoringRepository,
+        private PolskiKraftRepositoryInterface $polskiKraftRepository,
+        private StylesLogsRepositoryInterface $stylesLogsRepository,
+        private BeersRepositoryInterface $beersRepository,
+        private ErrorsLoggerInterface $errorsLogger
+    ) { }
 
     /**
      * @param array $inputAnswers

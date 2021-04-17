@@ -27,10 +27,6 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
 
     private Answers $answers;
     private bool $connectionError;
-    private SharedCache $cache;
-    private Dictionary $dictionary;
-    private ClientInterface $httpClient;
-    private UntappdRepositoryInterface $untappdRepository;
 
     /**
      * @param Dictionary $dictionary
@@ -41,19 +37,15 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function __construct(
-        Dictionary $dictionary,
-        SharedCache $cache,
-        ClientInterface $httpClient,
-        UntappdRepositoryInterface $untappdRepository
+        private Dictionary $dictionary,
+        private SharedCache $cache,
+        private ClientInterface $httpClient,
+        private UntappdRepositoryInterface $untappdRepository
     ) {
-        $this->httpClient = $httpClient;
         $this->connectionError = $this->checkIsConnectionRefused();
         if ( $this->checkIsConnectionRefused() ) {
             return; // we don't want to go further if connection refused
         }
-        $this->cache = $cache;
-        $this->dictionary = $dictionary;
-        $this->untappdRepository = $untappdRepository;
     }
 
     public function connectionRefused(): bool
