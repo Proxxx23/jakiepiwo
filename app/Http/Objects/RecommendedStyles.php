@@ -26,7 +26,7 @@ final class RecommendedStyles extends AbstractStyles
     public function toArray(): array
     {
         return [
-            'beerDataCollection' => $this->beerDataCollection !== null ? $this->beerDataCollection->toArray() : null,
+            'beerDataCollection' => $this?->beerDataCollection->toArray(),
             'description' => $this->description,
             'highlighted' => $this->highlighted,
             'id' => $this->id,

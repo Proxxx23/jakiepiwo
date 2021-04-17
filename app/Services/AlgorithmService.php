@@ -111,13 +111,8 @@ final class AlgorithmService
         $recommendedStylesCollection = $this->createRecommendedStylesCollection( $inputAnswers[3], $userAnswers );
         $unsuitableStylesCollection = $this->createUnsuitableStylesCollection( $userAnswers );
 
-        $recommendedIds = ( $recommendedStylesCollection !== null )
-            ? $recommendedStylesCollection->getRecommendedIds()
-            : null;
-
-        $unsuitableIds = ( $unsuitableStylesCollection !== null )
-            ? $unsuitableStylesCollection->getUnsuitableIds()
-            : null;
+        $recommendedIds = $recommendedStylesCollection?->getRecommendedIds();
+        $unsuitableIds = $unsuitableStylesCollection?->getUnsuitableIds();
 
         try {
             $this->stylesLogsRepository->logStyles( $user, $recommendedIds, $unsuitableIds );
@@ -127,12 +122,8 @@ final class AlgorithmService
 
         return BeerData::fromArray(
             [
-                'buyThis' => $recommendedStylesCollection !== null
-                    ? $recommendedStylesCollection->toArray()
-                    : null,
-                'avoidThis' => $unsuitableStylesCollection !== null
-                    ? $unsuitableStylesCollection->toArray()
-                    : null,
+                'buyThis' => $recommendedStylesCollection?->toArray(),
+                'avoidThis' => $unsuitableStylesCollection?->toArray(),
                 'barrelAged' => $userAnswers->isBarrelAged(),
                 'answers' => $inputAnswers,
             ]
