@@ -137,7 +137,7 @@ final class Answers
     }
 
     // Builds positive synergy if user ticks 2-4 particular answers
-    public function applyPositiveSynergy( array $idsToMultiply, float $multiplier ): void
+    public function applyPositiveSynergy( array $idsToMultiply, float $multiplier ): self
     {
         foreach ( $idsToMultiply as $id ) {
             if ( !isset( $this->recommendedIds[$id] ) ) {
@@ -146,10 +146,12 @@ final class Answers
             }
             $this->recommendedIds[$id] *= $multiplier;
         }
+
+        return $this;
     }
 
     // Builds negative synergy if user ticks 2-4 particular answers
-    public function applyNegativeSynergy( array $idsToDivide, float $divider ): void
+    public function applyNegativeSynergy( array $idsToDivide, float $divider ): self
     {
         foreach ( $idsToDivide as $id ) {
             if ( !isset( $this->unsuitableIds[$id] ) ) {
@@ -157,6 +159,8 @@ final class Answers
             }
             $this->unsuitableIds[$id] = \floor( $this->unsuitableIds[$id] / $divider );
         }
+
+        return $this;
     }
 
     // Excludes sour/smoked beers from recommended styles if user says NO
@@ -270,7 +274,6 @@ final class Answers
 
         if ( $secondRecommended * self::MARGIN_STYLES_TO_DISTINGUISH <= $firstRecommended ) {
             $this->highlightedIds = [ $recommendedIds[0] ];
-
             return;
         } else {
             $this->highlightedIds = [ $recommendedIds[0], $recommendedIds[1] ];
@@ -278,7 +281,6 @@ final class Answers
 
         if ( $thirdRecommended * self::MARGIN_STYLES_TO_DISTINGUISH <= $secondRecommended ) {
             $this->highlightedIds = [ $recommendedIds[0], $recommendedIds[1] ];
-
             return;
         } else {
             $this->highlightedIds = [ $recommendedIds[0], $recommendedIds[1], $recommendedIds[2] ];
@@ -286,7 +288,6 @@ final class Answers
 
         if ( $fourthRecommended * self::MARGIN_STYLES_TO_DISTINGUISH <= $thirdRecommended ) {
             $this->highlightedIds = [ $recommendedIds[0], $recommendedIds[1], $recommendedIds[2] ];
-
             return;
         } else {
             $this->highlightedIds = [ $recommendedIds[0], $recommendedIds[1], $recommendedIds[2], $recommendedIds[3] ];
@@ -294,7 +295,6 @@ final class Answers
 
         if ( $fifthRecommended * self::MARGIN_STYLES_TO_DISTINGUISH <= $fourthRecommended ) {
             $this->highlightedIds = [ $recommendedIds[0], $recommendedIds[1], $recommendedIds[2], $recommendedIds[3] ];
-
             return;
         } else {
             $this->highlightedIds = [ $recommendedIds[0], $recommendedIds[1], $recommendedIds[2], $recommendedIds[3], $recommendedIds[4] ];
@@ -302,7 +302,6 @@ final class Answers
 
         if ( $sixthRecommended * self::MARGIN_STYLES_TO_DISTINGUISH <= $fifthRecommended ) {
             $this->highlightedIds = [ $recommendedIds[0], $recommendedIds[1], $recommendedIds[2], $recommendedIds[3], $recommendedIds[4] ];
-
             return;
         } else {
             $this->highlightedIds = null;
