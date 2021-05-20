@@ -7,8 +7,8 @@
     "require": {
         "php": ">=8.0",
         "ext-curl": "*",
-        "ext-intl": "^8.0",
         "ext-fileinfo": "*",
+        "ext-intl": "^8.0",
         "ext-json": "*",
         "ext-mbstring": "*",
         "ext-openssl": "*",
@@ -18,7 +18,7 @@
         "ext-xml": "*",
         "barryvdh/laravel-cors": "~2.0.0",
         "fideloper/proxy": "~4.4.0",
-        "guzzlehttp/guzzle": "~7.2.0",
+        "guzzlehttp/guzzle": "~7.3.0",
         "laravel/framework": "~6.20.22",
         "laravel/helpers": "~1.4.0",
         "laravel/tinker": "~2.6.0",
@@ -30,7 +30,7 @@
         "drewm/mailchimp-api": "~2.5.0",
         "filp/whoops": "~2.12.0",
         "mockery/mockery": "~1.4.0",
-        "phpstan/phpstan": "~0.12.83",
+        "phpstan/phpstan": "~0.12.88",
         "phpunit/phpunit": "~9.5.0",
         "roave/security-advisories": "dev-latest"
     },
