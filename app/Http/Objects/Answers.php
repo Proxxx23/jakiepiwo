@@ -14,11 +14,11 @@ class Answers
     private bool $barrelAged = false;
     private int $countRecommended = 3;
     private int $countUnsuitable = 3;
-    /** @var int[]|null[] */
+    /** @var float[]|null[] */
     private array $unsuitableIds = [];
-    /** @var int[]|null */
+    /** @var float[]|null */
     private ?array $highlightedIds = null;
-    /** @var int[]|null[] */
+    /** @var float[]|null[] */
     private array $recommendedIds = [];
     private bool $smoked = false;
     private bool $sour = false;

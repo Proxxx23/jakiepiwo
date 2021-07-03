@@ -72,11 +72,11 @@ final class UntappdRepository implements UntappdRepositoryInterface
         $i18n = Transliterator::createFromRules( $rule, Transliterator::FORWARD );
         $data = null;
         foreach ( $beerData as $index => $beer ) {
-            $breweryName = $i18n->transliterate( $beer['subtitle'] );
-            $beerName = \preg_replace( '/[^A-Za-z0-9_ ]/', '', $i18n->transliterate( $beer['title'] ) );
+            $breweryName = $i18n?->transliterate( $beer['subtitle'] );
+            $beerName = \preg_replace( '/[^A-Za-z0-9_ ]/', '', $i18n?->transliterate( $beer['title'] ) ?: '' );
             $data[] = [
-                'beer_name' => \str_replace( '  ', ' ', $beerName ),
-                'brewery_name' => \str_replace( '  ', ' ', $breweryName ),
+                'beer_name' => \str_replace( '  ', ' ', $beerName ?: '' ),
+                'brewery_name' => \str_replace( '  ', ' ', $breweryName ?: '' ),
             ];
         }
 

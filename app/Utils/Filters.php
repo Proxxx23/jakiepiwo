@@ -105,7 +105,9 @@ final class Filters
         }
 
         self::filterExclusions( $answers, $beers );
-        self::filterImperials( $beers, $styleId, $density );
+        if ($styleId !== null) {
+            self::filterImperials( $beers, $styleId, $density );
+        }
     }
 
     /**
@@ -136,16 +138,16 @@ final class Filters
      * Remove imperial beers if someone don't want to have these beers
      *
      * @param array $beers
-     * @param int $styleId
+     * @param int|string $styleId
      * @param string $density
      */
-    private static function filterImperials( array &$beers, int $styleId, string $density ): void
+    private static function filterImperials( array &$beers, int|string $styleId, string $density ): void
     {
         if ( $density === 'coś ciężkiego' ) {
             return;
         }
 
-        if ( \in_array( $styleId, self::IMPERIAL_STYLE_IDS, true ) ) {
+        if ( \in_array( (int) $styleId, self::IMPERIAL_STYLE_IDS, true ) ) {
             return;
         }
 

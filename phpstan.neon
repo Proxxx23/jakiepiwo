@@ -1,6 +1,6 @@
 includes:
-	- vendor/phpstan/phpstan-phpunit/extension.neon
-	- vendor/phpstan/phpstan-phpunit/rules.neon
+#	- vendor/phpstan/phpstan-phpunit/extension.neon
+#	- vendor/phpstan/phpstan-phpunit/rules.neon
 	- vendor/phpstan/phpstan/conf/bleedingEdge.neon
 parameters:
     checkMissingIterableValueType: false
@@ -9,10 +9,12 @@ parameters:
     reportUnmatchedIgnoredErrors: false
     paths:
         - %currentWorkingDirectory%/app/Http
-    autoload_files:
-          - %currentWorkingDirectory%/vendor/autoload.php
+        - %currentWorkingDirectory%/app/Services
+        - %currentWorkingDirectory%/app/Utils
+        - %currentWorkingDirectory%/app/Helpers
+        - %currentWorkingDirectory%/app/Exceptions
     fileExtensions:
         - php
     ignoreErrors:
     - '#Strict comparison using === between [a-zA-Z0-9|]+ and null will always evaluate to false#'
-    - '#Unsafe usage of new static()#'
+    - '#Unsafe usage of new static\(\)#'
