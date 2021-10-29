@@ -12,14 +12,10 @@ final class SharedCache implements SharedCacheInterface
     public const DEFAULT_CACHE_TTL = 1800;
 
     public function __construct( private FilesystemAdapter $cache )
-    { }
+    {
+    }
 
-    /**
-     * @param string|null $cacheKey
-     *
-     * @return mixed|null
-     */
-    public function get( ?string $cacheKey )
+    public function get( ?string $cacheKey ): mixed
     {
         if ( $cacheKey === null ) {
             return null;
@@ -38,12 +34,7 @@ final class SharedCache implements SharedCacheInterface
             : null;
     }
 
-    /**
-     * @param string $cacheKey
-     * @param mixed $data
-     * @param int $ttl
-     */
-    public function set( string $cacheKey, $data, int $ttl = self::DEFAULT_CACHE_TTL ): void
+    public function set( string $cacheKey, mixed $data, int $ttl = self::DEFAULT_CACHE_TTL ): void
     {
         $item = null;
         try {

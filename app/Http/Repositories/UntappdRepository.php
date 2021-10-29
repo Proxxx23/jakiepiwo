@@ -13,7 +13,8 @@ final class UntappdRepository implements UntappdRepositoryInterface
     private const BEER_SEARCH_URL_PATTERN = 'https://api.untappd.com/v4/search/beer?q=%s&client_id=%s&client_secret=%s';
 
     public function __construct( private ClientInterface $client, private SharedCache $cache )
-    { }
+    {
+    }
 
     /**
      * todo refactor this class and method to UntappdAPI
@@ -43,7 +44,10 @@ final class UntappdRepository implements UntappdRepositoryInterface
             return null;
         }
 
-        $response = \json_decode( $request->getBody()->getContents(), true, 512, \JSON_THROW_ON_ERROR );
+        $response = \json_decode(
+            $request->getBody()
+                ->getContents(), true, 512, \JSON_THROW_ON_ERROR
+        );
 
         $beerCount = $response['response']['beers']['count'] ?? 0;
         if ( empty( $response ) || $beerCount !== 1 ) {
@@ -80,7 +84,7 @@ final class UntappdRepository implements UntappdRepositoryInterface
             ];
         }
 
-        if ($data === null) {
+        if ( $data === null ) {
             return;
         }
 

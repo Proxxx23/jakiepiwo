@@ -8,7 +8,8 @@ use App\Http\Repositories\NewsletterRepositoryInterface;
 final class NewsletterService
 {
     public function __construct( private NewsletterRepositoryInterface $newsletterRepository )
-    { }
+    {
+    }
 
     /**
      * @see: https://github.com/drewm/mailchimp-api

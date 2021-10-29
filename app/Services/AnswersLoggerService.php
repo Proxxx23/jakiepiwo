@@ -10,7 +10,8 @@ use App\Http\Repositories\UserAnswersRepositoryInterface;
 final class AnswersLoggerService
 {
     public function __construct( private UserAnswersRepositoryInterface $userAnswersRepository )
-    { }
+    {
+    }
 
     public function logAnswers( FormData $formInput, array $answers, BeerData $results ): void
     {

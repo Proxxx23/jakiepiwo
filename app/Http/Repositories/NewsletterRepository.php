@@ -8,7 +8,8 @@ use \DrewM\MailChimp\MailChimp;
 final class NewsletterRepository implements NewsletterRepositoryInterface
 {
     public function __construct( private MailChimp $mailChimp )
-    { }
+    {
+    }
 
     public function subscribe( string $email ): void
     {

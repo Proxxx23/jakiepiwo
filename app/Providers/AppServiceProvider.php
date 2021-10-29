@@ -57,7 +57,7 @@ class AppServiceProvider extends ServiceProvider
             'SharedCache', static fn(): SharedCache => new SharedCache( \resolve( 'SharedCacheFilesystemAdapter' ) )
         );
         $this->app->singleton(
-            'HttpClient', static fn(): Client => new Client(['verify' => false])
+            'HttpClient', static fn(): Client => new Client( [ 'verify' => false ] )
         );
         $this->app->singleton(
             'UntappdRepository', static fn(): UntappdRepository => new UntappdRepository(

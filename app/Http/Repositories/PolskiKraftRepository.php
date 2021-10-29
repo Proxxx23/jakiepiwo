@@ -196,10 +196,13 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
         return $beersToShow;
     }
 
-    private function isJustRatedOrCreatedAndHasProperRating( int $daysToCreation, int $daysToLastUpdated, float $beerRating ): bool
-    {
+    private function isJustRatedOrCreatedAndHasProperRating(
+        int $daysToCreation,
+        int $daysToLastUpdated,
+        float $beerRating
+    ): bool {
         return ( $daysToLastUpdated < self::LAST_UPDATED_DAYS_LIMIT &&
-            $beerRating >= self::MINIMAL_RATING ) || $daysToCreation < self::CREATION_DAYS_LIMIT;
+                $beerRating >= self::MINIMAL_RATING ) || $daysToCreation < self::CREATION_DAYS_LIMIT;
     }
 
     private function isRatedInLastWeeksAndHasProperRating( int $daysToLastUpdated, float $beerRating ): bool

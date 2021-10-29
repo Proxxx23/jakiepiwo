@@ -10,7 +10,8 @@ final class BeerData
         private ?array $avoidThis,
         private bool $barrelAged,
         private ?array $buyThis
-    ) { }
+    ) {
+    }
 
     public static function fromArray( array $data ): self
     {

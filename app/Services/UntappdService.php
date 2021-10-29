@@ -35,7 +35,7 @@ final class UntappdService
             $time = Carbon::now()
                 ->format( 'Y-m-d H:i:s' );
             $recordsToUpdate = DB::table( 'untappd' )
-                ->select( ['id', 'beer_name', 'brewery_name'] )
+                ->select( [ 'id', 'beer_name', 'brewery_name' ] )
                 ->whereNotNull( 'next_update' )
                 ->where( 'next_update', '<', $time )
                 ->where( 'beer_id', '<>', 'null' )

@@ -31,7 +31,8 @@ final class AlgorithmService
         private StylesLogsRepositoryInterface $stylesLogsRepository,
         private BeersRepositoryInterface $beersRepository,
         private ErrorsLoggerInterface $errorsLogger
-    ) { }
+    ) {
+    }
 
     /**
      * @param array $inputAnswers

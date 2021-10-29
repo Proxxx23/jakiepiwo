@@ -297,11 +297,23 @@ class Answers
             $this->highlightedIds = [ $recommendedIds[0], $recommendedIds[1], $recommendedIds[2], $recommendedIds[3] ];
             return;
         } else {
-            $this->highlightedIds = [ $recommendedIds[0], $recommendedIds[1], $recommendedIds[2], $recommendedIds[3], $recommendedIds[4] ];
+            $this->highlightedIds = [
+                $recommendedIds[0],
+                $recommendedIds[1],
+                $recommendedIds[2],
+                $recommendedIds[3],
+                $recommendedIds[4],
+            ];
         }
 
         if ( $sixthRecommended * self::MARGIN_STYLES_TO_DISTINGUISH <= $fifthRecommended ) {
-            $this->highlightedIds = [ $recommendedIds[0], $recommendedIds[1], $recommendedIds[2], $recommendedIds[3], $recommendedIds[4] ];
+            $this->highlightedIds = [
+                $recommendedIds[0],
+                $recommendedIds[1],
+                $recommendedIds[2],
+                $recommendedIds[3],
+                $recommendedIds[4],
+            ];
             return;
         } else {
             $this->highlightedIds = null;

@@ -9,7 +9,8 @@ use App\Http\Repositories\QuestionsRepositoryInterface;
 final class QuestionsService
 {
     public function __construct( private QuestionsRepositoryInterface $questionsRepository )
-    { }
+    {
+    }
 
     public function getQuestions(): array
     {

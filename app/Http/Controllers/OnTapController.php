@@ -37,12 +37,16 @@ final class OnTapController
 
         $ontapService = \resolve( 'OnTapService' );
         if ( $ontapService->connectionRefused() ) {
-            return \response( 'Could not connect to OnTap API - connection refused.', Response::HTTP_SERVICE_UNAVAILABLE );
+            return \response(
+                'Could not connect to OnTap API - connection refused.', Response::HTTP_SERVICE_UNAVAILABLE
+            );
         }
 
         $cities = $ontapService->getCitiesByCoordinates( $coordinates );
         if ( empty( $cities ) ) {
-            return \response( 'Could not determine user locale (city, nearby cities or voivodeship).', Response::HTTP_NO_CONTENT );
+            return \response(
+                'Could not determine user locale (city, nearby cities or voivodeship).', Response::HTTP_NO_CONTENT
+            );
         }
 
         $ontapService->setOnTapCities( $cities );

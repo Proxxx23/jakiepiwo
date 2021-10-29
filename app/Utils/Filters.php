@@ -105,7 +105,7 @@ final class Filters
         }
 
         self::filterExclusions( $answers, $beers );
-        if ($styleId !== null) {
+        if ( $styleId !== null ) {
             self::filterImperials( $beers, $styleId, $density );
         }
     }
