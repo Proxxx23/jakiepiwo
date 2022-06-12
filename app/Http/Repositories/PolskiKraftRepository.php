@@ -21,7 +21,7 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
     private const LAST_UPDATED_DAYS_LIMIT = 3;
     private const CREATION_DAYS_LIMIT = 14;
     private const LAST_UPDATED_DAYS_LIMIT_SECOND_TURN = 7;
-    private const LAST_UPDATED_MAX_DAYS = 180; // maximum limit if no beers found for last LAST_UPDATED_DAYS_LIMIT days
+    private const LAST_UPDATED_MAX_DAYS = 3600; // maximum limit if no beers found for last LAST_UPDATED_DAYS_LIMIT days
     private const BEERS_TO_SHOW_LIMIT = 3;
     private const MINIMAL_RATING = 2.5;
 
