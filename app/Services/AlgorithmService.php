@@ -34,19 +34,8 @@ final readonly class AlgorithmService
     ) {
     }
 
-    /**
-     * @param array $inputAnswers
-     * @param FormData $user
-     *
-     * @return BeerData
-     * @throws ConnectionException
-     */
     public function createBeerData( array $inputAnswers, FormData $user ): BeerData
     {
-        if ( $this->polskiKraftRepository->connectionRefused() ) {
-            throw new ConnectionException( 'Problem connecting to PolskiKraft API.' );
-        }
-
         $userAnswers = $user->getAnswers();
 
         $this->batchMarkTaste( $userAnswers, $inputAnswers );
@@ -237,9 +226,10 @@ final readonly class AlgorithmService
                 ); // add "smoked" prefix to smoked beers if user picked yes on smoked question
             }
 
-            $polskiKraftBeerDataCollection = $this->polskiKraftRepository->fetchByStyleId(
-                $density, $styleInfo->getId()
-            );
+            $polskiKraftBeerDataCollection = !$this->polskiKraftRepository->connectionRefused()
+                ? $this->polskiKraftRepository->fetchByStyleId( $density, $styleInfo->getId() )
+                : null;
+
             $stylesToTake = new RecommendedStyles( $styleInfo, $polskiKraftBeerDataCollection );
 
             if ( $answers->getHighlightedIds() !== null &&

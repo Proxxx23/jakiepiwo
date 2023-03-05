@@ -11,6 +11,7 @@ use App\Utils\Filters;
 use App\Utils\SharedCache;
 use Carbon\Carbon;
 use GuzzleHttp\ClientInterface;
+use GuzzleHttp\Exception\ConnectException;
 
 //todo: right now this is a service - change to service and move fetch to repo
 final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
@@ -43,9 +44,6 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
         private readonly UntappdRepositoryInterface $untappdRepository
     ) {
         $this->connectionError = $this->checkIsConnectionRefused();
-        if ( $this->checkIsConnectionRefused() ) {
-            return; // we don't want to go further if connection refused
-        }
     }
 
     public function connectionRefused(): bool
@@ -235,18 +233,21 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
 
     /**
      * @return bool
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     private function checkIsConnectionRefused(): bool
     {
-        $response = $this->httpClient->request(
-            'GET', self::DEFAULT_LIST_URI, [
-                'headers' => [
-                    'Accept' => 'application/json',
-                    'Content-Type' => 'application/json',
-                ],
-            ]
-        );
+        try {
+            $response = $this->httpClient->request(
+                'GET', self::DEFAULT_LIST_URI, [
+                    'headers' => [
+                        'Accept' => 'application/json',
+                        'Content-Type' => 'application/json',
+                    ],
+                ]
+            );
+        } catch ( ConnectException ) {
+            return true;
+        }
 
         return empty(
             $response->getBody()
