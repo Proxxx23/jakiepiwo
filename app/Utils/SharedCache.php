@@ -11,7 +11,7 @@ final class SharedCache implements SharedCacheInterface
 {
     public const DEFAULT_CACHE_TTL = 1800;
 
-    public function __construct( private FilesystemAdapter $cache )
+    public function __construct( private readonly FilesystemAdapter $cache )
     {
     }
 

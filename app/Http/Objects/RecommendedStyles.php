@@ -8,7 +8,7 @@ final class RecommendedStyles extends AbstractStyles
     private bool $highlighted = false;
     private ?string $moreUrlQuery;
 
-    public function __construct( StyleInfo $styleInfo, private ?PolskiKraftDataCollection $beerDataCollection )
+    public function __construct( StyleInfo $styleInfo, private readonly ?PolskiKraftDataCollection $beerDataCollection )
     {
         $this->description = $styleInfo->getDescription();
         $this->id = $styleInfo->getId();

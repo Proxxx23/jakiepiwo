@@ -251,20 +251,13 @@ final class Filters
 
     private static function getPregMatchSpecialBeersPatterns( int $styleId ): ?string
     {
-        switch ( $styleId ) {
-            case 22:
-                return '/.*' . \implode( '|', self::SPECIAL_BEERS_FILTERS['doppelbock'] ) . '.*/i';
-            case 57:
-                return '/.*' . \implode( '|', self::SPECIAL_BEERS_FILTERS['smokedale'] ) . '.*/i';
-            case 73:
-                return '/.*' . \implode( '|', self::SPECIAL_BEERS_FILTERS['milkshake'] ) . '.*/i';
-            case 74:
-                return '/.*' . \implode( '|', self::SPECIAL_BEERS_FILTERS['coffeestout'] ) . '.*/i';
-            case 998:
-            case 999:
-                return '/.*' . \implode( '|', self::SPECIAL_BEERS_FILTERS['pastry'] ) . '.*/i';
-            default:
-                return null;
-        }
+        return match ($styleId) {
+            22 => '/.*' . \implode('|', self::SPECIAL_BEERS_FILTERS['doppelbock']) . '.*/i',
+            57 => '/.*' . \implode('|', self::SPECIAL_BEERS_FILTERS['smokedale']) . '.*/i',
+            73 => '/.*' . \implode('|', self::SPECIAL_BEERS_FILTERS['milkshake']) . '.*/i',
+            74 => '/.*' . \implode('|', self::SPECIAL_BEERS_FILTERS['coffeestout']) . '.*/i',
+            998, 999 => '/.*' . \implode('|', self::SPECIAL_BEERS_FILTERS['pastry']) . '.*/i',
+            default => null,
+        };
     }
 }

@@ -4,25 +4,25 @@ declare( strict_types=1 );
 namespace App\Services;
 
 use App\Exceptions\ConnectionException;
+use App\Http\Objects\Answers;
+use App\Http\Objects\BeerData;
+use App\Http\Objects\FormData;
+use App\Http\Objects\RecommendedStyles;
+use App\Http\Objects\RecommendedStylesCollection;
 use App\Http\Objects\StyleInfo;
+use App\Http\Objects\UnsuitableStyles;
+use App\Http\Objects\UnsuitableStylesCollection;
+use App\Http\Repositories\BeersRepositoryInterface;
+use App\Http\Repositories\PolskiKraftRepositoryInterface;
 use App\Http\Repositories\ScoringRepository;
+use App\Http\Repositories\ScoringRepositoryInterface;
+use App\Http\Repositories\StylesLogsRepositoryInterface;
 use App\Utils\ErrorsLoggerInterface;
 use App\Utils\Exclude;
 use App\Utils\Synergy;
 use Exception;
-use App\Http\Objects\Answers;
-use App\Http\Objects\BeerData;
-use App\Http\Objects\UnsuitableStyles;
-use App\Http\Objects\UnsuitableStylesCollection;
-use App\Http\Objects\RecommendedStyles;
-use App\Http\Objects\RecommendedStylesCollection;
-use App\Http\Objects\FormData;
-use App\Http\Repositories\BeersRepositoryInterface;
-use App\Http\Repositories\PolskiKraftRepositoryInterface;
-use App\Http\Repositories\ScoringRepositoryInterface;
-use App\Http\Repositories\StylesLogsRepositoryInterface;
 
-final class AlgorithmService
+final readonly class AlgorithmService
 {
     public function __construct
     (
@@ -159,19 +159,14 @@ final class AlgorithmService
 
             $pair = \explode( ', ', $idMultiplierPair );
             foreach ( $pair as $item ) {
+                /** @var array $idPointsPair */
                 if ( \str_contains( \trim( $item ), ':' ) ) {
-
-                    /** @var array $idPointsPair */
                     $idPointsPair = \explode( ':', $item );
-                    $styleId = $idPointsPair[0];
-
-                    $sortedIds[$answer][] = $styleId;
                 } else {
-                    /** @var array $idPointsPair */
                     $idPointsPair = \explode( ', ', $item );
-                    $styleId = $idPointsPair[0];
-                    $sortedIds[$answer][] = $styleId;
                 }
+                $styleId = $idPointsPair[0];
+                $sortedIds[$answer][] = $styleId;
             }
         }
 

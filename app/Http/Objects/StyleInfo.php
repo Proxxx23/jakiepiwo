@@ -6,9 +6,9 @@ namespace App\Http\Objects;
 final class StyleInfo
 {
     private function __construct(
-        private array $description,
-        private int $id,
-        private ?string $moreUrlQuery,
+        private readonly array $description,
+        private readonly int $id,
+        private readonly ?string $moreUrlQuery,
         private string $name,
         private ?string $otherName,
         private ?string $polishName

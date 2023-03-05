@@ -314,7 +314,6 @@ class Answers
                 $recommendedIds[3],
                 $recommendedIds[4],
             ];
-            return;
         } else {
             $this->highlightedIds = null;
         }

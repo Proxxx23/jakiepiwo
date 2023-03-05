@@ -44,7 +44,7 @@ final class GeolocationRepository implements GeolocationRepositoryInterface
     private array $citiesList;
     private ?string $state;
 
-    public function __construct( private ClientInterface $httpClient )
+    public function __construct( private readonly ClientInterface $httpClient )
     {
     }
 

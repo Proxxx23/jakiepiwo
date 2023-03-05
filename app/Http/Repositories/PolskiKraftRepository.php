@@ -37,10 +37,10 @@ final class PolskiKraftRepository implements PolskiKraftRepositoryInterface
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function __construct(
-        private Dictionary $dictionary,
-        private SharedCache $cache,
-        private ClientInterface $httpClient,
-        private UntappdRepositoryInterface $untappdRepository
+        private readonly Dictionary $dictionary,
+        private readonly SharedCache $cache,
+        private readonly ClientInterface $httpClient,
+        private readonly UntappdRepositoryInterface $untappdRepository
     ) {
         $this->connectionError = $this->checkIsConnectionRefused();
         if ( $this->checkIsConnectionRefused() ) {

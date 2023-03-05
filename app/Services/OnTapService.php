@@ -12,8 +12,8 @@ final class OnTapService
     private bool $connectionRefused;
 
     public function __construct(
-        private OnTapRepositoryInterface $onTapRepository,
-        private GeolocationRepositoryInterface $geolocationRepository
+        private readonly OnTapRepositoryInterface $onTapRepository,
+        private readonly GeolocationRepositoryInterface $geolocationRepository
     ) {
         $this->connectionRefused = $onTapRepository->connectionRefused();
         if ( $onTapRepository->connectionRefused() ) {

@@ -9,9 +9,9 @@ final class FormData
     private ?string $email;
     private string $resultsHash;
 
-    public function __construct( private Answers $answers, array $requestData )
+    public function __construct( private readonly Answers $answers, array $requestData )
     {
-        $this->subscribeNewsletter = \is_bool( $requestData['newsletter'] ) ? $requestData['newsletter'] : false;
+        $this->subscribeNewsletter = \is_bool($requestData['newsletter']) && $requestData['newsletter'];
         $this->email = $this->emailIsValid( $requestData['email'] )
             ? $requestData['email']
             : null;

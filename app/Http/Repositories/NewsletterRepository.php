@@ -3,9 +3,9 @@ declare( strict_types=1 );
 
 namespace App\Http\Repositories;
 
-use \DrewM\MailChimp\MailChimp;
+use DrewM\MailChimp\MailChimp;
 
-final class NewsletterRepository implements NewsletterRepositoryInterface
+final readonly class NewsletterRepository implements NewsletterRepositoryInterface
 {
     public function __construct( private MailChimp $mailChimp )
     {

@@ -16,7 +16,7 @@ final class OnTapServiceTest extends TestCase
         $prophet = new Prophet();
         $prophecy = $prophet->prophesize( OnTapRepositoryInterface::class );
         $prophecy->fetchTapsByBeerName( [ 'title' => 'mockBeerName', 'subtitle' => 'mockBreweryName', 'subtitleAlt' => '' ] )
-            ->shouldBeCalledOnce();
+            ->shouldBeCalledTimes(1);
         $prophecy->fetchAllCities()
             ->willReturn( [] );
         $prophecy->connectionRefused()

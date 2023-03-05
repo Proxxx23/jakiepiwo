@@ -3,15 +3,15 @@ declare( strict_types=1 );
 
 namespace App\Http\Controllers;
 
-use App\Services\SimpleResultsService;
-use App\Utils\SharedCache;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Routing\Controller;
-use Symfony\Component\HttpFoundation\Response;
 use App\Http\Objects\Answers;
 use App\Http\Objects\FormData;
+use App\Services\SimpleResultsService;
 use App\Utils\ErrorsLogger;
+use App\Utils\SharedCache;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
+use Symfony\Component\HttpFoundation\Response;
 
 final class ResultsController extends Controller
 {
@@ -47,7 +47,7 @@ final class ResultsController extends Controller
 
         try {
             $formData = new FormData( new Answers(), $requestData );
-        } catch ( \InvalidArgumentException $ex ) {
+        } catch ( \InvalidArgumentException ) {
             $errorsLogger->log( self::INVALID_RESULTS_HASH_EXCEPTION_MESSAGE );
 
             return \response( self::INVALID_RESULTS_HASH_EXCEPTION_MESSAGE, Response::HTTP_BAD_REQUEST );

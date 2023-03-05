@@ -3,10 +3,10 @@ declare( strict_types=1 );
 
 namespace App\Services;
 
-use UnexpectedValueException;
 use App\Http\Repositories\QuestionsRepositoryInterface;
+use UnexpectedValueException;
 
-final class QuestionsService
+final readonly class QuestionsService
 {
     public function __construct( private QuestionsRepositoryInterface $questionsRepository )
     {

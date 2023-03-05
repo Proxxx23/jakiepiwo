@@ -5,7 +5,7 @@ namespace App\Utils;
 
 use App\Http\Repositories\ErrorLogsRepositoryInterface;
 
-final class ErrorsLogger implements ErrorsLoggerInterface
+final readonly class ErrorsLogger implements ErrorsLoggerInterface
 {
     public function __construct( private ErrorLogsRepositoryInterface $errorLogsRepository )
     {

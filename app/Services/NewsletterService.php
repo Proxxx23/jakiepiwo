@@ -5,7 +5,7 @@ namespace App\Services;
 
 use App\Http\Repositories\NewsletterRepositoryInterface;
 
-final class NewsletterService
+final readonly class NewsletterService
 {
     public function __construct( private NewsletterRepositoryInterface $newsletterRepository )
     {

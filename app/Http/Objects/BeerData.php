@@ -3,7 +3,7 @@ declare( strict_types=1 );
 
 namespace App\Http\Objects;
 
-final class BeerData
+final readonly class BeerData
 {
     public function __construct(
         private array $answers,

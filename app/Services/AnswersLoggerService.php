@@ -7,7 +7,7 @@ use App\Http\Objects\BeerData;
 use App\Http\Objects\FormData;
 use App\Http\Repositories\UserAnswersRepositoryInterface;
 
-final class AnswersLoggerService
+final readonly class AnswersLoggerService
 {
     public function __construct( private UserAnswersRepositoryInterface $userAnswersRepository )
     {

@@ -31,7 +31,7 @@ final class OnTapRepository implements OnTapRepositoryInterface
      *
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function __construct( private ClientInterface $httpClient, private SharedCache $cache )
+    public function __construct( private readonly ClientInterface $httpClient, private readonly SharedCache $cache )
     {
         $this->connectionError = $this->checkIsConnectionRefused();
     }
@@ -84,7 +84,6 @@ final class OnTapRepository implements OnTapRepositoryInterface
                         'name' => $place['name'],
                         'url' => 'https://ontap.pl/?multitap_id=' . $place['id'],
                     ];
-                    continue;
                 }
             }
         }
@@ -140,7 +139,6 @@ final class OnTapRepository implements OnTapRepositoryInterface
             $cityId = \array_search( $city, \array_column( $cities, 'name' ), true );
             if ( \is_int( $cityId ) ) {
                 $cityIds[] = $cities[$cityId]['id'];
-                continue;
             }
         }
 
