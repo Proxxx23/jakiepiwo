@@ -38,14 +38,15 @@ final class OnTapController
         $ontapService = \resolve( 'OnTapService' );
         if ( $ontapService->connectionRefused() ) {
             return \response(
-                'Could not connect to OnTap API - connection refused.', Response::HTTP_SERVICE_UNAVAILABLE
+                'Could not connect to OnTap API - connection refused.', Response::HTTP_BAD_GATEWAY
             );
         }
 
-        $cities = $ontapService->getCitiesByCoordinates( $coordinates );
-        if ( empty( $cities ) ) {
+        $cities = $ontapService->getCitiesByCoordinates($coordinates);
+        if ( empty( $cities) ) {
             return \response(
-                'Could not determine user locale (city, nearby cities or voivodeship).', Response::HTTP_NO_CONTENT
+                'Could not determine user locale (city, nearby cities or voivodeship).',
+                Response::HTTP_UNPROCESSABLE_ENTITY
             );
         }
 
@@ -62,7 +63,7 @@ final class OnTapController
 
         $styles = $resulsJson['buyThis'] ?? null;
         if ( $styles === null ) {
-            return \response( 'Could not obtain beer data by results hash', Response::HTTP_NOT_FOUND );
+            return \response( 'Could not obtain beer data by results hash', Response::HTTP_INTERNAL_SERVER_ERROR );
         }
 
         $data = null;
@@ -75,10 +76,8 @@ final class OnTapController
             }
         }
 
-        if ( $data === null ) {
-            return \response()->json( 'No beers found in given city.', Response::HTTP_NO_CONTENT );
-        }
-
-        return \response()->json( [ 'data' => $data ] );
+        return $data !== null
+            ? response()->json(['data' => $data])
+            : response()->json();
     }
 }
