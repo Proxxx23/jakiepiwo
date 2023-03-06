@@ -28,8 +28,6 @@ final class OnTapRepository implements OnTapRepositoryInterface
     /**
      * @param ClientInterface $httpClient
      * @param SharedCache $cache
-     *
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function __construct( private readonly ClientInterface $httpClient, private readonly SharedCache $cache )
     {
@@ -145,21 +143,21 @@ final class OnTapRepository implements OnTapRepositoryInterface
         return $cityIds ?? null;
     }
 
-    /**
-     * @return bool
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     */
     private function checkIsConnectionRefused(): bool
     {
-        $response = $this->httpClient->request(
-            'GET', self::CITIES_LIST_URI, [
-                'headers' => [
-                    'Accept' => 'application/json',
-                    'Content-Type' => 'application/json',
-                    'Api-Key' => $_ENV['ONTAP_API_KEY'],
-                ],
-            ]
-        );
+        try {
+            $response = $this->httpClient->request(
+                'GET', self::CITIES_LIST_URI, [
+                    'headers' => [
+                        'Accept' => 'application/json',
+                        'Content-Type' => 'application/json',
+                        'Api-Key' => $_ENV['ONTAP_API_KEY'],
+                    ],
+                ]
+            );
+        } catch (\Exception) {
+            return true;
+        }
 
         return empty(
             $response->getBody()

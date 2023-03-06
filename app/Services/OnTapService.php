@@ -9,7 +9,7 @@ use App\Http\Repositories\OnTapRepositoryInterface;
 
 final class OnTapService
 {
-    private bool $connectionRefused;
+    private readonly bool $connectionRefused;
 
     public function __construct(
         private readonly OnTapRepositoryInterface $onTapRepository,
