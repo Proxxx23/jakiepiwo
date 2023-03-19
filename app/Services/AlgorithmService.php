@@ -27,7 +27,7 @@ final readonly class AlgorithmService
     public function __construct
     (
         private ScoringRepositoryInterface $scoringRepository,
-        private PolskiKraftRepositoryInterface $polskiKraftRepository,
+//        private PolskiKraftRepositoryInterface $polskiKraftRepository,
         private StylesLogsRepositoryInterface $stylesLogsRepository,
         private BeersRepositoryInterface $beersRepository,
         private ErrorsLoggerInterface $errorsLogger
@@ -215,7 +215,7 @@ final readonly class AlgorithmService
             return null; // should never happen
         }
 
-        $this->polskiKraftRepository->setUserAnswers( $answers );
+//        $this->polskiKraftRepository->setUserAnswers( $answers );
 
         $recommendedStylesCollection = ( new RecommendedStylesCollection() )->setRecommendedIds( $recommendedIds );
         /** @var StyleInfo $styleInfo */
@@ -226,9 +226,11 @@ final readonly class AlgorithmService
                 ); // add "smoked" prefix to smoked beers if user picked yes on smoked question
             }
 
-            $polskiKraftBeerDataCollection = !$this->polskiKraftRepository->connectionRefused()
-                ? $this->polskiKraftRepository->fetchByStyleId( $density, $styleInfo->getId() )
-                : null;
+//            $polskiKraftBeerDataCollection = !$this->polskiKraftRepository->connectionRefused()
+//                ? $this->polskiKraftRepository->fetchByStyleId( $density, $styleInfo->getId() )
+//                : null;
+
+            $polskiKraftBeerDataCollection = null;
 
             $stylesToTake = new RecommendedStyles( $styleInfo, $polskiKraftBeerDataCollection );
 

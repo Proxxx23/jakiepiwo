@@ -70,18 +70,18 @@ class AppServiceProvider extends ServiceProvider
             \resolve( 'UntappdRepository' ),
         )
         );
-        $this->app->singleton(
-            'PolskiKraftRepository', static fn(): PolskiKraftRepository => new PolskiKraftRepository(
-            new Dictionary(),
-            \resolve( 'SharedCache' ),
-            \resolve( 'HttpClient' ),
-            \resolve( 'UntappdRepository' )
-        )
-        );
+//        $this->app->singleton(
+//            'PolskiKraftRepository', static fn(): PolskiKraftRepository => new PolskiKraftRepository(
+//            new Dictionary(),
+//            \resolve( 'SharedCache' ),
+//            \resolve( 'HttpClient' ),
+//            \resolve( 'UntappdRepository' )
+//        )
+//        );
         $this->app->singleton(
             'AlgorithmService', static fn(): AlgorithmService => new AlgorithmService(
             \resolve( 'ScoringRepository' ),
-            \resolve( 'PolskiKraftRepository' ),
+//            \resolve( 'PolskiKraftRepository' ),
             \resolve( 'StylesLogsRepository' ),
             \resolve( 'BeersRepository' ),
             \resolve( ErrorsLogger::class )
